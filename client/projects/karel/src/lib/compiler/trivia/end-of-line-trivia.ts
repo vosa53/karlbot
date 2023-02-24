@@ -1,7 +1,7 @@
 import { Trivia } from "./trivia";
 
 /**
- * End of line trivia.
+ * Trivia representing an end of line.
  */
 export class EndOfLineTrivia extends Trivia {
     

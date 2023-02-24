@@ -1,7 +1,7 @@
 import { Trivia } from "./trivia";
 
 /**
- * Invalid characters trivia.
+ * Trivia representing characters that has no meaning in the language.
  */
 export class InvalidCharactersTrivia extends Trivia {
     

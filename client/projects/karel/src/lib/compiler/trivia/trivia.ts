@@ -1,14 +1,14 @@
 /**
- * Trivia.
+ * Represents a text that has no meaning for a parser and so is not a direct part of any token.
  */
 export abstract class Trivia {
     /**
-     * Text content.
+     * Text.
      */
     readonly text: string;
     
     /**
-     * @param text Text content. 
+     * @param text Text. 
      */
     constructor(text: string) {
         this.text = text;

@@ -1,7 +1,7 @@
 import { Trivia } from "./trivia";
 
 /**
- * Single line comment trivia.
+ * Trivia representing a single line comment.
  */
 export class SinglelineCommentTrivia extends Trivia {
     

@@ -2,7 +2,7 @@ import { PrimitiveToken } from "../primitive-tokens/primitive-token";
 import { Trivia } from "./trivia";
 
 /**
- * Skipped token trivia.
+ * Trivia representing a token that was skipped during parsing and is not a direct part of any node.
  */
 export class SkippedTokenTrivia extends Trivia {
     /**

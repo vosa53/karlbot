@@ -1,7 +1,7 @@
 import { Trivia } from "./trivia";
 
 /**
- * Whitespace trivia.
+ * Trivia representing whitespace characters.
  */
 export class WhitespaceTrivia extends Trivia {
     
