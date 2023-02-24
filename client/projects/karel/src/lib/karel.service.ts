@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class KarelService {
-
+  
   static pes() {
     return "ves";
   }
