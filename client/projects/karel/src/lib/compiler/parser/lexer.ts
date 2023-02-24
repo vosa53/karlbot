@@ -20,13 +20,13 @@ import { WhitespaceTrivia } from "../trivia/whitespace-trivia";
 import { LexerContext } from "./lexer-context";
 
 /**
- * Karel lexer. Tokenizes text stream.
+ * Lexer of the Karel language. Turns a text stream into tokens.
  */
 export class Lexer {
     /**
-     * Tokenizes a single token from the provided lexer context.
+     * Tokenizes a single token from the passed context.
      * @param context Lexer context.
-     * @returns Tokenized token. Specially {@link EndOfFileToken} if the lexer context is at its end.
+     * @returns Created token. Specially {@link EndOfFileToken} if the passed lexer context was at the end.
      */
     static tokenize(context: LexerContext): PrimitiveToken {
         const leadingTrivia = this.tokenizeTrivia(context, false);
