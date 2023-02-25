@@ -1,9 +1,18 @@
 import { Program } from './program';
 
+/**
+ * Assembly.
+ */
 export class Assembly {
-    readonly programs: Program[];
+    /**
+     * Programs in the assembly.
+     */
+    readonly programs: readonly Program[];
 
-    constructor(programs: Program[]) {
+    /**
+     * @param programs Programs in the assembly.
+     */
+    constructor(programs: readonly Program[]) {
         this.programs = programs;
     }
 }
