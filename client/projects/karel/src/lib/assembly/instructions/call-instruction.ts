@@ -2,7 +2,7 @@ import { Instruction } from './instruction';
 import { Program } from '../program';
 
 /**
- * Instruction to call an internal program.
+ * Instruction to call a program.
  */
 export class CallInstruction extends Instruction {
     /**
