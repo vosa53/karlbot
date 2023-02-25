@@ -36,6 +36,13 @@ describe("FullLexerContext", () => {
         expect(context.next).toBe("c");
     });
 
+    it("goNext - Throws an error when the context has already reached the end.", () => {
+        const context = new FullLexerContext("a");
+        context.goNext();
+
+        expect(() => context.goNext()).toThrowMatching(e => e instanceof Error);
+    });
+
     it("collect - Returns an empty string after an instance creation.", () => {
         const context = new FullLexerContext("abc");
 

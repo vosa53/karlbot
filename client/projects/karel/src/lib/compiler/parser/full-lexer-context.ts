@@ -34,6 +34,9 @@ export class FullLexerContext implements LexerContext {
     }
 
     goNext() {
+        if (this.currentIndex >= this.text.length)
+            throw new Error("The context has already reached the end.");
+
         this.currentIndex++;
     }
 
