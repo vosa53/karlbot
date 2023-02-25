@@ -17,6 +17,20 @@ describe("PrimitiveToken", () => {
         expect(token.text).toBe("test");
     });
 
+    it("buildText - Creates text of the token including its leading and trailing trivia.", () => {
+        const leadingTrivia = [
+            new WhitespaceTrivia("    "), 
+            new InvalidCharactersTrivia("!!")
+        ];
+        const trailingTrivia = [
+            new MultilineCommentTrivia("/*abc*/"), 
+            new EndOfLineTrivia("\n")
+        ];
+        const token = new TestPrimitiveToken("test", leadingTrivia, trailingTrivia);
+
+        expect(token.buildText()).toBe("    !!test/*abc*/\n");
+    });
+
     it("textPosition - Is equal to the leading trivia total length.", () => {
         const leadingTrivia = [
             new WhitespaceTrivia("    "),
