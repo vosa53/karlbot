@@ -3,52 +3,60 @@ import { PrimitiveToken } from "../primitive-tokens/primitive-token";
 import { SkippedTokenTrivia } from "../trivia/skipped-token-trivia";
 import { ParserContext } from "./parser-context";
 
+/**
+ * {@link LexerContext} created from a previously known tokens.
+ */
 export class FullParserContext implements ParserContext {
-    get hasCurrent(): boolean {
-        return this.currentIndex < this.tokens.length - 1;
-    }
-
     get current(): PrimitiveToken {
-        const hasCurrent = this.currentIndex < this.tokens.length - 1;
         return this._current;
     }
 
     private readonly tokens: PrimitiveToken[];
+    private readonly skippedTokenTrivia: SkippedTokenTrivia[];
     private currentIndex: number;
-    private readonly skippedTokens: SkippedTokenTrivia[];
     private _current: PrimitiveToken;
 
+    /**
+     * @param tokens Tokens. The last token must be an {@link EndOfFilePrimitiveToken}.
+     */
     constructor(tokens: PrimitiveToken[]) {
         if (tokens.length === 0 || !(tokens[tokens.length - 1] instanceof EndOfFilePrimitiveToken))
-            throw new Error("Last token must be a EndOfFilePrimitiveToken.");
+            throw new Error("Last token must be an EndOfFilePrimitiveToken.");
 
         this.tokens = tokens;
+        this.skippedTokenTrivia = [];
         this.currentIndex = 0;
-        this.skippedTokens = [];
-        this._current = tokens[0];
+        this._current = this.createCurrent();
     }
 
     goNext() {
-        this.skippedTokens.length = 0;
+        this.throwIfLastToken();
+
+        this.skippedTokenTrivia.length = 0;
         this.currentIndex++;
-        this.updateCurrent();
+        this._current = this.createCurrent();
     }
 
     skip() {
-        if (this.hasCurrent) {
-            const skippedToken = new SkippedTokenTrivia(this.tokens[this.currentIndex]);
-            this.skippedTokens.push(skippedToken);
-        }
+        this.throwIfLastToken();
+
+        const skippedTokenTrivia = new SkippedTokenTrivia(this.tokens[this.currentIndex]);
+        this.skippedTokenTrivia.push(skippedTokenTrivia);
         this.currentIndex++;
-        this.updateCurrent();
+        this._current = this.createCurrent();
     }
 
-    private updateCurrent() {
-        if (this.currentIndex < this.tokens.length) {
-            this._current = this.tokens[this.currentIndex];
+    private createCurrent(): PrimitiveToken {
+        const current = this.tokens[this.currentIndex];
 
-            if (this.skippedTokens.length > 0)
-                this._current = this._current.with({ leadingTrivia: [...this.skippedTokens, ...this._current.leadingTrivia] });
-        }
+        if (this.skippedTokenTrivia.length === 0)
+            return current;
+        else
+            return current.with({ leadingTrivia: [...this.skippedTokenTrivia, ...current.leadingTrivia] });
+    }
+
+    private throwIfLastToken() {
+        if (this.currentIndex >= this.tokens.length - 1)
+            throw new Error("The context has already reached the end.");
     }
 }

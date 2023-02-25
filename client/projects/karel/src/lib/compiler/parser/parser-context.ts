@@ -1,7 +1,24 @@
+import { EndOfFilePrimitiveToken } from "../primitive-tokens/end-of-file-primitive-token";
 import { PrimitiveToken } from "../primitive-tokens/primitive-token";
 
+/**
+ * Processing context for a stream of tokens passed to a parser.
+ */
 export interface ParserContext {
+    /**
+     * Current token or {@link EndOfFilePrimitiveToken} if the context is at the end of the stream.
+     * 
+     * Starts at the first token of the stream.
+     */
     readonly current: PrimitiveToken;
+
+    /**
+     * Proceeds to the next token. If the context is at the last token it throws an error.
+     */
     goNext(): void;
+
+    /**
+     * Proceeds to the next token and the current token assigns as a skipped token trivia to the next token leading trivia. If the context is at the last token it throws an error.
+     */
     skip(): void;
 }
