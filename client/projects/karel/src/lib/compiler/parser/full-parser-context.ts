@@ -1,6 +1,6 @@
-import { EndOfFilePrimitiveToken } from "../primitive-tokens/end-of-file-primitive-token";
-import { PrimitiveToken } from "../primitive-tokens/primitive-token";
-import { SkippedTokenTrivia } from "../trivia/skipped-token-trivia";
+import { EndOfFilePrimitiveToken } from "../syntax-tree/primitive-tokens/end-of-file-primitive-token";
+import { PrimitiveToken } from "../syntax-tree/primitive-tokens/primitive-token";
+import { SkippedTokenTrivia } from "../syntax-tree/trivia/skipped-token-trivia";
 import { ParserContext } from "./parser-context";
 
 /**

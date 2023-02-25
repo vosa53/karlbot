@@ -1,6 +1,6 @@
-import { ArrayUtils } from "../../utils/array-utils";
-import { SyntaxError } from "../errors/syntax-error";
-import { LineTextRange } from "../line-text-range";
+import { ArrayUtils } from "../../../utils/array-utils";
+import { SyntaxError } from "../../errors/syntax-error";
+import { LineTextRange } from "../../line-text-range";
 import { Node } from "../nodes/node";
 import { PrimitiveSyntaxElement } from "../primitive-syntax-element";
 import { Token } from "../tokens/token";

@@ -1,6 +1,6 @@
-import { LineTextRange } from "../line-text-range";
+import { LineTextRange } from "../../line-text-range";
 import { PrimitiveNode } from "../primitive-nodes/primitive-node";
-import { TextRange } from "../text-range";
+import { TextRange } from "../../text-range";
 import { SyntaxElement } from "../syntax-element";
 
 export abstract class Node extends SyntaxElement {

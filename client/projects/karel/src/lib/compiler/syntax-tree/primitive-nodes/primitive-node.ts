@@ -1,6 +1,6 @@
-import { ArrayUtils } from "../../utils/array-utils";
-import { ChildrenBuilder } from "../children-builder";
-import { SyntaxError } from "../errors/syntax-error";
+import { ArrayUtils } from "../../../utils/array-utils";
+import { ChildrenBuilder } from "../../children-builder";
+import { SyntaxError } from "../../errors/syntax-error";
 import { Node } from "../nodes/node";
 import { PrimitiveSyntaxElement } from "../primitive-syntax-element";
 

@@ -1,7 +1,7 @@
-import { PrimitiveSyntaxElementUtils } from "../../utils/primitive-syntax-element-utils";
-import { ChildrenBuilder } from "../children-builder";
-import { SyntaxError } from "../errors/syntax-error";
-import { LineTextRange } from "../line-text-range";
+import { PrimitiveSyntaxElementUtils } from "../../../utils/primitive-syntax-element-utils";
+import { ChildrenBuilder } from "../../children-builder";
+import { SyntaxError } from "../../errors/syntax-error";
+import { LineTextRange } from "../../line-text-range";
 import { IfNode } from "../nodes/if-node";
 import { Node } from "../nodes/node";
 import { PrimitiveSyntaxElement } from "../primitive-syntax-element";

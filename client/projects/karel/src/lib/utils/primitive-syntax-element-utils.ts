@@ -1,7 +1,15 @@
-import { PrimitiveSyntaxElement } from "../compiler/primitive-syntax-element";
+import { PrimitiveSyntaxElement } from "../compiler/syntax-tree/primitive-syntax-element";
 
+/**
+ * Utils for {@link PrimitiveSyntaxElement}.
+ */
 export class PrimitiveSyntaxElementUtils {
-    static equalsOrBothNull(a: PrimitiveSyntaxElement | null, b: PrimitiveSyntaxElement | null): boolean {
-        return (a === null && b === null) || (a !== null && b !== null && a.equals(b));
+    /**
+     * Returns `true` when the syntax elements are equal according to {@link PrimitiveSyntaxElement.equals} or when they are both null. `false` otherwise.
+     * @param first First syntax element.
+     * @param second Second syntax element.
+     */
+    static equalsOrBothNull(first: PrimitiveSyntaxElement | null, second: PrimitiveSyntaxElement | null): boolean {
+        return (first === null && second === null) || (first !== null && second !== null && first.equals(second));
     }
 }

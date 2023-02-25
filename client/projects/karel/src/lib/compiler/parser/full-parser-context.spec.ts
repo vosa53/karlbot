@@ -1,8 +1,8 @@
-import { EndOfFilePrimitiveToken } from "../primitive-tokens/end-of-file-primitive-token";
-import { IdentifierPrimitiveToken } from "../primitive-tokens/identifier-primitive-token";
-import { ProgramPrimitiveToken } from "../primitive-tokens/program-primitive-token";
-import { IdentifierToken } from "../tokens/identifier-token";
-import { SkippedTokenTrivia } from "../trivia/skipped-token-trivia";
+import { EndOfFilePrimitiveToken } from "../syntax-tree/primitive-tokens/end-of-file-primitive-token";
+import { IdentifierPrimitiveToken } from "../syntax-tree/primitive-tokens/identifier-primitive-token";
+import { ProgramPrimitiveToken } from "../syntax-tree/primitive-tokens/program-primitive-token";
+import { IdentifierToken } from "../syntax-tree/tokens/identifier-token";
+import { SkippedTokenTrivia } from "../syntax-tree/trivia/skipped-token-trivia";
 import { FullLexerContext } from "./full-lexer-context";
 import { FullParserContext } from "./full-parser-context";
 

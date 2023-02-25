@@ -1,5 +1,5 @@
-import { SyntaxError } from "../errors/syntax-error";
-import { LineTextRange } from "../line-text-range";
+import { SyntaxError } from "../../errors/syntax-error";
+import { LineTextRange } from "../../line-text-range";
 import { Node } from "../nodes/node";
 import { Token } from "../tokens/token";
 import { EndOfLineTrivia } from "../trivia/end-of-line-trivia";

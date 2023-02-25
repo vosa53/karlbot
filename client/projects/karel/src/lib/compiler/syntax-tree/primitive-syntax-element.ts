@@ -1,4 +1,4 @@
-import { SyntaxError } from "./errors/syntax-error";
+import { SyntaxError } from "./../errors/syntax-error";
 import { Node } from "./nodes/node";
 import { SyntaxElement } from "./syntax-element";
 

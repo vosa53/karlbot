@@ -1,6 +1,6 @@
 import { SyntaxError } from "./errors/syntax-error";
 import { LineTextRange } from "./line-text-range";
-import { PrimitiveSyntaxElement } from "./primitive-syntax-element";
+import { PrimitiveSyntaxElement } from "./syntax-tree/primitive-syntax-element";
 
 /**
  * Utility class for creating primitive node children.

@@ -5,11 +5,11 @@ import { ProgramPrimitiveToken } from "../primitive-tokens/program-primitive-tok
 import { PrimitiveToken } from "../primitive-tokens/primitive-token";
 import { BlockPrimitiveNode } from "./block-primitive-node";
 import { PrimitiveNode } from "./primitive-node";
-import { SyntaxError } from "../errors/syntax-error";
-import { LineTextRange } from "../line-text-range";
+import { SyntaxError } from "../../errors/syntax-error";
+import { LineTextRange } from "../../line-text-range";
 import { PrimitiveSyntaxElement } from "../primitive-syntax-element";
-import { ChildrenBuilder } from "../children-builder";
-import { PrimitiveSyntaxElementUtils } from "../../utils/primitive-syntax-element-utils";
+import { ChildrenBuilder } from "../../children-builder";
+import { PrimitiveSyntaxElementUtils } from "../../../utils/primitive-syntax-element-utils";
 
 export class ProgramPrimitiveNode extends PrimitiveNode {
     readonly programToken: ProgramPrimitiveToken | null;

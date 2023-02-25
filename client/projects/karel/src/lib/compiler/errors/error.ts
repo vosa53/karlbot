@@ -1,5 +1,5 @@
 import { LineTextRange } from "../line-text-range";
-import { CompilationUnitNode } from "../nodes/compilation-unit-node";
+import { CompilationUnitNode } from "../syntax-tree/nodes/compilation-unit-node";
 
 /**
  * General compilation error.

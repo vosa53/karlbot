@@ -1,7 +1,7 @@
-import { LineTextRange } from "./line-text-range";
+import { LineTextRange } from "../line-text-range";
 import { Node } from "./nodes/node";
 import { PrimitiveSyntaxElement } from "./primitive-syntax-element";
-import { TextRange } from "./text-range";
+import { TextRange } from "../text-range";
 
 /**
  * Base for AST nodes and tokens.

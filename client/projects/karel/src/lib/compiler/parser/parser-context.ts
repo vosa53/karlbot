@@ -1,5 +1,5 @@
-import { EndOfFilePrimitiveToken } from "../primitive-tokens/end-of-file-primitive-token";
-import { PrimitiveToken } from "../primitive-tokens/primitive-token";
+import { EndOfFilePrimitiveToken } from "../syntax-tree/primitive-tokens/end-of-file-primitive-token";
+import { PrimitiveToken } from "../syntax-tree/primitive-tokens/primitive-token";
 
 /**
  * Processing context for a stream of tokens passed to a parser.

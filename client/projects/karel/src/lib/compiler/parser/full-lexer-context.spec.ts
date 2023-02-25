@@ -1,7 +1,7 @@
 import { FullLexerContext } from "./full-lexer-context";
 
 describe("FullLexerContext", () => {
-    it("current - Is set to the first character of the passed text after an instance creation.", () => {
+    it("current - Is the first character of the passed text after an instance creation.", () => {
         const context = new FullLexerContext("abc");
 
         expect(context.current).toBe("a");
