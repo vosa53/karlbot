@@ -33,6 +33,47 @@ describe("ChildrenBuilder", () => {
         expect(childrenBuilder.syntaxErrors).toEqual([new SyntaxError("Some error", new LineTextRange(1, 1, 1, 2))]);
         expect(childrenBuilder.children).toEqual([]);
     });
+
+    it("length - Is equal to the sum of children lengths.", () => {
+        const childrenBuilder = new ChildrenBuilder();
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(3, 1, 3, []));
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(2, 1, 2, []));
+
+        expect(childrenBuilder.length).toBe(5);
+    });
+
+    it("length - Is 0 without added children.", () => {
+        const childrenBuilder = new ChildrenBuilder();
+        expect(childrenBuilder.length).toBe(0);
+    });
+
+    it("lineCount - Is equal to the total children line counts.", () => {
+        const childrenBuilder = new ChildrenBuilder();
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(5, 2, 5, []));
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(5, 1, 5, []));
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(5, 3, 5, []));
+
+        expect(childrenBuilder.lineCount).toBe(4);
+    });
+
+    it("lineCount - Is 1 without added children.", () => {
+        const childrenBuilder = new ChildrenBuilder();
+        expect(childrenBuilder.lineCount).toBe(1);
+    });
+
+    it("lastLineLength - Is equal to the total children last line length.", () => {
+        const childrenBuilder = new ChildrenBuilder();
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(4, 1, 4, []));
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(10, 3, 2, []));
+        childrenBuilder.addChild(new TestPrimitiveSyntaxElement(3, 1, 3, []));
+
+        expect(childrenBuilder.lastLineLength).toBe(5);
+    });
+
+    it("lastLineLength - Is 0 without added children.", () => {
+        const childrenBuilder = new ChildrenBuilder();
+        expect(childrenBuilder.lastLineLength).toBe(0);
+    });
 });
 
 class TestPrimitiveSyntaxElement extends PrimitiveSyntaxElement {
