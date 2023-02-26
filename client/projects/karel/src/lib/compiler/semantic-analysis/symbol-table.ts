@@ -8,6 +8,9 @@ import { CompilationUnitNode } from "../syntax-tree/nodes/compilation-unit-node"
 import { Node } from "../syntax-tree/nodes/node";
 import { ProgramNode } from "../syntax-tree/nodes/program-node";
 
+/**
+ * Symbol table.
+ */
 export class SymbolTable {
     private constructor(
         private readonly definedSymbols: Symbol[],
@@ -15,6 +18,11 @@ export class SymbolTable {
         private readonly nameToSymbol: Map<string, Symbol>
     ) { }
 
+    /**
+     * Creates a new symbol table.
+     * @param compilationUnits Compilation units.
+     * @param externalPrograms References to external programs.
+     */
     static create(compilationUnits: readonly CompilationUnitNode[], externalPrograms: readonly ExternalProgramReference[]): SymbolTable {
         const definedSymbols: Symbol[] = [];
         const programToSymbol = new Map();
@@ -58,10 +66,17 @@ export class SymbolTable {
         return new SymbolTable(definedSymbols, programToSymbol, nameToSymbol);
     }
 
+    /**
+     * Returns all defined symbols.
+     */
     getDefined(): Symbol[] {
         return this.definedSymbols;
     }
 
+    /**
+     * Returns a symbol bound to the given node or `null` if the node is not associated with any symbol.
+     * @param node Node.
+     */
     getByNode(node: Node): Symbol | null {
         // TODO: Can nameToken be null?
         if (node instanceof CallNode && node.nameToken !== null)
@@ -72,6 +87,10 @@ export class SymbolTable {
         return null;
     }
 
+    /**
+     * Returns a symbol bound to the given name or `null` if the name is not associated with any symbol.
+     * @param name Name.
+     */
     getByName(name: string): Symbol | null {
         return this.nameToSymbol.get(name) || null;
     }

@@ -19,7 +19,15 @@ import { TimesPrimitiveToken } from "../syntax-tree/primitive-tokens/times-primi
 import { WhilePrimitiveToken } from "../syntax-tree/primitive-tokens/while-primitive-token";
 import { ParserContext } from "./parser-context";
 
+/**
+ * Parser of the Karel language. Turns a token stream into a syntax tree.
+ */
 export class Parser {
+    /**
+     * Parses tokens from the passed context.
+     * @param context Parser context.
+     * @returns Created syntax tree.
+     */
     static parseCompilationUnit(context: ParserContext, filePath: string): CompilationUnitPrimitiveNode {
         let programs: ProgramPrimitiveNode[] = [];
         let endOfFileToken: EndOfFilePrimitiveToken | null = null;
