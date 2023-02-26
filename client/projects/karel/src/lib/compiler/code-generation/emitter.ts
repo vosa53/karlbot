@@ -22,7 +22,14 @@ import { ProgramSymbol } from "../symbols/program-symbol";
 import { Symbol } from "../symbols/symbol";
 import { IsToken } from "../syntax-tree/tokens/is-token";
 
+/**
+ * Generates instructions.
+ */
 export class Emitter {
+    /**
+     * Creates an assembly from the given compilation.
+     * @param compilation Compilation.
+     */
     static emit(compilation: Compilation): Assembly {
         const programSymbolToProgram = compilation.symbolTable.getDefined()
             .filter(s => s instanceof ProgramSymbol)
@@ -160,15 +167,28 @@ export class Emitter {
     }
 }
 
+/**
+ * Used to emit instructions in a single program.
+ */
 class EmitterContext {
+    /**
+     * Index of the next emitted instruction.
+     */
     get nextInstructionIndex(): number {
         return this.instructions.length;
     }
 
+    /**
+     * Creates a new variable and returns its index.
+     */
     createVariable(): number {
         return this.variableCount++;
     }
 
+    /**
+     * Finds a program by its symbol and returns it. If the given symbol is not associated with any program throws an error.
+     * @param programSymbol Program symbol.
+     */
     getProgram(programSymbol: ProgramSymbol): Program {
         const program = this.programSymbolToProgramMap.get(programSymbol);
         if (program === undefined)
@@ -177,10 +197,17 @@ class EmitterContext {
         return program;
     }
 
+    /**
+     * Emits a single instruction.
+     * @param instruction Instruction to emit.
+     */
     emit(instruction: Instruction) {
         this.instructions.push(instruction);
     }
 
+    /**
+     * Creates a function to emit an instruction in the current place and returns it. The function can be used only once.
+     */
     emitLater(): (instruction: Instruction) => void {
         const index = this.instructions.length;
         this.instructions.push(null);
@@ -189,13 +216,16 @@ class EmitterContext {
 
         return (instruction) => {
             if (this.instructions[index] !== null)
-                throw new Error("This emit was already used.");
+                throw new Error("This emitLater function was already used.");
 
             this.laterEmitsCount--;
             this.instructions[index] = instruction;
         };
     }
 
+    /**
+     * Returns the emitted instructions. Can not be used before all later emits with {@link emitLater} are done.
+     */
     getInstructions(): Instruction[] {
         if (this.laterEmitsCount !== 0)
             throw new Error("Can not get instructons before all later emits are done.");
@@ -203,6 +233,9 @@ class EmitterContext {
         return <Instruction[]>this.instructions;
     }
 
+    /**
+     * Returns the number of created variables.
+     */
     getVariableCount(): number {
         return this.variableCount;
     }
@@ -211,7 +244,9 @@ class EmitterContext {
     private readonly instructions: (Instruction | null)[] = [];
     private laterEmitsCount = 0;
 
-    constructor(private readonly programSymbolToProgramMap: Map<Symbol, Program>,
-        readonly compilation: Compilation) {
-    }
+    /**
+     * @param programSymbolToProgramMap Symbol to program map. 
+     * @param compilation Compilation.
+     */
+    constructor(private readonly programSymbolToProgramMap: Map<Symbol, Program>, readonly compilation: Compilation) { }
 }

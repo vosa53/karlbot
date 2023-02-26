@@ -9,26 +9,51 @@ import { ProgramSymbol } from "./symbols/program-symbol";
 import { Symbol } from "./symbols/symbol";
 import { SymbolTable } from "./semantic-analysis/symbol-table";
 
+/**
+ * Collection of compilation units.
+ */
 export class Compilation {
+    /**
+     * Compilation units.
+     */
     readonly compilationUnits: readonly CompilationUnitNode[];
+
+    /**
+     * References to external programs.
+     */
     readonly externalPrograms: readonly ExternalProgramReference[];
 
+    /**
+     * Symbol table.
+     */
     get symbolTable(): SymbolTable {
         return this._symbolTable = this._symbolTable ?? SymbolTable.create(this.compilationUnits, this.externalPrograms);
     }
 
     private _symbolTable: SymbolTable | null = null;
 
+    /**
+     * @param compilationUnits Compilation units.
+     * @param externalPrograms References to external programs.
+     */
     constructor(compilationUnits: readonly CompilationUnitNode[], externalPrograms: readonly ExternalProgramReference[]) {
         this.compilationUnits = compilationUnits;
         this.externalPrograms = externalPrograms;
     }
 
+    /**
+     * Creates a new compilation with added compilation unit.
+     * @param compilationUnit Compilation unit to add.
+     */
     addCompilationUnit(compilationUnit: CompilationUnitNode): Compilation {
         const withCompilationUnit = [...this.compilationUnits, compilationUnit];
         return new Compilation(withCompilationUnit, this.externalPrograms);
     }
 
+    /**
+     * Creates a new compilation with removed compilation unit.
+     * @param compilationUnit Compilation unit to add.
+     */
     removeCompilationUnit(compilationUnit: CompilationUnitNode): Compilation {
         const index = this.compilationUnits.indexOf(compilationUnit);
 
@@ -41,6 +66,11 @@ export class Compilation {
         return new Compilation(withoutCompilationUnit, this.externalPrograms);
     }
 
+    /**
+     * Creates a new compilation with replaced compilation unit.
+     * @param oldCompilationUnit Compilation unit to be replaced.
+     * @param newCompilationUnit Replacing compilation unit.
+     */
     replaceCompilationUnit(oldCompilationUnit: CompilationUnitNode, newCompilationUnit: CompilationUnitNode): Compilation {
         const index = this.compilationUnits.indexOf(oldCompilationUnit);
 
@@ -53,6 +83,10 @@ export class Compilation {
         return new Compilation(withReplacedCompilationUnit, this.externalPrograms);
     }
 
+    /**
+     * Creates a new compilation with the given external programs.
+     * @param externalPrograms External programs to be in the new compilation.
+     */
     withExternalPrograms(externalPrograms: readonly ExternalProgramReference[]): Compilation {
         return new Compilation(this.compilationUnits, externalPrograms);
     }

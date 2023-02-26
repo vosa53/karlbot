@@ -13,7 +13,14 @@ import { ExternalProgramSymbol } from "./../symbols/external-program-symbol";
 import { ProgramSymbol } from "./../symbols/program-symbol";
 import { SyntaxElement } from "./../syntax-tree/syntax-element";
 
+/**
+ * Finds errors in a compilation.
+ */
 export class Checker {
+    /**
+     * Checks the given compilation for errors and returns them.
+     * @param compilation Compilation to check.
+     */
     static check(compilation: Compilation): Error[] {
         const errors: Error[] = [];
 
