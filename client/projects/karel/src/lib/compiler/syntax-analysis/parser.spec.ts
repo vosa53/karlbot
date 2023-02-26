@@ -32,113 +32,146 @@ import { Lexer } from "./lexer";
 import { Parser } from "./parser";
 
 describe("Parser", () => {
-    it("parseCompilationUnit - Parses a program.", () => {
-        const tokens = parseWithEndOfFile([
-            new ProgramPrimitiveToken("program"),
-            new IdentifierPrimitiveToken("main"),
-            new EndPrimitiveToken("end")
-        ]);
+    describe("program", () => {
+        it("parseCompilationUnit - Parses a valid program.", () => {
+            const tokens = parseWithEndOfFile([
+                new ProgramPrimitiveToken("program"),
+                new IdentifierPrimitiveToken("main"),
+                new EndPrimitiveToken("end")
+            ]);
+    
+            const expected = 
+                new CompilationUnitPrimitiveNode([
+                    new ProgramPrimitiveNode(
+                        new ProgramPrimitiveToken("program"),
+                        new IdentifierPrimitiveToken("main"),
+                        new BlockPrimitiveNode(
+                            [], 
+                            new EndPrimitiveToken("end")
+                        )
+                    )
+                ], 
+                    new EndOfFilePrimitiveToken(""),
+                    ""
+                );
+            expect(tokens).toEqual(expected);
+        });
 
-        const expected = 
-            new CompilationUnitPrimitiveNode([
-                new ProgramPrimitiveNode(
-                    new ProgramPrimitiveToken("program"),
-                    new IdentifierPrimitiveToken("main"),
+        it("parseCompilationUnit - Parses a program without name.", () => {
+            const tokens = parseWithEndOfFile([
+                new ProgramPrimitiveToken("program"),
+                new EndPrimitiveToken("end")
+            ]);
+    
+            const expected = 
+                new CompilationUnitPrimitiveNode([
+                    new ProgramPrimitiveNode(
+                        new ProgramPrimitiveToken("program"),
+                        null,
+                        new BlockPrimitiveNode(
+                            [], 
+                            new EndPrimitiveToken("end")
+                        )
+                    )
+                ], 
+                    new EndOfFilePrimitiveToken(""),
+                    ""
+                );
+            expect(tokens).toEqual(expected);
+        });
+    });
+
+    describe("call", () => {
+        it("parseCompilationUnit - Parses a call.", () => {
+            const tokens = parseInProgramContext([
+                new IdentifierPrimitiveToken("step")
+            ]);
+    
+            const expected = [
+                new CallPrimitiveNode(
+                    new IdentifierPrimitiveToken("step")
+                )
+            ];
+            expect(tokens).toEqual(expected);
+        });
+    });
+
+    describe("if", () => {
+        it("parseCompilationUnit - Parses an if.", () => {
+            const tokens = parseInProgramContext([
+                new IfPrimitiveToken("if"),
+                new IsPrimitiveToken("is"),
+                new IdentifierPrimitiveToken("wall"),
+                new EndPrimitiveToken("end")
+            ]);
+    
+            const expected = [
+                new IfPrimitiveNode(
+                    new IfPrimitiveToken("if"),
+                    new IsPrimitiveToken("is"),
+                    new CallPrimitiveNode(
+                        new IdentifierPrimitiveToken("wall")
+                    ),
                     new BlockPrimitiveNode(
-                        [], 
+                        [],
+                        new EndPrimitiveToken("end")
+                    ),
+                    null,
+                    null
+                )
+            ];
+            expect(tokens).toEqual(expected);
+        });
+    });
+
+    describe("while", () => {
+        it("parseCompilationUnit - Parses a while.", () => {
+            const tokens = parseInProgramContext([
+                new WhilePrimitiveToken("while"),
+                new IsPrimitiveToken("is"),
+                new IdentifierPrimitiveToken("wall"),
+                new EndPrimitiveToken("end")
+            ]);
+    
+            const expected = [
+                new WhilePrimitiveNode(
+                    new WhilePrimitiveToken("while"),
+                    new IsPrimitiveToken("is"),
+                    new CallPrimitiveNode(
+                        new IdentifierPrimitiveToken("wall")
+                    ),
+                    new BlockPrimitiveNode(
+                        [],
                         new EndPrimitiveToken("end")
                     )
                 )
-            ], 
-                new EndOfFilePrimitiveToken(""),
-                ""
-            );
-        expect(tokens).toEqual(expected);
+            ];
+            expect(tokens).toEqual(expected);
+        });
     });
 
-    it("parseCompilationUnit - Parses a call.", () => {
-        const tokens = parseInProgramContext([
-            new IdentifierPrimitiveToken("step")
-        ]);
-
-        const expected = [
-            new CallPrimitiveNode(
-                new IdentifierPrimitiveToken("step")
-            )
-        ];
-        expect(tokens).toEqual(expected);
-    });
-
-    it("parseCompilationUnit - Parses an if.", () => {
-        const tokens = parseInProgramContext([
-            new IfPrimitiveToken("if"),
-            new IsPrimitiveToken("is"),
-            new IdentifierPrimitiveToken("wall"),
-            new EndPrimitiveToken("end")
-        ]);
-
-        const expected = [
-            new IfPrimitiveNode(
-                new IfPrimitiveToken("if"),
-                new IsPrimitiveToken("is"),
-                new CallPrimitiveNode(
-                    new IdentifierPrimitiveToken("wall")
-                ),
-                new BlockPrimitiveNode(
-                    [],
-                    new EndPrimitiveToken("end")
-                ),
-                null,
-                null
-            )
-        ];
-        expect(tokens).toEqual(expected);
-    });
-
-    it("parseCompilationUnit - Parses a while.", () => {
-        const tokens = parseInProgramContext([
-            new WhilePrimitiveToken("while"),
-            new IsPrimitiveToken("is"),
-            new IdentifierPrimitiveToken("wall"),
-            new EndPrimitiveToken("end")
-        ]);
-
-        const expected = [
-            new WhilePrimitiveNode(
-                new WhilePrimitiveToken("while"),
-                new IsPrimitiveToken("is"),
-                new CallPrimitiveNode(
-                    new IdentifierPrimitiveToken("wall")
-                ),
-                new BlockPrimitiveNode(
-                    [],
-                    new EndPrimitiveToken("end")
-                )
-            )
-        ];
-        expect(tokens).toEqual(expected);
-    });
-
-    it("parseCompilationUnit - Parses a repeat.", () => {
-        const tokens = parseInProgramContext([
-            new RepeatPrimitiveToken("repeat"),
-            new NumberPrimitiveToken("4"),
-            new TimesPrimitiveToken("times"),
-            new EndPrimitiveToken("end")
-        ]);
-
-        const expected = [
-            new RepeatPrimitiveNode(
+    describe("repeat", () => {
+        it("parseCompilationUnit - Parses a repeat.", () => {
+            const tokens = parseInProgramContext([
                 new RepeatPrimitiveToken("repeat"),
                 new NumberPrimitiveToken("4"),
                 new TimesPrimitiveToken("times"),
-                new BlockPrimitiveNode(
-                    [],
-                    new EndPrimitiveToken("end")
+                new EndPrimitiveToken("end")
+            ]);
+    
+            const expected = [
+                new RepeatPrimitiveNode(
+                    new RepeatPrimitiveToken("repeat"),
+                    new NumberPrimitiveToken("4"),
+                    new TimesPrimitiveToken("times"),
+                    new BlockPrimitiveNode(
+                        [],
+                        new EndPrimitiveToken("end")
+                    )
                 )
-            )
-        ];
-        expect(tokens).toEqual(expected);
+            ];
+            expect(tokens).toEqual(expected);
+        });
     });
 });
 
