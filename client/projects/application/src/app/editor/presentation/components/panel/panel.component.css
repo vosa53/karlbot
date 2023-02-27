@@ -1,0 +1,16 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    background: whitesmoke;
+    height: 100%;
+}
+
+.header {
+    font-size: 17px;
+    padding-left: 16px;
+    margin-bottom: 0;
+}
+
+.content {
+    flex-grow: 1;
+}

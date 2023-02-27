@@ -34,6 +34,8 @@ $my-palette: (
  )
 );
 
+$my-typography: mat.define-typography-config();
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
@@ -52,11 +54,12 @@ $application-theme: mat.define-light-theme((
     warn: $application-warn,
   ),
   density: 0,
-  typography: mat.define-typography-config()
+  typography: $my-typography
 ));
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($application-theme);
+@include mat.typography-hierarchy($my-typography);
 

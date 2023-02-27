@@ -15,10 +15,24 @@ import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { PanelComponent } from './presentation/components/panel/panel.component';
+import { HeaderComponent } from './presentation/pages/editor-page/header/header.component';
+import { TownEditorComponent } from './presentation/pages/editor-page/town-editor/town-editor.component';
+import { CodeEditorComponent } from './presentation/pages/editor-page/code-editor/code-editor.component';
+import { FileExplorerComponent } from './presentation/pages/editor-page/file-explorer/file-explorer.component';
+import { SettingsComponent } from './presentation/pages/editor-page/settings/settings.component';
+import { ErrorListComponent } from './presentation/pages/editor-page/error-list/error-list.component';
 
 @NgModule({
     declarations: [
-        EditorPageComponent
+        EditorPageComponent,
+        PanelComponent,
+        HeaderComponent,
+        TownEditorComponent,
+        CodeEditorComponent,
+        FileExplorerComponent,
+        SettingsComponent,
+        ErrorListComponent
     ],
     imports: [
         CommonModule,

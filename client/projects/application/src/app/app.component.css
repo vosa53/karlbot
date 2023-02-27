@@ -1,0 +1,13 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.navigation {
+    height: 50px;
+}
+
+.page {
+    flex-grow: 1;
+}

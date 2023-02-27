@@ -1,15 +1,37 @@
-main {
+:host {
     height: 100%;
     display: grid;
-    grid-template-rows: auto auto auto 2fr 1fr auto;
+    grid-template-rows: auto 2fr 1fr auto;
     grid-template-columns: 17rem 1fr 1fr;
     grid-template-areas:
-        "nav nav nav"
-        "menu menu menu"
-        "toolbar toolbar toolbar"
+        "header header header"
         "file-explorer code-editor town-editor"
         "settings error-list town-editor"
         "status-bar status-bar status-bar";
+}
+
+.header {
+    grid-area: header;
+}
+
+.file-explorer {
+    grid-area: file-explorer;
+}
+
+.code-editor {
+    grid-area: code-editor;
+}
+
+.town-editor {
+    grid-area: town-editor;
+}
+
+.settings {
+    grid-area: settings;
+}
+
+.error-list {
+    grid-area: error-list;
 }
 
 mat-card {

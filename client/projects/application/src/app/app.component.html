@@ -1,1 +1,11 @@
-<router-outlet></router-outlet>
+<mat-toolbar color="primary" class="navigation">
+    <img src="assets/logo.png" style="width: 30px;" alt="">
+    <span class="example-spacer" style="width: 10px;"></span>
+    <span>KarlBot</span>
+    <span class="example-spacer" style="width: 20px;"></span>
+    <a mat-button routerLink="/">Editor</a>
+    <a mat-button routerLink="/projects">Projects</a>
+    <a mat-button routerLink="/challenges">Challenges</a>
+</mat-toolbar>
+
+<router-outlet class="page"></router-outlet>

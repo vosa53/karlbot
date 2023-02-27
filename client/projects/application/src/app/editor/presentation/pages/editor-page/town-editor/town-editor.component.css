@@ -1,0 +1,34 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.town-view {
+    flex-grow: 1;
+}
+
+.toolbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas: "tools . width height";
+    gap: 16px;
+    height: auto;
+}
+
+.toolbar-tools {
+    grid-area: tools;
+}
+
+.toolbar-width {
+    grid-area: width;
+}
+
+.toolbar-height {
+    grid-area: height;
+}
+
+.toolbar-width, .toolbar-height {
+    width: 75px;
+    margin: 4px 0;
+}

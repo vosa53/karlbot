@@ -1,0 +1,47 @@
+<mat-toolbar class="menu">
+    <button mat-button [matMenuTriggerFor]="fileMenu">File</button>
+    <mat-menu #fileMenu="matMenu">
+        <button mat-menu-item>New</button>
+        <button mat-menu-item>Open</button>
+        <button mat-menu-item>Save</button>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="editMenu">Edit</button>
+    <mat-menu #editMenu="matMenu">
+        <button mat-menu-item>Undo</button>
+        <button mat-menu-item>Redo</button>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="programMenu">Program</button>
+    <mat-menu #programMenu="matMenu">
+        <button mat-menu-item>Run</button>
+        <button mat-menu-item>Run read-only</button>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="helpMenu">Help</button>
+    <mat-menu #helpMenu="matMenu">
+        <button mat-menu-item>About</button>
+    </mat-menu>
+</mat-toolbar>
+
+<mat-toolbar class="toolbar">
+    <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+        <mat-icon>undo</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+        <mat-icon>redo</mat-icon>
+    </button>
+    <mat-form-field appearance="fill" subscriptSizing="dynamic" class="disable-form-underline">
+        <mat-label>Entry point</mat-label>
+        <mat-select>
+            <mat-option [value]="'a'">
+                Medium
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-button aria-label="Example icon button with a vertical three dot icon">
+        <mat-icon>play_arrow</mat-icon>
+        Run
+    </button>
+    <button mat-button aria-label="Example icon button with a vertical three dot icon">
+        <mat-icon>play_arrow</mat-icon>
+        Run read-only
+    </button>
+</mat-toolbar>

@@ -1,0 +1,17 @@
+<app-panel header="Settings">
+    <div class="fields">
+        <mat-form-field class="field" appearance="outline">
+            <mat-label>Karel speed</mat-label>
+            <mat-select>
+                <mat-option [value]="'medium'">
+                    Medium
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field class="field" appearance="outline">
+            <mat-label>Max recursion depth</mat-label>
+            <input matInput value="1000">
+        </mat-form-field>
+    </div>
+</app-panel>

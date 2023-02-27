@@ -1,0 +1,12 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.fields {
+    padding: 8px 16px;
+}
+
+.field {
+    width: 100%;
+}
