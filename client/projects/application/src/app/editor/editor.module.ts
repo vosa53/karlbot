@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CommonModule } from '@angular/common';
+import { EditorPageComponent } from './presentation/pages/editor-page/editor-page.component';
+import { EditorRoutingModule } from './editor-routing.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -19,12 +18,11 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @NgModule({
     declarations: [
-        AppComponent
+        EditorPageComponent
     ],
     imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
+        CommonModule,
+        EditorRoutingModule,
         MatSlideToggleModule,
         MatIconModule,
         LayoutModule,
@@ -38,8 +36,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
         MatInputModule,
         MatSelectModule,
         MatButtonToggleModule
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+    ]
 })
-export class AppModule { }
+export class EditorModule { }

@@ -1,0 +1,38 @@
+main {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto auto auto 2fr 1fr auto;
+    grid-template-columns: 17rem 1fr 1fr;
+    grid-template-areas:
+        "nav nav nav"
+        "menu menu menu"
+        "toolbar toolbar toolbar"
+        "file-explorer code-editor town-editor"
+        "settings error-list town-editor"
+        "status-bar status-bar status-bar";
+}
+
+mat-card {
+    /*margin: 5px;*/
+    box-shadow: none;
+    /*border: 1px solid lightgray;*/
+    border-radius: 0;
+    background: whitesmoke;
+}
+
+mat-card-header {
+    padding-top: 0;
+    /*background: #b4e61d;*/
+    border-top: solid 1px #d3d3d3;
+    border-bottom: solid 1px #d3d3d3;
+}
+
+mat-card-title {
+    font-size: 17px;
+}
+
+mat-card-content {
+    padding-top: 10px;
+    /*padding: 0;
+    padding-top: 10px;*/
+}

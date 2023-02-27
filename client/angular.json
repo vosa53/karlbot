@@ -25,6 +25,7 @@
               "projects/application/src/assets"
             ],
             "styles": [
+              "projects/application/src/custom-theme.scss",
               "projects/application/src/styles.css"
             ],
             "scripts": []
