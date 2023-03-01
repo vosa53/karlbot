@@ -8,9 +8,9 @@ export enum Direction {
     up = 0,
 
     /**
-     * Left (west).
+     * Right (east).
      */
-    left = 1,
+    right = 1,
 
     /**
      * Down (south).
@@ -18,7 +18,7 @@ export enum Direction {
     down = 2,
 
     /**
-     * Right (east).
+     * Left (west).
      */
-    right = 3
+    left = 3
 }

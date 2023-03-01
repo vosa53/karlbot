@@ -22,6 +22,7 @@ import { CodeEditorComponent } from './presentation/pages/editor-page/code-edito
 import { FileExplorerComponent } from './presentation/pages/editor-page/file-explorer/file-explorer.component';
 import { SettingsComponent } from './presentation/pages/editor-page/settings/settings.component';
 import { ErrorListComponent } from './presentation/pages/editor-page/error-list/error-list.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -49,7 +50,8 @@ import { ErrorListComponent } from './presentation/pages/editor-page/error-list/
         MatListModule,
         MatInputModule,
         MatSelectModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
+        SharedModule
     ]
 })
 export class EditorModule { }

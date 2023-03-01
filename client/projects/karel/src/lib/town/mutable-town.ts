@@ -147,7 +147,7 @@ export class MutableTown {
         tiles.fill(0);
         signCounts.fill(TownTile.land);
 
-        return new MutableTown(width, height, 0, 0, Direction.left, 0, 0, tiles, signCounts);
+        return new MutableTown(width, height, 0, 0, Direction.right, 0, 0, tiles, signCounts);
     }
 
     /**
