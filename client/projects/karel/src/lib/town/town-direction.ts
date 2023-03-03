@@ -1,7 +1,7 @@
 /**
  * Direction in a town.
  */
-export enum Direction {
+export enum TownDirection {
     /**
      * Up (north).
      */

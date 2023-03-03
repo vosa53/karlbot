@@ -16,6 +16,10 @@
     height: auto;
 }
 
+.toolbar-tool-icon {
+    width: 24px;
+}
+
 .toolbar-tools {
     grid-area: tools;
 }

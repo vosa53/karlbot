@@ -1,29 +1,30 @@
 import { TownCamera } from "./town-camera";
+import { Rectangle } from "../../../../../../karel/src/lib/math/rectangle";
 import { TownViewport } from "./town-viewport";
 
 /**
- * Town rendering environment.
+ * Environment in which a town is rendered.
  */
 export class TownRenderingEnvironment {
     /**
-     * Camera.
+     * Camera used for rendering.
      */
     readonly camera: TownCamera;
 
     /**
-     * Viewport.
+     * Viewport used for rendering.
      */
     readonly viewport: TownViewport;
 
     /**
-     * Pixel size of a tile before the camera zoom is applied.
+     * Pixel size of one tile **before** the camera zoom is applied.
      */
     readonly originalTilePixelSize: number;
 
     /**
-     * @param camera Camera.
-     * @param viewport Viewport.
-     * @param originalTilePixelSize Pixel size of a tile before the camera zoom is applied.
+     * @param camera Camera used for rendering.
+     * @param viewport Viewport used for rendering.
+     * @param originalTilePixelSize Pixel size of one tile **before** the camera zoom is applied.
      */
     constructor(camera: TownCamera, viewport: TownViewport, originalTilePixelSize: number) {
         this.camera = camera;
@@ -32,7 +33,7 @@ export class TownRenderingEnvironment {
     }
 
     /**
-     * Pixel size of a tile after the camera zoom is applied.
+     * Pixel size of one tile **after** the camera zoom is applied.
      */
     get tilePixelSize(): number {
         return this.originalTilePixelSize * this.camera.zoomLevel;
@@ -43,7 +44,7 @@ export class TownRenderingEnvironment {
      * @param x x coordinate in pixels.
      */
     pixelXToTileX(x: number): number {
-        return this.camera.centerTileX + (x - this.viewport.pixelWidth * 0.5) / this.originalTilePixelSize;
+        return this.camera.centerTile.x + (x - this.viewport.pixelWidth * 0.5) / this.tilePixelSize;
     }
 
     /**
@@ -51,7 +52,7 @@ export class TownRenderingEnvironment {
      * @param y y coordinate in pixels.
      */
     pixelYToTileY(y: number): number {
-        return this.camera.centerTileY + (y - this.viewport.pixelHeight * 0.5) / this.originalTilePixelSize;
+        return this.camera.centerTile.y + (y - this.viewport.pixelHeight * 0.5) / this.tilePixelSize;
     }
 
     /**
@@ -59,7 +60,7 @@ export class TownRenderingEnvironment {
      * @param x x coordinate in tiles.
      */
     tileXToPixelX(x: number): number {
-        return this.viewport.pixelWidth * 0.5 + (x - this.camera.centerTileX) * this.originalTilePixelSize;
+        return this.viewport.pixelWidth * 0.5 + (x - this.camera.centerTile.x) * this.tilePixelSize;
     }
 
     /**
@@ -67,22 +68,19 @@ export class TownRenderingEnvironment {
      * @param y y coordinate in tiles.
      */
     tileYToPixelY(y: number): number {
-        return this.viewport.pixelHeight * 0.5 + (y - this.camera.centerTileY) * this.originalTilePixelSize;
+        return this.viewport.pixelHeight * 0.5 + (y - this.camera.centerTile.y) * this.tilePixelSize;
     }
 
     /**
      * Returns a visible region in tile coordinates.
      */
-    getVisibleTileRegion(): { top: number, right: number, bottom: number, left: number } {
-        const viewportTileWidth = this.viewport.pixelWidth / this.tilePixelSize;
-        const viewportTileHeight = this.viewport.pixelHeight / this.tilePixelSize;
+    getVisibleTileRegion(): Rectangle {
+        const tileWidth = this.viewport.pixelWidth / this.tilePixelSize;
+        const tileHeight = this.viewport.pixelHeight / this.tilePixelSize;
 
-        const left = this.camera.centerTileX - (viewportTileWidth / 2);
-        const top = this.camera.centerTileY - (viewportTileHeight / 2);
-
-        const right = left + viewportTileWidth;
-        const bottom = top + viewportTileHeight;
+        const tileX = this.camera.centerTile.x - (tileWidth / 2);
+        const tileY = this.camera.centerTile.y - (tileHeight / 2);
         
-        return { top, right, bottom, left };
+        return new Rectangle(tileX, tileY, tileWidth, tileHeight);
     }
 }

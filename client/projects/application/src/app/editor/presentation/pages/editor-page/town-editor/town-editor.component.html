@@ -1,29 +1,25 @@
-<!--img src="/assets/b.png" alt="image" style="height: 700px;"-->
-<app-town-view class="town-view" [town]="town"></app-town-view>
+<app-town-view class="town-view" [town]="town" [camera]="camera" (cameraChange)="onTownViewCameraChange($event)" 
+    appTownViewMove 
+    appTownViewSelect [selectionDisabled]="selectionDisabled" [selectionMode]="selectionMode" (select)="onSelect($event)"
+></app-town-view>
 
 <mat-toolbar class="toolbar">
-    <mat-button-toggle-group #group="matButtonToggleGroup" class="toolbar-tools">
-        <mat-button-toggle value="left" aria-label="Text align left">
-            <mat-icon>format_align_left</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="center" aria-label="Text align center">
-            <mat-icon>format_align_center</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="right" aria-label="Text align right">
-            <mat-icon>format_align_right</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="justify" disabled aria-label="Text align justify">
-            <mat-icon>format_align_justify</mat-icon>
+    <mat-button-toggle-group class="toolbar-tools" [value]="selectedTool" (valueChange)="selectedTool = $event">
+        <mat-button-toggle [value]="tool.tool" *ngFor="let tool of tools">
+            <img *ngIf="tool.iconSrc !== undefined" class="toolbar-tool-icon" [src]="tool.iconSrc">
+            <mat-icon *ngIf="tool.iconName !== undefined" class="toolbar-tool-icon">{{tool.iconName}}</mat-icon>
         </mat-button-toggle>
     </mat-button-toggle-group>
 
     <mat-form-field class="toolbar-width" appearance="outline" subscriptSizing="dynamic">
         <mat-label>Width</mat-label>
-        <input matInput value="20">
+        <input type="number" matInput appValidatedInput [validator]="sizeValidator"
+            [validatedValue]="town !== null ? town.width.toString() : '0'" (validatedValueChange)="onSizeChange($event, undefined)">
     </mat-form-field>
 
     <mat-form-field class="toolbar-height" appearance="outline" subscriptSizing="dynamic">
         <mat-label>Height</mat-label>
-        <input matInput value="20">
+        <input type="number" matInput appValidatedInput [validator]="sizeValidator"
+            [validatedValue]="town !== null ? town.height.toString() : '0'" (validatedValueChange)="onSizeChange(undefined, $event)">
     </mat-form-field>
 </mat-toolbar>

@@ -1,5 +1,5 @@
 /**
- * Town viewport.
+ * Screen viewport where a town is rendered.
  */
 export class TownViewport {
     /**

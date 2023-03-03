@@ -1,12 +1,13 @@
-import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
+import { Vector } from 'projects/karel/src/lib/math/vector';
 import { MutableTown } from 'projects/karel/src/lib/town/mutable-town';
-import { TownCamera } from './town-camera';
-import { TownRenderer } from './town-renderer';
-import { TownRenderingEnvironment } from './town-rendering-environment';
-import { TownViewport } from './town-viewport';
+import { TownCamera } from '../../town/town-camera';
+import { TownRenderer } from '../../town/town-renderer';
+import { TownRenderingEnvironment } from '../../town/town-rendering-environment';
+import { TownViewport } from '../../town/town-viewport';
 
 /**
- * Component displaying a town.
+ * Displays a town.
  */
 @Component({
     selector: 'app-town-view',
@@ -21,7 +22,7 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
     town: MutableTown | null = null;
 
     /**
-     * Camera for rendering.
+     * Camera for display.
      */
     @Input()
     get camera(): TownCamera {
@@ -34,30 +35,27 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
     }
 
     /**
+     * Event when the camera is to be changed.
+     */
+    @Output()
+    readonly cameraChange = new EventEmitter<TownCamera>();
+
+    /**
      * Rendering environment.
      */
     get renderingEnvironment(): TownRenderingEnvironment {
         return this._renderingEnvironment;
     }
 
-    @ViewChild("canvas", { static: true })
-    private readonly canvasElementRef!: ElementRef<HTMLCanvasElement>;
-
-    private _camera = new TownCamera(0, 0, 1);
+    private _camera = new TownCamera(Vector.ZERO, 1);
     private _renderingEnvironment = new TownRenderingEnvironment(this.camera, new TownViewport(0, 0), 32);
 
-    private requestAnimationFrameId: number | null = null;
+    @ViewChild("canvas", { static: true })
+    private readonly canvasElementRef!: ElementRef<HTMLCanvasElement>;
     private readonly renderers: { renderer: TownViewRenderer, order: number }[] = [];
-
-    constructor() {
-        this.registerRenderer(c => {
-            if (this.town !== null)
-                TownRenderer.render(c, this.town, this.renderingEnvironment), 0
-        }, 0);
-    }
+    private requestAnimationFrameId: number | null = null;
 
     ngAfterViewInit() {
-        this.updateCanvasSize();
         this.updateRenderingEnvironment();
 
         const canvasElement = this.canvasElementRef.nativeElement;
@@ -71,6 +69,11 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
 
         };
         this.requestAnimationFrameId = requestAnimationFrame(animationFrameCallback);
+
+        this.registerRenderer(0, c => {
+            if (this.town !== null)
+                TownRenderer.render(c, this.renderingEnvironment, this.town);
+        });
     }
 
     ngOnDestroy(): void {
@@ -78,12 +81,17 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
             cancelAnimationFrame(this.requestAnimationFrameId);
     }
 
+    @HostListener("window:resize")
+    onWindowResize() {
+        this.updateRenderingEnvironment();
+    }
+
     /**
      * Adds a renderer
-     * @param renderer Renderer to add.
      * @param order Rendering order. Renderers are called in ascending order.
+     * @param renderer Renderer to add.
      */
-    registerRenderer(renderer: TownViewRenderer, order: number) {
+    registerRenderer(order: number, renderer: TownViewRenderer) {
         this.renderers.push({ renderer, order });
         this.renderers.sort((r1, r2) => r1.order - r2.order);
     }
@@ -105,14 +113,10 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
             renderer.renderer(context);
     }
 
-    private updateCanvasSize() {
+    private updateRenderingEnvironment() {
         const canvasElement = this.canvasElementRef.nativeElement;
         canvasElement.width = canvasElement.offsetWidth;
         canvasElement.height = canvasElement.offsetHeight;
-    }
-
-    private updateRenderingEnvironment() {
-        const canvasElement = this.canvasElementRef.nativeElement;
         this._renderingEnvironment = new TownRenderingEnvironment(this.camera, new TownViewport(canvasElement.width, canvasElement.height), 32);
     }
 }

@@ -1,4 +1,5 @@
-import { Direction } from './direction';
+import { Vector } from '../math/vector';
+import { TownDirection } from './town-direction';
 import { MutableTown } from './mutable-town';
 import { TownTile } from './town-tile';
 
@@ -6,6 +7,13 @@ import { TownTile } from './town-tile';
  * Karel town.
  */
 export class Town {
+    /**
+     * Maximum number of signs on one tile.
+     */
+    static get MAX_SIGN_COUNT(): number {
+        return MutableTown.MAX_SIGN_COUNT;
+    }
+    
     /**
      * Town width.
      */
@@ -21,38 +29,24 @@ export class Town {
     }
 
     /**
-     * Karel x coordinate.
+     * Karel position.
      */
-    get karelX(): number {
-        return this.mutableTown.karelX;
-    }
-
-    /**
-     * Karel y coordinate.
-     */
-    get karelY(): number {
-        return this.mutableTown.karelY;
+    get karelPosition(): Vector {
+        return this.mutableTown.karelPosition;
     }
 
     /**
      * Karel direction.
      */
-    get karelDirection(): Direction {
+    get karelDirection(): TownDirection {
         return this.mutableTown.karelDirection;
     }
     
     /**
-     * Home x coordinate.
+     * Home position.
      */
-    get homeX(): number {
-        return this.mutableTown.homeX;
-    }
-
-    /**
-     * Home y coordinate.
-     */
-    get homeY(): number {
-        return this.mutableTown.homeY;
+    get homePosition(): Vector {
+        return this.mutableTown.homePosition;
     }
 
     private constructor(
@@ -63,17 +57,15 @@ export class Town {
      * Creates a new town with the specified properties.
      * @param width Town width.
      * @param height Town height.
-     * @param karelX Karel x coordinate.
-     * @param karelY Karel y coordinate.
+     * @param karelPosition Karel position
      * @param karelDirection Karel direction.
-     * @param homeX Home x coordinate.
-     * @param homeY Home y coordinate.
+     * @param homePosition Home position.
      * @param tiles Tiles in row-major order.
      * @param signCounts Sign counts in row-major order.
      */
-    static create(width: number, height: number, karelX: number, karelY: number, karelDirection: Direction,
-        homeX: number, homeY: number, tiles: readonly TownTile[], signCounts: readonly number[]): Town {
-        const mutableTown = MutableTown.create(width, height, karelX, karelY, karelDirection, homeX, homeY, tiles, signCounts);
+    static create(width: number, height: number, karelPosition: Vector, karelDirection: TownDirection, homePosition: Vector,
+        tiles: readonly TownTile[], signCounts: readonly number[]): Town {
+        const mutableTown = MutableTown.create(width, height, karelPosition, karelDirection, homePosition, tiles, signCounts);
         return new Town(mutableTown);
     }
 

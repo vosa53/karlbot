@@ -1,10 +1,10 @@
-import { DirectionUtils } from "projects/karel/src/lib/town/direction-utils";
+import { TownDirectionUtils } from "projects/karel/src/lib/town/town-direction-utils";
 import { MutableTown } from "projects/karel/src/lib/town/mutable-town";
 import { TownTile } from "projects/karel/src/lib/town/town-tile";
 import { TownRenderingEnvironment } from "./town-rendering-environment";
 
 /**
- * Renders {@link MutableTown} on canvas.
+ * Renders a town on canvas.
  */
 export class TownRenderer {
     private static readonly karelImage = new Image();
@@ -27,25 +27,25 @@ export class TownRenderer {
     /**
      * Renders the given town to the given canvas rendering context. 
      * @param context Canvas rendering context.
-     * @param town Town to render.
      * @param environment Rendering environment.
+     * @param town Town to render.
      */
-    static render(context: CanvasRenderingContext2D, town: MutableTown, environment: TownRenderingEnvironment) {
-        TownRenderer.renderTiles(context, town, environment);
-        TownRenderer.renderKarel(context, town, environment);
-        TownRenderer.renderHome(context, town, environment);
+    static render(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
+        TownRenderer.renderTiles(context, environment, town);
+        TownRenderer.renderKarel(context, environment, town);
+        TownRenderer.renderHome(context, environment, town);
     }
 
-    private static renderTiles(context: CanvasRenderingContext2D, town: MutableTown, environment: TownRenderingEnvironment) {
+    private static renderTiles(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
         const signHeight = environment.tilePixelSize / 8;
 
         const visibleTileRegion = environment.getVisibleTileRegion();
 
-        const left = Math.max(Math.floor(visibleTileRegion.left), 0);
-        const top = Math.max(Math.floor(visibleTileRegion.top), 0);
+        const left = Math.max(Math.floor(visibleTileRegion.x), 0);
+        const top = Math.max(Math.floor(visibleTileRegion.y), 0);
 
-        const right = Math.min(Math.ceil(visibleTileRegion.right), town.width);
-        const bottom = Math.min(Math.ceil(visibleTileRegion.bottom), town.height);
+        const right = Math.min(Math.ceil(visibleTileRegion.x + visibleTileRegion.width), town.width);
+        const bottom = Math.min(Math.ceil(visibleTileRegion.y + visibleTileRegion.height), town.height);
 
         for (let y = top; y < bottom; y++) {
             for (let x = left; x < right; x++) {
@@ -65,17 +65,17 @@ export class TownRenderer {
         }
     }
 
-    private static renderHome(context: CanvasRenderingContext2D, town: MutableTown, environment: TownRenderingEnvironment) {
-        const positionX = environment.tileXToPixelX(town.homeX);
-        const positionY = environment.tileYToPixelY(town.homeY);
+    private static renderHome(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
+        const positionX = environment.tileXToPixelX(town.homePosition.x);
+        const positionY = environment.tileYToPixelY(town.homePosition.y);
 
         context.drawImage(this.homeImage, positionX, positionY, environment.tilePixelSize, environment.tilePixelSize);
     }
 
-    private static renderKarel(context: CanvasRenderingContext2D, town: MutableTown, environment: TownRenderingEnvironment) {
-        const positionX = environment.tileXToPixelX(town.karelX);
-        const positionY = environment.tileYToPixelY(town.karelY);
-        const directionVector = DirectionUtils.toVector(town.karelDirection);
+    private static renderKarel(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
+        const positionX = environment.tileXToPixelX(town.karelPosition.x);
+        const positionY = environment.tileYToPixelY(town.karelPosition.y);
+        const directionVector = TownDirectionUtils.toVector(town.karelDirection);
         const rotation = Math.atan2(directionVector.y, directionVector.x);
         const rotationOriginX = positionX + environment.tilePixelSize * 0.5;
         const rotationOriginY = positionY + environment.tilePixelSize * 0.5;

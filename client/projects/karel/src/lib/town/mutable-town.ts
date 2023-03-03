@@ -1,4 +1,5 @@
-import { Direction } from './direction';
+import { Vector } from '../math/vector';
+import { TownDirection } from './town-direction';
 import { Town } from './town';
 import { TownTile } from './town-tile';
 
@@ -8,6 +9,11 @@ import { TownTile } from './town-tile';
  * Mutable version.
  */
 export class MutableTown {
+    /**
+     * Maximum number of signs on one tile.
+     */
+    static readonly MAX_SIGN_COUNT = 8;
+
     /**
      * Town width.
      */
@@ -23,78 +29,48 @@ export class MutableTown {
     }
 
     /**
-     * Karel x coordinate.
+     * Karel position.
      */
-    get karelX(): number {
-        return this._karelX;
+    get karelPosition(): Vector {
+        return this._karelPosition;
     }
 
-    set karelX(value: number) {
-        MutableTown.throwIfInvalidXCoordinate(value, this.width);
-        this._karelX = value;
-    }
-
-    /**
-     * Karel y coordinate.
-     */
-    get karelY(): number {
-        return this._karelY;
-    }
-
-    set karelY(value: number) {
-        MutableTown.throwIfInvalidYCoordinate(value, this.height);
-        this._karelY = value;
+    set karelPosition(value: Vector) {
+        MutableTown.throwIfInvalidCoordinates(value.x, value.y, this.width, this.height);
+        this._karelPosition = value;
     }
 
     /**
      * Karel direction.
      */
-    karelDirection: Direction;
+    karelDirection: TownDirection;
     
     /**
-     * Home x coordinate.
+     * Home position.
      */
-    get homeX(): number {
-        return this._homeX;
+    get homePosition(): Vector {
+        return this._homePosition;
     }
 
-    set homeX(value: number) {
-        MutableTown.throwIfInvalidXCoordinate(value, this.width);
-        this._homeX = value;
+    set homePosition(value: Vector) {
+        MutableTown.throwIfInvalidCoordinates(value.x, value.y, this.width, this.height);
+        this._homePosition = value;
     }
-
-    /**
-     * Home y coordinate.
-     */
-    get homeY(): number {
-        return this._homeY;
-    }
-
-    set homeY(value: number) {
-        MutableTown.throwIfInvalidYCoordinate(value, this.height);
-        this._homeY = value;
-    }
-
-    private static readonly MAX_SIGN_COUNT = 8;
 
     private _width: number;
     private _height: number;
-    private _karelX: number;
-    private _karelY: number;
-    private _homeX: number;
-    private _homeY: number;
+    private _karelPosition: Vector;
+    private _homePosition: Vector;
     private signCounts: number[];
     private tiles: TownTile[];
 
-    private constructor(width: number, height: number, karelX: number, karelY: number, karelDirection: Direction,
-        homeX: number, homeY: number, tiles: TownTile[], signCounts: number[]) {
+    private constructor(width: number, height: number, karelPosition: Vector, karelDirection: TownDirection, homePosition: Vector, 
+        tiles: TownTile[], signCounts: number[]) {
         this._width = width;
         this._height = height;
-        this._karelX = karelX;
-        this._karelY = karelY;
+        this._karelPosition = karelPosition;
         this.karelDirection = karelDirection;
-        this._homeX = homeX;
-        this._homeY = homeY;
+        this._homePosition = homePosition;
         this.tiles = tiles;
         this.signCounts = signCounts;
     }
@@ -103,20 +79,18 @@ export class MutableTown {
      * Creates a new town with the specified properties.
      * @param width Town width.
      * @param height Town height.
-     * @param karelX Karel x coordinate.
-     * @param karelY Karel y coordinate.
+     * @param karelPosition Karel position.
      * @param karelDirection Karel direction.
-     * @param homeX Home x coordinate.
-     * @param homeY Home y coordinate.
+     * @param homePosition Home position.
      * @param tiles Tiles in row-major order.
      * @param signCounts Sign counts in row-major order.
      */
-    static create(width: number, height: number, karelX: number, karelY: number, karelDirection: Direction,
-        homeX: number, homeY: number, tiles: readonly TownTile[], signCounts: readonly number[]): MutableTown {
+    static create(width: number, height: number, karelPosition: Vector, karelDirection: TownDirection, homePosition: Vector,
+        tiles: readonly TownTile[], signCounts: readonly number[]): MutableTown {
         MutableTown.throwIfInvalidSize(width);
         MutableTown.throwIfInvalidSize(height);
-        MutableTown.throwIfInvalidCoordinates(karelX, karelY, width, height);
-        MutableTown.throwIfInvalidCoordinates(homeX, homeY, width, height);
+        MutableTown.throwIfInvalidCoordinates(karelPosition.x, karelPosition.y, width, height);
+        MutableTown.throwIfInvalidCoordinates(homePosition.x, homePosition.y, width, height);
         
         for (const signCount of signCounts)
             MutableTown.throwIfInvalidSignCount(signCount);
@@ -127,7 +101,7 @@ export class MutableTown {
         if (signCounts.length !== tileCount)
             throw new Error("Length of sign counts is not equal to width * height.");
 
-        return new MutableTown(width, height, karelX, karelY, karelDirection, homeX, homeY, [...tiles], [...signCounts]);
+        return new MutableTown(width, height, karelPosition, karelDirection, homePosition, [...tiles], [...signCounts]);
     }
 
     /**
@@ -147,21 +121,19 @@ export class MutableTown {
         tiles.fill(0);
         signCounts.fill(TownTile.land);
 
-        return new MutableTown(width, height, 0, 0, Direction.right, 0, 0, tiles, signCounts);
+        return new MutableTown(width, height, Vector.ZERO, TownDirection.right, Vector.ZERO, tiles, signCounts);
     }
 
     /**
-     * Creates a deep copy of the town.
+     * Creates a deep copy of the town. Does not copy immutable properties.
      */
     clone(): MutableTown {
         return new MutableTown(
             this.width,
             this.height,
-            this.karelX,
-            this.karelY,
+            this.karelPosition,
             this.karelDirection,
-            this.homeX,
-            this.homeY,
+            this.homePosition,
             [...this.tiles],
             [...this.signCounts]
         );
@@ -196,12 +168,16 @@ export class MutableTown {
 
         this._width = newWidth;
         this._height = newHeight;
+        this._karelPosition = new Vector(
+            Math.min(newWidth - 1, this.karelPosition.x),
+            Math.min(newHeight - 1, this.karelPosition.y)
+        );
+        this._homePosition = new Vector(
+            Math.min(newWidth - 1, this.homePosition.x),
+            Math.min(newHeight - 1, this.homePosition.y)
+        );
         this.tiles = newTiles;
         this.signCounts = newSignCounts;
-        this._karelX = Math.min(newWidth - 1, this.karelX);
-        this._karelY = Math.min(newHeight - 1, this.karelY);
-        this._homeX = Math.min(newWidth - 1, this.homeX);
-        this._homeY = Math.min(newHeight - 1, this.homeY);
     }
 
     /**
@@ -266,7 +242,7 @@ export class MutableTown {
      * Creates an immutable version of the town.
      */
     toImmutable(): Town {
-        return Town.create(this.width, this.height, this.karelX, this.karelY, this.karelDirection, this.homeX, this.homeY, this.tiles, this.signCounts);
+        return Town.create(this.width, this.height, this.karelPosition, this.karelDirection, this.homePosition, this.tiles, this.signCounts);
     }
 
     private convert2DTo1D(x: number, y: number): number {
@@ -279,18 +255,8 @@ export class MutableTown {
     }
 
     private static throwIfInvalidCoordinates(x: number, y: number, townWidth: number, townHeight: number) {
-        this.throwIfInvalidXCoordinate(x, townWidth);
-        this.throwIfInvalidXCoordinate(y, townHeight);
-    }
-
-    private static throwIfInvalidXCoordinate(x: number, townWidth: number) {
-        if (x < 0 || x >= townWidth)
-            throw new Error("x coordinate has to be greater than or equal to 0 and less than the town width.");
-    }
-
-    private static throwIfInvalidYCoordinate(y: number, townHeight: number) {
-        if (y < 0 || y >= townHeight)
-            throw new Error("y coordinate has to be greater than or equal to 0 and less than the town height.");
+        if (x < 0 || x >= townWidth || y < 0 || y >= townHeight)
+            throw new Error("Coordinate are outside of the town.");
     }
 
     private static throwIfInvalidSize(size: number) {
