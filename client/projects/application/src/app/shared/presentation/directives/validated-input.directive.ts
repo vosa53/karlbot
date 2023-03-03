@@ -46,11 +46,12 @@ export class ValidatedInputDirective {
             throw new Error("appValidatedInput can not be applied to elements other than input.");
 
         this.inputElement = inputElementRef.nativeElement;
+        this.setInputValue("");
     }
 
     @HostListener("input")
     onInput() {
-        this.matInput.errorState = !this.validator(this.inputElement.value);
+        this.updateErrorState();
     }
 
     @HostListener("blur")
@@ -75,7 +76,11 @@ export class ValidatedInputDirective {
 
     private setInputValue(value: string) {
         this.inputElement.value = value;
-        this.matInput.errorState = !this.validator(value);
+        this.updateErrorState();
+    }
+
+    private updateErrorState() {
+        this.matInput.errorState = !this.validator(this.inputElement.value);
     }
 }
 
