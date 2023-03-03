@@ -6,6 +6,7 @@
 
 .navigation {
     height: 50px;
+    flex: 0 0 auto;
 }
 
 .page {

@@ -1,13 +1,11 @@
 :host {
     height: 100%;
     display: grid;
-    grid-template-rows: auto 2fr 1fr auto;
+    grid-template-rows: auto 2fr 1fr;
     grid-template-columns: 17rem 1fr 1fr;
-    grid-template-areas:
-        "header header header"
+    grid-template-areas: "header header header"
         "file-explorer code-editor town-editor"
-        "settings error-list town-editor"
-        "status-bar status-bar status-bar";
+        "settings error-list town-editor";
 }
 
 .header {
@@ -32,29 +30,4 @@
 
 .error-list {
     grid-area: error-list;
-}
-
-mat-card {
-    /*margin: 5px;*/
-    box-shadow: none;
-    /*border: 1px solid lightgray;*/
-    border-radius: 0;
-    background: whitesmoke;
-}
-
-mat-card-header {
-    padding-top: 0;
-    /*background: #b4e61d;*/
-    border-top: solid 1px #d3d3d3;
-    border-bottom: solid 1px #d3d3d3;
-}
-
-mat-card-title {
-    font-size: 17px;
-}
-
-mat-card-content {
-    padding-top: 10px;
-    /*padding: 0;
-    padding-top: 10px;*/
 }
