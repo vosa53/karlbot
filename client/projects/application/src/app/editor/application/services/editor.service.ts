@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Emitter } from 'projects/karel/src/lib/compiler/code-generation/emitter';
 import { Error } from 'projects/karel/src/lib/compiler/errors/error';
 import { ExternalProgramReference } from 'projects/karel/src/lib/compiler/external-program-reference';
+import { Checker } from 'projects/karel/src/lib/compiler/semantic-analysis/checker';
 import { ProgramSymbol } from 'projects/karel/src/lib/compiler/symbols/program-symbol';
 import { CompilationUnitParser } from 'projects/karel/src/lib/compiler/syntax-analysis/compilation-unit-parser';
 import { CallStackFrame } from 'projects/karel/src/lib/interpreter/call-stack-frame';
@@ -16,11 +18,10 @@ import { TownFile } from 'projects/karel/src/lib/project/town-file';
 import { StandardLibrary } from 'projects/karel/src/lib/standard-library/standard-library';
 import { MutableTown } from 'projects/karel/src/lib/town/mutable-town';
 import { Town } from 'projects/karel/src/lib/town/town';
-import { TownCamera } from '../../shared/presentation/town/town-camera';
+import { TownCamera } from '../../../shared/presentation/town/town-camera';
+import { EditorDialogService } from '../../presentation/services/editor-dialog.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class EditorService {
     get project(): Project {
         return this._project;
@@ -69,6 +70,10 @@ export class EditorService {
         new Error("Missing end token.", this.project.compilation.compilationUnits[0], this.project.compilation.compilationUnits[0].getLineTextRange()),
     ];
 
+    constructor(private readonly dialogService: EditorDialogService) {
+        
+    }
+
     createFile(file: File) {
         this._project = this._project.addFile(file);
     }
@@ -99,6 +104,13 @@ export class EditorService {
     }
 
     async run() {
+        const errors = Checker.check(this.project.compilation);
+
+        if (errors.length !== 0) {
+            await this.dialogService.showCompilationContainsErrorMessage();
+            return;
+        }
+
         const assembly = Emitter.emit(this.project.compilation);
 
         const interpreter = new Interpreter();

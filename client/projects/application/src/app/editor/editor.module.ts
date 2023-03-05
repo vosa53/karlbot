@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDialogModule } from '@angular/material/dialog';
 import { PanelComponent } from './presentation/components/panel/panel.component';
 import { HeaderComponent } from './presentation/pages/editor-page/header/header.component';
 import { TownEditorComponent } from './presentation/pages/editor-page/town-editor/town-editor.component';
@@ -51,6 +52,7 @@ import { SharedModule } from '../shared/shared.module';
         MatInputModule,
         MatSelectModule,
         MatButtonToggleModule,
+        MatDialogModule,
         SharedModule
     ]
 })
