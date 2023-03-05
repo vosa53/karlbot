@@ -2,3 +2,22 @@
     display: block;
     height: 100%;
 }
+/*
+.error {
+    display: flex;
+    padding: 16px;
+    align-items: center;
+}
+
+.error:hover {
+    background-color: #eaeaea;
+}
+
+.error-message {
+    flex-grow: 1;
+    margin-left: 8px;
+}
+
+.error-position {
+    opacity: 0.5;
+}*/

@@ -3,6 +3,11 @@
  */
 export enum DataType {
     /**
+     * Unit.
+     */
+    unit,
+
+    /**
      * Number.
      */
     number

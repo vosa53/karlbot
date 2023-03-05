@@ -1,6 +1,37 @@
-<app-header class="header"></app-header>
-<app-file-explorer class="file-explorer"></app-file-explorer>
-<app-code-editor class="code-editor"></app-code-editor>
-<app-town-editor class="town-editor" [town]="town" [(camera)]="camera"></app-town-editor>
-<app-settings class="settings"></app-settings>
-<app-error-list class="error-list"></app-error-list>
+<app-header 
+    class="header"
+    [availableEntryPoints]="editorService.availableEntryPoints"
+    (runClick)="editorService.run()">
+</app-header>
+
+<app-file-explorer 
+    class="file-explorer"
+    [selectedCodeFile]="editorService.selectedCodeFile"
+    [selectedTownFile]="editorService.selectedTownFile"
+    [files]="editorService.project.files" 
+    (fileSelect)="editorService.selectFile($event)">
+</app-file-explorer>
+
+<app-code-editor 
+    class="code-editor" 
+    [code]="editorService.currentCode" 
+    (codeChange)="editorService.changeCode($event)">
+</app-code-editor>
+
+<app-town-editor 
+    class="town-editor" 
+    [town]="editorService.currentTown" 
+    [camera]="editorService.townCamera"
+    (cameraChange)="editorService.changeTownCamera($event)">
+</app-town-editor>
+
+<app-settings 
+    class="settings" 
+    [settings]="editorService.project.settings" 
+    (settingsChange)="editorService.changeSettings($event)">
+</app-settings>
+
+<app-error-list 
+    class="error-list" 
+    [errors]="editorService.errors">
+</app-error-list>

@@ -1,4 +1,29 @@
 :host {
     display: block;
     height: 100%;
+    position: relative;
+}
+
+.add {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 16px;
+}
+
+.file-icon {
+    width: 24px; 
+    height: 24px;
+    margin-left: 16px;
+    margin-right: 12px;
+}
+
+.menu-icon {
+    width: 24px; 
+    height: 24px;
+    margin-right: 12px;
+}
+
+.selected {
+    background: #eaeaea;
 }

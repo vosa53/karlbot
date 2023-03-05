@@ -1,16 +1,35 @@
-<app-panel header="File explorer">
-    <mat-list>
-        <mat-list-item>
-            <img matListItemIcon src="http://karlbot.cz/assets/files/code-file.png" style="width: 24px; height: 24px;margin-left: 16px; margin-right: 12px;" alt="">
-            <div matListItemTitle>DFS</div>
-        </mat-list-item>
-        <mat-list-item>
-            <img matListItemIcon src="http://karlbot.cz/assets/files/code-file.png" style="width: 24px; height: 24px;margin-left: 16px; margin-right: 12px;" alt="">
-            <div matListItemTitle>Movement</div>
-        </mat-list-item>
-        <mat-list-item>
-            <img matListItemIcon src="http://karlbot.cz/assets/files/town-file.png" style="width: 24px; height: 24px;margin-left: 16px; margin-right: 12px;" alt="">
-            <div matListItemTitle>Maze</div>
+<app-panel header="File explorer" class="panel">
+    <mat-list class="list">
+        <mat-list-item *ngFor="let file of files" (click)="fileSelect.emit(file)" [class.selected]="file === selectedCodeFile || file === selectedTownFile">
+            <img matListItemIcon [src]="getFileIconURL(file)" class="file-icon">
+            <div matListItemTitle>{{file.name}}</div>
+            <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <mat-icon>edit</mat-icon>
+                    <span>Rename</span>
+                </button>
+                <button mat-menu-item>
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                </button>
+            </mat-menu>
         </mat-list-item>
     </mat-list>
+
+    <button mat-fab color="secondary" class="add" [matMenuTriggerFor]="addMenu">
+        <mat-icon>add</mat-icon>
+    </button>
+    <mat-menu #addMenu="matMenu" xPosition="before" yPosition="above">
+        <button mat-menu-item>
+            <img src="http://karlbot.cz/assets/files/code-file.png" class="menu-icon">
+            <span>Code</span>
+        </button>
+        <button mat-menu-item>
+            <img src="http://karlbot.cz/assets/files/town-file.png" class="menu-icon">
+            <span>Town</span>
+        </button>
+    </mat-menu>
 </app-panel>

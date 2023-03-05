@@ -66,7 +66,7 @@ export class TownEditorComponent {
     /**
      * Town size (width or height) validator.
      */
-    sizeValidator = ValidatedInputValidatorFactory.integer(s => s > 0 && s <= 100);
+    readonly sizeValidator = ValidatedInputValidatorFactory.integer(s => s > 0 && s <= 100);
 
     constructor() {
         const assetsRoot = "/assets/editor/presentation/pages/editor/town-editor/";

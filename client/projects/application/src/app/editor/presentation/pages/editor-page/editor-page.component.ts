@@ -1,7 +1,5 @@
 import { Component } from "@angular/core";
-import { TownCamera } from "projects/application/src/app/shared/presentation/town/town-camera";
-import { Vector } from "projects/karel/src/lib/math/vector";
-import { MutableTown } from "projects/karel/src/lib/town/mutable-town";
+import { EditorService } from "../../../application/editor.service";
 
 @Component({
     selector: "app-editor-page",
@@ -9,6 +7,7 @@ import { MutableTown } from "projects/karel/src/lib/town/mutable-town";
     styleUrls: ["./editor-page.component.css"]
 })
 export class EditorPageComponent {
-    town = MutableTown.createEmpty(10, 10);
-    camera = new TownCamera(Vector.ZERO, 1);
+    constructor(readonly editorService: EditorService) {
+        
+    }
 }

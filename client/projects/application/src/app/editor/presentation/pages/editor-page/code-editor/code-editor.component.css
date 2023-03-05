@@ -1,4 +1,9 @@
 :host {
     display: block;
-    height: 20px;
+    height: 100%;
+}
+
+textarea {
+    border: none;
+    outline: none;
 }

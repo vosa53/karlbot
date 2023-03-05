@@ -1,3 +1,9 @@
 <app-panel header="Error list">
-
+    <mat-list>
+        <mat-list-item *ngFor="let error of errors">
+            <mat-icon matListItemIcon>error</mat-icon>
+            <div matListItemTitle>{{error.message}}</div>
+            <div matListItemMeta>{{error.compilationUnit.filePath}}:{{error.textRange.startLine}}:{{error.textRange.startColumn}}</div>
+        </mat-list-item>
+    </mat-list>
 </app-panel>
