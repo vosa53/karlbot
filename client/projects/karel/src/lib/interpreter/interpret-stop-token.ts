@@ -1,3 +1,5 @@
+import { Event } from "../event";
+
 /**
  * Token signaling stop of interpretation.
  */
@@ -9,6 +11,11 @@ export class InterpretStopToken {
         return this._isStopRequested;
     }
 
+    /**
+     * Event when stop is requested.
+     */
+    readonly stopRequested = new Event();
+
     private _isStopRequested = false;
     
     /**
@@ -19,5 +26,6 @@ export class InterpretStopToken {
             throw new Error("Stop can be requested at most once.");
             
         this._isStopRequested = true;
+        this.stopRequested.emit();
     }
 }
