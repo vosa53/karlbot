@@ -1,0 +1,61 @@
+@top CompilationUnit { 
+    Program* 
+}
+
+Program {
+  kw<"program"> identifier 
+  Block
+}
+
+Block {
+  statement* 
+  kw<"end">
+}
+
+statement {
+  If | While | Repeat | Call
+}
+
+If {
+  kw<"if"> Operator Call 
+  Block 
+  (kw<"else"> Block)?
+}
+
+While {
+  kw<"while"> Operator Call 
+  Block
+}
+
+Repeat {
+  kw<"repeat"> Number kw<"times">
+  Block
+}
+
+Call {
+  identifier
+}
+
+kw<word> { @specialize[@name={word}]<identifier, word> }
+
+@skip {} {
+  MultiLineComment { "/*" multiLineCommentContent* multiLineCommentEnd }
+}
+
+@local tokens {
+  multiLineCommentEnd { "*/" }
+  @else multiLineCommentContent
+}
+
+@tokens {
+  Number { "0" | $[1-9] $[0-9]* }
+  Operator { "is" | "not" }
+  identifier { $[a-zA-Z] $[a-zA-Z0-9]* }
+  SingleLineComment { "//" ![\n\r]* }
+  endOfLine { "\r\n" | "\r" | "\n" }
+  space { $[ ]+ }
+}
+
+@skip { SingleLineComment | MultiLineComment | space | endOfLine }
+
+@detectDelim

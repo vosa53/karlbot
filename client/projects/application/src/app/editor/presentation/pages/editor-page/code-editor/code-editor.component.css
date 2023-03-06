@@ -1,9 +1,11 @@
 :host {
     display: block;
     height: 100%;
+    position: relative;
 }
 
-textarea {
-    border: none;
-    outline: none;
+.editor-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
 }

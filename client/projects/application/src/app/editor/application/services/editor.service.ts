@@ -159,8 +159,20 @@ export class EditorService {
     }
 
     private createNewProject(): Project {
-        const code = `program main
-    // Your code
+        const code = `program DFS
+    put
+    repeat 4 times
+        if not wall
+            step
+            if not sign
+                DFS
+            end
+            turnBack
+            step
+            turnBack
+        end
+        turnLeft
+    end
 end
 `;
 
@@ -177,7 +189,7 @@ end
     }
 }
 
-export enum RunningStatus {
+export enum RunState {
     ready = "ready",
     running = "running",
     paused = "paused"
