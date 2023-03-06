@@ -1,7 +1,11 @@
 <app-header 
     class="header"
+    [editorState]="editorService.editorState"
     [availableEntryPoints]="editorService.availableEntryPoints"
-    (runClick)="editorService.run()">
+    [entryPoint]="editorService.project.settings.entryPoint"
+    (entryPointChange)="onEntryPointChange($event)"
+    (runClick)="editorService.run(false)"
+    (stopClick)="editorService.stop()">
 </app-header>
 
 <app-file-explorer 
@@ -9,12 +13,16 @@
     [selectedCodeFile]="editorService.selectedCodeFile"
     [selectedTownFile]="editorService.selectedTownFile"
     [files]="editorService.project.files" 
+    (codeFileAdd)="editorService.addCodeFile($event)"
+    (townFileAdd)="editorService.addTownFile($event)"
+    (fileRemove)="editorService.removeFile($event)"
     (fileSelect)="editorService.selectFile($event)">
 </app-file-explorer>
 
 <app-code-editor 
     class="code-editor" 
-    [code]="editorService.currentCode" 
+    [code]="editorService.currentCode"
+    [errors]="editorService.errorsInCurrentCodeFile"
     (codeChange)="editorService.changeCode($event)">
 </app-code-editor>
 

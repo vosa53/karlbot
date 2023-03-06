@@ -9,6 +9,7 @@ import { CompilationUnitParser } from 'projects/karel/src/lib/compiler/syntax-an
 import { CallStackFrame } from 'projects/karel/src/lib/interpreter/call-stack-frame';
 import { InterpretStopToken } from 'projects/karel/src/lib/interpreter/interpret-stop-token';
 import { Interpreter } from 'projects/karel/src/lib/interpreter/interpreter';
+import { ExceptionInterpretResult } from 'projects/karel/src/lib/interpreter/results/exception-interpret-result';
 import { Vector } from 'projects/karel/src/lib/math/vector';
 import { CodeFile } from 'projects/karel/src/lib/project/code-file';
 import { File } from 'projects/karel/src/lib/project/file';
@@ -59,22 +60,43 @@ export class EditorService {
         return this._errors;
     }
 
+    get errorsInCurrentCodeFile(): readonly Error[] {
+        return this._errorsInCurrentCodeFile;
+    }
+
+    get editorState(): EditorState {
+        if (this.interpreter === null)
+            return EditorState.ready;
+        else if (this.interpretStopToken !== null)
+            return EditorState.running;
+        else
+            return EditorState.paused;
+    }
+
     private _project = this.createNewProject();
     private _selectedCodeFile: CodeFile | null = null;
     private _selectedTownFile: TownFile | null = null;
     private _currentTown: MutableTown | null = null;
     private _townCamera: TownCamera = new TownCamera(Vector.ZERO, 1);
-    private _errors: readonly Error[] = [
-        new Error("Missing end token.", this.project.compilation.compilationUnits[0], this.project.compilation.compilationUnits[0].getLineTextRange()),
-        new Error("Missing end token.", this.project.compilation.compilationUnits[0], this.project.compilation.compilationUnits[0].getLineTextRange()),
-        new Error("Missing end token.", this.project.compilation.compilationUnits[0], this.project.compilation.compilationUnits[0].getLineTextRange()),
-    ];
+    private _errors: readonly Error[] = [];
+    private _errorsInCurrentCodeFile: readonly Error[] = [];
+    private interpreter: Interpreter | null = null;
+    private interpretStopToken: InterpretStopToken | null = null;
+    private checkTimeoutRef: number | null = null;
 
     constructor(private readonly dialogService: EditorDialogService) {
         
     }
 
-    createFile(file: File) {
+    addCodeFile(name: string) {
+        const compilationUnit = CompilationUnitParser.parse("// New file", name);
+        const file = new CodeFile(CompilationUnitParser.parse("// New file", name));
+        this._project = this._project.addFile(file);
+    }
+
+    addTownFile(name: string) {
+        const town = Town.createEmpty(10, 10);
+        const file = new TownFile(name, town);
         this._project = this._project.addFile(file);
     }
 
@@ -103,33 +125,38 @@ export class EditorService {
         }
     }
 
-    async run() {
+    async run(readonly: boolean) {
         const errors = Checker.check(this.project.compilation);
 
         if (errors.length !== 0) {
-            await this.dialogService.showCompilationContainsErrorMessage();
+            await this.dialogService.showCompilationContainsErrorsMessage();
             return;
         }
 
         const assembly = Emitter.emit(this.project.compilation);
 
-        const interpreter = new Interpreter();
+        this.interpreter = new Interpreter();
+        this.interpretStopToken = new InterpretStopToken();
 
         const externalPrograms = StandardLibrary.getPrograms(this._currentTown!, () => 100);
         for (const externalProgram of externalPrograms)
-            interpreter.addExternalProgram(externalProgram);
+            this.interpreter.addExternalProgram(externalProgram);
 
-        const entryPoint = assembly.programs.find(p => p.name === "main")!;
-        interpreter.callStack.push(new CallStackFrame(entryPoint));
-        const interpretStopToken = new InterpretStopToken();
+        const entryPoint = assembly.programs.find(p => p.name === this.project.settings.entryPoint)!;
+        this.interpreter.callStack.push(new CallStackFrame(entryPoint));
+        this.interpretStopToken = new InterpretStopToken();
 
-        const interpretResult = await interpreter.interpretAll(interpretStopToken);
+        const interpretResult = await this.interpreter.interpretAll(this.interpretStopToken);
 
-        console.log(interpretResult);
+        if (interpretResult instanceof ExceptionInterpretResult)
+            await this.dialogService.showExceptionMessage(interpretResult.exception);
+
+        this.interpreter = null;
+        this.interpretStopToken = null;
     }
 
     stop() {
-
+        this.interpretStopToken!.stop();
     }
 
     undo() {
@@ -148,6 +175,16 @@ export class EditorService {
         const newCodeFile = this.selectedCodeFile.withCompilationUnit(newCompilationUnit);
         this._project = this._project.replaceFile(this.selectedCodeFile, newCodeFile);
         this._selectedCodeFile = newCodeFile;
+        if (!this.availableEntryPoints.includes(this._project.settings.entryPoint)) {
+            const newEntryPoint = this.availableEntryPoints[0] ?? "";
+            const newSettings = this._project.settings.withEntryPoint(newEntryPoint);
+            const newProject = this._project.withSettings(newSettings);
+            this._project = newProject
+        }
+
+        if (this.checkTimeoutRef != null)
+            window.clearTimeout(this.checkTimeoutRef);
+        this.checkTimeoutRef = window.setTimeout(() => this.check(), 700);
     }
 
     changeTownCamera(townCamera: TownCamera) {
@@ -156,6 +193,12 @@ export class EditorService {
 
     changeSettings(settings: Settings) {
         this._project = this._project.withSettings(settings);
+    }
+
+    private check() {
+        this.checkTimeoutRef = null;
+        this._errors = Checker.check(this.project.compilation);
+        this._errorsInCurrentCodeFile = this._errors.filter(e => e.compilationUnit === this._selectedCodeFile?.compilationUnit);
     }
 
     private createNewProject(): Project {
@@ -175,10 +218,22 @@ export class EditorService {
     end
 end
 `;
+        const code2 = `program turnRight
+    repeat 3 times
+        turnLeft
+    end
+end
+
+program turnBack
+    repeat 2 times
+        turnLeft
+    end
+end
+`;
 
         const files = [
             new CodeFile(CompilationUnitParser.parse(code, "Programs")),
-            new CodeFile(CompilationUnitParser.parse("// Write code", "Programs2")),
+            new CodeFile(CompilationUnitParser.parse(code2, "Programs2")),
             new TownFile("Town", Town.createEmpty(20, 20)),
             new TownFile("Town2", Town.createEmpty(10, 10))
         ];
@@ -189,7 +244,7 @@ end
     }
 }
 
-export enum RunState {
+export enum EditorState {
     ready = "ready",
     running = "running",
     paused = "paused"

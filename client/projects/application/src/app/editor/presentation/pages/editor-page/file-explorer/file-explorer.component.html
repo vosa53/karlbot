@@ -11,7 +11,7 @@
                     <mat-icon>edit</mat-icon>
                     <span>Rename</span>
                 </button>
-                <button mat-menu-item>
+                <button mat-menu-item (click)="onFileRemove(file)">
                     <mat-icon>delete</mat-icon>
                     <span>Delete</span>
                 </button>
@@ -23,11 +23,11 @@
         <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addMenu="matMenu" xPosition="before" yPosition="above">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="onFileAdd('code')">
             <img src="http://karlbot.cz/assets/files/code-file.png" class="menu-icon">
             <span>Code</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="onFileAdd('town')">
             <img src="http://karlbot.cz/assets/files/town-file.png" class="menu-icon">
             <span>Town</span>
         </button>

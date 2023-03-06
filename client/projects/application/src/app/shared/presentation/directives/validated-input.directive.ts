@@ -87,7 +87,7 @@ export class ValidatedInputDirective {
 /**
  * Text validator for {@link ValidatedInputDirective}.
  */
-type ValidatedInputValidator = (text: string) => boolean;
+export type ValidatedInputValidator = (text: string) => boolean;
 
 /**
  * {@link ValidatedInputValidator} factory.

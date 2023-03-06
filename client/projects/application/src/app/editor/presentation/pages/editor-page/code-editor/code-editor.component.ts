@@ -4,6 +4,8 @@ import { defaultKeymap } from "@codemirror/commands";
 import { basicSetup } from "codemirror";
 import { karel } from "./codemirror/karel-codemirror-language";
 import { applicationStyle } from "./codemirror/application-codemirror-style";
+import {linter, Diagnostic, setDiagnostics } from "@codemirror/lint"
+import { Error } from "projects/karel/src/lib/compiler/errors/error";
 
 
 @Component({
@@ -28,11 +30,22 @@ export class CodeEditorComponent implements AfterViewInit {
         }
     }
 
+    @Input()
+    get errors(): readonly Error[] {
+        return this._errors;
+    }
+
+    set errors(value: readonly Error[]) {
+        this._errors = value;
+        this.updateDiagnostics();
+    }
+
     @Output()
     codeChange = new EventEmitter<string>();
 
     private _code = "";
     private codeInEditor = "";
+    private _errors: readonly Error[] = [];
     private editorView: EditorView | null = null;
 
     constructor(private readonly hostElement: ElementRef) {
@@ -60,5 +73,23 @@ export class CodeEditorComponent implements AfterViewInit {
             parent: this.hostElement.nativeElement.children[0]
         });
         this.codeInEditor = this.code;
+        this.updateDiagnostics();
+    }
+
+    private updateDiagnostics() {
+        if (this.editorView === null)
+            return;
+
+        const diagnostics: Diagnostic[] = this.errors.map(e => {
+            const from = this.editorView!.state.doc.line(e.textRange.startLine).from + e.textRange.startColumn - 1;
+            const to = this.editorView!.state.doc.line(e.textRange.endLine).from + e.textRange.endColumn - 1;
+            return {
+                from,
+                to,
+                severity: "error",
+                message: e.message
+            };
+        });
+        this.editorView!.dispatch(setDiagnostics(this.editorView!.state, diagnostics));
     }
 }

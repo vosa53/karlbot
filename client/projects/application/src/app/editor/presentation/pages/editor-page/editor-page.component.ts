@@ -12,4 +12,9 @@ export class EditorPageComponent {
     constructor(readonly editorService: EditorService, private readonly dialogService: MatDialog) {
 
     }
+
+    onEntryPointChange(newEntryPoint: string) {
+        const newSettings = this.editorService.project.settings.withEntryPoint(newEntryPoint);
+        this.editorService.changeSettings(newSettings);
+    }
 }

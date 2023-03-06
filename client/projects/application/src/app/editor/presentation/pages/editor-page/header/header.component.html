@@ -14,8 +14,9 @@
 
     <button mat-button [matMenuTriggerFor]="programMenu">Program</button>
     <mat-menu #programMenu="matMenu">
-        <button mat-menu-item (click)="runClick.emit()">Run</button>
-        <button mat-menu-item (click)="runReadonlyClick.emit()">Run read-only</button>
+        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runClick.emit()">Run</button>
+        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runReadonlyClick.emit()">Run read-only</button>
+        <button mat-menu-item *ngIf="editorState === 'running'" (click)="stopClick.emit()">Stop</button>
     </mat-menu>
 
     <button mat-button [matMenuTriggerFor]="helpMenu">Help</button>
@@ -25,14 +26,14 @@
 </mat-toolbar>
 
 <mat-toolbar class="toolbar">
-    <button mat-icon-button>
+    <button mat-icon-button *ngIf="editorState === 'ready'">
         <mat-icon (click)="undoClick.emit()">undo</mat-icon>
     </button>
-    <button mat-icon-button>
+    <button mat-icon-button *ngIf="editorState === 'ready'">
         <mat-icon (click)="redoClick.emit()">redo</mat-icon>
     </button>
 
-    <mat-form-field appearance="fill" subscriptSizing="dynamic" class="disable-form-underline">
+    <mat-form-field *ngIf="editorState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="disable-form-underline">
         <mat-label>Entry point</mat-label>
         <mat-select [value]="entryPoint" (selectionChange)="entryPointChange.emit($event.value)">
             <mat-option *ngFor="let availableEntryPoint of availableEntryPoints" [value]="availableEntryPoint">
@@ -40,13 +41,17 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
-    
-    <button mat-button (click)="runClick.emit()">
+
+    <button mat-button *ngIf="editorState === 'ready'" (click)="runClick.emit()">
         <mat-icon>play_arrow</mat-icon>
         Run
     </button>
-    <button mat-button (click)="runReadonlyClick.emit()">
+    <button mat-button *ngIf="editorState === 'ready'" (click)="runReadonlyClick.emit()">
         <mat-icon>play_arrow</mat-icon>
         Run read-only
+    </button>
+    <button mat-button *ngIf="editorState === 'running'" (click)="stopClick.emit()">
+        <mat-icon>stop</mat-icon>
+        Stop
     </button>
 </mat-toolbar>

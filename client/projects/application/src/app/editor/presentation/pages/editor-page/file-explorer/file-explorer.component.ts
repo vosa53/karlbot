@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
 import { CodeFile } from "projects/karel/src/lib/project/code-file";
 import { File } from "projects/karel/src/lib/project/file";
 import { TownFile } from "projects/karel/src/lib/project/town-file";
@@ -19,13 +20,36 @@ export class FileExplorerComponent {
     selectedTownFile: TownFile | null = null;
 
     @Output()
-    fileAdd = new EventEmitter<FileExplorerFileAdd>();
+    codeFileAdd = new EventEmitter<string>();
+
+    @Output()
+    townFileAdd = new EventEmitter<string>();
 
     @Output()
     fileRemove = new EventEmitter<File>();
 
     @Output()
     fileSelect = new EventEmitter<File>();
+
+    constructor(private readonly dialogService: DialogService) { }
+
+    async onFileAdd(fileType: "code" | "town") {
+        const validator = this.createFileNameValidator(null);
+        const fileName = await this.dialogService.showPrompt("Add file", "Enter a name of the new file", validator);
+
+        if (fileName === null)
+            return;
+
+        if (fileType === "code")
+            this.codeFileAdd.emit(fileName);
+        else
+            this.townFileAdd.emit(fileName);
+    }
+
+    async onFileRemove(file: File) {
+        // TODO: Add a confirm dialog.
+        this.fileRemove.emit(file);
+    }
 
     getFileIconURL(file: File): string {
         if (file instanceof CodeFile)
@@ -35,14 +59,13 @@ export class FileExplorerComponent {
         else
             throw new Error("");
     }
-}
 
-interface FileExplorerFileAdd {
-    name: string,
-    type: FileExplorerFileAddType
-}
+    private createFileNameValidator(file: File | null) {
+        return (fileName: string) => {
+            if (fileName === "")
+                return false;
 
-enum FileExplorerFileAddType {
-    code,
-    town
+            return this.files.every(f => f.name !== fileName || f.name === file?.name);
+        };
+    }
 }

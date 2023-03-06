@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Settings } from "projects/karel/src/lib/project/settings";
+import { EditorState } from "../../../../application/services/editor.service";
 
 @Component({
   selector: "app-header",
@@ -7,6 +8,9 @@ import { Settings } from "projects/karel/src/lib/project/settings";
   styleUrls: ["./header.component.css"]
 })
 export class HeaderComponent {
+    @Input()
+    editorState = EditorState.ready;
+
     @Input()
     availableEntryPoints: string[] = [];
 
@@ -36,6 +40,9 @@ export class HeaderComponent {
 
     @Output()
     runReadonlyClick = new EventEmitter<void>();
+
+    @Output()
+    stopClick = new EventEmitter<void>();
 
     @Output()
     aboutClick = new EventEmitter<void>();

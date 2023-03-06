@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Exception } from "projects/karel/src/lib/interpreter/exception";
 import { DialogService } from "../../../shared/presentation/services/dialog.service";
 
 @Injectable({
@@ -7,7 +8,11 @@ import { DialogService } from "../../../shared/presentation/services/dialog.serv
 export class EditorDialogService {
     constructor(private readonly dialogService: DialogService) { }
 
-    showCompilationContainsErrorMessage(): Promise<void> {
+    showCompilationContainsErrorsMessage(): Promise<void> {
         return this.dialogService.showMessage("Errors", "Compilation contains errors.");
+    }
+
+    showExceptionMessage(exception: Exception): Promise<void> {
+        return this.dialogService.showMessage("Exception", exception.message);
     }
 }

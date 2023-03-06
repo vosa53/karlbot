@@ -7,6 +7,8 @@ import { ValidatedInputDirective } from './presentation/directives/validated-inp
 import { MatDialogModule } from '@angular/material/dialog';
 import { MessageDialogComponent } from './presentation/components/message-dialog/message-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
+import { PromptDialogComponent } from './presentation/components/prompt-dialog/prompt-dialog.component';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
     declarations: [
@@ -14,12 +16,14 @@ import { MatButtonModule } from '@angular/material/button';
         TownViewMoveDirective,
         TownViewSelectDirective,
         ValidatedInputDirective,
-        MessageDialogComponent
+        MessageDialogComponent,
+        PromptDialogComponent
     ],
     imports: [
         CommonModule,
         MatDialogModule,
-        MatButtonModule
+        MatButtonModule,
+        MatInputModule
     ],
     exports: [
         TownViewComponent,
