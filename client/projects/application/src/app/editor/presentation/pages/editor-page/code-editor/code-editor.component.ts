@@ -4,8 +4,11 @@ import { defaultKeymap } from "@codemirror/commands";
 import { basicSetup } from "codemirror";
 import { karel } from "./codemirror/karel-codemirror-language";
 import { applicationStyle } from "./codemirror/application-codemirror-style";
-import {linter, Diagnostic, setDiagnostics } from "@codemirror/lint"
+import { linter, Diagnostic, setDiagnostics } from "@codemirror/lint"
+import { autocompletion, Completion } from "@codemirror/autocomplete";
 import { Error } from "projects/karel/src/lib/compiler/errors/error";
+import { CompletionItem } from "projects/karel/src/lib/compiler/language-service/completion-item";
+import { CompletionItemType } from "projects/karel/src/lib/compiler/language-service/completion-item-type";
 
 
 @Component({
@@ -40,6 +43,9 @@ export class CodeEditorComponent implements AfterViewInit {
         this.updateDiagnostics();
     }
 
+    @Input()
+    completionItemsProvider: (line: number, column: number) => CompletionItem[] = (l, c) => [];
+
     @Output()
     codeChange = new EventEmitter<string>();
 
@@ -67,6 +73,34 @@ export class CodeEditorComponent implements AfterViewInit {
                 EditorView.updateListener.of(u => {
                     this.codeInEditor = u.state.doc.toString();
                     this.codeChange.emit(this.codeInEditor);
+                }),
+                autocompletion({
+                    override: [
+                        c => {
+                            const identifier = c.matchBefore(/[a-zA-Z][a-zA-Z0-9]*/);
+                            if (identifier === null)
+                                return null;
+                            if (identifier.from == identifier.to && !c.explicit)
+                                return null
+
+                            const line = c.state.doc.lineAt(c.pos);
+                            const lineNumber = line.number;
+                            const columnNumber = c.pos - line.from + 1;
+                            const completionItems = this.completionItemsProvider(lineNumber, columnNumber);
+                            const codemirrorCompletionItems: Completion[] = completionItems.map(ci => {
+                                return {
+                                    label: ci.text,
+                                    detail: ci.description,
+                                    info: ci.title,
+                                    type: ci.type === CompletionItemType.program ? "program" : "externalProgram"
+                                };
+                            });
+                            return {
+                                from: identifier.from,
+                                options: codemirrorCompletionItems
+                            };
+                        }
+                    ]
                 })
                 //indentUnit.of("  ")
             ],

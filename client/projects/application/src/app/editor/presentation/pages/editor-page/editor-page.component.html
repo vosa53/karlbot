@@ -23,6 +23,7 @@
     class="code-editor" 
     [code]="editorService.currentCode"
     [errors]="editorService.errorsInCurrentCodeFile"
+    [completionItemsProvider]="completionItemsProvider"
     (codeChange)="editorService.changeCode($event)">
 </app-code-editor>
 

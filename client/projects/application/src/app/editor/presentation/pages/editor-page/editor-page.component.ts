@@ -9,6 +9,8 @@ import { EditorService } from "../../../application/services/editor.service";
     providers: [EditorService]
 })
 export class EditorPageComponent {
+    readonly completionItemsProvider = (line: number, column: number) => this.editorService.provideCompletionItems(line, column);
+
     constructor(readonly editorService: EditorService, private readonly dialogService: MatDialog) {
 
     }

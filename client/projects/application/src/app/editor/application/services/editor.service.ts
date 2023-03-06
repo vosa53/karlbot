@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Emitter } from 'projects/karel/src/lib/compiler/code-generation/emitter';
 import { Error } from 'projects/karel/src/lib/compiler/errors/error';
 import { ExternalProgramReference } from 'projects/karel/src/lib/compiler/external-program-reference';
+import { CompletionItem } from 'projects/karel/src/lib/compiler/language-service/completion-item';
+import { LanguageService } from 'projects/karel/src/lib/compiler/language-service/language-service';
 import { Checker } from 'projects/karel/src/lib/compiler/semantic-analysis/checker';
 import { ProgramSymbol } from 'projects/karel/src/lib/compiler/symbols/program-symbol';
 import { CompilationUnitParser } from 'projects/karel/src/lib/compiler/syntax-analysis/compilation-unit-parser';
@@ -193,6 +195,11 @@ export class EditorService {
 
     changeSettings(settings: Settings) {
         this._project = this._project.withSettings(settings);
+    }
+
+    provideCompletionItems(line: number, column: number): CompletionItem[] {
+        const languageService = new LanguageService(this.project.compilation);
+        return languageService.getCompletionItemsAt(this.selectedCodeFile!.compilationUnit, line, column);
     }
 
     private check() {
