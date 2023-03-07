@@ -9,7 +9,7 @@ import { Extension } from "@codemirror/state";
 export const applicationTheme = EditorView.theme({
     "&.cm-editor": { height: "100%" },
     ".cm-scroller": { overflow: "auto" },
-    ".cm-gutters": { background: "white", borderRight: "none", fontFamily: "'Roboto Mono', monospace" },
+    ".cm-gutters": { background: "transparent", borderRight: "none", fontFamily: "'Roboto Mono', monospace" },
     ".cm-content": { fontFamily: "'Roboto Mono', monospace" },
     "&.cm-focused": { outline: "none" },
     ".cm-lineNumbers": { color: "rgb(35, 120, 147)" },

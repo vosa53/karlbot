@@ -6,6 +6,10 @@
     <a mat-button routerLink="/">Editor</a>
     <a mat-button routerLink="/projects">Projects</a>
     <a mat-button routerLink="/challenges">Challenges</a>
+    <div style="flex-grow: 1;"></div>
+    <mat-slide-toggle [checked]="(colorThemeService.colorTheme$ | async) === 'dark'" (change)="onColorThemeChange($event.checked)">
+        Dark mode
+    </mat-slide-toggle>
 </mat-toolbar>
 
 <div class="page">

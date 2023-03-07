@@ -1,5 +1,5 @@
 .menu {
-    background: #eaeaea;
+    background: var(--background-tertiary);
     height: 36px;
 }
 

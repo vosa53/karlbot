@@ -71,7 +71,7 @@ export class EditorService {
         return errors.filter(e => e.compilationUnit === selectedCodeFile?.compilationUnit);
     }));
 
-    private availableEntryPoints: string[] = [];
+    private availableEntryPoints: readonly string[] = [];
 
     constructor(private readonly dialogService: EditorDialogService) {
         this.selectedTownFile.pipe(pairwise()).subscribe(([oldValue, newValue]) => {
