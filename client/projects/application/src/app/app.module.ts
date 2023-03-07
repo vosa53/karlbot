@@ -17,6 +17,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 @NgModule({
     declarations: [
@@ -39,9 +43,11 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatInputModule,
         MatSelectModule,
         MatButtonToggleModule,
-        MatDialogModule
+        MatDialogModule,
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth())
     ],
-    providers: [],
+    providers: [{ provide: FIREBASE_OPTIONS, useValue: environment.firebase }],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

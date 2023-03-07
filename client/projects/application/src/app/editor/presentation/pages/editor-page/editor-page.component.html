@@ -5,6 +5,7 @@
     [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
     (entryPointChange)="editorService.changeEntryPoint($event)"
     (runClick)="editorService.run(false)"
+    (runReadonlyClick)="editorService.run(true)"
     (stopClick)="editorService.stop()">
 </app-header>
 

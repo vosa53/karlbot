@@ -54,6 +54,7 @@ import { SharedModule } from '../shared/shared.module';
         MatButtonToggleModule,
         MatDialogModule,
         SharedModule
-    ]
+    ],
+    providers: [],
 })
 export class EditorModule { }
