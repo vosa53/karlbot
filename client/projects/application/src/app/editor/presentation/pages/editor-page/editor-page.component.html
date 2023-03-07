@@ -1,18 +1,18 @@
 <app-header 
     class="header"
-    [editorState]="editorService.editorState"
-    [availableEntryPoints]="editorService.availableEntryPoints"
-    [entryPoint]="editorService.project.settings.entryPoint"
-    (entryPointChange)="onEntryPointChange($event)"
+    [editorState]="(editorService.editorState$ | async)!"
+    [availableEntryPoints]="(editorService.availableEntryPoints$ | async)!"
+    [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
+    (entryPointChange)="editorService.changeEntryPoint($event)"
     (runClick)="editorService.run(false)"
     (stopClick)="editorService.stop()">
 </app-header>
 
 <app-file-explorer 
     class="file-explorer"
-    [selectedCodeFile]="editorService.selectedCodeFile"
-    [selectedTownFile]="editorService.selectedTownFile"
-    [files]="editorService.project.files" 
+    [selectedCodeFile]="(editorService.selectedCodeFile$ | async)!"
+    [selectedTownFile]="(editorService.selectedTownFile$ | async)!"
+    [files]="(editorService.project$ | async)!.files" 
     (codeFileAdd)="editorService.addCodeFile($event)"
     (townFileAdd)="editorService.addTownFile($event)"
     (fileRemove)="editorService.removeFile($event)"
@@ -21,26 +21,26 @@
 
 <app-code-editor 
     class="code-editor" 
-    [code]="editorService.currentCode"
-    [errors]="editorService.errorsInCurrentCodeFile"
+    [code]="(editorService.currentCode$ | async)!"
+    [errors]="(editorService.errorsInCurrentCodeFile$ | async)!"
     [completionItemsProvider]="completionItemsProvider"
     (codeChange)="editorService.changeCode($event)">
 </app-code-editor>
 
 <app-town-editor 
     class="town-editor" 
-    [town]="editorService.currentTown" 
-    [camera]="editorService.townCamera"
+    [town]="(editorService.currentTown$ | async)!" 
+    [camera]="(editorService.townCamera$ | async)!"
     (cameraChange)="editorService.changeTownCamera($event)">
 </app-town-editor>
 
 <app-settings 
     class="settings" 
-    [settings]="editorService.project.settings" 
+    [settings]="(editorService.project$ | async)!.settings" 
     (settingsChange)="editorService.changeSettings($event)">
 </app-settings>
 
 <app-error-list 
     class="error-list" 
-    [errors]="editorService.errors">
+    [errors]="(editorService.errors$ | async)!">
 </app-error-list>

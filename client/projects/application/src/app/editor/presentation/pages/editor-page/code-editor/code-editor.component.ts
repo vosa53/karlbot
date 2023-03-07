@@ -71,6 +71,9 @@ export class CodeEditorComponent implements AfterViewInit {
                 applicationStyle,
                 karel(),
                 EditorView.updateListener.of(u => {
+                    if (!u.docChanged)
+                        return;
+                    
                     this.codeInEditor = u.state.doc.toString();
                     this.codeChange.emit(this.codeInEditor);
                 }),

@@ -11,12 +11,7 @@ import { EditorService } from "../../../application/services/editor.service";
 export class EditorPageComponent {
     readonly completionItemsProvider = (line: number, column: number) => this.editorService.provideCompletionItems(line, column);
 
-    constructor(readonly editorService: EditorService, private readonly dialogService: MatDialog) {
+    constructor(readonly editorService: EditorService) {
 
-    }
-
-    onEntryPointChange(newEntryPoint: string) {
-        const newSettings = this.editorService.project.settings.withEntryPoint(newEntryPoint);
-        this.editorService.changeSettings(newSettings);
     }
 }

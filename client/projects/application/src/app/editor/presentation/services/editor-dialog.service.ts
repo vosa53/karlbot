@@ -12,6 +12,14 @@ export class EditorDialogService {
         return this.dialogService.showMessage("Errors", "Compilation contains errors.");
     }
 
+    showSelectEntryPointMessage() {
+        return this.dialogService.showMessage("Error", "Select a valid entry point.");
+    }
+
+    showSelectTownMessage() {
+        return this.dialogService.showMessage("Error", "Select a town.");
+    }
+
     showExceptionMessage(exception: Exception): Promise<void> {
         return this.dialogService.showMessage("Exception", exception.message);
     }

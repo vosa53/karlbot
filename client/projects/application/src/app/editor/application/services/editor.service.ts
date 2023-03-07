@@ -21,144 +21,134 @@ import { TownFile } from 'projects/karel/src/lib/project/town-file';
 import { StandardLibrary } from 'projects/karel/src/lib/standard-library/standard-library';
 import { MutableTown } from 'projects/karel/src/lib/town/mutable-town';
 import { Town } from 'projects/karel/src/lib/town/town';
+import { BehaviorSubject, combineLatest, debounceTime, forkJoin, map, merge, pairwise, startWith, Subject } from 'rxjs';
 import { TownCamera } from '../../../shared/presentation/town/town-camera';
 import { EditorDialogService } from '../../presentation/services/editor-dialog.service';
 
 @Injectable()
 export class EditorService {
-    get project(): Project {
-        return this._project;
-    }
+    private readonly project = new BehaviorSubject(this.createNewProject());
+    private readonly selectedCodeFile = new BehaviorSubject<CodeFile | null>(null);
+    private readonly selectedTownFile = new BehaviorSubject<TownFile | null>(null);
+    private readonly currentTown = new BehaviorSubject<MutableTown | null>(null);
+    private readonly townCamera = new BehaviorSubject(new TownCamera(Vector.ZERO, 1));
+    private readonly interpreter = new BehaviorSubject<Interpreter | null>(null);
+    private readonly interpretStopToken = new BehaviorSubject<InterpretStopToken | null>(null);
 
-    get availableEntryPoints(): string[] {
-        return this.project.compilation.symbolTable.getDefined()
+    readonly project$ = this.project.asObservable();
+    readonly selectedCodeFile$ = this.selectedCodeFile.asObservable();
+    readonly selectedTownFile$ = this.selectedTownFile.asObservable();
+    readonly currentTown$ = this.currentTown.asObservable();
+    readonly townCamera$ = this.townCamera.asObservable();
+
+    readonly interpreter$ = this.interpreter.asObservable();
+    readonly interpretStopToken$ = this.interpretStopToken.asObservable();
+
+    readonly currentCode$ = this.selectedCodeFile.pipe(map(cf => {
+        return cf?.compilationUnit?.buildText() ?? "";
+    }));
+
+    readonly availableEntryPoints$ = this.project.pipe(map(p => {
+        return p.compilation.symbolTable.getDefined()
             .filter(s => s instanceof ProgramSymbol && s.definition.nameToken !== null)
             .map(s => (<ProgramSymbol>s).definition.nameToken!.text);
-    }
+    }));
 
-    get selectedCodeFile(): CodeFile | null {
-        return this._selectedCodeFile;
-    }
-
-    get selectedTownFile(): TownFile | null {
-        return this._selectedTownFile;
-    }
-
-    get currentCode(): string {
-        if (this.selectedCodeFile === null)
-            return "";
-        return this.selectedCodeFile.compilationUnit.buildText();
-    }
-
-    get currentTown(): MutableTown | null {
-        return this._currentTown;
-    }
-
-    get townCamera(): TownCamera {
-        return this._townCamera;
-    }
-
-    get errors(): readonly Error[] {
-        return this._errors;
-    }
-
-    get errorsInCurrentCodeFile(): readonly Error[] {
-        return this._errorsInCurrentCodeFile;
-    }
-
-    get editorState(): EditorState {
-        if (this.interpreter === null)
+    readonly editorState$ = combineLatest([this.interpreter, this.interpretStopToken]).pipe(map(([interpreter, interpretStopToken]) => {
+        if (interpreter === null)
             return EditorState.ready;
-        else if (this.interpretStopToken !== null)
+        else if (interpretStopToken !== null)
             return EditorState.running;
         else
             return EditorState.paused;
-    }
+    }));
 
-    private _project = this.createNewProject();
-    private _selectedCodeFile: CodeFile | null = null;
-    private _selectedTownFile: TownFile | null = null;
-    private _currentTown: MutableTown | null = null;
-    private _townCamera: TownCamera = new TownCamera(Vector.ZERO, 1);
-    private _errors: readonly Error[] = [];
-    private _errorsInCurrentCodeFile: readonly Error[] = [];
-    private interpreter: Interpreter | null = null;
-    private interpretStopToken: InterpretStopToken | null = null;
-    private checkTimeoutRef: number | null = null;
+    readonly errors$ = this.project.pipe(debounceTime(700), startWith(this.project.value), map(p => {
+        return Checker.check(p.compilation);
+    }));
+
+    readonly errorsInCurrentCodeFile$ = combineLatest([this.errors$, this.selectedCodeFile]).pipe(map(([errors, selectedCodeFile]) => {
+        return errors.filter(e => e.compilationUnit === selectedCodeFile?.compilationUnit);
+    }));
+
+    private availableEntryPoints: string[] = [];
 
     constructor(private readonly dialogService: EditorDialogService) {
-        
+        this.selectedTownFile.pipe(pairwise()).subscribe(([oldValue, newValue]) => {
+            if (oldValue !== null) {
+                const newTown = this.currentTown.value!.toImmutable();
+                const newTownFile = oldValue.withTown(newTown);
+                const newProject = this.project.value.replaceFile(oldValue, newTownFile);
+                this.project.next(newProject);
+            }
+
+            this.currentTown.next(newValue?.town?.toMutable() ?? null);
+        });
+        this.availableEntryPoints$.subscribe(ae => this.availableEntryPoints = ae);
     }
 
     addCodeFile(name: string) {
         const compilationUnit = CompilationUnitParser.parse("// New file", name);
-        const file = new CodeFile(CompilationUnitParser.parse("// New file", name));
-        this._project = this._project.addFile(file);
+        const file = new CodeFile(compilationUnit);
+        const newProject = this.project.value.addFile(file);
+        this.project.next(newProject);
     }
 
     addTownFile(name: string) {
         const town = Town.createEmpty(10, 10);
         const file = new TownFile(name, town);
-        this._project = this._project.addFile(file);
+        const newProject = this.project.value.addFile(file);
+        this.project.next(newProject);
     }
 
     removeFile(file: File) {
-        this._project = this._project.removeFile(file);
+        const newProject = this.project.value.removeFile(file);
+        this.project.next(newProject);
     }
 
     renameFile(file: File, newName: string) {
         const newFile = file.withName(newName);
-        this._project = this._project.replaceFile(file, newFile);
+        const newProject = this.project.value.replaceFile(file, newFile);
+        this.project.next(newProject);
     }
 
     selectFile(file: File) {
         if (file instanceof CodeFile)
-            this._selectedCodeFile = file;
-        else if (file instanceof TownFile) {
-            if (this._selectedTownFile === file)
-                return;
-
-            if (this._selectedTownFile !== null) {
-                const newTownFile = this._selectedTownFile.withTown(this._currentTown!.toImmutable());
-                this._project = this._project.replaceFile(this._selectedTownFile, newTownFile);
-            }
-            this._selectedTownFile = file;
-            this._currentTown = file.town.toMutable();
-        }
+            this.selectedCodeFile.next(file);
+        else if (file instanceof TownFile)
+            this.selectedTownFile.next(file);
     }
 
     async run(readonly: boolean) {
-        const errors = Checker.check(this.project.compilation);
-
-        if (errors.length !== 0) {
+        if (this.hasErrors()) {
             await this.dialogService.showCompilationContainsErrorsMessage();
             return;
         }
 
-        const assembly = Emitter.emit(this.project.compilation);
+        if (!this.availableEntryPoints.includes(this.project.value.settings.entryPoint)) {
+            await this.dialogService.showSelectEntryPointMessage();
+            return;
+        }
 
-        this.interpreter = new Interpreter();
-        this.interpretStopToken = new InterpretStopToken();
+        if (this.currentTown.value === null) {
+            await this.dialogService.showSelectTownMessage();
+            return;
+        }
 
-        const externalPrograms = StandardLibrary.getPrograms(this._currentTown!, () => 100);
-        for (const externalProgram of externalPrograms)
-            this.interpreter.addExternalProgram(externalProgram);
+        this.interpreter.next(this.createInterpreter());
+        this.interpretStopToken.next(new InterpretStopToken());
 
-        const entryPoint = assembly.programs.find(p => p.name === this.project.settings.entryPoint)!;
-        this.interpreter.callStack.push(new CallStackFrame(entryPoint));
-        this.interpretStopToken = new InterpretStopToken();
-
-        const interpretResult = await this.interpreter.interpretAll(this.interpretStopToken);
+        const interpretResult = await this.interpreter.value!.interpretAll(this.interpretStopToken.value!);
 
         if (interpretResult instanceof ExceptionInterpretResult)
             await this.dialogService.showExceptionMessage(interpretResult.exception);
 
-        this.interpreter = null;
-        this.interpretStopToken = null;
+        this.interpreter.next(null);
+        this.interpretStopToken.next(null);
     }
 
     stop() {
-        this.interpretStopToken!.stop();
+        this.interpretStopToken.value!.stop();
     }
 
     undo() {
@@ -170,42 +160,60 @@ export class EditorService {
     }
 
     changeCode(code: string) {
-        if (this.selectedCodeFile === null)
+        if (this.selectedCodeFile.value === null)
             return;
 
-        const newCompilationUnit = CompilationUnitParser.parse(code, this.selectedCodeFile.compilationUnit.filePath);
-        const newCodeFile = this.selectedCodeFile.withCompilationUnit(newCompilationUnit);
-        this._project = this._project.replaceFile(this.selectedCodeFile, newCodeFile);
-        this._selectedCodeFile = newCodeFile;
-        if (!this.availableEntryPoints.includes(this._project.settings.entryPoint)) {
+        const newCompilationUnit = CompilationUnitParser.parse(code, this.selectedCodeFile.value.compilationUnit.filePath);
+        const newCodeFile = this.selectedCodeFile.value.withCompilationUnit(newCompilationUnit);
+        const newProject = this.project.value.replaceFile(this.selectedCodeFile.value, newCodeFile);
+        
+        this.selectedCodeFile.next(newCodeFile);
+        this.project.next(newProject)
+
+        /*if (!this.availableEntryPoints.includes(this._project.settings.entryPoint)) {
             const newEntryPoint = this.availableEntryPoints[0] ?? "";
             const newSettings = this._project.settings.withEntryPoint(newEntryPoint);
             const newProject = this._project.withSettings(newSettings);
             this._project = newProject
-        }
-
-        if (this.checkTimeoutRef != null)
-            window.clearTimeout(this.checkTimeoutRef);
-        this.checkTimeoutRef = window.setTimeout(() => this.check(), 700);
+        }*/
     }
 
     changeTownCamera(townCamera: TownCamera) {
-        this._townCamera = townCamera;
+        this.townCamera.next(townCamera);
     }
 
     changeSettings(settings: Settings) {
-        this._project = this._project.withSettings(settings);
+        const newProject = this.project.value.withSettings(settings);
+        this.project.next(newProject);
+    }
+
+    changeEntryPoint(entryPoint: string) {
+        const newSettings = this.project.value.settings.withEntryPoint(entryPoint);
+        this.changeSettings(newSettings);
     }
 
     provideCompletionItems(line: number, column: number): CompletionItem[] {
-        const languageService = new LanguageService(this.project.compilation);
-        return languageService.getCompletionItemsAt(this.selectedCodeFile!.compilationUnit, line, column);
+        const languageService = new LanguageService(this.project.value.compilation);
+        return languageService.getCompletionItemsAt(this.selectedCodeFile.value!.compilationUnit, line, column);
     }
 
-    private check() {
-        this.checkTimeoutRef = null;
-        this._errors = Checker.check(this.project.compilation);
-        this._errorsInCurrentCodeFile = this._errors.filter(e => e.compilationUnit === this._selectedCodeFile?.compilationUnit);
+    private createInterpreter(): Interpreter {
+        const assembly = Emitter.emit(this.project.value.compilation);
+        const interpreter = new Interpreter();
+
+        const externalPrograms = StandardLibrary.getPrograms(this.currentTown.value!, () => 100);
+        for (const externalProgram of externalPrograms)
+            interpreter.addExternalProgram(externalProgram);
+
+        const entryPoint = assembly.programs.find(p => p.name === this.project.value.settings.entryPoint)!;
+        interpreter.callStack.push(new CallStackFrame(entryPoint));
+
+        return interpreter;
+    }
+
+    private hasErrors(): boolean {
+        const errors = Checker.check(this.project.value.compilation);
+        return errors.length !== 0;
     }
 
     private createNewProject(): Project {
