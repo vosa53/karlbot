@@ -13,6 +13,10 @@ const routes: Routes = [
     {
         path: "challenges",
         loadChildren: () => import("./challenges/challenges.module").then(m => m.ChallengesModule)
+    },
+    {
+        path: "user",
+        loadChildren: () => import("./user/user.module").then(m => m.UserModule)
     }
 ];
 

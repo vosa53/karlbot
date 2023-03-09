@@ -26,6 +26,7 @@
             ],
             "styles": [
               "projects/application/src/custom-theme.scss",
+              "node_modules/firebaseui/dist/firebaseui.css",
               "projects/application/src/styles.css"
             ],
             "scripts": []
@@ -88,6 +89,7 @@
               "projects/application/src/assets"
             ],
             "styles": [
+              "node_modules/firebaseui/dist/firebaseui.css",
               "projects/application/src/styles.css"
             ],
             "scripts": []

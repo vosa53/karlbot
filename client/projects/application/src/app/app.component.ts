@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Subscription } from 'rxjs';
+import { AuthenticationService } from './shared/application/services/authentication.service';
 import { ColorTheme, ColorThemeService } from './shared/application/services/color-theme.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { ColorTheme, ColorThemeService } from './shared/application/services/col
 export class AppComponent implements OnInit, OnDestroy {
     private colorThemeSubscription: Subscription | null = null;
 
-    constructor(readonly colorThemeService: ColorThemeService) { }
+    constructor(readonly colorThemeService: ColorThemeService, readonly authenticationService: AuthenticationService) { }
 
     ngOnInit() {
         this.colorThemeSubscription = this.colorThemeService.colorTheme$.subscribe(ct => {
