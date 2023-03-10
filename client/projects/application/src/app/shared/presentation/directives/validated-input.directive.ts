@@ -8,6 +8,7 @@ import { MatInput } from '@angular/material/input';
  * Thanks to this property it allows to easily one-way bind values from models and to update them via events only with *valid* values.
  */
 @Directive({
+    standalone: true,
     selector: '[appValidatedInput]'
 })
 export class ValidatedInputDirective {

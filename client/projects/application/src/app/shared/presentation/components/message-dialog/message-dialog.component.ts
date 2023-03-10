@@ -1,8 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ValidatedInputDirective } from '../../directives/validated-input.directive';
 
 @Component({
+    standalone: true,
     selector: 'app-message-dialog',
+    imports: [CommonModule, MatDialogModule, ValidatedInputDirective, MatButtonModule],
     templateUrl: './message-dialog.component.html',
     styleUrls: ['./message-dialog.component.css']
 })

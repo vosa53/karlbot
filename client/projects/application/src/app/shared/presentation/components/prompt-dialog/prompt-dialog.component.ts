@@ -1,8 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ValidatedInputDirective } from '../../directives/validated-input.directive';
 
 @Component({
+    standalone: true,
     selector: 'app-prompt-dialog',
+    imports: [CommonModule, MatDialogModule, ValidatedInputDirective, MatFormFieldModule, MatInputModule, MatButtonModule],
     templateUrl: './prompt-dialog.component.html',
     styleUrls: ['./prompt-dialog.component.css']
 })

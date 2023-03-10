@@ -7,6 +7,7 @@ import { TownCamera } from "../town/town-camera";
  * Adds an ability to move the camera to {@link TownViewComponent}.
  */
 @Directive({
+    standalone: true,
     selector: "[appTownViewMove]"
 })
 export class TownViewMoveDirective {

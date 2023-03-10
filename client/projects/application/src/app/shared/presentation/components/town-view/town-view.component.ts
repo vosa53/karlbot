@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
 import { Vector } from 'projects/karel/src/lib/math/vector';
 import { MutableTown } from 'projects/karel/src/lib/town/mutable-town';
@@ -10,7 +11,9 @@ import { TownViewport } from '../../town/town-viewport';
  * Displays a town.
  */
 @Component({
+    standalone: true,
     selector: 'app-town-view',
+    imports: [CommonModule],
     templateUrl: './town-view.component.html',
     styleUrls: ['./town-view.component.css']
 })

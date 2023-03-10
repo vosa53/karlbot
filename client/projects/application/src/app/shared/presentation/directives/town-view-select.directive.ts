@@ -8,6 +8,7 @@ import { TownRegionHighlightRenderer } from "../town/town-region-highlight-rende
  * Adds an ability to select town regions to {@link TownViewComponent}.
  */
 @Directive({
+    standalone: true,
     selector: "[appTownViewSelect]"
 })
 export class TownViewSelectDirective {

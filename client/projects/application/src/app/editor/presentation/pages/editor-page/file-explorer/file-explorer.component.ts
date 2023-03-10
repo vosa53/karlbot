@@ -1,11 +1,19 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatListModule } from "@angular/material/list";
+import { MatMenuModule } from "@angular/material/menu";
 import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
 import { CodeFile } from "projects/karel/src/lib/project/code-file";
 import { File } from "projects/karel/src/lib/project/file";
 import { TownFile } from "projects/karel/src/lib/project/town-file";
+import { PanelComponent } from "../../../components/panel/panel.component";
 
 @Component({
+    standalone: true,
     selector: "app-file-explorer",
+    imports: [CommonModule, MatMenuModule, MatIconModule, MatListModule, PanelComponent, MatButtonModule],
     templateUrl: "./file-explorer.component.html",
     styleUrls: ["./file-explorer.component.css"]
 })

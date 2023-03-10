@@ -9,10 +9,13 @@ import { autocompletion, Completion } from "@codemirror/autocomplete";
 import { Error } from "projects/karel/src/lib/compiler/errors/error";
 import { CompletionItem } from "projects/karel/src/lib/compiler/language-service/completion-item";
 import { CompletionItemType } from "projects/karel/src/lib/compiler/language-service/completion-item-type";
+import { CommonModule } from "@angular/common";
 
 
 @Component({
+    standalone: true,
     selector: "app-code-editor",
+    imports: [CommonModule],
     templateUrl: "./code-editor.component.html",
     styleUrls: ["./code-editor.component.css"]
 })

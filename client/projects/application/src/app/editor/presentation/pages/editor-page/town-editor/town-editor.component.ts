@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { TownViewSelectionEvent, TownViewSelectionMode } from "projects/application/src/app/shared/presentation/directives/town-view-select.directive";
+import { TownViewSelectDirective, TownViewSelectionEvent, TownViewSelectionMode } from "projects/application/src/app/shared/presentation/directives/town-view-select.directive";
 import { TownCamera } from "projects/application/src/app/shared/presentation/town/town-camera";
 import { Vector } from "projects/karel/src/lib/math/vector";
 import { MutableTown } from "projects/karel/src/lib/town/mutable-town";
@@ -10,13 +10,25 @@ import { MoveTownEditorTool } from "./tools/move-town-editor-tool";
 import { SignTownEditorTool } from "./tools/sign-town-editor-tool";
 import { TileTownEditorTool } from "./tools/tile-town-editor-tool";
 import { TownEditorTool } from "./tools/town-editor-tool";
-import { ValidatedInputValidatorFactory } from "projects/application/src/app/shared/presentation/directives/validated-input.directive";
+import { ValidatedInputDirective, ValidatedInputValidatorFactory } from "projects/application/src/app/shared/presentation/directives/validated-input.directive";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { TownViewMoveDirective } from "projects/application/src/app/shared/presentation/directives/town-view-move.directive";
+import { TownViewComponent } from "projects/application/src/app/shared/presentation/components/town-view/town-view.component";
+import { MatMenuModule } from "@angular/material/menu";
+import { CommonModule } from "@angular/common";
+import { MatInputModule } from "@angular/material/input";
 
 /**
  * Town editor.
  */
 @Component({
+    standalone: true,
     selector: "app-town-editor",
+    imports: [CommonModule, ValidatedInputDirective, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonToggleModule, MatToolbarModule, 
+        TownViewSelectDirective, TownViewMoveDirective, TownViewComponent, MatMenuModule],
     templateUrl: "./town-editor.component.html",
     styleUrls: ["./town-editor.component.css"]
 })

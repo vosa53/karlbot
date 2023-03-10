@@ -1,9 +1,16 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Settings } from "projects/karel/src/lib/project/settings";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatSelectModule } from "@angular/material/select";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatButtonModule } from '@angular/material/button';
 import { EditorState } from "../../../../application/services/editor.service";
 
 @Component({
+  standalone: true,
   selector: "app-header",
+  imports: [CommonModule, MatIconModule, MatSelectModule, MatToolbarModule, MatMenuModule, MatButtonModule],
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.css"]
 })

@@ -1,9 +1,16 @@
+import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ValidatedInputValidatorFactory } from "projects/application/src/app/shared/presentation/directives/validated-input.directive";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { ValidatedInputDirective, ValidatedInputValidatorFactory } from "projects/application/src/app/shared/presentation/directives/validated-input.directive";
 import { Settings } from "projects/karel/src/lib/project/settings";
+import { PanelComponent } from "../../../components/panel/panel.component";
 
 @Component({
+    standalone: true,
     selector: "app-settings",
+    imports: [CommonModule, ValidatedInputDirective, MatFormFieldModule, MatInputModule, MatSelectModule, PanelComponent],
     templateUrl: "./settings.component.html",
     styleUrls: ["./settings.component.css"]
 })
