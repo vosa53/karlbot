@@ -14,8 +14,9 @@ using System.Text;
 
 namespace KarlBot.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class AuthenticationController : ControllerBase
     {
         private readonly ILogger<AuthenticationController> _logger;
@@ -23,26 +24,21 @@ namespace KarlBot.Controllers
         private readonly IFirebaseAuthenticationService _firebaseAuthenticationService;
         private readonly IUserRepository _userRepository;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AuthenticationController(ILogger<AuthenticationController> logger, IConfiguration config, IFirebaseAuthenticationService firebaseAuthenticationService,
-            IUserRepository userRepository, UserManager<User> userManager, SignInManager<User> signInManager)
+            IUserRepository userRepository, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
             _config = config;
             _firebaseAuthenticationService = firebaseAuthenticationService;
             _userRepository = userRepository;
             _userManager = userManager;
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<string> GetSecret()
-        {
-            return "Some secret string.";
+            _roleManager = roleManager;
         }
 
         [HttpPost("Firebase")]
-        public async Task<ActionResult<FirebaseResponse>> Get(FirebaseRequest request)
+        public async Task<ActionResult<FirebaseResponse>> FirebaseAsync(FirebaseRequest request)
         {
             var firebaseUser = await _firebaseAuthenticationService.VerifyIdTokenAsync(request.FirebaseIdToken);
             if (firebaseUser == null)
@@ -55,11 +51,7 @@ namespace KarlBot.Controllers
 
                 if (user == null)
                 {
-                    user = new User
-                    {
-                        UserName = firebaseUser.Email,
-                        Email = firebaseUser.Email
-                    };
+                    user = new User(firebaseUser.Email);
                     var result = await _userManager.CreateAsync(user);
                     if (!result.Succeeded)
                         throw new Exception();
@@ -68,24 +60,30 @@ namespace KarlBot.Controllers
                 }
             }
 
+            var roles = await _userManager.GetRolesAsync(user);
+
             return new FirebaseResponse
             {
-                Token = CreateToken(user)
+                Token = CreateToken(user, roles)
             };
         }
 
-        private string CreateToken(User user)
+        private string CreateToken(User user, IEnumerable<string> roles)
         {
             var issuer = _config["Jwt:Issuer"];
             var audience = _config["Jwt:Audience"];
             var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]);
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                };
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("Id", Guid.NewGuid().ToString()),
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddDays(7),
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials

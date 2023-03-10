@@ -19,7 +19,7 @@ export class AuthenticationService {
         });
 
         this.auth.authState.subscribe(u => {
-
+            console.log(u?.getIdToken());
         });
     }
 

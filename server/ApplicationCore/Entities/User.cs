@@ -9,5 +9,10 @@ namespace ApplicationCore.Entities
 {
     public class User : IdentityUser
     {
+        public User(string email)
+        {
+            UserName = email;
+            Email = email;
+        }
     }
 }

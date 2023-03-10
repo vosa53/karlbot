@@ -8,10 +8,11 @@ namespace ApplicationCore.Repositories
 {
     public interface IRepository<T, K>
     {
-        Task<List<T>> GetAllAsync();
+        Task<List<T>> GetAsync();
         Task<T?> GetByIdAsync(K id);
-        Task Add(T entity);
-        Task Update(T entity);
-        Task Remove(T entity);
+        Task<bool> ExistsByIdAsync(K id);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task RemoveAsync(T entity);
     }
 }

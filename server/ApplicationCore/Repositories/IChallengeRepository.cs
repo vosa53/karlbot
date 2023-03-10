@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Repositories
 {
-    public interface IProjectRepository : IRepository<Project, int>
+    public interface IChallengeRepository : IRepository<Challenge, int>
     {
-        Task<List<Project>> GetAsync(string? authorId);
     }
 }

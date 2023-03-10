@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             DbSet = DbContext.Set<T>();
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAsync()
         {
             return await DbSet.ToListAsync();
         }
@@ -29,22 +29,27 @@ namespace Infrastructure.Repositories
             return await DbSet.FindAsync(id).AsTask();
         }
 
-        public async Task Add(T entity)
+        public async Task AddAsync(T entity)
         {
             DbSet.Add(entity);
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task Remove(T entity)
+        public async Task RemoveAsync(T entity)
         {
             DbSet.Remove(entity);
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             DbSet.Update(entity);
             await DbContext.SaveChangesAsync();
+        }
+
+        public Task<bool> ExistsByIdAsync(K id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

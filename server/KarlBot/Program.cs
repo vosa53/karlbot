@@ -22,7 +22,10 @@ namespace KarlBot
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(o =>
+            {
+                o.SuppressAsyncSuffixInActionNames = false;
+            });
 
             FirebaseApp.Create(new AppOptions
             {
@@ -30,6 +33,9 @@ namespace KarlBot
             });
 
             builder.Services.AddTransient<IFirebaseAuthenticationService, FirebaseAuthenticationService>();
+            builder.Services.AddTransient<IChallengeRepository, DbContextChallengeRepository>();
+            builder.Services.AddTransient<IChallengeSubmissionRepository, DbContextChallengeSubmissionRepository>();
+            builder.Services.AddTransient<IProjectRepository, DbContextProjectRepository>();
             builder.Services.AddTransient<IUserRepository, DbContextUserRepository>();
 
             // Configuring Swagger/OpenAPI. More at: https://aka.ms/aspnetcore/swashbuckle.
@@ -106,7 +112,7 @@ namespace KarlBot
             app.UseAuthorization();
 
 
-            app.MapControllers();
+            app.MapControllers().RequireAuthorization();
 
             app.Run();
         }
