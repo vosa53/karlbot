@@ -21,6 +21,7 @@ import { TownFile } from 'projects/karel/src/lib/project/town-file';
 import { StandardLibrary } from 'projects/karel/src/lib/standard-library/standard-library';
 import { MutableTown } from 'projects/karel/src/lib/town/town';
 import { Town } from 'projects/karel/src/lib/town/town';
+import { ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
 import { BehaviorSubject, combineLatest, debounceTime, forkJoin, map, merge, pairwise, startWith, Subject } from 'rxjs';
 import { TownCamera } from '../../../shared/presentation/town/town-camera';
 import { EditorDialogService } from '../../presentation/services/editor-dialog.service';
@@ -85,6 +86,8 @@ export class EditorService {
             this.currentTown.next(newValue?.town?.toMutable() ?? null);
         });
         this.availableEntryPoints$.subscribe(ae => this.availableEntryPoints = ae);
+
+        console.log(ProjectSerializer.serialize(this.project.value));
     }
 
     addCodeFile(name: string) {

@@ -11,6 +11,9 @@
         "paths": {
             "karel": [
                 "dist/karel"
+            ],
+            "karel-evaluation": [
+              "dist/karel-evaluation"
             ]
         },
         "noImplicitReturns": true,

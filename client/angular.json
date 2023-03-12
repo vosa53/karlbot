@@ -147,6 +147,39 @@
           }
         }
       }
+    },
+    "karel-evaluation": {
+      "projectType": "library",
+      "root": "projects/karel-evaluation",
+      "sourceRoot": "projects/karel-evaluation/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/karel-evaluation/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/karel-evaluation/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/karel-evaluation/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/karel-evaluation/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   }
 }

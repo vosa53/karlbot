@@ -1,4 +1,4 @@
-// Webpack is used only for bundling the Karel library for server challenge evaluation.
+// Webpack is used only for bundling the Karel evaluation library for server challenge evaluation.
 
 const path = require("path");
 const CircularDependencyPlugin = require("circular-dependency-plugin")
@@ -18,10 +18,13 @@ module.exports = {
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
     },
+    externals: {
+        karel: "karel"
+    },
     output: {
         filename: "bundle.js",
         path: path.resolve(__dirname, "dist"),
-        library: "karel"
+        library: "karelEvaluation"
     },
     plugins: [
         new CircularDependencyPlugin({
