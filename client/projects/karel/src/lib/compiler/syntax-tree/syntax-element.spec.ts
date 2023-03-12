@@ -1,8 +1,8 @@
-import { ChildrenBuilder } from "./../children-builder";
-import { SyntaxError } from "./../errors/syntax-error";
-import { LineTextRange } from "./../line-text-range";
+import { ChildrenBuilder } from "../children-builder";
+import { SyntaxError } from "../errors/syntax-error";
+import { LineTextRange } from "../line-text-range";
 import { Node } from "./nodes/node";
-import { PrimitiveSyntaxElement } from "./primitive-syntax-element";
+import { PrimitiveSyntaxElement } from "./syntax-element";
 import { SyntaxElement } from "./syntax-element";
 
 describe("PrimitiveSyntaxElement", () => {

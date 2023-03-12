@@ -1,17 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from './shared/application/services/authentication.service';
 import { ColorTheme, ColorThemeService } from './shared/application/services/color-theme.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
     standalone: true,
     selector: "app-root",
-    imports: [CommonModule, RouterModule, MatSlideToggleModule, MatToolbarModule, MatButtonModule],
+    imports: [CommonModule, RouterModule, MatSlideToggleModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })

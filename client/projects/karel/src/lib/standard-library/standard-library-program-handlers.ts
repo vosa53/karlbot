@@ -1,6 +1,6 @@
 import { InterpretStopToken } from '../interpreter/interpret-stop-token';
 import { Exception } from '../interpreter/exception';
-import { MutableTown } from '../town/mutable-town';
+import { MutableTown } from '../town/town';
 import { TownTile } from '../town/town-tile';
 import { Vector } from '../math/vector';
 import { TownDirectionUtils } from '../town/town-direction-utils';

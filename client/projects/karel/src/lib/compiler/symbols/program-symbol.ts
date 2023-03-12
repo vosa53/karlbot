@@ -1,10 +1,10 @@
 import { ProgramNode } from "../syntax-tree/nodes/program-node";
-import { Symbol } from "./symbol";
+import { Symbol_ } from "./symbol";
 
 /**
  * Symbol for a program.
  */
-export class ProgramSymbol extends Symbol {
+export class ProgramSymbol extends Symbol_ {
     /**
      * Definition of the program to which the symbol refers.
      */

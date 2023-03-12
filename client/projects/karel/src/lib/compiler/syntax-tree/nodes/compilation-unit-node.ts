@@ -1,9 +1,11 @@
-import { CompilationUnitPrimitiveNode } from "../primitive-nodes/compilation-unit-primitive-node";
-import { ProgramPrimitiveNode } from "../primitive-nodes/program-primitive-node";
-import { EndOfFilePrimitiveToken } from "../primitive-tokens/end-of-file-primitive-token";
+import { ArrayUtils } from "../../../utils/array-utils";
+import { PrimitiveSyntaxElementUtils } from "../../../utils/syntax-element-utils";
+import { ChildrenBuilder } from "../../children-builder";
+import { PrimitiveSyntaxElement } from "../syntax-element";
+import { EndOfFilePrimitiveToken } from "../tokens/end-of-file-token";
 import { EndOfFileToken } from "../tokens/end-of-file-token";
-import { Node } from "./node";
-import { ProgramNode } from "./program-node";
+import { Node, PrimitiveNode } from "./node";
+import { ProgramNode, ProgramPrimitiveNode } from "./program-node";
 
 export class CompilationUnitNode extends Node {
     get programs(): readonly ProgramNode[] {
@@ -47,5 +49,41 @@ export class CompilationUnitNode extends Node {
         index += compilationUnitPrimitiveNode.programs.length;
 
         this._endOfFileToken = /*compilationUnitPrimitiveNode.endOfFileToken !== null ? */<EndOfFileToken>this.children[index]/* : null*/;
+    }
+}
+
+
+export class CompilationUnitPrimitiveNode extends PrimitiveNode {
+    readonly programs: readonly ProgramPrimitiveNode[];
+    readonly endOfFileToken: EndOfFilePrimitiveToken;
+    readonly filePath: string;
+
+    constructor(programs: readonly ProgramPrimitiveNode[], endOfFileToken: EndOfFilePrimitiveToken, filePath: string) {
+        super(CompilationUnitPrimitiveNode.createChildren(programs, endOfFileToken));
+        this.programs = programs;
+        this.endOfFileToken = endOfFileToken;
+        this.filePath = filePath;
+    }
+
+    override equals(other: PrimitiveSyntaxElement): boolean {
+        return super.equals(other) && other instanceof CompilationUnitPrimitiveNode &&
+            ArrayUtils.equals(this.programs, other.programs, (t, o) => t.equals(o)) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.endOfFileToken, other.endOfFileToken) &&
+            this.filePath === other.filePath;
+    }
+
+    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): CompilationUnitNode {
+        return new CompilationUnitNode(this, parent, position, startLine, startColumn);
+    }
+
+    private static createChildren(programs: readonly ProgramPrimitiveNode[], endOfFileToken: EndOfFilePrimitiveToken): ChildrenBuilder {
+        const children = new ChildrenBuilder();
+        
+        for (const program of programs)
+            children.addChild(program);
+    
+        children.addChildOrError(endOfFileToken, "Missing end of file token");
+    
+        return children;
     }
 }

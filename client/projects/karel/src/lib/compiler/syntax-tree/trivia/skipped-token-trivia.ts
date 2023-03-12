@@ -1,4 +1,4 @@
-import { PrimitiveToken } from "../primitive-tokens/primitive-token";
+import { PrimitiveToken } from "../tokens/token";
 import { Trivia } from "./trivia";
 
 /**

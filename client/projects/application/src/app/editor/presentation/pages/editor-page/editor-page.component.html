@@ -1,47 +1,89 @@
-<app-header 
-    class="header"
-    [editorState]="(editorService.editorState$ | async)!"
-    [availableEntryPoints]="(editorService.availableEntryPoints$ | async)!"
-    [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
-    (entryPointChange)="editorService.changeEntryPoint($event)"
-    (runClick)="editorService.run(false)"
-    (runReadonlyClick)="editorService.run(true)"
-    (stopClick)="editorService.stop()">
-</app-header>
+<ng-template #header>
+    <app-header 
+        class="header"
+        [editorState]="(editorService.editorState$ | async)!"
+        [availableEntryPoints]="(editorService.availableEntryPoints$ | async)!"
+        [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
+        (entryPointChange)="editorService.changeEntryPoint($event)"
+        (runClick)="editorService.run(false)"
+        (runReadonlyClick)="editorService.run(true)"
+        (stopClick)="editorService.stop()">
+    </app-header>
+</ng-template>
 
-<app-file-explorer 
-    class="file-explorer"
-    [selectedCodeFile]="(editorService.selectedCodeFile$ | async)!"
-    [selectedTownFile]="(editorService.selectedTownFile$ | async)!"
-    [files]="(editorService.project$ | async)!.files" 
-    (codeFileAdd)="editorService.addCodeFile($event)"
-    (townFileAdd)="editorService.addTownFile($event)"
-    (fileRemove)="editorService.removeFile($event)"
-    (fileSelect)="editorService.selectFile($event)">
-</app-file-explorer>
+<ng-template #fileExplorer>
+    <app-file-explorer 
+        class="file-explorer"
+        [selectedCodeFile]="(editorService.selectedCodeFile$ | async)!"
+        [selectedTownFile]="(editorService.selectedTownFile$ | async)!"
+        [files]="(editorService.project$ | async)!.files" 
+        (codeFileAdd)="editorService.addCodeFile($event)"
+        (townFileAdd)="editorService.addTownFile($event)"
+        (fileRemove)="editorService.removeFile($event)"
+        (fileSelect)="editorService.selectFile($event)">
+    </app-file-explorer>
+</ng-template>
 
-<app-code-editor 
-    class="code-editor" 
-    [code]="(editorService.currentCode$ | async)!"
-    [errors]="(editorService.errorsInCurrentCodeFile$ | async)!"
-    [completionItemsProvider]="completionItemsProvider"
-    (codeChange)="editorService.changeCode($event)">
-</app-code-editor>
+<ng-template #codeEditor>
+    <app-code-editor 
+        class="code-editor" 
+        [code]="(editorService.currentCode$ | async)!"
+        [errors]="(editorService.errorsInCurrentCodeFile$ | async)!"
+        [completionItemsProvider]="completionItemsProvider"
+        (codeChange)="editorService.changeCode($event)">
+    </app-code-editor>
+</ng-template>
 
-<app-town-editor 
-    class="town-editor" 
-    [town]="(editorService.currentTown$ | async)!" 
-    [camera]="(editorService.townCamera$ | async)!"
-    (cameraChange)="editorService.changeTownCamera($event)">
-</app-town-editor>
+<ng-template #townEditor>
+    <app-town-editor 
+        class="town-editor" 
+        [town]="(editorService.currentTown$ | async)!" 
+        [camera]="(editorService.townCamera$ | async)!"
+        (cameraChange)="editorService.changeTownCamera($event)">
+    </app-town-editor>
+</ng-template>
 
-<app-settings 
-    class="settings" 
-    [settings]="(editorService.project$ | async)!.settings" 
-    (settingsChange)="editorService.changeSettings($event)">
-</app-settings>
+<ng-template #settings>
+    <app-settings 
+        class="settings" 
+        [settings]="(editorService.project$ | async)!.settings" 
+        (settingsChange)="editorService.changeSettings($event)">
+    </app-settings>
+</ng-template>
 
-<app-error-list 
-    class="error-list" 
-    [errors]="(editorService.errors$ | async)!">
-</app-error-list>
+<ng-template #errorList>
+    <app-error-list 
+        class="error-list" 
+        [errors]="(editorService.errors$ | async)!">
+    </app-error-list>
+</ng-template>
+
+<div class="large-screen" *ngIf="!isSmallScreen">
+    <ng-container *ngTemplateOutlet="header"></ng-container>
+    <ng-container *ngTemplateOutlet="fileExplorer"></ng-container>
+    <ng-container *ngTemplateOutlet="codeEditor"></ng-container>
+    <ng-container *ngTemplateOutlet="townEditor"></ng-container>
+    <ng-container *ngTemplateOutlet="settings"></ng-container>
+    <ng-container *ngTemplateOutlet="errorList"></ng-container>
+</div>
+
+<div class="small-screen" *ngIf="isSmallScreen">
+    <ng-container *ngTemplateOutlet="header"></ng-container>
+    <mat-tab-group preserveContent class="content tab-full-height">
+        <mat-tab label="Project">
+            <div class="project">
+                <ng-container *ngTemplateOutlet="fileExplorer"></ng-container>
+                <ng-container *ngTemplateOutlet="settings"></ng-container>
+            </div>
+        </mat-tab>
+        <mat-tab label="Code" class="code">
+            <div class="code">
+                <ng-container *ngTemplateOutlet="codeEditor"></ng-container>
+                <ng-container *ngTemplateOutlet="errorList"></ng-container>
+            </div>
+        </mat-tab>
+        <mat-tab label="Town" class="town">
+            <ng-container *ngTemplateOutlet="townEditor"></ng-container>
+        </mat-tab>
+    </mat-tab-group>
+</div>

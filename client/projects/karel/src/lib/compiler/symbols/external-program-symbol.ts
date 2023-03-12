@@ -1,10 +1,10 @@
 import { ExternalProgramReference } from "../external-program-reference";
-import { Symbol } from "./symbol";
+import { Symbol_ } from "./symbol";
 
 /**
  * Symbol for an external program.
  */
-export class ExternalProgramSymbol extends Symbol {
+export class ExternalProgramSymbol extends Symbol_ {
     /**
      * Reference of the external program to which the symbol refers.
      */

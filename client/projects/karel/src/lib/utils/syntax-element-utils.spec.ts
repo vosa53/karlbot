@@ -1,8 +1,8 @@
 import { Node } from "../compiler/syntax-tree/nodes/node";
-import { PrimitiveSyntaxElement } from "../compiler/syntax-tree/primitive-syntax-element";
+import { PrimitiveSyntaxElement } from "../compiler/syntax-tree/syntax-element";
 import { SyntaxElement } from "../compiler/syntax-tree/syntax-element";
 import { ArrayUtils } from "./array-utils";
-import { PrimitiveSyntaxElementUtils } from "./primitive-syntax-element-utils";
+import { PrimitiveSyntaxElementUtils } from "./syntax-element-utils";
 
 describe("PrimitiveSyntaxElementUtils", () => {
     it("equals - Returns true when syntax elements are equal.", () => {

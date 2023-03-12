@@ -1,6 +1,6 @@
 import { TownViewSelectionEvent, TownViewSelectionMode } from "projects/application/src/app/shared/presentation/directives/town-view-select.directive";
 import { Vector } from "projects/karel/src/lib/math/vector";
-import { MutableTown } from "projects/karel/src/lib/town/mutable-town";
+import { MutableTown } from "projects/karel/src/lib/town/town";
 import { TownTile } from "projects/karel/src/lib/town/town-tile";
 import { TownEditorTool } from "./town-editor-tool";
 

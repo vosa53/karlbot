@@ -1,13 +1,14 @@
-import { BlockPrimitiveNode } from "../primitive-nodes/block-primitive-node";
-import { RepeatPrimitiveNode } from "../primitive-nodes/repeat-primitive-node";
-import { NumberPrimitiveToken } from "../primitive-tokens/number-primitive-token";
-import { RepeatPrimitiveToken } from "../primitive-tokens/repeat-primitive-token";
-import { TimesPrimitiveToken } from "../primitive-tokens/times-primitive-token";
+import { PrimitiveSyntaxElementUtils } from "../../../utils/syntax-element-utils";
+import { ChildrenBuilder } from "../../children-builder";
+import { PrimitiveSyntaxElement } from "../syntax-element";
+import { NumberPrimitiveToken } from "../tokens/number-token";
+import { RepeatPrimitiveToken } from "../tokens/repeat-token";
+import { TimesPrimitiveToken } from "../tokens/times-token";
 import { NumberToken } from "../tokens/number-token";
 import { RepeatToken } from "../tokens/repeat-token";
 import { TimesToken } from "../tokens/times-token";
-import { BlockNode } from "./block-node";
-import { Node } from "./node";
+import { BlockNode, BlockPrimitiveNode } from "./block-node";
+import { Node, PrimitiveNode } from "./node";
 
 export class RepeatNode extends Node {
     get repeatToken(): RepeatToken | null {
@@ -68,5 +69,44 @@ export class RepeatNode extends Node {
         index += repeatPrimitiveNode.timesToken !== null ? 1 : 0;
 
         this._body = repeatPrimitiveNode.body !== null ? <BlockNode>this.children[index] : null;
+    }
+}
+
+
+export class RepeatPrimitiveNode extends PrimitiveNode {
+    readonly repeatToken: RepeatPrimitiveToken | null;
+    readonly countToken: NumberPrimitiveToken | null;
+    readonly timesToken: TimesPrimitiveToken | null;
+    readonly body: BlockPrimitiveNode | null;
+
+    constructor(repeatToken: RepeatPrimitiveToken | null, countToken: NumberPrimitiveToken | null, timesToken: TimesPrimitiveToken | null, body: BlockPrimitiveNode | null) {
+        super(RepeatPrimitiveNode.createChildren(repeatToken, countToken, timesToken, body));
+        this.repeatToken = repeatToken;
+        this.countToken = countToken;
+        this.timesToken = timesToken;
+        this.body = body;
+    }
+
+    override equals(other: PrimitiveSyntaxElement): boolean {
+        return super.equals(other) && other instanceof RepeatPrimitiveNode &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.repeatToken, other.repeatToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.countToken, other.countToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.timesToken, other.timesToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.body, other.body);
+    }
+
+    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): RepeatNode {
+        return new RepeatNode(this, parent, position, startLine, startColumn);
+    }
+
+    private static createChildren(repeatToken: RepeatPrimitiveToken | null, countToken: NumberPrimitiveToken | null, timesToken: TimesPrimitiveToken | null, body: BlockPrimitiveNode | null): ChildrenBuilder {
+        const children = new ChildrenBuilder();
+    
+        children.addChildOrError(repeatToken, "Missing repeat token");
+        children.addChildOrError(countToken, "Missing count token");
+        children.addChildOrError(timesToken, "Missing times token");
+        children.addChildOrError(body, "Missing body");
+    
+        return children;
     }
 }

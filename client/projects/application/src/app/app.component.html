@@ -1,20 +1,32 @@
-<mat-toolbar color="primary" class="navigation">
-    <img src="assets/logo.png" style="width: 30px;" alt="">
-    <span class="example-spacer" style="width: 10px;"></span>
-    <span>KarlBot</span>
-    <span class="example-spacer" style="width: 20px;"></span>
-    <a mat-button routerLink="/">Editor</a>
-    <a mat-button routerLink="/projects">Projects</a>
-    <a mat-button routerLink="/challenges">Challenges</a>
-    <div style="flex-grow: 1;"></div>
-    <mat-slide-toggle [checked]="(colorThemeService.colorTheme$ | async) === 'dark'" (change)="onColorThemeChange($event.checked)">
-        Dark mode
-    </mat-slide-toggle>
-    <a mat-button *ngIf="(authenticationService.currentUser$ | async) === null" routerLink="/user/sign-in">Sign in</a>
-    <span mat-button *ngIf="(authenticationService.currentUser$ | async) !== null">{{authenticationService.currentUser$ | async}}</span>
-    <a mat-button *ngIf="(authenticationService.currentUser$ | async) !== null" (click)="authenticationService.signOut()">Sign out</a>
-</mat-toolbar>
-
-<div class="page">
-    <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container style="height: 100%;">
+    <mat-sidenav #drawer mode="over">
+      <h1>KarlBot</h1>
+    </mat-sidenav>
+    <mat-sidenav-content class="container">
+        <mat-toolbar color="primary" class="app-bar">
+            <button mat-icon-button (click)="drawer.toggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <div class="title">
+                <img class="title-icon" src="assets/logo.png" alt="">
+                <span class="title-text">KarlBot</span>
+            </div>
+            <div class="navigation">
+                <a mat-button routerLink="/">Editor</a>
+                <a mat-button routerLink="/projects">Projects</a>
+                <a mat-button routerLink="/challenges">Challenges</a>
+            </div>
+            <div style="flex-grow: 1;"></div>
+            <mat-slide-toggle class="dark-mode-switch" [checked]="(colorThemeService.colorTheme$ | async) === 'dark'" (change)="onColorThemeChange($event.checked)">
+                Dark mode
+            </mat-slide-toggle>
+            <a mat-button *ngIf="(authenticationService.currentUser$ | async) === null" routerLink="/user/sign-in">Sign in</a>
+            <span mat-button *ngIf="(authenticationService.currentUser$ | async) !== null">{{authenticationService.currentUser$ | async}}</span>
+            <a mat-button *ngIf="(authenticationService.currentUser$ | async) !== null" (click)="authenticationService.signOut()">Sign out</a>
+        </mat-toolbar>
+    
+        <div class="page">
+            <router-outlet></router-outlet>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

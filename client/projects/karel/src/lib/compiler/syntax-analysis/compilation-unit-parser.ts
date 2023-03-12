@@ -1,5 +1,5 @@
 import { CompilationUnitNode } from "../syntax-tree/nodes/compilation-unit-node";
-import { EndOfFilePrimitiveToken } from "../syntax-tree/primitive-tokens/end-of-file-primitive-token";
+import { EndOfFilePrimitiveToken } from "../syntax-tree/tokens/end-of-file-token";
 import { FullLexerContext } from "./full-lexer-context";
 import { FullParserContext } from "./full-parser-context";
 import { Lexer } from "./lexer";

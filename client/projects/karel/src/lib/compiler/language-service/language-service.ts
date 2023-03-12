@@ -2,7 +2,7 @@ import { Compilation } from "../compilation";
 import { DataType } from "../data-type";
 import { ExternalProgramSymbol } from "../symbols/external-program-symbol";
 import { ProgramSymbol } from "../symbols/program-symbol";
-import { Symbol } from "../symbols/symbol";
+import { Symbol_ } from "../symbols/symbol";
 import { CompilationUnitNode } from "../syntax-tree/nodes/compilation-unit-node";
 import { CompletionItem } from "./completion-item";
 import { CompletionItemType } from "./completion-item-type";
@@ -38,7 +38,7 @@ export class LanguageService {
 
     }*/
 
-    private createCompletionItem(symbol: Symbol) {
+    private createCompletionItem(symbol: Symbol_) {
         if (symbol instanceof ExternalProgramSymbol) {
             return new CompletionItem(
                 symbol.externalProgram.name, 

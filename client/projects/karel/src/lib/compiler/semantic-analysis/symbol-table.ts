@@ -2,7 +2,7 @@ import { ExternalProgramReference } from "../external-program-reference";
 import { AmbiguousSymbol } from "../symbols/ambiguous-symbol";
 import { ExternalProgramSymbol } from "../symbols/external-program-symbol";
 import { ProgramSymbol } from "../symbols/program-symbol";
-import { Symbol } from "../symbols/symbol";
+import { Symbol_ } from "../symbols/symbol";
 import { CallNode } from "../syntax-tree/nodes/call-node";
 import { CompilationUnitNode } from "../syntax-tree/nodes/compilation-unit-node";
 import { Node } from "../syntax-tree/nodes/node";
@@ -13,9 +13,9 @@ import { ProgramNode } from "../syntax-tree/nodes/program-node";
  */
 export class SymbolTable {
     private constructor(
-        private readonly definedSymbols: Symbol[],
-        private readonly programToSymbol: Map<ProgramNode, Symbol>,
-        private readonly nameToSymbol: Map<string, Symbol>
+        private readonly definedSymbols: Symbol_[],
+        private readonly programToSymbol: Map<ProgramNode, Symbol_>,
+        private readonly nameToSymbol: Map<string, Symbol_>
     ) { }
 
     /**
@@ -24,10 +24,10 @@ export class SymbolTable {
      * @param externalPrograms References to external programs.
      */
     static create(compilationUnits: readonly CompilationUnitNode[], externalPrograms: readonly ExternalProgramReference[]): SymbolTable {
-        const definedSymbols: Symbol[] = [];
+        const definedSymbols: Symbol_[] = [];
         const programToSymbol = new Map();
         const nameToSymbol = new Map();
-        const nameToSymbols = new Map<string, Symbol[]>();
+        const nameToSymbols = new Map<string, Symbol_[]>();
 
         for (const compilationUnit of compilationUnits) {
             for (const program of compilationUnit.programs) {
@@ -69,7 +69,7 @@ export class SymbolTable {
     /**
      * Returns all defined symbols.
      */
-    getDefined(): Symbol[] {
+    getDefined(): Symbol_[] {
         return this.definedSymbols;
     }
 
@@ -77,7 +77,7 @@ export class SymbolTable {
      * Returns a symbol bound to the given node or `null` if the node is not associated with any symbol.
      * @param node Node.
      */
-    getByNode(node: Node): Symbol | null {
+    getByNode(node: Node): Symbol_ | null {
         // TODO: Can nameToken be null?
         if (node instanceof CallNode && node.nameToken !== null)
             return this.nameToSymbol.get(node.nameToken.text) || null;
@@ -91,7 +91,7 @@ export class SymbolTable {
      * Returns a symbol bound to the given name or `null` if the name is not associated with any symbol.
      * @param name Name.
      */
-    getByName(name: string): Symbol | null {
+    getByName(name: string): Symbol_ | null {
         return this.nameToSymbol.get(name) || null;
     }
 }

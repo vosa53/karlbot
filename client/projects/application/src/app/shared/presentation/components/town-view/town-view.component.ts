@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
 import { Vector } from 'projects/karel/src/lib/math/vector';
-import { MutableTown } from 'projects/karel/src/lib/town/mutable-town';
+import { MutableTown } from 'projects/karel/src/lib/town/town';
 import { TownCamera } from '../../town/town-camera';
 import { TownRenderer } from '../../town/town-renderer';
 import { TownRenderingEnvironment } from '../../town/town-rendering-environment';

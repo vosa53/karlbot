@@ -1,5 +1,5 @@
 import { TownDirectionUtils } from "projects/karel/src/lib/town/town-direction-utils";
-import { MutableTown } from "projects/karel/src/lib/town/mutable-town";
+import { MutableTown } from "projects/karel/src/lib/town/town";
 import { TownTile } from "projects/karel/src/lib/town/town-tile";
 import { TownRenderingEnvironment } from "./town-rendering-environment";
 

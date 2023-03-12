@@ -2,7 +2,7 @@ import { ChildrenBuilder } from "./children-builder";
 import { SyntaxError } from "./errors/syntax-error";
 import { LineTextRange } from "./line-text-range";
 import { Node } from "./syntax-tree/nodes/node";
-import { PrimitiveSyntaxElement } from "./syntax-tree/primitive-syntax-element";
+import { PrimitiveSyntaxElement } from "./syntax-tree/syntax-element";
 import { SyntaxElement } from "./syntax-tree/syntax-element";
 
 describe("ChildrenBuilder", () => {

@@ -1,11 +1,12 @@
-import { BlockPrimitiveNode } from "../primitive-nodes/block-primitive-node";
-import { ProgramPrimitiveNode } from "../primitive-nodes/program-primitive-node";
-import { IdentifierPrimitiveToken } from "../primitive-tokens/identifier-primitive-token";
-import { ProgramPrimitiveToken } from "../primitive-tokens/program-primitive-token";
+import { PrimitiveSyntaxElementUtils } from "../../../utils/syntax-element-utils";
+import { ChildrenBuilder } from "../../children-builder";
+import { PrimitiveSyntaxElement } from "../syntax-element";
+import { IdentifierPrimitiveToken } from "../tokens/identifier-token";
+import { ProgramPrimitiveToken } from "../tokens/program-token";
 import { IdentifierToken } from "../tokens/identifier-token";
 import { ProgramToken } from "../tokens/program-token";
-import { BlockNode } from "./block-node";
-import { Node } from "./node";
+import { BlockNode, BlockPrimitiveNode } from "./block-node";
+import { Node, PrimitiveNode } from "./node";
 
 export class ProgramNode extends Node {
     get programToken(): ProgramToken | null {
@@ -55,5 +56,40 @@ export class ProgramNode extends Node {
         index += programPrimitiveNode.nameToken !== null ? 1 : 0;
 
         this._body = programPrimitiveNode.body !== null ? <BlockNode>this.children[index] : null;
+    }
+}
+
+
+export class ProgramPrimitiveNode extends PrimitiveNode {
+    readonly programToken: ProgramPrimitiveToken | null;
+    readonly nameToken: IdentifierPrimitiveToken | null;
+    readonly body: BlockPrimitiveNode | null;
+
+    constructor(programToken: ProgramPrimitiveToken | null, nameToken: IdentifierPrimitiveToken | null, body: BlockPrimitiveNode | null) {
+        super(ProgramPrimitiveNode.createChildren(programToken, nameToken, body));
+        this.programToken = programToken;
+        this.nameToken = nameToken;
+        this.body = body;
+    }
+
+    override equals(other: PrimitiveSyntaxElement): boolean {
+        return super.equals(other) && other instanceof ProgramPrimitiveNode &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.programToken, other.programToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.nameToken, other.nameToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.body, other.body);
+    }
+
+    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): ProgramNode {
+        return new ProgramNode(this, parent, position, startLine, startColumn);
+    }
+
+    private static createChildren(programToken: ProgramPrimitiveToken | null, nameToken: IdentifierPrimitiveToken | null, body: BlockPrimitiveNode | null): ChildrenBuilder {
+        const children = new ChildrenBuilder();
+    
+        children.addChildOrError(programToken, "Missing program token");
+        children.addChildOrError(nameToken, "Missing name token");
+        children.addChildOrError(body, "Missing body");
+    
+        return children;
     }
 }

@@ -1,4 +1,4 @@
-import { PrimitiveSyntaxElement } from "../compiler/syntax-tree/primitive-syntax-element";
+import { PrimitiveSyntaxElement } from "../compiler/syntax-tree/syntax-element";
 
 /**
  * Utils for {@link PrimitiveSyntaxElement}.

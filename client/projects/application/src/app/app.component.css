@@ -1,14 +1,38 @@
-:host {
+.container {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.navigation {
+.app-bar {
     height: 50px;
     flex: 0 0 auto;
 }
 
 .page {
     flex-grow: 1;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+}
+
+.title-icon {
+    width: 30px;
+}
+
+.title-text {
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
+@media (max-width: 1000px) {
+    .navigation {
+        display: none;
+    }
+
+    .dark-mode-switch {
+        display: none;
+    }
 }

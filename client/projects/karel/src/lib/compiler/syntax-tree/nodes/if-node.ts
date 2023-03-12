@@ -1,17 +1,17 @@
-import { BlockPrimitiveNode } from "../primitive-nodes/block-primitive-node";
-import { CallPrimitiveNode } from "../primitive-nodes/call-primitive-node";
-import { IfPrimitiveNode } from "../primitive-nodes/if-primitive-node";
-import { ElsePrimitiveToken } from "../primitive-tokens/else-primitive-token";
-import { IfPrimitiveToken } from "../primitive-tokens/if-primitive-token";
-import { IsPrimitiveToken } from "../primitive-tokens/is-primitive-token";
-import { NotPrimitiveToken } from "../primitive-tokens/not-primitive-token";
+import { PrimitiveSyntaxElementUtils } from "../../../utils/syntax-element-utils";
+import { ChildrenBuilder } from "../../children-builder";
+import { PrimitiveSyntaxElement } from "../syntax-element";
+import { ElsePrimitiveToken } from "../tokens/else-token";
+import { IfPrimitiveToken } from "../tokens/if-token";
+import { IsPrimitiveToken } from "../tokens/is-token";
+import { NotPrimitiveToken } from "../tokens/not-token";
 import { ElseToken } from "../tokens/else-token";
 import { IfToken } from "../tokens/if-token";
 import { IsToken } from "../tokens/is-token";
 import { NotToken } from "../tokens/not-token";
-import { BlockNode } from "./block-node";
-import { CallNode } from "./call-node";
-import { Node } from "./node";
+import { BlockNode, BlockPrimitiveNode } from "./block-node";
+import { CallNode, CallPrimitiveNode } from "./call-node";
+import { Node, PrimitiveNode } from "./node";
 
 export class IfNode extends Node {
     get ifToken(): IfToken | null {
@@ -94,5 +94,59 @@ export class IfNode extends Node {
         index += ifPrimitiveNode.elseToken !== null ? 1 : 0;
 
         this._elseBody = ifPrimitiveNode.elseBody !== null ? <BlockNode>this.children[index] : null;
+    }
+}
+
+
+export class IfPrimitiveNode extends PrimitiveNode {
+    readonly ifToken: IfPrimitiveToken | null;
+    readonly operationToken: IsPrimitiveToken | NotPrimitiveToken | null;
+    readonly condition: CallPrimitiveNode | null;
+    readonly body: BlockPrimitiveNode | null;
+    readonly elseToken: ElsePrimitiveToken | null;
+    readonly elseBody: BlockPrimitiveNode | null;
+
+    constructor(ifToken: IfPrimitiveToken | null, operationToken: IsPrimitiveToken | NotPrimitiveToken | null, condition: CallPrimitiveNode | null, body: BlockPrimitiveNode | null, 
+        elseToken: ElsePrimitiveToken | null, elseBody: BlockPrimitiveNode | null) {
+        super(IfPrimitiveNode.createChildren(ifToken, operationToken, condition, body, elseToken, elseBody));
+        this.ifToken = ifToken;
+        this.operationToken = operationToken;
+        this.condition = condition;
+        this.body = body;
+        this.elseToken = elseToken;
+        this.elseBody = elseBody;
+    }
+
+    override equals(other: PrimitiveSyntaxElement): boolean {
+        return super.equals(other) && other instanceof IfPrimitiveNode &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.ifToken, other.ifToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.operationToken, other.operationToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.condition, other.condition) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.body, other.body) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.elseToken, other.elseToken) &&
+            PrimitiveSyntaxElementUtils.equalsOrBothNull(this.elseBody, other.elseBody);
+    }
+
+    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): IfNode {
+        return new IfNode(this, parent, position, startLine, startColumn);
+    }
+
+    private static createChildren(ifToken: IfPrimitiveToken | null, operationToken: IsPrimitiveToken | NotPrimitiveToken | null, condition: CallPrimitiveNode | null, body: BlockPrimitiveNode | null, 
+        elseToken: ElsePrimitiveToken | null, elseBody: BlockPrimitiveNode | null): ChildrenBuilder {
+        const children = new ChildrenBuilder();
+    
+        children.addChildOrError(ifToken, "Missing if token");
+        children.addChildOrError(operationToken, "Missing operation token");
+        children.addChildOrError(condition, "Missing condition");
+        children.addChildOrError(body, "Missing body");
+
+        if (elseToken != null) {
+            children.addChild(elseToken);
+            children.addChildOrError(elseBody, "Missing else body");
+        }
+        else if (elseBody != null)
+            children.addChild(elseBody);
+    
+        return children;
     }
 }

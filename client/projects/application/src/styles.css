@@ -10,3 +10,7 @@ body {
 .disable-form-underline .mdc-line-ripple::before {
     border-bottom: none !important;
 }
+
+.tab-full-height .mat-mdc-tab-body-wrapper {
+    flex-grow: 1;
+}

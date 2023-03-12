@@ -6,7 +6,7 @@ import { ProgramNode } from "./syntax-tree/nodes/program-node";
 import { AmbiguousSymbol } from "./symbols/ambiguous-symbol";
 import { ExternalProgramSymbol } from "./symbols/external-program-symbol";
 import { ProgramSymbol } from "./symbols/program-symbol";
-import { Symbol } from "./symbols/symbol";
+import { Symbol_ } from "./symbols/symbol";
 import { SymbolTable } from "./semantic-analysis/symbol-table";
 
 /**

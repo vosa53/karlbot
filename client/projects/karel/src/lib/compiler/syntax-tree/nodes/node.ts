@@ -1,6 +1,8 @@
+import { ArrayUtils } from "../../../utils/array-utils";
+import { ChildrenBuilder } from "../../children-builder";
 import { LineTextRange } from "../../line-text-range";
-import { PrimitiveNode } from "../primitive-nodes/primitive-node";
 import { TextRange } from "../../text-range";
+import { PrimitiveSyntaxElement } from "../syntax-element";
 import { SyntaxElement } from "../syntax-element";
 
 export abstract class Node extends SyntaxElement {
@@ -43,5 +45,27 @@ export abstract class Node extends SyntaxElement {
             currentLine += primitiveChild.lineCount - 1;
             currentColumn = primitiveChild.lineCount > 1 ? primitiveChild.lastLineLength + 1 : currentColumn + primitiveChild.length;
         }
+    }
+}
+
+
+export abstract class PrimitiveNode extends PrimitiveSyntaxElement {
+    readonly children: readonly PrimitiveSyntaxElement[];
+    
+    constructor(childrenBuilder: ChildrenBuilder) {
+        super(childrenBuilder.length, childrenBuilder.lineCount, childrenBuilder.lastLineLength, childrenBuilder.syntaxErrors);
+        this.children = childrenBuilder.children;
+    }
+
+    equals(other: PrimitiveSyntaxElement): boolean {
+        return other instanceof PrimitiveNode &&
+            ArrayUtils.equals(this.children, other.children, (t, o) => t.equals(o));
+    }
+
+    abstract override createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): Node;
+
+    override pushText(texts: string[]) {
+        for (const child of this.children)
+            child.pushText(texts);
     }
 }

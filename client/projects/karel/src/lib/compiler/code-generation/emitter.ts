@@ -19,7 +19,7 @@ import { RepeatNode } from "../syntax-tree/nodes/repeat-node";
 import { WhileNode } from "../syntax-tree/nodes/while-node";
 import { ExternalProgramSymbol } from "../symbols/external-program-symbol";
 import { ProgramSymbol } from "../symbols/program-symbol";
-import { Symbol } from "../symbols/symbol";
+import { Symbol_ } from "../symbols/symbol";
 import { IsToken } from "../syntax-tree/tokens/is-token";
 
 /**
@@ -248,5 +248,5 @@ class EmitterContext {
      * @param programSymbolToProgramMap Symbol to program map. 
      * @param compilation Compilation.
      */
-    constructor(private readonly programSymbolToProgramMap: Map<Symbol, Program>, readonly compilation: Compilation) { }
+    constructor(private readonly programSymbolToProgramMap: Map<Symbol_, Program>, readonly compilation: Compilation) { }
 }

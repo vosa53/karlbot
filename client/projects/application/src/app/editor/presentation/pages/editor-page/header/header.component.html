@@ -25,7 +25,7 @@
     </mat-menu>
 </mat-toolbar>
 
-<mat-toolbar class="toolbar">
+<mat-toolbar class="toolbar" style="overflow: auto;">
     <button mat-icon-button *ngIf="editorState === 'ready'">
         <mat-icon (click)="undoClick.emit()">undo</mat-icon>
     </button>

@@ -9,7 +9,7 @@ import { SinglelineCommentTrivia } from "../trivia/singleline-comment-trivia";
 import { SkippedTokenTrivia } from "../trivia/skipped-token-trivia";
 import { Trivia } from "../trivia/trivia";
 import { WhitespaceTrivia } from "../trivia/whitespace-trivia";
-import { PrimitiveToken } from "./primitive-token";
+import { PrimitiveToken } from "./token";
 
 describe("PrimitiveToken", () => {
     it("text - Is a text only of the token itself without its trivia.", () => {

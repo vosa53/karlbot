@@ -1,33 +1,90 @@
 :host {
+    display: block;
+    position: relative;
+    height: 100%;
+}
+
+.large-screen {
+    position: absolute;
+    width: 100%;
     height: 100%;
     display: grid;
-    grid-template-rows: auto 2fr 1fr;
+    grid-template-rows: minmax(auto, auto) minmax(0, 2fr) minmax(0, 1fr);
+    
     grid-template-columns: 17rem 1fr 1fr;
     grid-template-areas: "header header header"
         "file-explorer code-editor town-editor"
         "settings error-list town-editor";
 }
 
-.header {
+.large-screen .header {
     grid-area: header;
 }
 
-.file-explorer {
+.large-screen .file-explorer {
     grid-area: file-explorer;
 }
 
-.code-editor {
+.large-screen .code-editor {
     grid-area: code-editor;
 }
 
-.town-editor {
+.large-screen .town-editor {
     grid-area: town-editor;
 }
 
-.settings {
+.large-screen .settings {
     grid-area: settings;
 }
 
-.error-list {
+.large-screen .error-list {
+    grid-area: error-list;
+}
+
+.small-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "header" "content";
+}
+
+.small-screen .header {
+    grid-area: header;
+}
+
+.small-screen .content {
+    grid-area: content;
+}
+
+.small-screen .project {
+    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas: "file-explorer" "settings";
+}
+
+.small-screen .project .file-explorer {
+    grid-area: file-explorer;
+}
+
+.small-screen .project .settings {
+    grid-area: settings;
+}
+
+.small-screen .code {
+    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas: "code-editor" "error-list";
+}
+
+.small-screen .code .code-editor {
+    grid-area: code-editor;
+}
+
+.small-screen .code .error-list {
     grid-area: error-list;
 }

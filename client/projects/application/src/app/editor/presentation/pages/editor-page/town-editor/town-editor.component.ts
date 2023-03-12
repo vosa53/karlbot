@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { TownViewSelectDirective, TownViewSelectionEvent, TownViewSelectionMode } from "projects/application/src/app/shared/presentation/directives/town-view-select.directive";
 import { TownCamera } from "projects/application/src/app/shared/presentation/town/town-camera";
 import { Vector } from "projects/karel/src/lib/math/vector";
-import { MutableTown } from "projects/karel/src/lib/town/mutable-town";
+import { MutableTown } from "projects/karel/src/lib/town/town";
 import { TownTile } from "projects/karel/src/lib/town/town-tile";
 import { HomeTownEditorTool } from "./tools/home-town-editor-tool";
 import { KarelTownEditorTool } from "./tools/karel-town-editor-tool";

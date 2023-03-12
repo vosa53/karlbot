@@ -19,7 +19,7 @@ import { Project } from 'projects/karel/src/lib/project/project';
 import { Settings } from 'projects/karel/src/lib/project/settings';
 import { TownFile } from 'projects/karel/src/lib/project/town-file';
 import { StandardLibrary } from 'projects/karel/src/lib/standard-library/standard-library';
-import { MutableTown } from 'projects/karel/src/lib/town/mutable-town';
+import { MutableTown } from 'projects/karel/src/lib/town/town';
 import { Town } from 'projects/karel/src/lib/town/town';
 import { BehaviorSubject, combineLatest, debounceTime, forkJoin, map, merge, pairwise, startWith, Subject } from 'rxjs';
 import { TownCamera } from '../../../shared/presentation/town/town-camera';

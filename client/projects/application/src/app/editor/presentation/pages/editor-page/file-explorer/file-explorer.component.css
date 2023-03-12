@@ -27,3 +27,7 @@
 .selected {
     background: #eaeaea;
 }
+
+.list {
+    margin-bottom: 50px;
+}
