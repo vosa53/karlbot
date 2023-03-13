@@ -10,15 +10,19 @@ import { appRoutes } from './app/app.routes';
 import { environment } from './environments/environment';
 import firebase from 'firebase/compat/app';
 import * as firebaseui from 'firebaseui';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { API_BASE_URL } from './app/shared/application/api-base-url';
+import { TokenInterceptor } from './app/shared/application/services/token-interceptor';
 
 bootstrapApplication(AppComponent, {
     providers: [
         provideRouter(appRoutes),
-        provideHttpClient(),
+        provideHttpClient(
+            withInterceptors([TokenInterceptor])
+        ),
         provideAnimations(),
         importProvidersFrom(
             provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -35,6 +39,7 @@ bootstrapApplication(AppComponent, {
               }),
             MatDialogModule
         ),
-        { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
+        { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
+        { provide: API_BASE_URL, useValue: "https://localhost:7105" }
     ]
 });

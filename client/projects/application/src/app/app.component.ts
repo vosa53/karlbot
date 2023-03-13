@@ -6,7 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthenticationService } from './shared/application/services/authentication.service';
+import { SignInService } from './shared/application/services/sign-in.service';
 import { ColorTheme, ColorThemeService } from './shared/application/services/color-theme.service';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class AppComponent implements OnInit, OnDestroy {
     private colorThemeSubscription: Subscription | null = null;
 
-    constructor(readonly colorThemeService: ColorThemeService, readonly authenticationService: AuthenticationService) { }
+    constructor(readonly colorThemeService: ColorThemeService, readonly authenticationService: SignInService) { }
 
     ngOnInit() {
         this.colorThemeSubscription = this.colorThemeService.colorTheme$.subscribe(ct => {

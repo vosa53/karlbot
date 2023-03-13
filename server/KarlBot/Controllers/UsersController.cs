@@ -20,7 +20,7 @@ namespace KarlBot.Controllers
 
         [Authorize]
         [HttpGet("current")]
-        public async Task<ActionResult<UserDataModel>> GetCurrentUserAsync()
+        public async Task<ActionResult<UserDataModel>> GetCurrentAsync()
         {
             var user = await _userManager.GetUserAsync(User);
 

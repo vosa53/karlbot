@@ -22,6 +22,8 @@ namespace KarlBot
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddCors();
+
             builder.Services.AddControllers(o =>
             {
                 o.SuppressAsyncSuffixInActionNames = false;
@@ -94,17 +96,15 @@ namespace KarlBot
 
             var app = builder.Build();
 
+            app.UseCors(
+                options => options.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader()
+            );
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-                        if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-};
 
             app.UseHttpsRedirection();
 

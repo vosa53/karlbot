@@ -1,39 +1,24 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from "@angular/common/http";
+import { Inject, Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { API_BASE_URL } from "../api-base-url";
+import { FirebaseRequest } from "../models/firebase-request";
+import { FirebaseReponse } from "../models/firebase-response";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthenticationService {
-    private readonly currentUser = new BehaviorSubject<string | null>(null);
-    readonly currentUser$ = this.currentUser.asObservable();
+    private readonly authenticationBaseUrl: string;
 
-    constructor(private readonly auth: AngularFireAuth, private readonly httpClient: HttpClient) {
-        this.auth.onAuthStateChanged(u => {
-            if (u !== null)
-                this.currentUser.next(u.displayName);
-            else
-                this.currentUser.next(null);
-        });
-
-        this.auth.authState.subscribe(u => {
-            console.log(u?.getIdToken());
-        });
+    constructor(private readonly httpClient: HttpClient, @Inject(API_BASE_URL) apiBaseUrl: string) {
+        this.authenticationBaseUrl = `${apiBaseUrl}/authentication`;
     }
 
-    private getToken() {
+    firebase(firebaseIdToken: string): Observable<FirebaseReponse> {
+        const url = `${this.authenticationBaseUrl}/firebase`;
+        const request: FirebaseRequest = { firebaseIdToken };
 
+        return this.httpClient.post<FirebaseReponse>(url, request);
     }
-
-    signOut() {
-        //this.auth.user.subscribe(u => console.log(u));
-        //this.auth.user.subscribe(u => u?.getIdToken().then(t => console.log(t)));
-        //this.auth.signOut();
-    }
-}
-
-interface AuthenticateFirebaseResponse {
-    token: string;
 }
