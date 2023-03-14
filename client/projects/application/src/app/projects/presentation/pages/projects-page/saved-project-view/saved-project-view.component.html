@@ -1,0 +1,18 @@
+<mat-card matRipple>
+    <mat-card-header>
+      <mat-card-title>{{project.name}}</mat-card-title>
+      <mat-card-subtitle>{{savedProject.modified | date}}</mat-card-subtitle>
+    </mat-card-header>
+    <app-town-view mat-card-image [town]="town" class="town-view"></app-town-view>
+    <mat-card-actions align="end">
+        <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="removeClick.emit()">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+            </button>
+        </mat-menu>
+    </mat-card-actions>
+  </mat-card>

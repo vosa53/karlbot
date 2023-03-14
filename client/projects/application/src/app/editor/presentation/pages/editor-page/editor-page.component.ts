@@ -9,6 +9,7 @@ import { SettingsComponent } from "./settings/settings.component";
 import { TownEditorComponent } from "./town-editor/town-editor.component";
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     standalone: true,
@@ -22,7 +23,11 @@ export class EditorPageComponent {
     readonly completionItemsProvider = (line: number, column: number) => this.editorService.provideCompletionItems(line, column);
     isSmallScreen: boolean = false;
 
-    constructor(readonly editorService: EditorService, readonly breakpointObserver: BreakpointObserver) {
+    constructor(readonly editorService: EditorService, readonly breakpointObserver: BreakpointObserver, readonly activatedRoute: ActivatedRoute) {
         breakpointObserver.observe(["(max-width: 1000px)"]).subscribe(b => this.isSmallScreen = b.matches);
+        
+        const projectId = activatedRoute.snapshot.paramMap.get("id");
+        if (projectId !== null)
+            editorService.openProject(parseInt(projectId, 10));
     }
 }

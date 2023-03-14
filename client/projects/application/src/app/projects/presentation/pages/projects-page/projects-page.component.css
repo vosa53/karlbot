@@ -1,0 +1,14 @@
+.title {
+    margin: 32px 16px 16px;
+}
+
+.create-project-button {
+    margin: 16px;
+}
+
+.projects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 16px;
+}

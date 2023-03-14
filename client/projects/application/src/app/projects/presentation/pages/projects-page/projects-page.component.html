@@ -1,3 +1,10 @@
-<h1>Projects</h1>
+<h1 class="mat-headline-4 title">Projects</h1>
 
-<button mat-raised-button color="primary">Add project</button>
+<button mat-flat-button color="primary" class="create-project-button" routerLink="/editor">
+    <mat-icon>add</mat-icon>
+    Create new
+</button>
+
+<div class="projects">
+    <app-saved-project-view routerLink="/editor/{{savedProject.id}}" *ngFor="let savedProject of projects" [savedProject]="savedProject" (removeClick)="onRemoveClick(savedProject)"></app-saved-project-view>
+</div>

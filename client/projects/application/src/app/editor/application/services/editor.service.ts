@@ -1,5 +1,7 @@
+import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Emitter } from 'projects/karel/src/lib/compiler/code-generation/emitter';
 import { Error } from 'projects/karel/src/lib/compiler/errors/error';
 import { ExternalProgramReference } from 'projects/karel/src/lib/compiler/external-program-reference';
@@ -23,11 +25,15 @@ import { MutableTown } from 'projects/karel/src/lib/town/town';
 import { Town } from 'projects/karel/src/lib/town/town';
 import { ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
 import { BehaviorSubject, combineLatest, debounceTime, forkJoin, map, merge, pairwise, startWith, Subject } from 'rxjs';
+import { SavedProject } from '../../../shared/application/models/saved-project';
+import { ProjectService } from '../../../shared/application/services/project.service';
+import { SignInService } from '../../../shared/application/services/sign-in.service';
 import { TownCamera } from '../../../shared/presentation/town/town-camera';
 import { EditorDialogService } from '../../presentation/services/editor-dialog.service';
 
 @Injectable()
 export class EditorService {
+    private readonly savedProject = new BehaviorSubject<SavedProject | null>(null);
     private readonly project = new BehaviorSubject(this.createNewProject());
     private readonly selectedCodeFile = new BehaviorSubject<CodeFile | null>(null);
     private readonly selectedTownFile = new BehaviorSubject<TownFile | null>(null);
@@ -74,7 +80,9 @@ export class EditorService {
 
     private availableEntryPoints: readonly string[] = [];
 
-    constructor(private readonly dialogService: EditorDialogService) {
+    constructor(private readonly dialogService: EditorDialogService, private readonly projectService: ProjectService, 
+        private readonly signInService: SignInService, private readonly router: Router, private readonly activatedRoute: ActivatedRoute,
+        private readonly location: Location) {
         this.selectedTownFile.pipe(pairwise()).subscribe(([oldValue, newValue]) => {
             if (oldValue !== null) {
                 const newTown = this.currentTown.value!.toImmutable();
@@ -86,8 +94,45 @@ export class EditorService {
             this.currentTown.next(newValue?.town?.toMutable() ?? null);
         });
         this.availableEntryPoints$.subscribe(ae => this.availableEntryPoints = ae);
+    }
 
-        console.log(ProjectSerializer.serialize(this.project.value));
+    async openProject(projectId: number) {
+        const savedProject = await this.projectService.getById(projectId);
+        const project = ProjectDeserializer.deserialize(savedProject.projectFile, StandardLibrary.getProgramReferences());
+
+        this.savedProject.next(savedProject);
+        this.project.next(project);
+    }
+
+    async saveProject() {
+        const currentUser = await this.signInService.currentUser;
+        if (currentUser === null)
+            throw new window.Error();
+
+            
+        let savedProject: SavedProject;
+        if (this.savedProject.value === null) {
+            const toSave = {
+                id: 0,
+                created: new Date(),
+                modified: new Date(),
+                isPublic: true,
+                authorId: currentUser.id,
+                projectFile: ProjectSerializer.serialize(this.project.value)
+            };
+            savedProject = await this.projectService.add(toSave);
+
+            this.location.go(`editor/${savedProject.id}`);
+        }
+        else {
+            const toSave = {
+                ...this.savedProject.value,
+                projectFile: ProjectSerializer.serialize(this.project.value)
+            };
+            await this.projectService.update(toSave);
+            savedProject = await this.projectService.getById(toSave.id);
+        }
+        this.savedProject.next(savedProject);
     }
 
     addCodeFile(name: string) {

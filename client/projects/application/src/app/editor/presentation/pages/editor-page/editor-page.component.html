@@ -7,7 +7,8 @@
         (entryPointChange)="editorService.changeEntryPoint($event)"
         (runClick)="editorService.run(false)"
         (runReadonlyClick)="editorService.run(true)"
-        (stopClick)="editorService.stop()">
+        (stopClick)="editorService.stop()"
+        (saveClick)="editorService.saveProject()">
     </app-header>
 </ng-template>
 

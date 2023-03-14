@@ -42,4 +42,4 @@ bootstrapApplication(AppComponent, {
         { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
         { provide: API_BASE_URL, useValue: "https://localhost:7105" }
     ]
-});
+})

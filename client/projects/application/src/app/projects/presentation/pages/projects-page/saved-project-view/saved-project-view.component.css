@@ -1,0 +1,10 @@
+:host {
+    display: block;
+    width: 300px;
+    cursor: pointer;
+}
+
+.town-view {
+    width: 100%; 
+    height: 200px;
+}

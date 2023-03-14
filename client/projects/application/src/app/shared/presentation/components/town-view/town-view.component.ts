@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
 import { Vector } from 'projects/karel/src/lib/math/vector';
-import { MutableTown } from 'projects/karel/src/lib/town/town';
+import { ReadonlyTown } from 'projects/karel/src/public-api';
 import { TownCamera } from '../../town/town-camera';
 import { TownRenderer } from '../../town/town-renderer';
 import { TownRenderingEnvironment } from '../../town/town-rendering-environment';
@@ -22,7 +22,7 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
      * Town to display.
      */
     @Input()
-    town: MutableTown | null = null;
+    town: ReadonlyTown | null = null;
 
     /**
      * Camera for display.

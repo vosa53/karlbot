@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { ProjectSerializer } from 'projects/karel/src/public-api';
-import { map, Observable } from 'rxjs';
 import { API_BASE_URL } from '../api-base-url';
 import { SavedProject } from '../models/saved-project';
+import { ApiService } from './api-service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,37 +9,35 @@ import { SavedProject } from '../models/saved-project';
 export class ProjectService {
     private readonly projectsBaseUrl: string;
 
-    constructor(private readonly httpClient: HttpClient, @Inject(API_BASE_URL) apiBaseUrl: string) {
+    constructor(private readonly apiService: ApiService, @Inject(API_BASE_URL) apiBaseUrl: string) {
         this.projectsBaseUrl = `${apiBaseUrl}/projects`;
     }
 
-    get(): Observable<SavedProject[]> {
-        return this.httpClient.get<ProjectDTO[]>(this.projectsBaseUrl).pipe(
-            map(p => p.map(p => this.fromDTO(p)))
-        );
+    async get(): Promise<SavedProject[]> {
+        const dto = await this.apiService.get<ProjectDTO[]>(this.projectsBaseUrl);
+        return dto.map(d => this.fromDTO(d));
     }
 
-    getById(id: number): Observable<SavedProject> {
+    async getById(id: number): Promise<SavedProject> {
         const url = `${this.projectsBaseUrl}/${id}`;
-        return this.httpClient.get<ProjectDTO>(url).pipe(
-            map(p => this.fromDTO(p))
-        );
+        const dto = await this.apiService.get<ProjectDTO>(url);
+        return this.fromDTO(dto);
     }
 
-    add(project: SavedProject): Observable<SavedProject> {
+    async add(project: SavedProject): Promise<SavedProject> {
         const dto = this.toDTO(project);
-        return this.httpClient.post<SavedProject>(this.projectsBaseUrl, dto);
+        return await this.apiService.post<SavedProject>(this.projectsBaseUrl, dto);
     }
 
-    update(project: SavedProject): Observable<any> {
+    async update(project: SavedProject): Promise<any> {
         const dto = this.toDTO(project);
         const url = `${this.projectsBaseUrl}/${project.id}`;
-        return this.httpClient.put(url, dto);
+        await this.apiService.put(url, dto);
     }
 
-    delete(project: SavedProject): Observable<any> {
+    async delete(project: SavedProject): Promise<any> {
         const url = `${this.projectsBaseUrl}/${project.id}`;
-        return this.httpClient.delete(url);
+        return this.apiService.delete(url);
     }
 
     private toDTO(savedProject: SavedProject): ProjectDTO {

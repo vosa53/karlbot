@@ -63,6 +63,8 @@ namespace KarlBot.Controllers
             project.ProjectFile = dataModel.ProjectFile;
             project.Modified = DateTime.UtcNow;
 
+            await _projectRepository.UpdateAsync(project);
+
             return NoContent();
         }
 

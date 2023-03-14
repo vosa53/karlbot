@@ -3,6 +3,11 @@ import { Routes } from '@angular/router';
 export const appRoutes: Routes = [
     {
         path: "",
+        redirectTo: "/editor",
+        pathMatch: "full"
+    },
+    {
+        path: "editor",
         loadChildren: () => import("./editor/editor.routes").then(m => m.editorRoutes)
     },
     {

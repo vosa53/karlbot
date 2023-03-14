@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../api-base-url';
 import { User } from '../models/user';
+import { ApiService } from './api-service';
 
 @Injectable({
     providedIn: 'root'
@@ -10,12 +9,12 @@ import { User } from '../models/user';
 export class UserService {
     private readonly usersBaseUrl: string;
 
-    constructor(private readonly httpClient: HttpClient, @Inject(API_BASE_URL) apiBaseUrl: string) {
+    constructor(private readonly apiService: ApiService, @Inject(API_BASE_URL) apiBaseUrl: string) {
         this.usersBaseUrl = `${apiBaseUrl}/users`;
     }
 
-    getCurrent(): Observable<User> {
+    getCurrent(): Promise<User> {
         const url = `${this.usersBaseUrl}/current`;
-        return this.httpClient.get<User>(url);
+        return this.apiService.get<User>(url);
     }
 }

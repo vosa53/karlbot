@@ -1,48 +1,63 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
+import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { BehaviorSubject, distinctUntilChanged, from, map, of, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, firstValueFrom, from, map, of, shareReplay, skip, Subscription, switchMap } from 'rxjs';
+import { User } from '../models/user';
 import { AuthenticationService } from './authentication.service';
 import { UserService } from './user.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class SignInService {
-    private readonly currentUserToken = new BehaviorSubject<string | null>(null);
-    readonly currentUserToken$ = this.currentUserToken.asObservable();
+export class SignInService implements OnDestroy {
+    get currentUser(): Promise<User | null> {
+        return this._currentUser;
+    }
 
-    readonly currentUser$ = this.currentUserToken$.pipe(
-        switchMap(t => {
-            if (t === null)
-                return of(null);
-            else 
-                return this.userService.getCurrent();
-        }),
-        shareReplay(1)
-    );
+    get currentUserToken(): Promise<string | null> {
+        return this._currentUserToken;
+    }
+
+    private _currentUser: Promise<User | null>;
+    private _currentUserToken: Promise<string | null>;
+    private authStateSubscription: Subscription | null = null;
 
     constructor(private readonly firebaseAuthentication: AngularFireAuth, private readonly authenticationService: AuthenticationService, 
         private readonly userService: UserService) {
-            this.firebaseAuthentication.authState.pipe(
-                switchMap(u => {
-                    if (u === null)
-                        return of(null);
-                    else 
-                        return from(u.getIdToken());
-                }),
-                switchMap(t => {
-                    if (t === null)
-                        return of(null);
-                    else 
-                        return this.authenticationService.firebase(t);
-                }),
-                map(fr => fr?.token ?? null),
-                shareReplay(1)
-            ).subscribe(t => this.currentUserToken.next(t));
+
+        this._currentUserToken = this.getCurrentUserToken();
+        this._currentUser = this.getCurrentUser();
+
+        this.authStateSubscription = this.firebaseAuthentication.authState.pipe(skip(1)).subscribe(u => {
+            this._currentUserToken = this.getCurrentUserToken();
+            this._currentUser = this.getCurrentUser();
+        });
     }
 
     signOut() {
         this.firebaseAuthentication.signOut();
+    }
+
+    ngOnDestroy() {
+        this.authStateSubscription?.unsubscribe();
+    }
+
+    private async getCurrentUserToken() {
+        const user = await firstValueFrom(this.firebaseAuthentication.authState);
+        if (user === null)
+            return null;
+
+        const firebaseIdToken = await user.getIdToken();
+        const firebaseAuthenticationResult = await this.authenticationService.firebase(firebaseIdToken);
+        return firebaseAuthenticationResult.token;
+    }
+
+    private async getCurrentUser() {
+        const currentUserToken = await this.currentUserToken;
+        if (currentUserToken === null)
+            return null;
+
+        return this.userService.getCurrent();
     }
 }

@@ -1,6 +1,6 @@
 import { TownDirectionUtils } from "projects/karel/src/lib/town/town-direction-utils";
-import { MutableTown } from "projects/karel/src/lib/town/town";
 import { TownTile } from "projects/karel/src/lib/town/town-tile";
+import { ReadonlyTown } from "projects/karel/src/public-api";
 import { TownRenderingEnvironment } from "./town-rendering-environment";
 
 /**
@@ -30,13 +30,13 @@ export class TownRenderer {
      * @param environment Rendering environment.
      * @param town Town to render.
      */
-    static render(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
+    static render(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: ReadonlyTown) {
         TownRenderer.renderTiles(context, environment, town);
         TownRenderer.renderKarel(context, environment, town);
         TownRenderer.renderHome(context, environment, town);
     }
 
-    private static renderTiles(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
+    private static renderTiles(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: ReadonlyTown) {
         const signHeight = environment.tilePixelSize / 8;
 
         const visibleTileRegion = environment.getVisibleTileRegion();
@@ -65,14 +65,14 @@ export class TownRenderer {
         }
     }
 
-    private static renderHome(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
+    private static renderHome(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: ReadonlyTown) {
         const positionX = environment.tileXToPixelX(town.homePosition.x);
         const positionY = environment.tileYToPixelY(town.homePosition.y);
 
         context.drawImage(this.homeImage, positionX, positionY, environment.tilePixelSize, environment.tilePixelSize);
     }
 
-    private static renderKarel(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: MutableTown) {
+    private static renderKarel(context: CanvasRenderingContext2D, environment: TownRenderingEnvironment, town: ReadonlyTown) {
         const positionX = environment.tileXToPixelX(town.karelPosition.x);
         const positionY = environment.tileYToPixelY(town.karelPosition.y);
         const directionVector = TownDirectionUtils.toVector(town.karelDirection);

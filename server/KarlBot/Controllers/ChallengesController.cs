@@ -62,6 +62,8 @@ namespace KarlBot.Controllers
             challenge.Description = dataModel.Description;
             challenge.EvaluationCode = dataModel.EvaluationCode;
 
+            await _challengeRepository.UpdateAsync(challenge);
+
             return NoContent();
         }
 
