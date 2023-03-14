@@ -1,4 +1,4 @@
-import { Project } from "karel";
+import { Project } from "projects/karel/src/public-api";
 
 export interface SavedProject {
     readonly id: number;
@@ -6,5 +6,5 @@ export interface SavedProject {
     readonly isPublic: boolean;
     readonly created: Date;
     readonly modified: Date;
-    readonly projectFile: string;
+    readonly project: Project;
 }

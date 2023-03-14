@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    margin: 16px;
+    align-items: center;
+}
+
+.wrapper:not(.full-width) {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.title {
+    margin: 16px 0 16px 0;
+}

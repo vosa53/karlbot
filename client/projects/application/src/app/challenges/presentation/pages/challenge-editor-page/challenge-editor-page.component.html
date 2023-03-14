@@ -1,0 +1,20 @@
+<app-page title="Challenge editor">
+    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" style="height: 300px;"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Evaluation code</mat-label>
+            <textarea matInput formControlName="evaluationCode" style="height: 300px;"></textarea>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">Submit</button>
+    </form>
+</app-page>

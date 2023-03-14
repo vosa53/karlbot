@@ -16,6 +16,7 @@ import { MatInput } from '@angular/material/input';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { API_BASE_URL } from './app/shared/application/api-base-url';
 import { TokenInterceptor } from './app/shared/application/services/token-interceptor';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 bootstrapApplication(AppComponent, {
     providers: [
@@ -37,7 +38,8 @@ bootstrapApplication(AppComponent, {
                 privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
                 credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
               }),
-            MatDialogModule
+            MatDialogModule,
+            MatBottomSheetModule
         ),
         { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
         { provide: API_BASE_URL, useValue: "https://localhost:7105" }

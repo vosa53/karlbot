@@ -57,7 +57,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddAsync(int challengeId, ChallengeSubmissionDataModel dataModel)
+        public async Task<ActionResult> AddAsync(int challengeId, [FromBody] ChallengeSubmissionDataModel dataModel)
         {
             var existsChallenge = await _challengeRepository.ExistsByIdAsync(challengeId);
             if (!existsChallenge)

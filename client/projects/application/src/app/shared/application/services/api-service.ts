@@ -33,13 +33,15 @@ export class ApiService {
         return lastValueFrom(observable);
     }
 
-    private createHttpClientOptions(options: ApiEndpointOptions): { context: HttpContext } {
+    private createHttpClientOptions(options: ApiEndpointOptions) {
         return {
+            params: options.params,
             context: new HttpContext().set(IS_ANONYMOUS_ENDPOINT, options.isAnonymous ?? false)
         };
     }
 }
 
 export interface ApiEndpointOptions {
+    params?: { [param: string]: string | number },
     isAnonymous?: boolean;
 }

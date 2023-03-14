@@ -29,6 +29,12 @@ namespace Infrastructure.Repositories
             return await DbSet.FindAsync(id).AsTask();
         }
 
+        public async Task<bool> ExistsByIdAsync(K id)
+        {
+            var entity = await DbSet.FindAsync(id);
+            return entity != null;
+        }
+
         public async Task AddAsync(T entity)
         {
             DbSet.Add(entity);
@@ -45,11 +51,6 @@ namespace Infrastructure.Repositories
         {
             DbSet.Update(entity);
             await DbContext.SaveChangesAsync();
-        }
-
-        public Task<bool> ExistsByIdAsync(K id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

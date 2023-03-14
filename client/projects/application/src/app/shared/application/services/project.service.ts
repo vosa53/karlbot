@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+import { ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
 import { API_BASE_URL } from '../api-base-url';
 import { SavedProject } from '../models/saved-project';
 import { ApiService } from './api-service';
@@ -26,7 +27,8 @@ export class ProjectService {
 
     async add(project: SavedProject): Promise<SavedProject> {
         const dto = this.toDTO(project);
-        return await this.apiService.post<SavedProject>(this.projectsBaseUrl, dto);
+        const dtoResult = await this.apiService.post<ProjectDTO>(this.projectsBaseUrl, dto);
+        return this.fromDTO(dtoResult);
     }
 
     async update(project: SavedProject): Promise<any> {
@@ -47,7 +49,7 @@ export class ProjectService {
             isPublic: savedProject.isPublic,
             created: savedProject.created.toISOString(),
             modified: savedProject.modified.toISOString(),
-            projectFile: savedProject.projectFile
+            projectFile: ProjectSerializer.serialize(savedProject.project)
         };
     }
 
@@ -58,7 +60,7 @@ export class ProjectService {
             isPublic: dto.isPublic,
             created: new Date(dto.created),
             modified: new Date(dto.modified),
-            projectFile: dto.projectFile
+            project: ProjectDeserializer.deserialize(dto.projectFile, [])
         };
     }
 }

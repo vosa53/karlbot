@@ -27,33 +27,22 @@ export class SavedProjectViewComponent {
             return;
 
         this._savedProject = value;
-        this._project = this.getProject(value);
-        this._town = this.getTown(this._project);
     }
 
     @Output()
     removeClick = new EventEmitter<void>();
 
     get project(): Project {
-        return this._project;
+        return this.savedProject.project;
     }
 
     get town(): Town | null {
-        return this._town;
+        const townFile = this.project.files.filter(f => f instanceof TownFile)[0] as TownFile | undefined;
+        return townFile?.town ?? null;
     }
 
     private _savedProject: SavedProject = this.createSavedProject();
-    private _project = this.getProject(this._savedProject);
-    private _town = this.getTown(this._project);
 
-    private getProject(savedProject: SavedProject): Project {
-        return ProjectDeserializer.deserialize(savedProject.projectFile, []);
-    }
-
-    private getTown(project: Project): Town | null {
-        const townFile = project.files.filter(f => f instanceof TownFile)[0] as TownFile | undefined;
-        return townFile?.town ?? null;
-    }
 
     private createSavedProject(): SavedProject {
         return {
@@ -62,7 +51,7 @@ export class SavedProjectViewComponent {
             created: new Date(),
             modified: new Date(),
             isPublic: false,
-            projectFile: ProjectSerializer.serialize(Project.create("test", [], [], new Settings("", 0, 0)))
+            project: Project.create("test", [], [], new Settings("", 0, 0))
         };
     }
 }

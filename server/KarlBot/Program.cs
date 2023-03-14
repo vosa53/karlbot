@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using KarlBot.Controllers;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace KarlBot
 {
@@ -27,6 +29,9 @@ namespace KarlBot
             builder.Services.AddControllers(o =>
             {
                 o.SuppressAsyncSuffixInActionNames = false;
+            }).AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             });
 
             FirebaseApp.Create(new AppOptions

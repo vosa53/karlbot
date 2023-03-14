@@ -22,6 +22,7 @@ namespace ApplicationCore.Entities
             ChallengeId = challengeId;
             UserId = userId;
             ProjectFile = projectFile;
+            EvaluationMessage = "";
         }
     }
 }

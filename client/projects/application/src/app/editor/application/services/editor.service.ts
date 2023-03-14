@@ -98,7 +98,7 @@ export class EditorService {
 
     async openProject(projectId: number) {
         const savedProject = await this.projectService.getById(projectId);
-        const project = ProjectDeserializer.deserialize(savedProject.projectFile, StandardLibrary.getProgramReferences());
+        const project = savedProject.project.withExternalPrograms(StandardLibrary.getProgramReferences());
 
         this.savedProject.next(savedProject);
         this.project.next(project);
@@ -118,7 +118,7 @@ export class EditorService {
                 modified: new Date(),
                 isPublic: true,
                 authorId: currentUser.id,
-                projectFile: ProjectSerializer.serialize(this.project.value)
+                project: this.project.value
             };
             savedProject = await this.projectService.add(toSave);
 
@@ -127,7 +127,7 @@ export class EditorService {
         else {
             const toSave = {
                 ...this.savedProject.value,
-                projectFile: ProjectSerializer.serialize(this.project.value)
+                project: this.project.value
             };
             await this.projectService.update(toSave);
             savedProject = await this.projectService.getById(toSave.id);

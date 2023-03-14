@@ -6,11 +6,12 @@ import { SavedProject } from 'projects/application/src/app/shared/application/mo
 import { SavedProjectViewComponent } from './saved-project-view/saved-project-view.component';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 
 @Component({
     selector: 'app-projects-page',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, SavedProjectViewComponent, MatIconModule, RouterModule],
+    imports: [CommonModule, MatButtonModule, SavedProjectViewComponent, MatIconModule, RouterModule, PageComponent],
     templateUrl: './projects-page.component.html',
     styleUrls: ['./projects-page.component.css']
 })
