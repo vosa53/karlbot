@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authenticatedCanActivate } from './shared/application/authenticated-can-activate';
 
 export const appRoutes: Routes = [
     {
@@ -12,11 +13,13 @@ export const appRoutes: Routes = [
     },
     {
         path: "projects",
-        loadChildren: () => import("./projects/projects.routes").then(m => m.projectsRoutes)
+        loadChildren: () => import("./projects/projects.routes").then(m => m.projectsRoutes),
+        canActivate: [authenticatedCanActivate]
     },
     {
         path: "challenges",
-        loadChildren: () => import("./challenges/challenges.routes").then(m => m.challengesRoutes)
+        loadChildren: () => import("./challenges/challenges.routes").then(m => m.challengesRoutes),
+        canActivate: [authenticatedCanActivate]
     },
     {
         path: "user",

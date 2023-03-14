@@ -20,9 +20,21 @@
             <mat-slide-toggle class="dark-mode-switch" [checked]="(colorThemeService.colorTheme$ | async) === 'dark'" (change)="onColorThemeChange($event.checked)">
                 Dark mode
             </mat-slide-toggle>
+            <div style="width: 48px;"></div>
             <a mat-button *ngIf="(authenticationService.currentUser | async) === null" routerLink="/user/sign-in">Sign in</a>
-            <span mat-button *ngIf="(authenticationService.currentUser | async) !== null">{{(authenticationService.currentUser | async)?.email}}</span>
-            <a mat-button *ngIf="(authenticationService.currentUser | async) !== null" (click)="authenticationService.signOut()">Sign out</a>
+            <button  *ngIf="(authenticationService.currentUser | async) !== null" matListItemMeta mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item routerLink="/projects">
+                    <mat-icon>person</mat-icon>
+                    <span>{{(authenticationService.currentUser | async)?.email}}</span>
+                </button>
+                <button mat-menu-item (click)="authenticationService.signOut()">
+                    <mat-icon>logout</mat-icon>
+                    <span>Sign out</span>
+                </button>
+            </mat-menu>
         </mat-toolbar>
     
         <div class="page">

@@ -9,11 +9,12 @@ import { Subscription } from 'rxjs';
 import { SignInService } from './shared/application/services/sign-in.service';
 import { ColorTheme, ColorThemeService } from './shared/application/services/color-theme.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
     standalone: true,
     selector: "app-root",
-    imports: [CommonModule, RouterModule, MatSlideToggleModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule],
+    imports: [CommonModule, RouterModule, MatSlideToggleModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatMenuModule],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
