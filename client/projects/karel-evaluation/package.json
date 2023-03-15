@@ -1,22 +1,22 @@
 {
-  "name": "karel-evaluation",
-  "version": "0.0.1",
-  "scripts": {
-    "buildlib": "webpack"
-  },
-  "peerDependencies": {
-    "@angular/common": "^15.1.0",
-    "@angular/core": "^15.1.0",
-    "karel": "^0.0.1"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "sideEffects": false,
-  "devDependencies": {
-    "circular-dependency-plugin": "^5.2.2",
-    "ts-loader": "^9.4.2",
-    "webpack": "^5.76.1",
-    "webpack-cli": "^5.0.1"
-  }
+    "name": "karel-evaluation",
+    "version": "0.0.1",
+    "scripts": {
+        "build": "webpack"
+    },
+    "peerDependencies": {
+        "@angular/common": "^15.1.0",
+        "@angular/core": "^15.1.0",
+        "karel": "^0.0.1"
+    },
+    "dependencies": {
+        "tslib": "^2.3.0"
+    },
+    "sideEffects": false,
+    "devDependencies": {
+        "circular-dependency-plugin": "^5.2.2",
+        "ts-loader": "^9.4.2",
+        "webpack": "^5.76.1",
+        "webpack-cli": "^5.0.1"
+    }
 }

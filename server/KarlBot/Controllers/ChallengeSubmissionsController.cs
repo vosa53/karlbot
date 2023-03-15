@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Repositories;
+using Infrastructure;
 using KarlBot.Authorization;
 using KarlBot.DataModels.Challenges;
 using Microsoft.AspNetCore.Http;
@@ -40,7 +41,6 @@ namespace KarlBot.Controllers
                     return NotFound();
             }
 
-
             var submissions = await _challengeSubmissionRepository.GetAsync(challengeId, userId);
 
             return submissions.Select(c => ToDataModel(c)).ToList();
@@ -59,12 +59,23 @@ namespace KarlBot.Controllers
         [HttpPost]
         public async Task<ActionResult> AddAsync(int challengeId, [FromBody] ChallengeSubmissionDataModel dataModel)
         {
-            var existsChallenge = await _challengeRepository.ExistsByIdAsync(challengeId);
-            if (!existsChallenge)
+            var challenge = await _challengeRepository.GetByIdAsync(challengeId);
+            if (challenge == null)
                 return NotFound();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var submission = new ChallengeSubmission(challengeId, userId, dataModel.ProjectFile);
+
+            var evaluator = new ChallengeEvaluator();
+            var evaluationResult = await evaluator.EvaluateAsync(submission.ProjectFile, challenge.EvaluationCode);
+
+            submission.EvaluationState = evaluationResult.type switch
+            {
+                ChallengeEvaluationResultType.Success => ChallengeSubmissionEvaluationState.Success,
+                ChallengeEvaluationResultType.Failure => ChallengeSubmissionEvaluationState.Failure,
+                ChallengeEvaluationResultType.SystemError => ChallengeSubmissionEvaluationState.SystemError
+            };
+            submission.EvaluationMessage = evaluationResult.message;
 
             await _challengeSubmissionRepository.AddAsync(submission);
 
@@ -73,13 +84,15 @@ namespace KarlBot.Controllers
 
         private ChallengeSubmissionDataModel ToDataModel(ChallengeSubmission submission)
         {
+            var isAdmin = User.IsInRole("Admin");
+
             return new ChallengeSubmissionDataModel
             {
                 Id = submission.Id,
                 UserId = submission.UserId,
                 ProjectFile = submission.ProjectFile,
                 EvaluationState = submission.EvaluationState,
-                EvaluationMessage = submission.EvaluationMessage
+                EvaluationMessage = isAdmin || submission.EvaluationState != ChallengeSubmissionEvaluationState.SystemError ? submission.EvaluationMessage : ""
             };
         }
     }

@@ -10,6 +10,7 @@ namespace ApplicationCore.Entities
     {
         InProgress,
         Success,
-        Failure
+        Failure,
+        SystemError
     }
 }

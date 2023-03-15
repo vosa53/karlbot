@@ -2,7 +2,7 @@
     "name": "karel",
     "version": "0.0.1",
     "scripts": {
-        "buildlib": "webpack"
+        "build": "webpack"
     },
     "peerDependencies": {
         "@angular/common": "^15.1.0",

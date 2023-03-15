@@ -25,6 +25,8 @@ export class ChallengeSubmissionComponent {
             return "Success";
         else if (evaluationState === ChallengeSubmissionEvaluationState.failure)
             return "Failure";
+        else if (evaluationState === ChallengeSubmissionEvaluationState.systemError)
+            return "System error";
         else 
             throw new Error();
     }
