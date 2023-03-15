@@ -15,9 +15,9 @@ namespace Infrastructure.Repositories
         {
         }
 
-        public async Task<List<ChallengeSubmission>> GetAsync(int challlengeId, string? userId)
+        public async Task<List<ChallengeSubmission>> GetAsync(int challengeId, string? userId)
         {
-            IQueryable<ChallengeSubmission> query = DbSet;
+            IQueryable<ChallengeSubmission> query = DbSet.Where(cs => cs.ChallengeId == challengeId);
 
             if (userId != null)
                 query = query.Where(cs => cs.UserId == userId);

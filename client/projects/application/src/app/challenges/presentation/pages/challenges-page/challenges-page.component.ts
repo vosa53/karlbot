@@ -27,10 +27,10 @@ export class ChallengesPageComponent implements OnInit {
         this.loadChallenges();
     }
 
-    /*async onRemoveClick(challenge: Challenge) {
+    async onRemoveClick(challenge: Challenge) {
         await this.challengeService.delete(challenge);
-        this.loadProjects();
-    }*/
+        this.loadChallenges();
+    }
 
     private async loadChallenges() {
         this.challenges = await this.challengeService.get();

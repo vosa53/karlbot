@@ -16,7 +16,7 @@
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let challenge">
                 <button mat-button routerLink="/challenges/editor/{{challenge.id}}">Edit</button>
-                <button mat-button>Delete</button>
+                <button mat-button (click)="onRemoveClick(challenge)">Delete</button>
             </td>
         </ng-container>
 
