@@ -2,7 +2,7 @@ import { Project, ProjectDeserializer, StandardLibrary } from "karel";
 import { EvaluationError } from "./evaluation-error";
 import { EvaluationResult } from "./evaluation-result";
 
-declare function evaluate(project: Project): Promise<EvaluationResult | undefined>;
+declare function evaluate(project: Project): EvaluationResult | undefined | Promise<EvaluationResult | undefined>;
 
 export async function _evaluate(projectFile: string): Promise<EvaluationResult> {
     const standardLibraryProgramReferences = StandardLibrary.getProgramReferences();
