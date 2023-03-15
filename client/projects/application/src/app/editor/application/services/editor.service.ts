@@ -245,6 +245,25 @@ export class EditorService {
         this.changeSettings(newSettings);
     }
 
+    async share() {
+        const savedProject = this.savedProject.value;
+        if (savedProject === null) {
+            await this.dialogService.showCanNotShareUnsavedProjectMessage();
+            return;
+        }
+
+        const projectUrl = window.location.host + "/editor" + savedProject.id;
+        const newIsProjectPublic = await this.dialogService.showShare(savedProject.isPublic, projectUrl);
+        if (newIsProjectPublic === null)
+            return;
+
+        const newSavedProject = {
+            ...savedProject,
+            isPublic: newIsProjectPublic
+        };
+        this.savedProject.next(newSavedProject);
+    }
+
     provideCompletionItems(line: number, column: number): CompletionItem[] {
         const languageService = new LanguageService(this.project.value.compilation);
         return languageService.getCompletionItemsAt(this.selectedCodeFile.value!.compilationUnit, line, column);

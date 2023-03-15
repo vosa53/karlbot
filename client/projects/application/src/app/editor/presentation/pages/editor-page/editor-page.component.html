@@ -7,10 +7,11 @@
         [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
         (projectNameChange)="editorService.changeProjectName($event)"
         (entryPointChange)="editorService.changeEntryPoint($event)"
+        (saveClick)="editorService.saveProject()"
+        (shareClick)="editorService.share()"
         (runClick)="editorService.run(false)"
         (runReadonlyClick)="editorService.run(true)"
-        (stopClick)="editorService.stop()"
-        (saveClick)="editorService.saveProject()">
+        (stopClick)="editorService.stop()">
     </app-header>
 </ng-template>
 

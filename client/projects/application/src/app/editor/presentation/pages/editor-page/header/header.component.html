@@ -63,15 +63,15 @@
 </mat-toolbar>
 
 <mat-toolbar class="toolbar" style="overflow: auto;">
-    <button mat-icon-button *ngIf="editorState === 'ready'">
-        <mat-icon (click)="saveClick.emit()">save</mat-icon>
+    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="saveClick.emit()">
+        <mat-icon>save</mat-icon>
     </button>
 
-    <button mat-icon-button *ngIf="editorState === 'ready'">
-        <mat-icon (click)="undoClick.emit()">undo</mat-icon>
+    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="undoClick.emit()">
+        <mat-icon>undo</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="editorState === 'ready'">
-        <mat-icon (click)="redoClick.emit()">redo</mat-icon>
+    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="redoClick.emit()">
+        <mat-icon>redo</mat-icon>
     </button>
 
     <mat-form-field *ngIf="editorState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="disable-form-underline">
@@ -98,7 +98,7 @@
 
     <div style="flex-grow: 1;"></div>
 
-    <button mat-icon-button *ngIf="editorState === 'ready'">
-        <mat-icon (click)="shareClick.emit()">share</mat-icon>
+    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="shareClick.emit()">
+        <mat-icon>share</mat-icon>
     </button>
 </mat-toolbar>
