@@ -235,6 +235,11 @@ export class EditorService {
         this.project.next(newProject);
     }
 
+    changeProjectName(projectName: string) {
+        const newProject = this.project.value.withName(projectName);
+        this.project.next(newProject);
+    }
+
     changeEntryPoint(entryPoint: string) {
         const newSettings = this.project.value.settings.withEntryPoint(entryPoint);
         this.changeSettings(newSettings);

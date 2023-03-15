@@ -16,9 +16,9 @@ export class DialogService {
         });
     }
 
-    async showPrompt(title: string, message: string, validator: PromptDialogValidator): Promise<string | null> {
+    async showPrompt(title: string, message: string, text: string, validator: PromptDialogValidator): Promise<string | null> {
         const result = await this.show(PromptDialogComponent, {
-            data: { title, message, validator }
+            data: { title, message, text, validator }
         }) as string;
         return result ?? null;
     }

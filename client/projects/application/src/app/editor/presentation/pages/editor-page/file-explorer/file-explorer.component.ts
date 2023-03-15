@@ -43,7 +43,7 @@ export class FileExplorerComponent {
 
     async onFileAdd(fileType: "code" | "town") {
         const validator = this.createFileNameValidator(null);
-        const fileName = await this.dialogService.showPrompt("Add file", "Enter a name of the new file", validator);
+        const fileName = await this.dialogService.showPrompt("Add file", "Enter a name of the new file", "", validator);
 
         if (fileName === null)
             return;

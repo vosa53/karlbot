@@ -2,8 +2,10 @@
     <app-header 
         class="header"
         [editorState]="(editorService.editorState$ | async)!"
+        [projectName]="(editorService.project$ | async)!.name"
         [availableEntryPoints]="(editorService.availableEntryPoints$ | async)!"
         [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
+        (projectNameChange)="editorService.changeProjectName($event)"
         (entryPointChange)="editorService.changeEntryPoint($event)"
         (runClick)="editorService.run(false)"
         (runReadonlyClick)="editorService.run(true)"

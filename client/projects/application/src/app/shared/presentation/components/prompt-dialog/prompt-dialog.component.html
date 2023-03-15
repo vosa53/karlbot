@@ -2,7 +2,7 @@
 <div mat-dialog-content>
     <p>{{data.message}}</p>
     <mat-form-field appearance="fill">
-        <input matInput appValidatedInput [validator]="data.validator" [validatedValue]="input" (validatedValueChange)="input = $event" cdkFocusInitial>
+        <input matInput appValidatedInput [validator]="data.validator" [validatedValue]="text" (validatedValueChange)="text = $event" cdkFocusInitial>
       </mat-form-field>
 </div>
 <div mat-dialog-actions align="end">

@@ -14,18 +14,21 @@ import { ValidatedInputDirective } from '../../directives/validated-input.direct
     styleUrls: ['./prompt-dialog.component.css']
 })
 export class PromptDialogComponent {
-    input = "";
+    text = "";
 
-    constructor(readonly dialogRef: MatDialogRef<PromptDialogComponent>, @Inject(MAT_DIALOG_DATA) readonly data: PromptDialogData) { }
+    constructor(readonly dialogRef: MatDialogRef<PromptDialogComponent>, @Inject(MAT_DIALOG_DATA) readonly data: PromptDialogData) { 
+        this.text = data.text;
+    }
 
     onCloseClick() {
-        this.dialogRef.close(this.input);
+        this.dialogRef.close(this.text);
     }
 }
 
 export interface PromptDialogData {
     readonly title: string;
     message: string;
+    text: string;
     validator: PromptDialogValidator;
 }
 

@@ -18,7 +18,7 @@
             </div>
             <div style="flex-grow: 1;"></div>
             <mat-slide-toggle class="dark-mode-switch" [checked]="(colorThemeService.colorTheme$ | async) === 'dark'" (change)="onColorThemeChange($event.checked)">
-                Dark mode
+                <span style="margin-left: 4px;">Dark mode</span>
             </mat-slide-toggle>
             <div style="width: 48px;"></div>
             <a mat-button *ngIf="(authenticationService.currentUser | async) === null" routerLink="/user/sign-in">Sign in</a>

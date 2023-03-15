@@ -1,31 +1,72 @@
 <mat-toolbar class="menu">
-    <button mat-button [matMenuTriggerFor]="fileMenu">File</button>
+    <button mat-button [matMenuTriggerFor]="fileMenu">Project</button>
     <mat-menu #fileMenu="matMenu">
-        <button mat-menu-item (click)="newClick.emit()">New</button>
-        <button mat-menu-item (click)="openClick.emit()">Open</button>
-        <button mat-menu-item (click)="saveClick.emit()">Save</button>
+        <button mat-menu-item (click)="newClick.emit()">
+            <mat-icon>add</mat-icon>
+            New
+        </button>
+        <button mat-menu-item (click)="saveClick.emit()">
+            <mat-icon>save</mat-icon>
+            Save
+        </button>
+
+        <mat-divider style="margin: 6px 20px;"></mat-divider>
+
+        <button mat-menu-item (click)="shareClick.emit()">
+            <mat-icon>share</mat-icon>
+            Share
+        </button>
+
+        <mat-divider style="margin: 6px 20px;"></mat-divider>
+
+        <button mat-menu-item (click)="importClick.emit()">
+            <mat-icon>upload</mat-icon>
+            Import
+        </button>
+        <button mat-menu-item (click)="exportClick.emit()">
+            <mat-icon>download</mat-icon>
+            Export
+        </button>
     </mat-menu>
 
     <button mat-button [matMenuTriggerFor]="editMenu">Edit</button>
     <mat-menu #editMenu="matMenu">
-        <button mat-menu-item (click)="undoClick.emit()">Undo</button>
-        <button mat-menu-item (click)="redoClick.emit()">Redo</button>
+        <button mat-menu-item (click)="undoClick.emit()">
+            <mat-icon>undo</mat-icon>
+            Undo
+        </button>
+        <button mat-menu-item (click)="redoClick.emit()">
+            <mat-icon>redo</mat-icon>
+            Redo
+        </button>
     </mat-menu>
 
     <button mat-button [matMenuTriggerFor]="programMenu">Program</button>
     <mat-menu #programMenu="matMenu">
-        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runClick.emit()">Run</button>
-        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runReadonlyClick.emit()">Run read-only</button>
-        <button mat-menu-item *ngIf="editorState === 'running'" (click)="stopClick.emit()">Stop</button>
+        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runClick.emit()">
+            <mat-icon>play_arrow</mat-icon>
+            Run
+        </button>
+        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runReadonlyClick.emit()">
+            <mat-icon>play_arrow</mat-icon>
+            Run read-only
+        </button>
+        <button mat-menu-item *ngIf="editorState === 'running'" (click)="stopClick.emit()">
+            <mat-icon>stop</mat-icon>
+            Stop
+        </button>
     </mat-menu>
 
-    <button mat-button [matMenuTriggerFor]="helpMenu">Help</button>
-    <mat-menu #helpMenu="matMenu">
-        <button mat-menu-item (click)="aboutClick.emit()">About</button>
-    </mat-menu>
+    <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center;">
+        <span class="mat-subtitle-1" style="margin: 0; opacity: 0.4;" (click)="onChangeProjectNameClick()">{{projectName}}</span>
+    </div>
 </mat-toolbar>
 
 <mat-toolbar class="toolbar" style="overflow: auto;">
+    <button mat-icon-button *ngIf="editorState === 'ready'">
+        <mat-icon (click)="saveClick.emit()">save</mat-icon>
+    </button>
+
     <button mat-icon-button *ngIf="editorState === 'ready'">
         <mat-icon (click)="undoClick.emit()">undo</mat-icon>
     </button>
@@ -53,5 +94,11 @@
     <button mat-button *ngIf="editorState === 'running'" (click)="stopClick.emit()">
         <mat-icon>stop</mat-icon>
         Stop
+    </button>
+
+    <div style="flex-grow: 1;"></div>
+
+    <button mat-icon-button *ngIf="editorState === 'ready'">
+        <mat-icon (click)="shareClick.emit()">share</mat-icon>
     </button>
 </mat-toolbar>
