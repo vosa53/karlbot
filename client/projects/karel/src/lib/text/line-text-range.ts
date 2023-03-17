@@ -34,4 +34,13 @@ export class LineTextRange {
         this.endLine = endLine;
         this.endColumn = endColumn;
     }
+
+    /**
+     * Returns `true` when this and other are equal. `false` otherwise.
+     * @param other Other.
+     */
+    equals(other: LineTextRange): boolean {
+        return this.startLine  === other.startLine && this.startColumn === other.startColumn && 
+            this.endLine === other.endLine && this.endColumn === other.endColumn;
+    }
 }

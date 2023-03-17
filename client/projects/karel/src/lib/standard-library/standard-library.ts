@@ -34,17 +34,17 @@ export class StandardLibrary {
      */
     static getPrograms(town: MutableTown, actionDelayProvider: () => number): ExternalProgram[] {
         return [
-            new ExternalProgram("step", (i, st) => standardLibraryProgramHandlers.step(town, actionDelayProvider(), st)),
-            new ExternalProgram("turnLeft", (i, st) => standardLibraryProgramHandlers.turnLeft(town, actionDelayProvider(), st)),
-            new ExternalProgram("pick", (i, st) => standardLibraryProgramHandlers.pick(town, actionDelayProvider(), st)),
-            new ExternalProgram("put", (i, st) => standardLibraryProgramHandlers.put(town, actionDelayProvider(), st)),
-            new ExternalProgram("wall", (i, st) => this.booleanToNumber(standardLibraryProgramHandlers.wall(town))),
-            new ExternalProgram("sign", (i, st) => this.booleanToNumber(standardLibraryProgramHandlers.sign(town))),
-            new ExternalProgram("north", (i, st) => this.booleanToNumber(standardLibraryProgramHandlers.north(town))),
-            new ExternalProgram("south", (i, st) => this.booleanToNumber(standardLibraryProgramHandlers.south(town))),
-            new ExternalProgram("east", (i, st) => this.booleanToNumber(standardLibraryProgramHandlers.east(town))),
-            new ExternalProgram("west", (i, st) => this.booleanToNumber(standardLibraryProgramHandlers.west(town))),
-            new ExternalProgram("home", (i, st) => this.booleanToNumber(standardLibraryProgramHandlers.isHome(town)))
+            new ExternalProgram("step", st => standardLibraryProgramHandlers.step(town, actionDelayProvider(), st)),
+            new ExternalProgram("turnLeft", st => standardLibraryProgramHandlers.turnLeft(town, actionDelayProvider(), st)),
+            new ExternalProgram("pick", st => standardLibraryProgramHandlers.pick(town, actionDelayProvider(), st)),
+            new ExternalProgram("put", st => standardLibraryProgramHandlers.put(town, actionDelayProvider(), st)),
+            new ExternalProgram("wall", st => this.booleanToNumber(standardLibraryProgramHandlers.wall(town))),
+            new ExternalProgram("sign", st => this.booleanToNumber(standardLibraryProgramHandlers.sign(town))),
+            new ExternalProgram("north", st => this.booleanToNumber(standardLibraryProgramHandlers.north(town))),
+            new ExternalProgram("south", st => this.booleanToNumber(standardLibraryProgramHandlers.south(town))),
+            new ExternalProgram("east", st => this.booleanToNumber(standardLibraryProgramHandlers.east(town))),
+            new ExternalProgram("west", st => this.booleanToNumber(standardLibraryProgramHandlers.west(town))),
+            new ExternalProgram("home", st => this.booleanToNumber(standardLibraryProgramHandlers.isHome(town)))
         ];
     }
 

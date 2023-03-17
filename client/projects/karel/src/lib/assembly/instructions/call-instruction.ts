@@ -1,14 +1,13 @@
 import { Instruction } from './instruction';
-import { Program } from '../program';
 
 /**
  * Instruction to call a program.
  */
 export class CallInstruction extends Instruction {
     /**
-     * @param program Program to be called.
+     * @param name Name of the program to be called.
      */
-    constructor(readonly program: Program) {
+    constructor(readonly name: string) {
         super();
     }
 }

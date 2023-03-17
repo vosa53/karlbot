@@ -5,6 +5,7 @@ import { TownTile } from '../town/town-tile';
 import { Vector } from '../math/vector';
 import { TownDirectionUtils } from '../town/town-direction-utils';
 import { TownDirection } from '../town/town-direction';
+import { ExternalProgramException } from '../interpreter/external-program-exception';
 
 /**
  * Karel 'step' program.
@@ -12,14 +13,14 @@ import { TownDirection } from '../town/town-direction';
  * @param actionDelay Delay before the program is executed.
  * @param stopToken Token to stop the program execution.
  */
-export async function step(town: MutableTown, actionDelay: number, stopToken: InterpretStopToken): Promise<void | Exception> {
+export async function step(town: MutableTown, actionDelay: number, stopToken: InterpretStopToken): Promise<void | ExternalProgramException> {
     await delay(actionDelay, stopToken);
     const nextPosition = getNextPosition(town);
 
     if (isLandAt(town, nextPosition.x, nextPosition.y))
         town.karelPosition = nextPosition;
     else
-        return new Exception("Wall in a way.");
+        return new ExternalProgramException("Wall in a way.");
 }
 
 /**
@@ -41,12 +42,12 @@ export async function turnLeft(town: MutableTown, actionDelay: number, stopToken
  * @param actionDelay Delay before the program is executed.
  * @param stopToken Token to stop the program execution.
  */
-export async function pick(town: MutableTown, actionDelay: number, stopToken: InterpretStopToken): Promise<void | Exception> {
+export async function pick(town: MutableTown, actionDelay: number, stopToken: InterpretStopToken): Promise<void | ExternalProgramException> {
     await delay(actionDelay, stopToken);
     const currentSignCount = town.getSignCountAt(town.karelPosition.x, town.karelPosition.y);
 
     if (currentSignCount === 0)
-        return new Exception("No sign to pick.");
+        return new ExternalProgramException("No sign to pick.");
     else
         town.setSignCountAt(town.karelPosition.x, town.karelPosition.y, currentSignCount - 1);
 }

@@ -7,17 +7,13 @@ export async function run(project: Project, town: MutableTown): Promise<void> {
         throw new EvaluationError("Project contains errors.");
 
     const assembly = Emitter.emit(project.compilation);
-    const interpreter = new Interpreter();
-
-    const externalPrograms = StandardLibrary.getPrograms(town, () => 0);
-    for (const externalProgram of externalPrograms)
-        interpreter.addExternalProgram(externalProgram);
-
     const entryPoint = assembly.programs.find(p => p.name === project.settings.entryPoint);
+    const externalPrograms = StandardLibrary.getPrograms(town, () => 0);
+
     if (entryPoint === undefined)
         throw new EvaluationError("No valid entry point is selected.");
 
-    interpreter.callStack.push(new CallStackFrame(entryPoint));
+    const interpreter = new Interpreter(assembly, entryPoint, externalPrograms);
 
     const result = await interpreter.interpretAll(new InterpretStopToken());
 

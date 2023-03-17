@@ -1,7 +1,7 @@
-import { LineTextRange } from "../../line-text-range";
+import { LineTextRange } from "../../../text/line-text-range";
 import { Node } from "../nodes/node";
 import { SyntaxElement } from "../syntax-element";
-import { TextRange } from "../../text-range";
+import { TextRange } from "../../../text/text-range";
 import { Trivia } from "../trivia/trivia";
 import { PrimitiveSyntaxElement } from "../syntax-element";
 import { SkippedTokenTrivia } from "../trivia/skipped-token-trivia";

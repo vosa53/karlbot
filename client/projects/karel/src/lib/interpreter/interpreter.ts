@@ -18,6 +18,12 @@ import { ExceptionInterpretResult } from './results/exception-interpret-result';
 import { StopInterpretResult } from './results/stop-interpret-result';
 import { NormalInterpretResult } from './results/normal-interpret-result';
 import { InterpretResult } from './results/interpret-result';
+import { ExternalProgramException } from './external-program-exception';
+import { NoOperationInstruction } from '../assembly/instructions/no-operation-instruction';
+import { BreakpointInterpretResult } from './results/breakpoint-interpret-result';
+import { ReadonlyCallStackFrame } from './readonly-call-stack-frame';
+import { Assembly } from '../assembly/assembly';
+import { Program } from '../assembly/program';
 
 /**
  * Karel interpreter.
@@ -29,42 +35,46 @@ export class Interpreter {
     maxCallStackSize: number | null = null;
 
     /**
-     * Call stack.
+     * Whether the breakpoint on the first instruction should be skipped.
      */
-    readonly callStack: CallStackFrame[] = [];
+    skipBreakpointOnFirstInstruction: boolean = false;
 
-    /**
-     * Current call stack frame.
-     */
-    get currentStackFrame(): CallStackFrame | null {
-        if (this.callStack.length === 0)
-            return null;
+    private readonly assembly: Assembly;
+    private readonly nameToProgram: ReadonlyMap<string, Program>;
+    private readonly nameToExternalProgram: ReadonlyMap<string, ExternalProgram>;
+    
+    private breakpoints = new Set<Instruction>();
+    private callStack: CallStackFrame[] = [];
 
-        return this.callStack[this.callStack.length - 1];
+    private get callStackTop(): CallStackFrame | null {
+        return this.callStack.length === 0 ? null : this.callStack[this.callStack.length - 1];
     }
 
-    private readonly externalProgramMap = new Map<string, ExternalProgram>();
+    constructor(assembly: Assembly, entryPoint: Program, externalPrograms: ExternalProgram[]) {
+        this.assembly = assembly;
 
-    /**
-     * Adds an external program.
-     * @param externalProgram External program to add.
-     */
-    addExternalProgram(externalProgram: ExternalProgram) {
-        if (this.externalProgramMap.has(externalProgram.name))
+        this.nameToProgram = new Map(assembly.programs.map(p => [p.name, p]));
+        this.nameToExternalProgram = new Map(externalPrograms.map(ep => [ep.name, ep]));
+
+        if (this.nameToProgram.get(entryPoint.name) !== entryPoint)
             throw new Error();
 
-        this.externalProgramMap.set(externalProgram.name, externalProgram);
+        this.callStack.push(new CallStackFrame(entryPoint));
     }
 
     /**
-     * Removes an external program.
-     * @param externalProgram External program to remove.
+     * Sets breakpoints on the given instructions.
+     * @param instructions Instructions on which the breakpoints are to be set.
      */
-    removeExternalProgram(externalProgram: ExternalProgram) {
-        const matchingExternalProgram = this.externalProgramMap.get(externalProgram.name);
+    setBreakpoints(instructions: Iterable<Instruction>) {
+        this.breakpoints = new Set(instructions);
+    }
 
-        if (matchingExternalProgram === externalProgram)
-            this.externalProgramMap.delete(externalProgram.name);
+    /**
+     * Returns a readonly version of the call stack.
+     */
+    getCallStack(): readonly ReadonlyCallStackFrame[] {
+        return this.callStack;
     }
 
     /**
@@ -78,41 +88,88 @@ export class Interpreter {
     /**
      * Interprets a single instruction.
      * @param stopToken Token to stop the intepretation.
-     * @returns 
      */
     async interpretSingle(stopToken: InterpretStopToken): Promise<InterpretResult> {
-        let interpretedCount = 0;
-        return this.interpretWhile(() => interpretedCount++ !== 1, stopToken);
+        return this.interpretWhile(interpretedCount => interpretedCount === 0, stopToken);
     }
 
-    private async interpretWhile(predicate: () => boolean, stopToken: InterpretStopToken): Promise<InterpretResult> {
-        while (this.currentStackFrame !== null && predicate()) {
+    /**
+     * Interprets instructions until a new source range is reached.
+     * @param stopToken Token to stop the intepretation.
+     */
+    async interpretStepInto(stopToken: InterpretStopToken): Promise<InterpretResult> {
+        if (this.callStackTop === null)
+            return this.interpretWhile(() => false, stopToken);
+
+        const startSourceRange = this.assembly.sourceMap.getRangeByInstruction(this.callStackTop.currentInstruction);
+        return this.interpretWhile(() => {
+            return this.assembly.sourceMap.getRangeByInstruction(this.callStackTop!.currentInstruction).equals(startSourceRange);
+        }, stopToken);
+    }
+
+    /**
+     * Interprets instructions until a new source range in the current program is reached. 
+     * @param stopToken Token to stop the intepretation.
+     */
+    async interpretStepOver(stopToken: InterpretStopToken): Promise<InterpretResult> {
+        if (this.callStackTop === null)
+            return this.interpretWhile(() => false, stopToken);
+
+        const startCallStackLength = this.callStack.length;
+        const startSourceRange = this.assembly.sourceMap.getRangeByInstruction(this.callStackTop.currentInstruction);
+        return this.interpretWhile(() => {
+            return this.callStack.length > startCallStackLength ||
+                this.assembly.sourceMap.getRangeByInstruction(this.callStackTop!.currentInstruction).equals(startSourceRange);
+        }, stopToken);
+    }
+
+    /**
+     * Interprets instructions until the end of the current program.
+     * @param stopToken Token to stop the intepretation.
+     */
+    async interpretStepOut(stopToken: InterpretStopToken): Promise<InterpretResult> {
+        if (this.callStackTop === null)
+            return this.interpretWhile(() => false, stopToken);
+        
+        const startCallStackLength = this.callStack.length;
+        return this.interpretWhile(() => this.callStack.length >= startCallStackLength, stopToken);
+    }
+
+    private async interpretWhile(predicate: (interpretedCount: number) => boolean, stopToken: InterpretStopToken): Promise<InterpretResult> {
+        let interpretedCount = 0;
+        while (this.callStackTop !== null && predicate(interpretedCount)) {
             if (stopToken.isStopRequested)
                 return new StopInterpretResult();
+
+            if (this.breakpoints.has(this.callStackTop.currentInstruction) && (interpretedCount !== 0 || !this.skipBreakpointOnFirstInstruction))
+                return new BreakpointInterpretResult();
 
             let result = this.interpretCurrent(stopToken);
             if (result instanceof Promise)
                 result = await result;
 
-            if (result instanceof Exception) {
-                this.callStack.length = 0;
+            if (result instanceof Exception)
                 return new ExceptionInterpretResult(result);
-            }
+
+            interpretedCount++;
         }
 
         return new NormalInterpretResult();
     }
 
     private interpretCurrent(stopToken: InterpretStopToken): void | Exception | Promise<void | Exception> {
-        while (this.currentStackFrame !== null && this.currentStackFrame.currentInstructionIndex >= this.currentStackFrame.program.instructions.length)
+        if (this.callStackTop === null)
+            throw new Error();
+
+        const instruction = this.callStackTop.currentInstruction;
+        this.callStackTop.currentInstructionIndex++;
+
+        let result: void | Exception | Promise<void | Exception>;
+        result = this.interpret(instruction, stopToken);
+        while (this.callStackTop !== null && this.callStackTop.currentInstructionIndex >= this.callStackTop.program.instructions.length)
             this.callStack.pop();
 
-        if (this.currentStackFrame !== null) {
-            const instruction = this.currentStackFrame.currentInstruction;
-            this.currentStackFrame.currentInstructionIndex++;
-
-            return this.interpret(instruction, stopToken);
-        }
+        return result;
     }
 
     private interpret(instruction: Instruction, stopToken: InterpretStopToken): void | Exception | Promise<void | Exception> {
@@ -132,6 +189,8 @@ export class Interpreter {
             this.interpretJump(instruction);
         else if (instruction instanceof LoadInstruction)
             this.interpretLoad(instruction);
+        else if (instruction instanceof NoOperationInstruction)
+            this.interpretNoOperation(instruction);
         else if (instruction instanceof PopInstruction)
             this.interpretPop(instruction);
         else if (instruction instanceof PushInstruction)
@@ -143,118 +202,134 @@ export class Interpreter {
     }
 
     private interpretAdd(instruction: AddInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
-        if (this.currentStackFrame.evaluationStack!.length < 2)
+        if (this.callStackTop.evaluationStack!.length < 2)
             throw new Error();
 
-        const numberA = this.currentStackFrame.evaluationStack.pop()!;
-        const numberB = this.currentStackFrame.evaluationStack.pop()!;
+        const numberA = this.callStackTop.evaluationStack.pop()!;
+        const numberB = this.callStackTop.evaluationStack.pop()!;
         const result = numberA + numberB;
-        this.currentStackFrame.evaluationStack.push(result);
+        this.callStackTop.evaluationStack.push(result);
     }
 
     private async interpretCallExternal(instruction: CallExternalInstruction, stopToken: InterpretStopToken): Promise<void | Exception> {
-        const externalProgram = this.externalProgramMap.get(instruction.name);
+        const externalProgram = this.nameToExternalProgram.get(instruction.name);
         if (externalProgram === undefined)
             throw new Error();
 
-        let result = externalProgram.handler(this, stopToken);
+        let result = externalProgram.handler(stopToken);
         if (result instanceof Promise)
             result = await result;
 
-        if (result instanceof Exception)
-            return result;
+        if (result instanceof ExternalProgramException)
+            return this.throwException(result.message);
 
-        if (typeof (result) === "number" && this.currentStackFrame !== null)
-            this.currentStackFrame.evaluationStack.push(result);
+        if (typeof (result) === "number" && this.callStackTop !== null)
+            this.callStackTop.evaluationStack.push(result);
     }
 
     private interpretCall(instruction: CallInstruction): void | Exception {
-        const newStackFrame = new CallStackFrame(instruction.program);
-        this.callStack.push(newStackFrame);
+        if (this.maxCallStackSize !== null && this.callStack.length >= this.maxCallStackSize)
+            return this.throwException("Stack overflow.");
 
-        if (this.maxCallStackSize !== null && this.callStack.length > this.maxCallStackSize)
-            return new Exception("Stack overflow.");
+        const program = this.nameToProgram.get(instruction.name);
+        if (program === undefined)
+            throw new Error();
+
+        this.callStack.push(new CallStackFrame(program));
     }
 
     private interpretCompareGreater(instruction: CompareGreaterInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
-        if (this.currentStackFrame.evaluationStack.length < 2)
+        if (this.callStackTop.evaluationStack.length < 2)
             throw new Error();
 
-        const numberA = this.currentStackFrame.evaluationStack.pop()!;
-        const numberB = this.currentStackFrame.evaluationStack.pop()!;
+        const numberA = this.callStackTop.evaluationStack.pop()!;
+        const numberB = this.callStackTop.evaluationStack.pop()!;
         const result = numberA < numberB;
         const resultNumber = result ? 1 : 0;
-        this.currentStackFrame.evaluationStack.push(resultNumber);
+        this.callStackTop.evaluationStack.push(resultNumber);
     }
 
     private interpretJumpIfFalse(instruction: JumpIfFalseInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
-        if (this.currentStackFrame.evaluationStack.length === 0)
+        if (this.callStackTop.evaluationStack.length === 0)
             throw new Error();
 
-        const number = this.currentStackFrame.evaluationStack.pop()!;
+        const number = this.callStackTop.evaluationStack.pop()!;
         if (number === 0)
-            this.currentStackFrame.currentInstructionIndex = instruction.instructionIndex;
+            this.callStackTop.currentInstructionIndex = instruction.instructionIndex;
     }
 
     private interpretJumpIfTrue(instruction: JumpIfTrueInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
-        if (this.currentStackFrame.evaluationStack.length === 0)
+        if (this.callStackTop.evaluationStack.length === 0)
             throw new Error();
 
-        const number = this.currentStackFrame.evaluationStack.pop()!;
+        const number = this.callStackTop.evaluationStack.pop()!;
         if (number === 1)
-            this.currentStackFrame.currentInstructionIndex = instruction.instructionIndex;
+            this.callStackTop.currentInstructionIndex = instruction.instructionIndex;
     }
 
     private interpretJump(instruction: JumpInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
 
-        this.currentStackFrame.currentInstructionIndex = instruction.instructionIndex;
+        this.callStackTop.currentInstructionIndex = instruction.instructionIndex;
     }
 
     private interpretLoad(instruction: LoadInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
-        if (this.currentStackFrame.variables.length <= instruction.localIndex)
+        if (this.callStackTop.variables.length <= instruction.localIndex)
             throw new Error();
 
-        const localValue = this.currentStackFrame.variables[instruction.localIndex];
-        this.currentStackFrame.evaluationStack.push(localValue);
+        const localValue = this.callStackTop.variables[instruction.localIndex];
+        this.callStackTop.evaluationStack.push(localValue);
     }
 
+    private interpretNoOperation(instruction: NoOperationInstruction) { }
+
     private interpretPop(instruction: PopInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
-        if (this.currentStackFrame.evaluationStack.length === 0)
+        if (this.callStackTop.evaluationStack.length === 0)
             throw new Error();
 
-        this.currentStackFrame.evaluationStack.pop();
+        this.callStackTop.evaluationStack.pop();
     }
 
     private interpretPush(instruction: PushInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
 
-        this.currentStackFrame.evaluationStack.push(instruction.value);
+        this.callStackTop.evaluationStack.push(instruction.value);
     }
 
     private interpretStore(instruction: StoreInstruction) {
-        if (this.currentStackFrame === null)
+        if (this.callStackTop === null)
             throw new Error();
-        if (this.currentStackFrame.evaluationStack.length === 0)
+        if (this.callStackTop.evaluationStack.length === 0)
             throw new Error();
-        if (this.currentStackFrame.variables.length <= instruction.localIndex)
+        if (this.callStackTop.variables.length <= instruction.localIndex)
             throw new Error();
 
-        const number = this.currentStackFrame.evaluationStack.pop()!;
-        this.currentStackFrame.variables[instruction.localIndex] = number;
+        const number = this.callStackTop.evaluationStack.pop()!;
+        this.callStackTop.variables[instruction.localIndex] = number;
+    }
+
+    private throwException(message: string): Exception {
+        if (this.callStackTop === null)
+            throw new Error();
+
+        this.callStackTop.currentInstructionIndex--;
+        const exception = new Exception(message, this.callStack);
+        this.callStack = [];
+        
+        return exception;
     }
 }

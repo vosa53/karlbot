@@ -23,8 +23,6 @@ export * from './lib/assembly/instructions/store-instruction';
 export * from './lib/compiler/compilation';
 export * from './lib/compiler/data-type';
 export * from './lib/compiler/external-program-reference';
-export * from './lib/compiler/line-text-range';
-export * from './lib/compiler/text-range';
 
 export * from './lib/compiler/code-generation/emitter';
 
@@ -107,6 +105,9 @@ export * from './lib/project/town-file';
 
 export * from './lib/standard-library/standard-library-program-handlers';
 export * from './lib/standard-library/standard-library';
+
+export * from './lib/text/line-text-range';
+export * from './lib/text/text-range';
 
 export * from './lib/town/town-direction-utils';
 export * from './lib/town/town-direction';

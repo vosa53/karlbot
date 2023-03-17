@@ -271,16 +271,10 @@ export class EditorService {
 
     private createInterpreter(): Interpreter {
         const assembly = Emitter.emit(this.project.value.compilation);
-        const interpreter = new Interpreter();
-
-        const externalPrograms = StandardLibrary.getPrograms(this.currentTown.value!, () => 100);
-        for (const externalProgram of externalPrograms)
-            interpreter.addExternalProgram(externalProgram);
-
         const entryPoint = assembly.programs.find(p => p.name === this.project.value.settings.entryPoint)!;
-        interpreter.callStack.push(new CallStackFrame(entryPoint));
+        const externalPrograms = StandardLibrary.getPrograms(this.currentTown.value!, () => this.project.value.settings.karelSpeed);
 
-        return interpreter;
+        return new Interpreter(assembly, entryPoint, externalPrograms);
     }
 
     private hasErrors(): boolean {

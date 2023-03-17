@@ -1,6 +1,5 @@
-import { Exception } from './exception';
-import { InterpretStopToken } from './interpret-stop-token';
-import { Interpreter } from './interpreter';
+import { ExternalProgramException } from './external-program-exception';
+import { InterpretStopToken } from './interpret-stop-token'
 
 /**
  * External program.
@@ -16,6 +15,7 @@ export class ExternalProgram {
      */
     readonly handler: ExternalProgramHandler;
 
+
     /**
      * @param name Name.
      * @param handler Handler.
@@ -29,5 +29,5 @@ export class ExternalProgram {
 /**
  * External program handler.
  */
-export type ExternalProgramHandler = (interpreter: Interpreter, stopToken: InterpretStopToken) => 
-    void | number | Exception | Promise<void | number | Exception>;
+export type ExternalProgramHandler = (stopToken: InterpretStopToken) => 
+    void | number | ExternalProgramException | Promise<void | number | ExternalProgramException>;

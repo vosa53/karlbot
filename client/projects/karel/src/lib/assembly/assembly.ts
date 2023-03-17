@@ -1,4 +1,5 @@
 import { Program } from './program';
+import { SourceMap } from './source-map';
 
 /**
  * Assembly.
@@ -10,9 +11,16 @@ export class Assembly {
     readonly programs: readonly Program[];
 
     /**
-     * @param programs Programs in the assembly.
+     * Source map.
      */
-    constructor(programs: readonly Program[]) {
+    readonly sourceMap: SourceMap;
+
+    /**
+     * @param programs Programs in the assembly.
+     * @param sourceMap Source map.
+     */
+    constructor(programs: readonly Program[], sourceMap: SourceMap) {
         this.programs = programs;
+        this.sourceMap = sourceMap;
     }
 }

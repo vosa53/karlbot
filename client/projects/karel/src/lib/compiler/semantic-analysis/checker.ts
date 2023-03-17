@@ -1,7 +1,7 @@
 import { Compilation } from "./../compilation";
 import { DataType } from "./../data-type";
 import { Error } from "./../errors/error";
-import { LineTextRange } from "./../line-text-range";
+import { LineTextRange } from "../../text/line-text-range";
 import { CallNode } from "./../syntax-tree/nodes/call-node";
 import { CompilationUnitNode } from "./../syntax-tree/nodes/compilation-unit-node";
 import { IfNode } from "./../syntax-tree/nodes/if-node";

@@ -19,8 +19,12 @@ import { RepeatNode } from "../syntax-tree/nodes/repeat-node";
 import { WhileNode } from "../syntax-tree/nodes/while-node";
 import { ExternalProgramSymbol } from "../symbols/external-program-symbol";
 import { ProgramSymbol } from "../symbols/program-symbol";
-import { Symbol_ } from "../symbols/symbol";
 import { IsToken } from "../syntax-tree/tokens/is-token";
+import { FileLineTextRange, SourceMap } from "../../assembly/source-map";
+import { CompilationUnitNode } from "../syntax-tree/nodes/compilation-unit-node";
+import { NoOperationInstruction } from "../../assembly/instructions/no-operation-instruction";
+import { ProgramNode } from "../syntax-tree/nodes/program-node";
+import { LineTextRange } from "../../text/line-text-range";
 
 /**
  * Generates instructions.
@@ -31,38 +35,54 @@ export class Emitter {
      * @param compilation Compilation.
      */
     static emit(compilation: Compilation): Assembly {
-        const programSymbolToProgram = compilation.symbolTable.getDefined()
-            .filter(s => s instanceof ProgramSymbol)
-            .map(ps => {
-                const programSymbol = <ProgramSymbol>ps;
-                Emitter.throwCompilationHasErrorsIfNull(programSymbol.definition.nameToken);
-                const program = new Program(programSymbol.definition.nameToken.text, [], 0);
-                return <const>[ps, program];
-            });
+        const programs: Program[] = [];
+        const instructionToSourceRange: [Instruction, FileLineTextRange][] = [];
 
-        const programSymbolToProgramMap = new Map(programSymbolToProgram);
+        for (const symbol of compilation.symbolTable.getDefined()) {
+            if (!(symbol instanceof ProgramSymbol))
+                continue;
 
-        for (const _programSymbolToProgram of programSymbolToProgram) {
-            const programSymbol = <ProgramSymbol>_programSymbolToProgram[0];
-            const program = _programSymbolToProgram[1];
+            const programNode = symbol.definition;
+            Emitter.throwCompilationHasErrorsIfNull(programNode.nameToken);
+            const compilationUnitNode = programNode.parent as CompilationUnitNode;
+            
+            const emitterContext = new EmitterContext(compilation);
+            this.emitProgram(programNode, emitterContext);
+            const instructionsWithSourceRanges = emitterContext.getInstructionsWithSourceRanges();
+            const instructions = instructionsWithSourceRanges.map(iwsr => iwsr[0]);
+            const variableCount = emitterContext.getVariableCount();
 
-            const context = new EmitterContext(programSymbolToProgramMap, compilation);
-            this.emitProgram(programSymbol, context);
-            program.instructions.push(...context.getInstructions());
-            program.variableCount = context.getVariableCount();
+            for (const [instruction, sourceRange] of instructionsWithSourceRanges) {
+                const sourceRangeWithFile = new FileLineTextRange(compilationUnitNode.filePath, sourceRange);
+                instructionToSourceRange.push([instruction, sourceRangeWithFile]);
+            }
+            
+            const program = new Program(programNode.nameToken.text, instructions, variableCount);
+            programs.push(program);
         }
 
-        const programs = programSymbolToProgram.map(p => p[1]);
-        return new Assembly(programs);
+        const sourceMap = SourceMap.create(instructionToSourceRange);
+        return new Assembly(programs, sourceMap);
     }
 
-    private static emitProgram(programSymbol: ProgramSymbol, context: EmitterContext) {
-        Emitter.throwCompilationHasErrorsIfNull(programSymbol.definition.body);
+    private static emitProgram(program: ProgramNode, context: EmitterContext) {
+        Emitter.throwCompilationHasErrorsIfNull(program.programToken);
+        Emitter.throwCompilationHasErrorsIfNull(program.nameToken);
+        Emitter.throwCompilationHasErrorsIfNull(program.body);
 
-        this.emitBlock(programSymbol.definition.body, context);
+        const sourceRange = new LineTextRange(
+            program.programToken.startLine, program.programToken.startColumn, 
+            program.nameToken.endLine, program.nameToken.endColumn
+        );
+
+        context.emit(new NoOperationInstruction(), sourceRange);
+
+        this.emitBlock(program.body, context);
     }
 
     private static emitBlock(block: BlockNode, context: EmitterContext) {
+        Emitter.throwCompilationHasErrorsIfNull(block.endToken);
+
         for (const statement of block.statements) {
             if (statement instanceof CallNode)
                 this.emitCall(statement, context);
@@ -75,30 +95,40 @@ export class Emitter {
             else
                 throw new Error();
         }
+
+        const endSourceRange = block.endToken.getLineTextRangeWithoutTrivia();
+        context.emit(new NoOperationInstruction(), endSourceRange);
     }
 
-    private static emitCall(callNode: CallNode, context: EmitterContext) {
-        const programSymbol = <ProgramSymbol | ExternalProgramSymbol>context.compilation.symbolTable.getByNode(callNode);
+    private static emitCall(callNode: CallNode, context: EmitterContext, sourceRange?: LineTextRange) {
+        sourceRange = sourceRange ?? callNode.getLineTextRangeWithoutTrivia();
 
+        const programSymbol = context.compilation.symbolTable.getByNode(callNode) as ProgramSymbol | ExternalProgramSymbol;
         if (programSymbol instanceof ProgramSymbol) {
-            const program = context.getProgram(programSymbol);
-            context.emit(new CallInstruction(program));
+            Emitter.throwCompilationHasErrorsIfNull(programSymbol.definition.nameToken);
+            context.emit(new CallInstruction(programSymbol.definition.nameToken.text), sourceRange);
         }
         else
-            context.emit(new CallExternalInstruction(programSymbol.externalProgram.name));
+            context.emit(new CallExternalInstruction(programSymbol.externalProgram.name), sourceRange);
     }
 
     private static emitIf(ifNode: IfNode, context: EmitterContext) {
+        Emitter.throwCompilationHasErrorsIfNull(ifNode.ifToken);
         Emitter.throwCompilationHasErrorsIfNull(ifNode.condition);
         Emitter.throwCompilationHasErrorsIfNull(ifNode.body);
 
-        this.emitCall(ifNode.condition, context);
+        const sourceRange = new LineTextRange(
+            ifNode.ifToken.startLine, ifNode.ifToken.startColumn, 
+            ifNode.condition.endLine, ifNode.condition.endColumn
+        );
 
-        const emitConditionJump = context.emitLater();
+        this.emitCall(ifNode.condition, context, sourceRange);
+
+        const emitConditionJump = context.emitLater(sourceRange);
 
         this.emitBlock(ifNode.body, context);
 
-        const emitOverElseJump = ifNode.elseBody !== null ? context.emitLater() : null;
+        const emitOverElseJump = ifNode.elseBody !== null ? context.emitLater(sourceRange) : null;
 
         if (ifNode.operationToken instanceof IsToken)
             emitConditionJump(new JumpIfFalseInstruction(context.nextInstructionIndex));
@@ -106,24 +136,33 @@ export class Emitter {
             emitConditionJump(new JumpIfTrueInstruction(context.nextInstructionIndex));
 
         if (ifNode.elseBody !== null) {
+            const elseSourceRange = ifNode.elseToken!.getLineTextRangeWithoutTrivia();
+
+            context.emit(new NoOperationInstruction(), elseSourceRange);
             this.emitBlock(ifNode.elseBody, context);
             emitOverElseJump!(new JumpInstruction(context.nextInstructionIndex));
         }
     }
 
     private static emitWhile(whileNode: WhileNode, context: EmitterContext) {
+        Emitter.throwCompilationHasErrorsIfNull(whileNode.whileToken);
         Emitter.throwCompilationHasErrorsIfNull(whileNode.condition);
         Emitter.throwCompilationHasErrorsIfNull(whileNode.body);
 
+        const sourceRange = new LineTextRange(
+            whileNode.whileToken.startLine, whileNode.whileToken.startColumn, 
+            whileNode.condition.endLine, whileNode.condition.endColumn
+        );
+
         const conditionInstructionIndex = context.nextInstructionIndex;
 
-        this.emitCall(whileNode.condition, context);
+        this.emitCall(whileNode.condition, context, sourceRange);
 
-        const emitConditionJump = context.emitLater();
+        const emitConditionJump = context.emitLater(sourceRange);
 
         this.emitBlock(whileNode.body, context);
 
-        context.emit(new JumpInstruction(conditionInstructionIndex));
+        context.emit(new JumpInstruction(conditionInstructionIndex), sourceRange);
 
         if (whileNode.operationToken instanceof IsToken)
             emitConditionJump(new JumpIfFalseInstruction(context.nextInstructionIndex));
@@ -132,31 +171,38 @@ export class Emitter {
     }
 
     private static emitRepeat(repeatNode: RepeatNode, context: EmitterContext) {
+        Emitter.throwCompilationHasErrorsIfNull(repeatNode.repeatToken);
         Emitter.throwCompilationHasErrorsIfNull(repeatNode.countToken);
+        Emitter.throwCompilationHasErrorsIfNull(repeatNode.timesToken);
         Emitter.throwCompilationHasErrorsIfNull(repeatNode.body);
+
+        const sourceRange = new LineTextRange(
+            repeatNode.repeatToken.startLine, repeatNode.repeatToken.startColumn, 
+            repeatNode.timesToken.endLine, repeatNode.timesToken.endColumn
+        );
 
         const indexVariable = context.createVariable();
 
-        context.emit(new PushInstruction(0));
-        context.emit(new StoreInstruction(indexVariable));
+        context.emit(new PushInstruction(0), sourceRange);
+        context.emit(new StoreInstruction(indexVariable), sourceRange);
 
         const conditionInstructionIndex = context.nextInstructionIndex;
 
         const count = parseInt(repeatNode.countToken.text);
-        context.emit(new PushInstruction(count));
-        context.emit(new LoadInstruction(indexVariable));
-        context.emit(new CompareGreaterInstruction());
+        context.emit(new PushInstruction(count), sourceRange);
+        context.emit(new LoadInstruction(indexVariable), sourceRange);
+        context.emit(new CompareGreaterInstruction(), sourceRange);
 
-        const emitConditionJump = context.emitLater();
+        const emitConditionJump = context.emitLater(sourceRange);
 
         this.emitBlock(repeatNode.body, context);
 
-        context.emit(new PushInstruction(1));
-        context.emit(new LoadInstruction(indexVariable));
-        context.emit(new AddInstruction());
-        context.emit(new StoreInstruction(indexVariable));
+        context.emit(new PushInstruction(1), sourceRange);
+        context.emit(new LoadInstruction(indexVariable), sourceRange);
+        context.emit(new AddInstruction(), sourceRange);
+        context.emit(new StoreInstruction(indexVariable), sourceRange);
 
-        context.emit(new JumpInstruction(conditionInstructionIndex));
+        context.emit(new JumpInstruction(conditionInstructionIndex), sourceRange);
 
         emitConditionJump(new JumpIfFalseInstruction(context.nextInstructionIndex));
     }
@@ -175,7 +221,35 @@ class EmitterContext {
      * Index of the next emitted instruction.
      */
     get nextInstructionIndex(): number {
-        return this.instructions.length;
+        return this.instruction.length;
+    }
+
+    /**
+     * Emits a single instruction.
+     * @param instruction Instruction to emit.
+     * @param sourceRange Text range that represents the instruction in the source code.
+     */
+    emit(instruction: Instruction, sourceRange: LineTextRange) {
+        this.instruction.push([instruction, sourceRange]);
+    }
+
+    /**
+     * Creates a function to emit an instruction in the current place and returns it. The function can be used only once.
+     * @param sourceRange Text range that represents the instruction in the source code.
+     */
+    emitLater(sourceRange: LineTextRange): (instruction: Instruction) => void {
+        const index = this.instruction.length;
+        this.instruction.push([null, sourceRange]);
+
+        this.laterEmitsCount++;
+
+        return (instruction) => {
+            if (this.instruction[index][0] !== null)
+                throw new Error("This emitLater function was already used.");
+
+            this.laterEmitsCount--;
+            this.instruction[index][0] = instruction;
+        };
     }
 
     /**
@@ -186,51 +260,14 @@ class EmitterContext {
     }
 
     /**
-     * Finds a program by its symbol and returns it. If the given symbol is not associated with any program throws an error.
-     * @param programSymbol Program symbol.
+     * Returns the emitted instructions with the text range that represents them in the source code.
+     * Can not be used before all later emits with {@link emitLater} are done.
      */
-    getProgram(programSymbol: ProgramSymbol): Program {
-        const program = this.programSymbolToProgramMap.get(programSymbol);
-        if (program === undefined)
-            throw new Error("Program for this symbol was not found.");
-
-        return program;
-    }
-
-    /**
-     * Emits a single instruction.
-     * @param instruction Instruction to emit.
-     */
-    emit(instruction: Instruction) {
-        this.instructions.push(instruction);
-    }
-
-    /**
-     * Creates a function to emit an instruction in the current place and returns it. The function can be used only once.
-     */
-    emitLater(): (instruction: Instruction) => void {
-        const index = this.instructions.length;
-        this.instructions.push(null);
-
-        this.laterEmitsCount++;
-
-        return (instruction) => {
-            if (this.instructions[index] !== null)
-                throw new Error("This emitLater function was already used.");
-
-            this.laterEmitsCount--;
-            this.instructions[index] = instruction;
-        };
-    }
-
-    /**
-     * Returns the emitted instructions. Can not be used before all later emits with {@link emitLater} are done.
-     */
-    getInstructions(): Instruction[] {
+    getInstructionsWithSourceRanges(): [Instruction, LineTextRange][] {
         if (this.laterEmitsCount !== 0)
             throw new Error("Can not get instructons before all later emits are done.");
 
-        return <Instruction[]>this.instructions;
+        return this.instruction as [Instruction, LineTextRange][];
     }
 
     /**
@@ -240,13 +277,12 @@ class EmitterContext {
         return this.variableCount;
     }
 
+    private readonly instruction: [Instruction | null, LineTextRange][] = [];
     private variableCount = 0;
-    private readonly instructions: (Instruction | null)[] = [];
     private laterEmitsCount = 0;
 
     /**
-     * @param programSymbolToProgramMap Symbol to program map. 
      * @param compilation Compilation.
      */
-    constructor(private readonly programSymbolToProgramMap: Map<Symbol_, Program>, readonly compilation: Compilation) { }
+    constructor(readonly compilation: Compilation) { }
 }

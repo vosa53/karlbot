@@ -1,5 +1,5 @@
 import { SyntaxError } from "./errors/syntax-error";
-import { LineTextRange } from "./line-text-range";
+import { LineTextRange } from "../text/line-text-range";
 import { PrimitiveSyntaxElement } from "./syntax-tree/syntax-element";
 
 /**

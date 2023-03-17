@@ -1,4 +1,4 @@
-import { LineTextRange } from "../line-text-range";
+import { LineTextRange } from "../../text/line-text-range";
 import { CompilationUnitNode } from "../syntax-tree/nodes/compilation-unit-node";
 
 /**

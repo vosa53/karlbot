@@ -7,17 +7,17 @@ export class Program {
     /**
      * Name.
      */
-    name: string;
+    readonly name: string;
 
     /**
      * Instructions.
      */
-    readonly instructions: Instruction[];
+    readonly instructions: readonly Instruction[];
 
     /**
      * Count of used variables.
      */
-    variableCount: number;
+    readonly variableCount: number;
 
     /**
      * @param name Name.

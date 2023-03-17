@@ -1,7 +1,7 @@
 import { ArrayUtils } from "../../../utils/array-utils";
 import { ChildrenBuilder } from "../../children-builder";
-import { LineTextRange } from "../../line-text-range";
-import { TextRange } from "../../text-range";
+import { LineTextRange } from "../../../text/line-text-range";
+import { TextRange } from "../../../text/text-range";
 import { PrimitiveSyntaxElement } from "../syntax-element";
 import { SyntaxElement } from "../syntax-element";
 

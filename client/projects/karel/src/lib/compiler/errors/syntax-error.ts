@@ -1,4 +1,4 @@
-import { LineTextRange } from "../line-text-range";
+import { LineTextRange } from "../../text/line-text-range";
 
 /**
  * Syntax error.

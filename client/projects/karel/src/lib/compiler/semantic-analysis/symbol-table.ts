@@ -9,13 +9,13 @@ import { Node } from "../syntax-tree/nodes/node";
 import { ProgramNode } from "../syntax-tree/nodes/program-node";
 
 /**
- * Symbol table.
+ * Allows to lookup symbols associated with various syntax constructs.
  */
 export class SymbolTable {
     private constructor(
-        private readonly definedSymbols: Symbol_[],
-        private readonly programToSymbol: Map<ProgramNode, Symbol_>,
-        private readonly nameToSymbol: Map<string, Symbol_>
+        private readonly definedSymbols: readonly Symbol_[],
+        private readonly programToSymbol: ReadonlyMap<ProgramNode, Symbol_>,
+        private readonly nameToSymbol: ReadonlyMap<string, Symbol_>
     ) { }
 
     /**
@@ -69,7 +69,7 @@ export class SymbolTable {
     /**
      * Returns all defined symbols.
      */
-    getDefined(): Symbol_[] {
+    getDefined(): readonly Symbol_[] {
         return this.definedSymbols;
     }
 

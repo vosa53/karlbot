@@ -1,6 +1,6 @@
-import { LineTextRange } from "../line-text-range";
+import { LineTextRange } from "../../text/line-text-range";
 import { Node } from "./nodes/node";
-import { TextRange } from "../text-range";
+import { TextRange } from "../../text/text-range";
 import { SyntaxError } from "../errors/syntax-error";
 
 /**
