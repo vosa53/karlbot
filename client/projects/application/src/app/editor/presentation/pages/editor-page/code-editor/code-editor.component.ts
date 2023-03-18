@@ -16,6 +16,7 @@ import { StateField, StateEffect } from "@codemirror/state"
 import { codeCompletion } from "./codemirror/code-completion";
 import { setErrors } from "./codemirror/error-highlighting";
 import { currentRangeHighlighting, setCurrentRange } from "./codemirror/current-range-highlighting";
+import { breakpoints, breakpointsChanged, getBreakpoints, setBreakpoints } from "./codemirror/breakpoints";
 
 
 @Component({
@@ -32,14 +33,8 @@ export class CodeEditorComponent implements AfterViewInit {
     }
 
     set code(value: string) {
-        if (this._code === value)
-            return;
-
         this._code = value;
-        if (this.editorView !== null && this.codeInEditor !== value) {
-            this.editorView.dispatch({ changes: { from: 0, to: this.editorView.state.doc.length, insert: value } });
-            this.codeInEditor = value;
-        }
+        this.updateCode();
     }
 
     @Input()
@@ -63,15 +58,30 @@ export class CodeEditorComponent implements AfterViewInit {
     }
 
     @Input()
+    get breakpoints(): readonly number[] {
+        return this._breakpoints;
+    }
+
+    set breakpoints(value: readonly number[]) {
+        this._breakpoints = value;
+        this.updateBreakpoints();
+    }
+
+    @Input()
     completionItemsProvider: (line: number, column: number) => CompletionItem[] = (l, c) => [];
 
     @Output()
     codeChange = new EventEmitter<string>();
 
+    @Output()
+    breakpointsChange = new EventEmitter<readonly number[]>();
+
     private _code = "";
     private codeInEditor = "";
     private _errors: readonly Error[] = [];
     private _currentRange: LineTextRange | null = null;
+    private _breakpoints: readonly number[] = [];
+    private breakpointsInEditor: readonly number[] = [];
     private editorView: EditorView | null = null;
 
     constructor(private readonly hostElement: ElementRef) {
@@ -83,6 +93,7 @@ export class CodeEditorComponent implements AfterViewInit {
             doc: this._code,
             extensions: [
                 currentRangeHighlighting(),
+                breakpoints(),
                 keymap.of(defaultKeymap),
                 basicSetup,
                 applicationStyleLight,
@@ -93,17 +104,29 @@ export class CodeEditorComponent implements AfterViewInit {
             ],
             parent: this.hostElement.nativeElement.children[0]
         });
-        this.codeInEditor = this.code;
+        this.updateCode();
         this.updateDiagnostics();
         this.updateCurrentRange();
+        this.updateBreakpoints();
     }
 
     private onEditorViewUpdate(update: ViewUpdate) {
-        if (!update.docChanged)
-            return;
+        if (update.docChanged) {
+            this.codeInEditor = update.state.doc.toString();
+            this.codeChange.emit(this.codeInEditor);
+        }
 
-        this.codeInEditor = update.state.doc.toString();
-        this.codeChange.emit(this.codeInEditor);
+        if (breakpointsChanged(update)) {
+            this.breakpointsInEditor = getBreakpoints(update.state);
+            this.breakpointsChange.emit(this.breakpointsInEditor);
+        }
+    }
+
+    private updateCode() {
+        if (this.editorView !== null && this.codeInEditor !== this.code) {
+            this.codeInEditor = this.code;
+            this.editorView.dispatch({ changes: { from: 0, to: this.editorView.state.doc.length, insert: this.code } });
+        }
     }
 
     private updateDiagnostics() {
@@ -114,5 +137,12 @@ export class CodeEditorComponent implements AfterViewInit {
     private updateCurrentRange() {
         if (this.editorView !== null)
             this.editorView.dispatch(setCurrentRange(this.editorView.state, this.currentRange));
+    }
+
+    private updateBreakpoints() {
+        if (this.editorView !== null && this.breakpointsInEditor !== this.breakpoints) {
+            this.breakpointsInEditor = this.breakpoints;
+            this.editorView.dispatch(setBreakpoints(this.editorView.state, this.breakpoints));
+        }
     }
 }

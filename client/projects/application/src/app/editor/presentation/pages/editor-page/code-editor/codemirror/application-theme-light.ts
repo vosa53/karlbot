@@ -13,7 +13,7 @@ export const applicationThemeLight = EditorView.theme({
     ".cm-content": { fontFamily: "'Roboto Mono', monospace" },
     "&.cm-focused": { outline: "none" },
     ".cm-lineNumbers": { color: "rgb(35, 120, 147)" },
-    "& .cm-lineNumbers .cm-gutterElement": { paddingLeft: "16px" }
+    "& .cm-lineNumbers .cm-gutterElement": { paddingLeft: "8px" }
 });
 
 /**

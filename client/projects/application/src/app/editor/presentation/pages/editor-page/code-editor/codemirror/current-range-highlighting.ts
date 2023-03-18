@@ -15,10 +15,13 @@ const currentRangeField = StateField.define<DecorationSet>({
     create() {
         return Decoration.none
     },
-    update(currentRange, tr) {
-        currentRange = currentRange.map(tr.changes);
+    update(currentRange, transaction) {
+        currentRange = currentRange.map(transaction.changes);
 
-        for (const effect of tr.effects) if (effect.is(setCurrentRangeEffect)) {
+        for (const effect of transaction.effects) {
+            if (!effect.is(setCurrentRangeEffect))
+                continue;
+
             if (effect.value === null)
                 currentRange = Decoration.none;
             else
