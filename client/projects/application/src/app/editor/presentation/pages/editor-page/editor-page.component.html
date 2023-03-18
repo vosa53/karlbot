@@ -33,6 +33,7 @@
         class="code-editor" 
         [code]="(editorService.currentCode$ | async)!"
         [errors]="(editorService.errorsInCurrentCodeFile$ | async)!"
+        [currentRange]="currentRange"
         [completionItemsProvider]="completionItemsProvider"
         (codeChange)="editorService.changeCode($event)">
     </app-code-editor>

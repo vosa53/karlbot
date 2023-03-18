@@ -10,6 +10,7 @@ import { TownEditorComponent } from "./town-editor/town-editor.component";
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { ActivatedRoute } from "@angular/router";
+import { LineTextRange } from "projects/karel/src/public-api";
 
 @Component({
     standalone: true,
@@ -23,11 +24,17 @@ export class EditorPageComponent {
     readonly completionItemsProvider = (line: number, column: number) => this.editorService.provideCompletionItems(line, column);
     isSmallScreen: boolean = false;
 
+    currentRange: LineTextRange | null = null;
+
     constructor(readonly editorService: EditorService, readonly breakpointObserver: BreakpointObserver, readonly activatedRoute: ActivatedRoute) {
         breakpointObserver.observe(["(max-width: 1000px)"]).subscribe(b => this.isSmallScreen = b.matches);
         
         const projectId = activatedRoute.snapshot.paramMap.get("id");
         if (projectId !== null)
             editorService.openProject(parseInt(projectId, 10));
+
+        setTimeout(() => {
+            this.currentRange = new LineTextRange(2, 3, 2, 8);
+        }, 2000);
     }
 }

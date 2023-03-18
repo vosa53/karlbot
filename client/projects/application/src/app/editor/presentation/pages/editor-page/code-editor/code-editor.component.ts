@@ -1,15 +1,21 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
-import { EditorView, keymap } from "@codemirror/view";
+import { EditorView, keymap, ViewUpdate } from "@codemirror/view";
 import { defaultKeymap } from "@codemirror/commands";
 import { basicSetup } from "codemirror";
-import { karel } from "./codemirror/karel-codemirror-language";
-import { applicationStyle } from "./codemirror/application-codemirror-style";
+import { karel } from "./codemirror/karel-language";
+import { applicationStyleLight } from "./codemirror/application-theme-light";
 import { linter, Diagnostic, setDiagnostics } from "@codemirror/lint"
 import { autocompletion, Completion } from "@codemirror/autocomplete";
 import { Error } from "projects/karel/src/lib/compiler/errors/error";
 import { CompletionItem } from "projects/karel/src/lib/compiler/language-service/completion-item";
 import { CompletionItemType } from "projects/karel/src/lib/compiler/language-service/completion-item-type";
 import { CommonModule } from "@angular/common";
+import { LineTextRange } from "projects/karel/src/public-api";
+import { Decoration, DecorationSet } from "@codemirror/view"
+import { StateField, StateEffect } from "@codemirror/state"
+import { codeCompletion } from "./codemirror/code-completion";
+import { setErrors } from "./codemirror/error-highlighting";
+import { currentRangeHighlighting, setCurrentRange } from "./codemirror/current-range-highlighting";
 
 
 @Component({
@@ -47,6 +53,16 @@ export class CodeEditorComponent implements AfterViewInit {
     }
 
     @Input()
+    get currentRange(): LineTextRange | null {
+        return this._currentRange;
+    }
+
+    set currentRange(value: LineTextRange | null) {
+        this._currentRange = value;
+        this.updateCurrentRange();
+    }
+
+    @Input()
     completionItemsProvider: (line: number, column: number) => CompletionItem[] = (l, c) => [];
 
     @Output()
@@ -55,81 +71,48 @@ export class CodeEditorComponent implements AfterViewInit {
     private _code = "";
     private codeInEditor = "";
     private _errors: readonly Error[] = [];
+    private _currentRange: LineTextRange | null = null;
     private editorView: EditorView | null = null;
 
     constructor(private readonly hostElement: ElementRef) {
 
     }
 
-    onCodeChange(newCode: string) {
-        this.codeChange.emit(newCode);
-    }
-
     ngAfterViewInit(): void {
         this.editorView = new EditorView({
             doc: this._code,
             extensions: [
+                currentRangeHighlighting(),
                 keymap.of(defaultKeymap),
                 basicSetup,
-                applicationStyle,
+                applicationStyleLight,
                 karel(),
-                EditorView.updateListener.of(u => {
-                    if (!u.docChanged)
-                        return;
-                    
-                    this.codeInEditor = u.state.doc.toString();
-                    this.codeChange.emit(this.codeInEditor);
-                }),
-                autocompletion({
-                    override: [
-                        c => {
-                            const identifier = c.matchBefore(/[a-zA-Z][a-zA-Z0-9]*/);
-                            if (identifier === null)
-                                return null;
-                            if (identifier.from == identifier.to && !c.explicit)
-                                return null
-
-                            const line = c.state.doc.lineAt(c.pos);
-                            const lineNumber = line.number;
-                            const columnNumber = c.pos - line.from + 1;
-                            const completionItems = this.completionItemsProvider(lineNumber, columnNumber);
-                            const codemirrorCompletionItems: Completion[] = completionItems.map(ci => {
-                                return {
-                                    label: ci.text,
-                                    detail: ci.description,
-                                    info: ci.title,
-                                    type: ci.type === CompletionItemType.program ? "program" : "externalProgram"
-                                };
-                            });
-                            return {
-                                from: identifier.from,
-                                options: codemirrorCompletionItems
-                            };
-                        }
-                    ]
-                })
+                codeCompletion((line, column) => this.completionItemsProvider(line, column)),
+                EditorView.updateListener.of(u => this.onEditorViewUpdate(u))
                 //indentUnit.of("  ")
             ],
             parent: this.hostElement.nativeElement.children[0]
         });
         this.codeInEditor = this.code;
         this.updateDiagnostics();
+        this.updateCurrentRange();
+    }
+
+    private onEditorViewUpdate(update: ViewUpdate) {
+        if (!update.docChanged)
+            return;
+
+        this.codeInEditor = update.state.doc.toString();
+        this.codeChange.emit(this.codeInEditor);
     }
 
     private updateDiagnostics() {
-        if (this.editorView === null)
-            return;
+        if (this.editorView !== null)
+            this.editorView.dispatch(setErrors(this.editorView.state, this.errors));
+    }
 
-        const diagnostics: Diagnostic[] = this.errors.map(e => {
-            const from = this.editorView!.state.doc.line(e.textRange.startLine).from + e.textRange.startColumn - 1;
-            const to = this.editorView!.state.doc.line(e.textRange.endLine).from + e.textRange.endColumn - 1;
-            return {
-                from,
-                to,
-                severity: "error",
-                message: e.message
-            };
-        });
-        this.editorView!.dispatch(setDiagnostics(this.editorView!.state, diagnostics));
+    private updateCurrentRange() {
+        if (this.editorView !== null)
+            this.editorView.dispatch(setCurrentRange(this.editorView.state, this.currentRange));
     }
 }

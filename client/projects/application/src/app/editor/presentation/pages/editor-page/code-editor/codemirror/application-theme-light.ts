@@ -6,7 +6,7 @@ import { Extension } from "@codemirror/state";
 /**
  * Application Codemirror editor theme.
  */
-export const applicationTheme = EditorView.theme({
+export const applicationThemeLight = EditorView.theme({
     "&.cm-editor": { height: "100%" },
     ".cm-scroller": { overflow: "auto" },
     ".cm-gutters": { background: "transparent", borderRight: "none", fontFamily: "'Roboto Mono', monospace" },
@@ -19,7 +19,7 @@ export const applicationTheme = EditorView.theme({
 /**
  * Application Codemirror highlight style.
  */
-export const applicationHighlightStyle = HighlightStyle.define([
+export const applicationHighlightStyleLight = HighlightStyle.define([
     { tag: t.keyword, color: "#1E88E5" },
     { tag: t.operatorKeyword, color: "#673AB7" },
     { tag: t.comment, color: "#81C784" },
@@ -29,4 +29,4 @@ export const applicationHighlightStyle = HighlightStyle.define([
 /**
  * Application Codemirror style extension.
  */
-export const applicationStyle: Extension = [applicationTheme, syntaxHighlighting(applicationHighlightStyle)];
+export const applicationStyleLight: Extension = [applicationThemeLight, syntaxHighlighting(applicationHighlightStyleLight)];

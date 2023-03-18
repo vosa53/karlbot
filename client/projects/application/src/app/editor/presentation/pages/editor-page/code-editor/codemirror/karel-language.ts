@@ -1,4 +1,4 @@
-import { parser } from "./karel-lezer-parser";
+import { parser } from "./lezer/karel-parser";
 import { styleTags, tags as t } from "@lezer/highlight";
 import { LRLanguage } from "@codemirror/language";
 import { LanguageSupport } from "@codemirror/language";
