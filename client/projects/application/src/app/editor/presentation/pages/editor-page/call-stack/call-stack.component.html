@@ -1,0 +1,7 @@
+<app-panel header="Call stack">
+    <mat-list>
+        <mat-list-item *ngFor="let callStackFrame of callStack">
+            <div matListItemTitle>{{callStackFrame.program.name}}</div>
+        </mat-list-item>
+    </mat-list>
+</app-panel>

@@ -66,6 +66,21 @@ export class HeaderComponent {
     @Output()
     stopClick = new EventEmitter<void>();
 
+    @Output()
+    pauseClick = new EventEmitter<void>();
+
+    @Output()
+    continueClick = new EventEmitter<void>();
+
+    @Output()
+    stepIntoClick = new EventEmitter<void>();
+
+    @Output()
+    stepOverClick = new EventEmitter<void>();
+
+    @Output()
+    stepOutClick = new EventEmitter<void>();
+
     private static readonly PROJECT_NAME_VALIDATOR: ValidatedInputValidator = t => t !== "";
 
     constructor(private readonly dialogService: DialogService) {

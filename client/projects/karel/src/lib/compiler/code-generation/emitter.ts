@@ -70,9 +70,11 @@ export class Emitter {
         Emitter.throwCompilationHasErrorsIfNull(program.nameToken);
         Emitter.throwCompilationHasErrorsIfNull(program.body);
 
+        const programSourceRange = program.programToken.getLineTextRangeWithoutTrivia();
+        const nameSourceRange = program.nameToken.getLineTextRangeWithoutTrivia();
         const sourceRange = new LineTextRange(
-            program.programToken.startLine, program.programToken.startColumn, 
-            program.nameToken.endLine, program.nameToken.endColumn
+            programSourceRange.startLine, programSourceRange.startColumn, 
+            nameSourceRange.endLine, nameSourceRange.endColumn
         );
 
         context.emit(new NoOperationInstruction(), sourceRange);
@@ -117,9 +119,11 @@ export class Emitter {
         Emitter.throwCompilationHasErrorsIfNull(ifNode.condition);
         Emitter.throwCompilationHasErrorsIfNull(ifNode.body);
 
+        const ifSourceRange = ifNode.ifToken.getLineTextRangeWithoutTrivia();
+        const conditionSourceRange = ifNode.condition.getLineTextRangeWithoutTrivia();
         const sourceRange = new LineTextRange(
-            ifNode.ifToken.startLine, ifNode.ifToken.startColumn, 
-            ifNode.condition.endLine, ifNode.condition.endColumn
+            ifSourceRange.startLine, ifSourceRange.startColumn, 
+            conditionSourceRange.endLine, conditionSourceRange.endColumn
         );
 
         this.emitCall(ifNode.condition, context, sourceRange);
@@ -149,9 +153,11 @@ export class Emitter {
         Emitter.throwCompilationHasErrorsIfNull(whileNode.condition);
         Emitter.throwCompilationHasErrorsIfNull(whileNode.body);
 
+        const whileSourceRange = whileNode.whileToken.getLineTextRangeWithoutTrivia();
+        const conditionSourceRange = whileNode.condition.getLineTextRangeWithoutTrivia();
         const sourceRange = new LineTextRange(
-            whileNode.whileToken.startLine, whileNode.whileToken.startColumn, 
-            whileNode.condition.endLine, whileNode.condition.endColumn
+            whileSourceRange.startLine, whileSourceRange.startColumn, 
+            conditionSourceRange.endLine, conditionSourceRange.endColumn
         );
 
         const conditionInstructionIndex = context.nextInstructionIndex;
@@ -176,9 +182,11 @@ export class Emitter {
         Emitter.throwCompilationHasErrorsIfNull(repeatNode.timesToken);
         Emitter.throwCompilationHasErrorsIfNull(repeatNode.body);
 
+        const repeatSourceRange = repeatNode.repeatToken.getLineTextRangeWithoutTrivia();
+        const timesSourceRange = repeatNode.timesToken.getLineTextRangeWithoutTrivia();
         const sourceRange = new LineTextRange(
-            repeatNode.repeatToken.startLine, repeatNode.repeatToken.startColumn, 
-            repeatNode.timesToken.endLine, repeatNode.timesToken.endColumn
+            repeatSourceRange.startLine, repeatSourceRange.startColumn, 
+            timesSourceRange.endLine, timesSourceRange.endColumn
         );
 
         const indexVariable = context.createVariable();

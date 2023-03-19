@@ -47,7 +47,7 @@ export class ProjectDeserializer {
 
     private static deserializeCodeFile(file: any): CodeFile {
         const compilationUnit = CompilationUnitParser.parse(file.code, file.name);
-        return new CodeFile(compilationUnit);
+        return new CodeFile(compilationUnit, file.breakpoints);
     }
 
     private static deserializeTownFile(file: any): TownFile {

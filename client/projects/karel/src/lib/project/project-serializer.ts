@@ -48,7 +48,8 @@ export class ProjectSerializer {
         return {
             type: "code",
             name: file.name,
-            code: file.compilationUnit.buildText()
+            code: file.compilationUnit.buildText(),
+            breakpoints: file.breakpoints
         };
     }
 

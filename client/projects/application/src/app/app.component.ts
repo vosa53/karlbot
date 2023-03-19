@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SignInService } from './shared/application/services/sign-in.service';
 import { ColorTheme, ColorThemeService } from './shared/application/services/color-theme.service';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
@@ -21,7 +21,9 @@ import { MatMenuModule } from '@angular/material/menu';
 export class AppComponent implements OnInit, OnDestroy {
     private colorThemeSubscription: Subscription | null = null;
 
-    constructor(readonly colorThemeService: ColorThemeService, readonly authenticationService: SignInService) { }
+    constructor(readonly colorThemeService: ColorThemeService, readonly authenticationService: SignInService, iconRegistry: MatIconRegistry) {
+        iconRegistry.setDefaultFontSetClass("material-symbols-outlined");
+    }
 
     ngOnInit() {
         this.colorThemeSubscription = this.colorThemeService.colorTheme$.subscribe(ct => {

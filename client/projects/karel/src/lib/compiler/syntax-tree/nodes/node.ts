@@ -4,6 +4,8 @@ import { LineTextRange } from "../../../text/line-text-range";
 import { TextRange } from "../../../text/text-range";
 import { PrimitiveSyntaxElement } from "../syntax-element";
 import { SyntaxElement } from "../syntax-element";
+import { Token } from "@angular/compiler";
+import { PrimitiveToken } from "../tokens/token";
 
 export abstract class Node extends SyntaxElement {
     get children(): SyntaxElement[] {
@@ -19,13 +21,25 @@ export abstract class Node extends SyntaxElement {
     }
 
     getTextRangeWithoutTrivia(): TextRange {
-        // TODO: bug
-        return this.getTextRange();
+        const firstToken = this.getFirstDescendantPrimitiveToken();
+        const lastToken = this.getLastDescendantPrimitiveToken();
+
+        return new TextRange(
+            this.position + firstToken.textPosition,
+            this.length - firstToken.textPosition - (lastToken.length - lastToken.textPosition - lastToken.text.length)
+        );
     }
 
     getLineTextRangeWithoutTrivia(): LineTextRange {
-        // TODO: bug
-        return this.getLineTextRange();
+        const firstToken = this.getFirstDescendantPrimitiveToken();
+        const lastToken = this.getLastDescendantPrimitiveToken();
+
+        return new LineTextRange(
+            this.startLine + firstToken.textStartLine - 1,
+            firstToken.textStartLine > 1 ? firstToken.textStartColumn : this.startColumn + firstToken.textStartColumn - 1,
+            this.endLine - (lastToken.lineCount - lastToken.textEndLine),
+            lastToken.textEndLine > 1 ? lastToken.textEndColumn : this.startColumn + lastToken.textEndColumn - 1
+        );
     }
 
     private initializeChildren() {
@@ -46,6 +60,24 @@ export abstract class Node extends SyntaxElement {
             currentColumn = primitiveChild.lineCount > 1 ? primitiveChild.lastLineLength + 1 : currentColumn + primitiveChild.length;
         }
     }
+
+    private getFirstDescendantPrimitiveToken(): PrimitiveToken {
+        let currentNode = this.primitive as PrimitiveNode;
+        while (currentNode.children[0] instanceof PrimitiveNode) {
+            currentNode = currentNode.children[0];
+        }
+
+        return currentNode.children[0] as PrimitiveToken;
+    }
+
+    private getLastDescendantPrimitiveToken(): PrimitiveToken {
+        let currentNode = this.primitive as PrimitiveNode;
+        while (currentNode.children[currentNode.children.length - 1] instanceof PrimitiveNode) {
+            currentNode = currentNode.children[currentNode.children.length - 1] as PrimitiveNode;
+        }
+
+        return currentNode.children[currentNode.children.length - 1] as PrimitiveToken;
+    }
 }
 
 
@@ -53,6 +85,9 @@ export abstract class PrimitiveNode extends PrimitiveSyntaxElement {
     readonly children: readonly PrimitiveSyntaxElement[];
     
     constructor(childrenBuilder: ChildrenBuilder) {
+        if (childrenBuilder.children.length === 0)
+            throw new Error("Node must have at least one child.");
+
         super(childrenBuilder.length, childrenBuilder.lineCount, childrenBuilder.lastLineLength, childrenBuilder.syntaxErrors);
         this.children = childrenBuilder.children;
     }

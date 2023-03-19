@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FileLineTextRange } from 'projects/karel/src/lib/assembly/source-map';
 import { Emitter } from 'projects/karel/src/lib/compiler/code-generation/emitter';
 import { Error } from 'projects/karel/src/lib/compiler/errors/error';
 import { ExternalProgramReference } from 'projects/karel/src/lib/compiler/external-program-reference';
@@ -13,6 +14,7 @@ import { CompilationUnitParser } from 'projects/karel/src/lib/compiler/syntax-an
 import { CallStackFrame } from 'projects/karel/src/lib/interpreter/call-stack-frame';
 import { InterpretStopToken } from 'projects/karel/src/lib/interpreter/interpret-stop-token';
 import { Interpreter } from 'projects/karel/src/lib/interpreter/interpreter';
+import { ReadonlyCallStackFrame } from 'projects/karel/src/lib/interpreter/readonly-call-stack-frame';
 import { ExceptionInterpretResult } from 'projects/karel/src/lib/interpreter/results/exception-interpret-result';
 import { Vector } from 'projects/karel/src/lib/math/vector';
 import { CodeFile } from 'projects/karel/src/lib/project/code-file';
@@ -23,7 +25,7 @@ import { TownFile } from 'projects/karel/src/lib/project/town-file';
 import { StandardLibrary } from 'projects/karel/src/lib/standard-library/standard-library';
 import { MutableTown } from 'projects/karel/src/lib/town/town';
 import { Town } from 'projects/karel/src/lib/town/town';
-import { ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
+import { Assembly, Instruction, InterpretResult, NormalInterpretResult, ProjectDeserializer, ProjectSerializer, StopInterpretResult } from 'projects/karel/src/public-api';
 import { BehaviorSubject, combineLatest, debounceTime, forkJoin, map, merge, pairwise, startWith, Subject } from 'rxjs';
 import { SavedProject } from '../../../shared/application/models/saved-project';
 import { ProjectService } from '../../../shared/application/services/project.service';
@@ -41,6 +43,7 @@ export class EditorService {
     private readonly townCamera = new BehaviorSubject(new TownCamera(Vector.ZERO, 1));
     private readonly interpreter = new BehaviorSubject<Interpreter | null>(null);
     private readonly interpretStopToken = new BehaviorSubject<InterpretStopToken | null>(null);
+    private readonly callStack = new BehaviorSubject<readonly ReadonlyCallStackFrame[] | null>(null);
 
     readonly project$ = this.project.asObservable();
     readonly selectedCodeFile$ = this.selectedCodeFile.asObservable();
@@ -50,6 +53,8 @@ export class EditorService {
 
     readonly interpreter$ = this.interpreter.asObservable();
     readonly interpretStopToken$ = this.interpretStopToken.asObservable();
+
+    readonly callStack$ = this.callStack.asObservable();
 
     readonly currentCode$ = this.selectedCodeFile.pipe(map(cf => {
         return cf?.compilationUnit?.buildText() ?? "";
@@ -78,7 +83,21 @@ export class EditorService {
         return errors.filter(e => e.compilationUnit === selectedCodeFile?.compilationUnit);
     }));
 
+    readonly currentRange$ = combineLatest([this.callStack$, this.selectedCodeFile]).pipe(map(([callStack, selectedCodeFile]) => {
+        if (callStack === null || callStack.length === 0 || selectedCodeFile === null)
+            return null;
+
+        const currentRange = this.assembly!.sourceMap.getRangeByInstruction(callStack[callStack.length - 1].currentInstruction);
+
+        if (currentRange.filePath === selectedCodeFile.name)
+            return currentRange.textRange;
+        
+        return null;
+    }));
+
     private availableEntryPoints: readonly string[] = [];
+    private assembly: Assembly | null = null;
+    private willPause = false;
 
     constructor(private readonly dialogService: EditorDialogService, private readonly projectService: ProjectService, 
         private readonly signInService: SignInService, private readonly router: Router, private readonly activatedRoute: ActivatedRoute,
@@ -137,7 +156,7 @@ export class EditorService {
 
     addCodeFile(name: string) {
         const compilationUnit = CompilationUnitParser.parse("// New file", name);
-        const file = new CodeFile(compilationUnit);
+        const file = new CodeFile(compilationUnit, []);
         const newProject = this.project.value.addFile(file);
         this.project.next(newProject);
     }
@@ -184,19 +203,61 @@ export class EditorService {
         }
 
         this.interpreter.next(this.createInterpreter());
-        this.interpretStopToken.next(new InterpretStopToken());
-
-        const interpretResult = await this.interpreter.value!.interpretAll(this.interpretStopToken.value!);
-
-        if (interpretResult instanceof ExceptionInterpretResult)
-            await this.dialogService.showExceptionMessage(interpretResult.exception);
-
-        this.interpreter.next(null);
-        this.interpretStopToken.next(null);
+        this.setInterpreterBreakpoints();
+        await this.continue();
+        this.interpreter.value!.skipBreakpointOnFirstInstruction = true;
     }
 
     stop() {
+        this.willPause = false;
+        const stopToken = this.interpretStopToken.value;
+        if (stopToken !== null)
+            stopToken.stop();
+        else
+            this.setReadyState();
+    }
+
+    pause() {
+        this.willPause = true;
         this.interpretStopToken.value!.stop();
+    }
+
+    async continue() {
+        await this._run(st => this.interpreter.value!.interpretAll(st));
+    }
+
+    async stepInto() {
+        await this._run(st => this.interpreter.value!.interpretStepInto(st));
+    }
+
+    async stepOver() {
+        await this._run(st => this.interpreter.value!.interpretStepOver(st));
+    }
+
+    async stepOut() {
+        await this._run(st => this.interpreter.value!.interpretStepOut(st));
+    }
+
+    private async _run(action: (stopToken: InterpretStopToken) => Promise<InterpretResult>) {
+        this.callStack.next(null);
+        this.interpretStopToken.next(new InterpretStopToken());
+        const result = await action(this.interpretStopToken.value!);
+
+        this.interpretStopToken.next(null);
+        const callStack = this.interpreter.value!.getCallStack();
+
+        const isFullStop = result instanceof NormalInterpretResult && callStack.length === 0 || 
+            result instanceof StopInterpretResult && !this.willPause;
+        if (isFullStop) {
+            this.setReadyState();
+        }
+        else {
+            this.callStack.next(callStack);
+            if (result instanceof ExceptionInterpretResult) {
+                this.callStack.next(result.exception.callStack);
+                await this.dialogService.showExceptionMessage(result.exception);
+            }
+        }
     }
 
     undo() {
@@ -205,6 +266,30 @@ export class EditorService {
 
     redo() {
 
+    }
+
+    private setReadyState() {
+        this.interpreter.next(null);
+        this.callStack.next(null);
+    }
+
+    private setInterpreterBreakpoints() {
+        const breakpointInstructions: Instruction[] = [];
+        
+        for (const file of this.project.value.files) {
+            if (!(file instanceof CodeFile))
+                continue;
+            
+            for (const breakpoint of file.breakpoints) {
+                const breakpointLineInstruction = this.assembly!.sourceMap.getInstructionsByLine(file.name, breakpoint);
+                if (breakpointLineInstruction.length !== 0)
+                    breakpointInstructions.push(breakpointLineInstruction[0]);
+            }
+        }
+
+        //console.log(breakpointInstructions[0]);
+        //console.log(this.assembly?.sourceMap.getRangeByInstruction(breakpointInstructions[0]));
+        this.interpreter.value!.setBreakpoints(breakpointInstructions);
     }
 
     changeCode(code: string) {
@@ -216,7 +301,7 @@ export class EditorService {
         const newProject = this.project.value.replaceFile(this.selectedCodeFile.value, newCodeFile);
         
         this.selectedCodeFile.next(newCodeFile);
-        this.project.next(newProject)
+        this.project.next(newProject);
 
         /*if (!this.availableEntryPoints.includes(this._project.settings.entryPoint)) {
             const newEntryPoint = this.availableEntryPoints[0] ?? "";
@@ -224,6 +309,22 @@ export class EditorService {
             const newProject = this._project.withSettings(newSettings);
             this._project = newProject
         }*/
+    }
+
+    changeBreakpoints(breakpoints: readonly number[]) {
+        if (this.selectedCodeFile.value === null)
+            return;
+
+        console.log(this.selectedCodeFile.value.name + " " + JSON.stringify(breakpoints));
+
+        const newCodeFile = this.selectedCodeFile.value.withBreakpoints(breakpoints);
+        const newProject = this.project.value.replaceFile(this.selectedCodeFile.value, newCodeFile);
+        
+        this.selectedCodeFile.next(newCodeFile);
+        this.project.next(newProject);
+
+        if (this.interpreter.value !== null)
+            this.setInterpreterBreakpoints();
     }
 
     changeTownCamera(townCamera: TownCamera) {
@@ -270,11 +371,11 @@ export class EditorService {
     }
 
     private createInterpreter(): Interpreter {
-        const assembly = Emitter.emit(this.project.value.compilation);
-        const entryPoint = assembly.programs.find(p => p.name === this.project.value.settings.entryPoint)!;
+        this.assembly = Emitter.emit(this.project.value.compilation);
+        const entryPoint = this.assembly.programs.find(p => p.name === this.project.value.settings.entryPoint)!;
         const externalPrograms = StandardLibrary.getPrograms(this.currentTown.value!, () => this.project.value.settings.karelSpeed);
 
-        return new Interpreter(assembly, entryPoint, externalPrograms);
+        return new Interpreter(this.assembly, entryPoint, externalPrograms);
     }
 
     private hasErrors(): boolean {
@@ -313,8 +414,8 @@ end
 `;
 
         const files = [
-            new CodeFile(CompilationUnitParser.parse(code, "Programs")),
-            new CodeFile(CompilationUnitParser.parse(code2, "Programs2")),
+            new CodeFile(CompilationUnitParser.parse(code, "Programs"), []),
+            new CodeFile(CompilationUnitParser.parse(code2, "Programs2"), []),
             new TownFile("Town", Town.createEmpty(20, 20)),
             new TownFile("Town2", Town.createEmpty(10, 10))
         ];

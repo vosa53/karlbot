@@ -11,6 +11,9 @@ export abstract class Trivia {
      * @param text Text. 
      */
     constructor(text: string) {
+        if (text === "")
+            throw new Error("Trivia text can not be empty.");
+        
         this.text = text;
     }
 
