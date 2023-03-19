@@ -5,8 +5,11 @@
     align-items: center;
 }
 
-.wrapper:not(.full-width) {
+.wrapper {
     width: 100%;
+}
+
+.wrapper:not(.full-width) {
     max-width: 1200px;
 }
 

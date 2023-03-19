@@ -22,7 +22,7 @@ export class ChallengeSubmissionComponent {
         else if (this.challengeSubmission.evaluationResult.successRate === 1)
             return "Success";
         else
-            return "Failure";
+            return `Failure (${Math.round(this.challengeSubmission.evaluationResult.successRate * 10000) / 100} %)`;
     }
 
     private createChallengeSubmission(): ChallengeSubmission {
