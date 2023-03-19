@@ -1,6 +1,13 @@
 <app-page *ngIf="challenge !== null" [title]="challenge.name">
     <p>{{challenge.description}}</p>
 
+    <h2 *ngIf="challengeTestCases.length !== 0">Examples</h2>
+    <div *ngFor="let testCase of challengeTestCases" class="test-case">
+        <app-town-view [town]="testCase.inputTown" [camera]="camera" class="test-case-input"></app-town-view>
+        <mat-icon class="test-case-arrow">arrow_right_alt</mat-icon>
+        <app-town-view [town]="testCase.outputTown" [camera]="camera" class="test-case-output"></app-town-view>
+    </div>
+
     <h2>Submissions</h2>
     <button mat-flat-button color="primary" (click)="onSubmitProject()">
         <mat-icon>add</mat-icon>

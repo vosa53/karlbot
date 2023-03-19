@@ -11,22 +11,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
-import { Project, ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
+import { Project, ProjectDeserializer, ProjectSerializer, Vector } from 'projects/karel/src/public-api';
 import { lastValueFrom } from 'rxjs';
 import { SavedProject } from 'projects/application/src/app/shared/application/models/saved-project';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 import { ChallengeSubmissionComponent } from './challenge-submission/challenge-submission.component';
+import { ChallengeTestCase } from 'projects/application/src/app/shared/application/models/challenge-test-case';
+import { TownViewComponent } from 'projects/application/src/app/shared/presentation/components/town-view/town-view.component';
+import { TownCamera } from 'projects/application/src/app/shared/presentation/town/town-camera';
 
 @Component({
     selector: 'app-challenge-page',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent],
+    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent],
     templateUrl: './challenge-page.component.html',
     styleUrls: ['./challenge-page.component.css']
 })
 export class ChallengePageComponent {
     challenge: Challenge | null = null;
+    challengeTestCases: ChallengeTestCase[] = [];
     challengeSubmissions: ChallengeSubmission[] = [];
+    camera = new TownCamera(new Vector(5, 5), 0.7);
 
     constructor(private readonly challengeService: ChallengeService, private readonly challengeSubmissionService: ChallengeSubmissionService,
         private readonly projectService: ProjectService, private readonly signInService: SignInService,
@@ -41,6 +46,7 @@ export class ChallengePageComponent {
             const id = parseInt(idText, 10);
 
             this.challenge = await this.challengeService.getById(id);
+            this.challengeTestCases = this.challenge.testCases!.filter(tc => tc.isPublic);
             this.challengeSubmissions = await this.challengeSubmissionService.get(id, currentUserId);
         });
     }

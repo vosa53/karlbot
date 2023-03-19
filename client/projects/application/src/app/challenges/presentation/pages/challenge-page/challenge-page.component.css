@@ -4,3 +4,21 @@
     gap: 16px;
     margin-top: 16px;
 }
+
+.test-case {
+    margin: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+}
+
+.test-case-input, .test-case-output {
+    width: 250px;
+    height: 250px;
+}
+
+.test-case-arrow {
+    opacity: 0.1;
+    transform: scale(7);
+}
