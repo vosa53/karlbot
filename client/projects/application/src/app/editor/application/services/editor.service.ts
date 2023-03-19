@@ -28,6 +28,7 @@ import { Town } from 'projects/karel/src/lib/town/town';
 import { Assembly, Instruction, InterpretResult, NormalInterpretResult, ProjectDeserializer, ProjectSerializer, StopInterpretResult } from 'projects/karel/src/public-api';
 import { BehaviorSubject, combineLatest, debounceTime, forkJoin, map, merge, pairwise, startWith, Subject } from 'rxjs';
 import { SavedProject } from '../../../shared/application/models/saved-project';
+import { FileService } from '../../../shared/application/services/file-service';
 import { ProjectService } from '../../../shared/application/services/project.service';
 import { SignInService } from '../../../shared/application/services/sign-in.service';
 import { TownCamera } from '../../../shared/presentation/town/town-camera';
@@ -101,7 +102,7 @@ export class EditorService {
 
     constructor(private readonly dialogService: EditorDialogService, private readonly projectService: ProjectService, 
         private readonly signInService: SignInService, private readonly router: Router, private readonly activatedRoute: ActivatedRoute,
-        private readonly location: Location) {
+        private readonly location: Location, private readonly fileService: FileService) {
         this.selectedTownFile.pipe(pairwise()).subscribe(([oldValue, newValue]) => {
             if (oldValue !== null) {
                 const newTown = this.currentTown.value!.toImmutable();
@@ -152,6 +153,26 @@ export class EditorService {
             savedProject = await this.projectService.getById(toSave.id);
         }
         this.savedProject.next(savedProject);
+    }
+
+    async importProject() {
+        const projectFile = await this.fileService.open();
+        if (projectFile === null)
+            return;
+
+        const projectFileText = await projectFile.text();
+        try {
+            const project = ProjectDeserializer.deserialize(projectFileText, StandardLibrary.getProgramReferences());
+            this.project.next(project);
+        } catch {
+            alert("Invalid project file");
+        }
+    }
+
+    async exportProject() {
+        const projectFileText = ProjectSerializer.serialize(this.project.value);
+        const projectFile = new window.File([projectFileText], this.project.value.name + ".kbp");
+        await this.fileService.save(projectFile);
     }
 
     addCodeFile(name: string) {
