@@ -1,5 +1,5 @@
 <app-page *ngIf="challenge !== null" [title]="challenge.name">
-    <p>{{challenge.description}}</p>
+    <div [appMarkdown]="challenge.description"></div>
 
     <h2 *ngIf="challengeTestCases.length !== 0">Examples</h2>
     <div *ngFor="let testCase of challengeTestCases" class="test-case">
