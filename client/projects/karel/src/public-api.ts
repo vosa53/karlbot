@@ -109,7 +109,9 @@ export * from './lib/standard-library/standard-library';
 export * from './lib/text/line-text-range';
 export * from './lib/text/text-range';
 
+export * from './lib/town/town-deserializer';
 export * from './lib/town/town-direction-utils';
 export * from './lib/town/town-direction';
+export * from './lib/town/town-serializer';
 export * from './lib/town/town-tile';
 export * from './lib/town/town';

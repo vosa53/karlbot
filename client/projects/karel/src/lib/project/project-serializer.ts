@@ -1,4 +1,5 @@
 import { Town } from "../town/town";
+import { TownSerializer } from "../town/town-serializer";
 import { CodeFile } from "./code-file";
 import { File } from "./file";
 import { Project } from "./project";
@@ -57,25 +58,7 @@ export class ProjectSerializer {
         return {
             type: "town",
             name: file.name,
-            town: this.serializeTown(file.town)
-        };
-    }
-
-    private static serializeTown(town: Town): any {
-        return {
-            width: town.width,
-            height: town.height,
-            karelPosition: {
-                x: town.karelPosition.x,
-                y: town.karelPosition.y
-            },
-            karelDirection: town.karelDirection,
-            homePosition: {
-                x: town.homePosition.x,
-                y: town.homePosition.y
-            },
-            tiles: town.getTiles(),
-            signCounts: town.getSignCounts()
+            town: TownSerializer.serializeTown(file.town)
         };
     }
 }

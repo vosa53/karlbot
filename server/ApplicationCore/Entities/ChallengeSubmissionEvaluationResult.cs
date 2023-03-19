@@ -6,11 +6,5 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Entities
 {
-    public enum ChallengeSubmissionEvaluationState
-    {
-        InProgress,
-        Success,
-        Failure,
-        SystemError
-    }
+    public record ChallengeSubmissionEvaluationResult(double SuccessRate, string Message);
 }

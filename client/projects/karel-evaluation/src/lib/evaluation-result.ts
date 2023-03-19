@@ -1,9 +1,9 @@
 export class EvaluationResult {
-    readonly success: boolean;
+    readonly successRate: number;
     readonly message: string;
 
-    constructor(success: boolean, message: string) {
-        this.success = success;
+    constructor(successRate: number, message: string) {
+        this.successRate = successRate;
         this.message = message;
     }
 }

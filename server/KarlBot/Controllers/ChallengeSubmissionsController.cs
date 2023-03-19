@@ -67,15 +67,9 @@ namespace KarlBot.Controllers
             var submission = new ChallengeSubmission(challengeId, userId, dataModel.ProjectFile);
 
             var evaluator = new ChallengeEvaluator();
-            var evaluationResult = await evaluator.EvaluateAsync(submission.ProjectFile, challenge.EvaluationCode);
+            var evaluationResult = await evaluator.EvaluateAsync(submission.ProjectFile, challenge.TestCases!);
 
-            submission.EvaluationState = evaluationResult.type switch
-            {
-                ChallengeEvaluationResultType.Success => ChallengeSubmissionEvaluationState.Success,
-                ChallengeEvaluationResultType.Failure => ChallengeSubmissionEvaluationState.Failure,
-                ChallengeEvaluationResultType.SystemError => ChallengeSubmissionEvaluationState.SystemError
-            };
-            submission.EvaluationMessage = evaluationResult.message;
+            submission.EvaluationResult = new ChallengeSubmissionEvaluationResult(evaluationResult.SuccessRate, evaluationResult.Message);
 
             await _challengeSubmissionRepository.AddAsync(submission);
 
@@ -91,8 +85,16 @@ namespace KarlBot.Controllers
                 Id = submission.Id,
                 UserId = submission.UserId,
                 ProjectFile = submission.ProjectFile,
-                EvaluationState = submission.EvaluationState,
-                EvaluationMessage = isAdmin || submission.EvaluationState != ChallengeSubmissionEvaluationState.SystemError ? submission.EvaluationMessage : ""
+                EvaluationResult = submission.EvaluationResult != null ? ToDataModel(submission.EvaluationResult) : null
+            };
+        }
+
+        private ChallengeSubmissionEvaluationResultDataModel ToDataModel(ChallengeSubmissionEvaluationResult submissionEvaluationResult)
+        {
+            return new ChallengeSubmissionEvaluationResultDataModel
+            {
+                SuccessRate = submissionEvaluationResult.SuccessRate,
+                Message = submissionEvaluationResult.Message
             };
         }
     }

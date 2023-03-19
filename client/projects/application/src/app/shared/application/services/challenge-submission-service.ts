@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
 import { API_BASE_URL } from '../api-base-url';
 import { ChallengeSubmission } from '../models/challenge-submission';
-import { ChallengeSubmissionEvaluationState } from '../models/challenge-submission-evaluation-state';
+import { ChallengeSubmissionEvaluationResult } from '../models/challenge-submission-evaluation-result';
 import { ApiService } from './api-service';
 
 @Injectable({
@@ -43,8 +43,7 @@ export class ChallengeSubmissionService {
             id: challengeSubmission.id,
             userId: challengeSubmission.userId,
             projectFile: ProjectSerializer.serialize(challengeSubmission.project),
-            evaluationState: challengeSubmission.evaluationState,
-            evaluationMessage: challengeSubmission.evaluationMessage
+            evaluationResult: challengeSubmission.evaluationResult
         };
     }
 
@@ -53,8 +52,7 @@ export class ChallengeSubmissionService {
             id: dto.id,
             userId: dto.userId,
             project: ProjectDeserializer.deserialize(dto.projectFile, []),
-            evaluationState: dto.evaluationState,
-            evaluationMessage: dto.evaluationMessage
+            evaluationResult: dto.evaluationResult
         };
     }
 }
@@ -63,6 +61,5 @@ interface ChallengeSubmissionDTO {
     readonly id: number;
     readonly userId: string;
     readonly projectFile: string;
-    readonly evaluationState: ChallengeSubmissionEvaluationState;
-    readonly evaluationMessage: string;
+    readonly evaluationResult: ChallengeSubmissionEvaluationResult | null;
 }

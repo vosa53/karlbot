@@ -1,4 +1,24 @@
-.form {
+.inputs {
     display: flex;
     flex-direction: column;
+}
+
+.add-button {
+    display: block;
+    margin: 16px 0;
+}
+
+.save-button {
+    margin: 16px 0;
+}
+
+.test-case-description {
+    display: flex;
+    justify-content: end;
+}
+
+.test-case-description-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }

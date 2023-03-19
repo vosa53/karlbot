@@ -1,0 +1,25 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.towns {
+    flex-grow: 1;
+    display: flex;
+    height: 100%;
+    gap: 20px;
+}
+
+.town {
+    flex-grow: 1;
+    height: 100%;
+}
+
+.checks-title {
+    margin: 0;
+}
+
+.checks {
+    margin: 8px 0;
+}

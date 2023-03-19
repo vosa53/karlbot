@@ -8,6 +8,6 @@
 
         public string Description { get; set; }
 
-        public string? EvaluationCode { get; set; }
+        public IList<ChallengeTestCaseDataModel>? TestCases { get; set; }
     }
 }

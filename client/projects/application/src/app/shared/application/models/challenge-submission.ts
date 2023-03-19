@@ -1,10 +1,9 @@
 import { Project } from "projects/karel/src/public-api";
-import { ChallengeSubmissionEvaluationState } from "./challenge-submission-evaluation-state";
+import { ChallengeSubmissionEvaluationResult } from "./challenge-submission-evaluation-result";
 
 export interface ChallengeSubmission {
     readonly id: number;
     readonly userId: string;
     readonly project: Project;
-    readonly evaluationState: ChallengeSubmissionEvaluationState;
-    readonly evaluationMessage: string;
+    readonly evaluationResult: ChallengeSubmissionEvaluationResult | null;
 }

@@ -2,6 +2,7 @@ import { ExternalProgramReference } from "../compiler/external-program-reference
 import { CompilationUnitParser } from "../compiler/syntax-analysis/compilation-unit-parser";
 import { Vector } from "../math/vector";
 import { Town } from "../town/town";
+import { TownDeserializer } from "../town/town-deserializer";
 import { CodeFile } from "./code-file";
 import { File } from "./file";
 import { Project } from "./project";
@@ -51,19 +52,7 @@ export class ProjectDeserializer {
     }
 
     private static deserializeTownFile(file: any): TownFile {
-        const town = this.deserializeTown(file.town);
+        const town = TownDeserializer.deserializeTown(file.town);
         return new TownFile(file.name, town);
-    }
-
-    private static deserializeTown(town: any): Town {
-        return Town.create(
-            town.width,
-            town.height,
-            new Vector(town.karelPosition.x, town.karelPosition.y),
-            town.karelDirection,
-            new Vector(town.homePosition.x, town.homePosition.y),
-            town.tiles,
-            town.signCounts
-        );
     }
 }

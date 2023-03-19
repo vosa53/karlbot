@@ -13,7 +13,6 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
 import { Project, ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
 import { lastValueFrom } from 'rxjs';
-import { ChallengeSubmissionEvaluationState } from 'projects/application/src/app/shared/application/models/challenge-submission-evaluation-state';
 import { SavedProject } from 'projects/application/src/app/shared/application/models/saved-project';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 import { ChallengeSubmissionComponent } from './challenge-submission/challenge-submission.component';
@@ -56,8 +55,7 @@ export class ChallengePageComponent {
             id: 0,
             userId: currentUser!.id,
             project: project,
-            evaluationState: ChallengeSubmissionEvaluationState.inProgress,
-            evaluationMessage: ""
+            evaluationResult: null
         }
         await this.challengeSubmissionService.add(this.challenge!.id, submission);
         this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUser!.id);

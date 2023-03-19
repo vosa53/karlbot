@@ -19,35 +19,35 @@ namespace Infrastructure.Repositories
             DbSet = DbContext.Set<T>();
         }
 
-        public async Task<List<T>> GetAsync()
+        public virtual async Task<List<T>> GetAsync()
         {
             return await DbSet.ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(K id)
+        public virtual async Task<T?> GetByIdAsync(K id)
         {
             return await DbSet.FindAsync(id).AsTask();
         }
 
-        public async Task<bool> ExistsByIdAsync(K id)
+        public virtual async Task<bool> ExistsByIdAsync(K id)
         {
             var entity = await DbSet.FindAsync(id);
             return entity != null;
         }
 
-        public async Task AddAsync(T entity)
+        public virtual async Task AddAsync(T entity)
         {
             DbSet.Add(entity);
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(T entity)
+        public virtual async Task RemoveAsync(T entity)
         {
             DbSet.Remove(entity);
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             DbSet.Update(entity);
             await DbContext.SaveChangesAsync();

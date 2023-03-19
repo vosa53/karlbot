@@ -41,7 +41,11 @@ namespace KarlBot.Controllers
         [HttpPost]
         public async Task<ActionResult> AddAsync(ChallengeDataModel dataModel)
         {
-            var challenge = new Challenge(dataModel.Name, dataModel.Description, dataModel.EvaluationCode);
+            if (dataModel.TestCases == null)
+                return BadRequest();
+
+            var challengeTestCases = dataModel.TestCases?.Select(tc => ToTestCase(tc)).ToList();
+            var challenge = new Challenge(dataModel.Name, dataModel.Description, challengeTestCases);
             await _challengeRepository.AddAsync(challenge);
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id = challenge.Id }, ToDataModel(challenge));
@@ -53,6 +57,8 @@ namespace KarlBot.Controllers
         {
             if (id != dataModel.Id)
                 return BadRequest();
+            if (dataModel.TestCases == null)
+                return BadRequest();
 
             var challenge = await _challengeRepository.GetByIdAsync(id);
             if (challenge == null)
@@ -60,7 +66,7 @@ namespace KarlBot.Controllers
 
             challenge.Name = dataModel.Name;
             challenge.Description = dataModel.Description;
-            challenge.EvaluationCode = dataModel.EvaluationCode;
+            challenge.TestCases = dataModel.TestCases?.Select(tc => ToTestCase(tc)).ToList();
 
             await _challengeRepository.UpdateAsync(challenge);
 
@@ -89,8 +95,32 @@ namespace KarlBot.Controllers
                 Id = challenge.Id,
                 Name = challenge.Name,
                 Description = challenge.Description,
-                EvaluationCode = isAdmin ? challenge.EvaluationCode : null
+                TestCases = challenge.TestCases?.Where(tc => tc.IsPublic || isAdmin)?.Select(tc => ToDataModel(tc)).ToList()
             };
+        }
+
+        private ChallengeTestCaseDataModel ToDataModel(ChallengeTestCase testCase)
+        {
+            return new ChallengeTestCaseDataModel
+            {
+                InputTown = testCase.InputTown,
+                OutputTown = testCase.OutputTown,
+                CheckKarelPosition = testCase.CheckKarelPosition,
+                CheckKarelDirection = testCase.CheckKarelDirection,
+                CheckSigns = testCase.CheckSigns,
+                IsPublic = testCase.IsPublic
+            };
+        }
+
+        private ChallengeTestCase ToTestCase(ChallengeTestCaseDataModel dataModel)
+        {
+            return new ChallengeTestCase(
+                dataModel.InputTown,
+                dataModel.OutputTown,
+                dataModel.CheckKarelPosition,
+                dataModel.CheckKarelDirection,
+                dataModel.CheckSigns,
+                dataModel.IsPublic);
         }
     }
 }

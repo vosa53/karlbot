@@ -14,13 +14,17 @@ namespace ApplicationCore.Entities
 
         public string Description { get; set; }
 
-        public string EvaluationCode { get; set; }
+        public IList<ChallengeTestCase>? TestCases { get; set; }
 
-        public Challenge(string name, string description, string evaluationCode)
+        public Challenge(string name, string description, IList<ChallengeTestCase>? testCases)
         {
             Name = name;
             Description = description;
-            EvaluationCode = evaluationCode;
+            TestCases = testCases;
+        }
+
+        public Challenge()
+        {
         }
     }
 }

@@ -1,0 +1,15 @@
+<ng-container *ngIf="testCase !== null">
+    <h4 class="checks-title">Check</h4>
+    <mat-chip-listbox class="checks" multiple>
+        <mat-chip-option [selected]="testCase.checkKarelPosition" (selectionChange)="onCheckKarelPositionChange($event.selected)">Position of Karel</mat-chip-option>
+        <mat-chip-option [selected]="testCase.checkKarelDirection" (selectionChange)="onCheckKarelDirectionChange($event.selected)">Direction of Karel</mat-chip-option>
+        <mat-chip-option [selected]="testCase.checkSigns" (selectionChange)="onCheckSignsChange($event.selected)">Sign counts</mat-chip-option>
+    </mat-chip-listbox>
+
+    <div class="towns">
+        <app-town-editor class="town" [town]="testCase.inputTown" [camera]="townCamera"
+            (cameraChange)="onTownCameraChange($event)"></app-town-editor>
+        <app-town-editor class="town" [town]="testCase.outputTown" [camera]="townCamera"
+            (cameraChange)="onTownCameraChange($event)"></app-town-editor>
+    </div>
+</ng-container>

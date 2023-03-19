@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FirebaseAdmin.Messaging;
+using ApplicationCore.Entities;
+using System.Text.Json;
 
 namespace Infrastructure
 {
@@ -15,101 +17,60 @@ namespace Infrastructure
         private static readonly string KAREL_LIBRARY = File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel\dist\bundle.js");
         private static readonly string KAREL_EVALUATION_LIBRARY = File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel-evaluation\dist\bundle.js");
 
-        public async Task<ChallengeEvaluationResult> EvaluateAsync(string projectFile, string evaluationCode)
+        public async Task<ChallengeEvaluationResult> EvaluateAsync(string projectFile, IList<ChallengeTestCase> testCases)
         {
-            return await EvaluateLoopingProtectionAsync(projectFile, evaluationCode);
-        }
-
-        private async Task<ChallengeEvaluationResult> EvaluateLoopingProtectionAsync(string projectFile, string evaluationCode)
-        {
-            var scriptCancellationTokenSource = new CancellationTokenSource();
-            var timeoutCancellationTokenSource = new CancellationTokenSource();
-            Task.Delay(3000, timeoutCancellationTokenSource.Token).ContinueWith((t) =>
-            {
-                scriptCancellationTokenSource.Cancel();
-            });
-
+            using var engine = new V8ScriptEngine();
             try
             {
-                var result = await EvaluateErrorProtectionAsync(projectFile, evaluationCode, scriptCancellationTokenSource.Token);
-                timeoutCancellationTokenSource.Cancel();
-                return result;
-            }
-            catch (ScriptInterruptedException exception)
-            {
-                return new ChallengeEvaluationResult(ChallengeEvaluationResultType.SystemError, "Timeout");
-            }
-        }
-
-        private async Task<ChallengeEvaluationResult> EvaluateErrorProtectionAsync(string projectFile, string evaluationCode, CancellationToken cancellationToken)
-        {
-            try
-            {
-                return await EvaluateInternalAsync(projectFile, evaluationCode, cancellationToken);
+                return await EvaluateInternalAsync(engine, projectFile, testCases);
             }
             catch (ScriptEngineException exception)
             {
-                return new ChallengeEvaluationResult(ChallengeEvaluationResultType.SystemError, exception.ScriptException.stack);
+                throw CreateEvaluationScriptErrorException(exception.ScriptException);
             }
         }
 
-        private Task<ChallengeEvaluationResult> EvaluateInternalAsync(string projectFile, string evaluationCode, CancellationToken cancellationToken)
+        private Task<ChallengeEvaluationResult> EvaluateInternalAsync(V8ScriptEngine engine, string projectFile, IList<ChallengeTestCase> testCases)
         {
-            var engine = new V8ScriptEngine();
-
-            var wasDisposed = false;
-            var disposeEngineLock = new object();
-            void StopAndDisposeEngine()
-            {
-                lock (disposeEngineLock)
-                {
-                    if (!wasDisposed)
-                    {
-                        engine.Interrupt();
-                        engine.Dispose();
-                        wasDisposed = true;
-                    }
-                }
-            }
-
-            cancellationToken.Register(() => StopAndDisposeEngine());
-
             engine.Evaluate(KAREL_LIBRARY);
-            engine.Evaluate(KAREL_EVALUATION_LIBRARY);
-            engine.Evaluate(evaluationCode);
+            engine.Evaluate(File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel-evaluation\dist\bundle.js"));
 
             var taskCompletionSource = new TaskCompletionSource<ChallengeEvaluationResult>();
 
             Action<dynamic> resolveHandler = r =>
             {
-                var isSuccess = r.success;
+                var successRate = r.successRate;
                 var message = r.message;
-                var result = new ChallengeEvaluationResult(isSuccess ? ChallengeEvaluationResultType.Success : ChallengeEvaluationResultType.Failure, message);
-                StopAndDisposeEngine();
+                var result = new ChallengeEvaluationResult(successRate, message);
                 taskCompletionSource.SetResult(result);
             };
 
             Action<dynamic> rejectHandler = e =>
             {
-                var errorMessage = e.stack;
-                var result = new ChallengeEvaluationResult(ChallengeEvaluationResultType.SystemError, errorMessage);
-                StopAndDisposeEngine();
-                taskCompletionSource.SetResult(result);
+                taskCompletionSource.SetException(CreateEvaluationScriptErrorException(e));
             };
 
-            var resultPromise = engine.Script.karelEvaluation._evaluate(projectFile);
+            var evaluationScriptTestCases = testCases.Select(tc => new
+            {
+                inputTown = tc.InputTown,
+                outputTown = tc.OutputTown,
+                checkKarelPosition = tc.CheckKarelPosition,
+                checkKarelDirection = tc.CheckKarelDirection,
+                checkSigns = tc.CheckSigns
+            }).ToArray();
+
+            var resultPromise = engine.Script.karelEvaluation.evaluate(projectFile, JsonSerializer.Serialize(evaluationScriptTestCases));
             resultPromise.then(resolveHandler, rejectHandler);
 
             return taskCompletionSource.Task;
         }
+
+        private Exception CreateEvaluationScriptErrorException(dynamic scriptError)
+        {
+            var errorMessage = scriptError.stack;
+            return new Exception("Error in challenge evaluation script: " + errorMessage);
+        }
     }
 
-    public record ChallengeEvaluationResult(ChallengeEvaluationResultType type, string message);
-
-    public enum ChallengeEvaluationResultType
-    {
-        Success,
-        Failure,
-        SystemError
-    }
+    public record ChallengeEvaluationResult(double SuccessRate, string Message);
 }

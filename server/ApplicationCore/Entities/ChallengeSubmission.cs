@@ -14,15 +14,13 @@ namespace ApplicationCore.Entities
         public string UserId { get; set; }
         public User User { get; set; }
         public string ProjectFile { get; set; }
-        public ChallengeSubmissionEvaluationState EvaluationState { get; set; }
-        public string EvaluationMessage { get; set; }
+        public ChallengeSubmissionEvaluationResult? EvaluationResult { get; set; }
 
         public ChallengeSubmission(int challengeId, string userId, string projectFile)
         {
             ChallengeId = challengeId;
             UserId = userId;
             ProjectFile = projectFile;
-            EvaluationMessage = "";
         }
     }
 }

@@ -1,4 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
+import { TownDeserializer } from 'projects/karel/src/lib/town/town-deserializer';
+import { TownSerializer } from 'projects/karel/src/lib/town/town-serializer';
 import { API_BASE_URL } from '../api-base-url';
 import { Challenge } from '../models/challenge';
 import { ApiService } from './api-service';
@@ -46,7 +48,14 @@ export class ChallengeService {
             id: challenge.id,
             name: challenge.name,
             description: challenge.description,
-            evaluationCode: challenge.evaluationCode ?? undefined
+            testCases: challenge.testCases?.map(tc => ({
+                inputTown: TownSerializer.serialize(tc.inputTown),
+                outputTown: TownSerializer.serialize(tc.outputTown),
+                checkKarelPosition: tc.checkKarelPosition,
+                checkKarelDirection: tc.checkKarelDirection,
+                checkSigns: tc.checkSigns,
+                isPublic: tc.isPublic
+            })) ?? null
         };
     }
 
@@ -55,14 +64,30 @@ export class ChallengeService {
             id: dto.id, 
             name: dto.name,
             description: dto.description,
-            evaluationCode: dto.evaluationCode ?? null
+            testCases: dto.testCases?.map(tc => ({
+                inputTown: TownDeserializer.deserialize(tc.inputTown),
+                outputTown: TownDeserializer.deserialize(tc.outputTown),
+                checkKarelPosition: tc.checkKarelPosition,
+                checkKarelDirection: tc.checkKarelDirection,
+                checkSigns: tc.checkSigns,
+                isPublic: tc.isPublic
+            })) ?? null
         };
     }
 }
 
 interface ChallengeDTO {
-    id: number;
-    name: string;
-    description: string;
-    evaluationCode?: string;
+    readonly id: number;
+    readonly name: string;
+    readonly description: string;
+    readonly testCases: ChallengeTestCaseDTO[] | null;
+}
+
+interface ChallengeTestCaseDTO {
+    readonly inputTown: string;
+    readonly outputTown: string;
+    readonly checkKarelPosition: boolean;
+    readonly checkKarelDirection: boolean;
+    readonly checkSigns: boolean;
+    readonly isPublic: boolean;
 }

@@ -4,9 +4,9 @@
         <mat-card-subtitle>Mar 13, 2023</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <p>{{challengeSubmission.evaluationMessage}}</p>
+        <p>{{challengeSubmission.evaluationResult?.message}}</p>
     </mat-card-content>
-    <mat-card-footer *ngIf="challengeSubmission.evaluationState === 'inProgress'">
+    <mat-card-footer *ngIf="challengeSubmission.evaluationResult === null">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </mat-card-footer>
 </mat-card>
