@@ -1,8 +1,16 @@
 .menu {
+    overflow-x: auto;
+    overflow-y: hidden;
     background: var(--background-tertiary);
     height: 36px;
 }
 
 .toolbar {
+    overflow-x: auto;
+    overflow-y: hidden;
     height: 56px;
+}
+
+.toolbar > *, .menu > * {
+    flex-shrink: 0;
 }

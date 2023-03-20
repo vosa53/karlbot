@@ -8,6 +8,7 @@ import { Extension } from "@codemirror/state";
  */
 export const applicationThemeLight = EditorView.theme({
     "&.cm-editor": { color: "#263238" },
+    ".cm-gutters": { background: "#fafafa" },
     ".cm-lineNumbers": { color: "#B0BEC5" },
     ".cm-cursor": { borderLeftColor: "#263238" },
     ".cm-activeLine": { outlineColor: "#4a4a4a11" },

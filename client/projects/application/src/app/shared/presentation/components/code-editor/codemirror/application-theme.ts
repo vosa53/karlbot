@@ -8,9 +8,9 @@ import { Extension } from "@codemirror/state";
  */
 export const applicationTheme = EditorView.baseTheme({
     "&.cm-editor": { background: "transparent", height: "100%" },
+    ".cm-gutters": { borderRight: "none", fontFamily: "'Roboto Mono', monospace" },
     ".cm-activeLine": { background: "none" },
     ".cm-scroller": { overflow: "auto" },
-    ".cm-gutters": { background: "transparent", borderRight: "none", fontFamily: "'Roboto Mono', monospace" },
     ".cm-content": { fontFamily: "'Roboto Mono', monospace" },
     "&.cm-focused": { outline: "none" },
     "& .cm-lineNumbers .cm-gutterElement": { paddingLeft: "8px" },
