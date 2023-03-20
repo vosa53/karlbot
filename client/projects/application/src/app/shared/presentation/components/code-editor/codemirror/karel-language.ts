@@ -14,7 +14,7 @@ export const karelLanguage = LRLanguage.define({
                 SingleLineComment: t.lineComment,
                 MultiLineComment: t.blockComment,
                 Number: t.number,
-                "program if while repeat end": t.controlKeyword,
+                "program if while repeat times end": t.controlKeyword,
                 Operator: t.operatorKeyword,
             })/*,
             indentNodeProp.add({

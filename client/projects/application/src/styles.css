@@ -11,6 +11,10 @@ body {
     border-bottom: none !important;
 }
 
+.transparent-form-background .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background: transparent;
+}
+
 .tab-full-height .mat-mdc-tab-body-wrapper {
     flex-grow: 1;
 }

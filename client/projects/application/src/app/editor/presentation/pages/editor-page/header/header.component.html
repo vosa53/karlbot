@@ -74,7 +74,7 @@
         <mat-icon>redo</mat-icon>
     </button>
 
-    <mat-form-field *ngIf="editorState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="disable-form-underline">
+    <mat-form-field *ngIf="editorState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="disable-form-underline transparent-form-background">
         <mat-label>Entry point</mat-label>
         <mat-select [value]="entryPoint" (selectionChange)="entryPointChange.emit($event.value)">
             <mat-option *ngFor="let availableEntryPoint of availableEntryPoints" [value]="availableEntryPoint">

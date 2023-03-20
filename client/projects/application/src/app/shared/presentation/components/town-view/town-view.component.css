@@ -7,5 +7,5 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    background: url("/assets/shared/presentation/components/town-view/background-white.png");
+    background: var(--background-designer);
 }

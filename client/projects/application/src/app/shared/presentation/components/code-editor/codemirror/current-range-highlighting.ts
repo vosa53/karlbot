@@ -35,7 +35,8 @@ const currentRangeField = StateField.define<DecorationSet>({
 const currentRangeMark = Decoration.mark({ class: "cm-current-range" });
 
 const currentRangeTheme = EditorView.baseTheme({
-    ".cm-current-range": { background: "rgba(252, 215, 3, 0.5)" }
+    "&light .cm-current-range": { background: "#FDD83566", outline: "solid 1px #FDD83566" },
+    "&dark .cm-current-range": { background: "#C0CA3366", outline: "solid 1px #C0CA3366" }
 });
 
 export function setCurrentRange(state: EditorState, currentRange: LineTextRange | null): TransactionSpec {

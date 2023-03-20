@@ -1,5 +1,5 @@
 <app-panel header="File explorer" class="panel">
-    <mat-list class="list">
+    <mat-nav-list class="list">
         <mat-list-item *ngFor="let file of files" (click)="fileSelect.emit(file)" [class.selected]="file === selectedCodeFile || file === selectedTownFile">
             <img matListItemIcon [src]="getFileIconURL(file)" class="file-icon">
             <div matListItemTitle>{{file.name}}</div>
@@ -17,7 +17,7 @@
                 </button>
             </mat-menu>
         </mat-list-item>
-    </mat-list>
+    </mat-nav-list>
 
     <button mat-fab color="secondary" class="add" [matMenuTriggerFor]="addMenu">
         <mat-icon>add</mat-icon>

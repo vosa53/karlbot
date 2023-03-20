@@ -12,11 +12,15 @@ import { CompletionItemType } from "projects/karel/src/lib/compiler/language-ser
 import { CommonModule } from "@angular/common";
 import { LineTextRange } from "projects/karel/src/public-api";
 import { Decoration, DecorationSet } from "@codemirror/view"
-import { StateField, StateEffect } from "@codemirror/state"
+import { Compartment } from "@codemirror/state"
 import { codeCompletion } from "./codemirror/code-completion";
 import { setErrors } from "./codemirror/error-highlighting";
 import { currentRangeHighlighting, setCurrentRange } from "./codemirror/current-range-highlighting";
 import { breakpoints, breakpointsChanged, getBreakpoints, setBreakpoints } from "./codemirror/breakpoints";
+import { applicationStyle } from "./codemirror/application-theme";
+import { applicationStyleDark } from "./codemirror/application-theme-dark";
+import { tabKeymap } from "./codemirror/tab-keymap";
+import { ColorTheme, ColorThemeService } from "../../../application/services/color-theme.service";
 
 
 @Component({
@@ -83,9 +87,14 @@ export class CodeEditorComponent implements AfterViewInit {
     private _breakpoints: readonly number[] = [];
     private breakpointsInEditor: readonly number[] = [];
     private editorView: EditorView | null = null;
+    private readonly editorTheme = new Compartment();
+    private colorTheme = ColorTheme.light; 
 
-    constructor(private readonly hostElement: ElementRef) {
-
+    constructor(private readonly hostElement: ElementRef, private readonly colorThemeService: ColorThemeService) {
+        this.colorThemeService.colorTheme$.subscribe(ct => {
+            this.colorTheme = ct;
+            this.updateTheme();
+        });
     }
 
     ngAfterViewInit(): void {
@@ -94,9 +103,10 @@ export class CodeEditorComponent implements AfterViewInit {
             extensions: [
                 currentRangeHighlighting(),
                 breakpoints(),
-                keymap.of(defaultKeymap),
+                keymap.of([...defaultKeymap, ...tabKeymap]),
                 basicSetup,
-                applicationStyleLight,
+                applicationStyle,
+                this.editorTheme.of(this.colorThemeToStyle(this.colorTheme)),
                 karel(),
                 codeCompletion((line, column) => this.completionItemsProvider(line, column)),
                 EditorView.updateListener.of(u => this.onEditorViewUpdate(u))
@@ -144,5 +154,20 @@ export class CodeEditorComponent implements AfterViewInit {
             this.breakpointsInEditor = this.breakpoints;
             this.editorView.dispatch(setBreakpoints(this.editorView.state, this.breakpoints));
         }
+    }
+
+    private updateTheme() {
+        if (this.editorView !== null) {
+            this.editorView.dispatch({
+                effects: this.editorTheme.reconfigure(this.colorThemeToStyle(this.colorTheme))
+            });
+        }
+    }
+
+    private colorThemeToStyle(colorTheme: ColorTheme) {
+        if (colorTheme === ColorTheme.light)
+            return applicationStyleLight;
+        else
+            return applicationStyleDark;
     }
 }

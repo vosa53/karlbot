@@ -6,10 +6,8 @@ type CompletionItemsProvider = (line: number, column: number) => CompletionItem[
 
 function handler(context: CompletionContext, completionItemsProvider: CompletionItemsProvider) {
     const identifier = context.matchBefore(/[a-zA-Z][a-zA-Z0-9]*/);
-    if (identifier === null)
+    if ((identifier === null || identifier.from == identifier.to) && !context.explicit)
         return null;
-    if (identifier.from == identifier.to && !context.explicit)
-        return null
 
     const line = context.state.doc.lineAt(context.pos);
     const lineNumber = line.number;
@@ -20,11 +18,11 @@ function handler(context: CompletionContext, completionItemsProvider: Completion
             label: ci.text,
             detail: ci.description,
             info: ci.title,
-            type: ci.type === CompletionItemType.program ? "program" : "externalProgram"
+            type: ci.type === CompletionItemType.program ? "function" : "class"
         };
     });
     return {
-        from: identifier.from,
+        from: identifier?.from ?? context.pos,
         options: codemirrorCompletionItems
     };
 }

@@ -41,7 +41,7 @@ export class EditorService {
     private readonly selectedCodeFile = new BehaviorSubject<CodeFile | null>(null);
     private readonly selectedTownFile = new BehaviorSubject<TownFile | null>(null);
     private readonly currentTown = new BehaviorSubject<MutableTown | null>(null);
-    private readonly townCamera = new BehaviorSubject(new TownCamera(Vector.ZERO, 1));
+    private readonly townCamera = new BehaviorSubject(new TownCamera(new Vector(10, 10), 1));
     private readonly interpreter = new BehaviorSubject<Interpreter | null>(null);
     private readonly interpretStopToken = new BehaviorSubject<InterpretStopToken | null>(null);
     private readonly callStack = new BehaviorSubject<readonly ReadonlyCallStackFrame[] | null>(null);
@@ -405,7 +405,10 @@ export class EditorService {
     }
 
     private createNewProject(): Project {
-        const code = `program DFS
+        const code = `/**
+ * Karel program doing a depth first search algorithm.
+ */
+program DFS
     put
     repeat 4 times
         if not wall
