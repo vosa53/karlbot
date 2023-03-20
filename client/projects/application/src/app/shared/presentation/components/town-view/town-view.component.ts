@@ -55,6 +55,8 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild("canvas", { static: true })
     private readonly canvasElementRef!: ElementRef<HTMLCanvasElement>;
+    private readonly canvasResizeObserver = new ResizeObserver(() => this.updateRenderingEnvironment());
+    private canvasRenderingContext: CanvasRenderingContext2D | null = null;
     private readonly renderers: { renderer: TownViewRenderer, order: number }[] = [];
     private requestAnimationFrameId: number | null = null;
 
@@ -62,12 +64,12 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
         this.updateRenderingEnvironment();
 
         const canvasElement = this.canvasElementRef.nativeElement;
-        const canvasContext = canvasElement.getContext("2d");
-        if (canvasContext === null)
-            throw new Error("Can not get a canvas 2d rendering context.")
+        this.canvasRenderingContext = canvasElement.getContext("2d");
+        if (this.canvasRenderingContext === null)
+            throw new Error("Can not get a canvas 2d rendering context.");
 
         const animationFrameCallback = () => {
-            this.render(canvasContext);
+            this.render(this.canvasRenderingContext!);
             this.requestAnimationFrameId = requestAnimationFrame(animationFrameCallback);
 
         };
@@ -77,16 +79,15 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
             if (this.town !== null)
                 TownRenderer.render(c, this.renderingEnvironment, this.town);
         });
+
+        this.canvasResizeObserver.observe(canvasElement);
     }
 
     ngOnDestroy(): void {
         if (this.requestAnimationFrameId !== null)
             cancelAnimationFrame(this.requestAnimationFrameId);
-    }
-
-    @HostListener("window:resize")
-    onWindowResize() {
-        this.updateRenderingEnvironment();
+        
+        this.canvasResizeObserver.disconnect();
     }
 
     /**
@@ -121,6 +122,10 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
         canvasElement.width = canvasElement.offsetWidth;
         canvasElement.height = canvasElement.offsetHeight;
         this._renderingEnvironment = new TownRenderingEnvironment(this.camera, new TownViewport(canvasElement.width, canvasElement.height), 32);
+        
+        // Setting `width` and `height` clears the canvas.
+        if (this.canvasRenderingContext !== null)
+            this.render(this.canvasRenderingContext);
     }
 }
 
