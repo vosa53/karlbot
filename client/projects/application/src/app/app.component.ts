@@ -4,24 +4,28 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { SignInService } from './shared/application/services/sign-in.service';
 import { ColorTheme, ColorThemeService } from './shared/application/services/color-theme.service';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
+import { MatRippleModule } from '@angular/material/core';
 
 @Component({
     standalone: true,
     selector: "app-root",
-    imports: [CommonModule, RouterModule, MatSlideToggleModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatMenuModule],
+    imports: [CommonModule, RouterModule, MatSlideToggleModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatMenuModule, MatDividerModule, MatListModule, MatRippleModule],
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
     private colorThemeSubscription: Subscription | null = null;
 
-    constructor(readonly colorThemeService: ColorThemeService, readonly authenticationService: SignInService, iconRegistry: MatIconRegistry) {
+    constructor(readonly colorThemeService: ColorThemeService, readonly authenticationService: SignInService, 
+        iconRegistry: MatIconRegistry, readonly router: Router) {
         iconRegistry.setDefaultFontSetClass("material-symbols-outlined");
     }
 
