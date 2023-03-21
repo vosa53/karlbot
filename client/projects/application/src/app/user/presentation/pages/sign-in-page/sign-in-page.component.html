@@ -1,4 +1,9 @@
-<p>sign-in-page works!</p>
-<mat-icon>home</mat-icon>
-
-<firebase-ui></firebase-ui>
+<app-page title="Sign in">
+    <div class="container">
+        <mat-card class="form">
+            <div class="sign-in-options">
+                <firebase-ui (signInSuccessWithAuthResult)="onSignInSuccess()"></firebase-ui>
+            </div>
+        </mat-card>
+    </div>
+</app-page>
