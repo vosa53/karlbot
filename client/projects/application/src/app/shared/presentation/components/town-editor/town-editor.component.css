@@ -9,8 +9,10 @@
 }
 
 .toolbar {
+    overflow-x: auto;
+    overflow-y: hidden;
     display: grid;
-    grid-template-columns: auto 1fr auto auto;
+    grid-template-columns: max-content 1fr auto auto;
     grid-template-areas: "tools . width height";
     gap: 16px;
     height: auto;

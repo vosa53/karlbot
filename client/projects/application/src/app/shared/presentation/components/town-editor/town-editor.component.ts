@@ -20,6 +20,7 @@ import { TownViewComponent } from "projects/application/src/app/shared/presentat
 import { MatMenuModule } from "@angular/material/menu";
 import { CommonModule } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
+import {MatBadgeModule} from '@angular/material/badge';
 
 /**
  * Town editor.
@@ -28,7 +29,7 @@ import { MatInputModule } from "@angular/material/input";
     standalone: true,
     selector: "app-town-editor",
     imports: [CommonModule, ValidatedInputDirective, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonToggleModule, MatToolbarModule, 
-        TownViewSelectDirective, TownViewMoveDirective, TownViewComponent, MatMenuModule],
+        TownViewSelectDirective, TownViewMoveDirective, TownViewComponent, MatMenuModule, MatBadgeModule],
     templateUrl: "./town-editor.component.html",
     styleUrls: ["./town-editor.component.css"]
 })
@@ -73,7 +74,7 @@ export class TownEditorComponent {
     /**
      * Available tools with their icons.
      */
-    readonly tools: readonly { iconSrc?: string, iconName?: string, tool: TownEditorTool }[];
+    readonly tools: readonly TownEditorToolButton[];
 
     /**
      * Town size (width or height) validator.
@@ -86,10 +87,10 @@ export class TownEditorComponent {
             { iconName: "open_with", tool: new MoveTownEditorTool() },
             { iconSrc: assetsRoot + "karel-tool.png", tool: new KarelTownEditorTool() },
             { iconSrc: assetsRoot + "home-tool.png", tool: new HomeTownEditorTool() },
-            { iconSrc: assetsRoot + "wall-tool.png", tool: new TileTownEditorTool(TownTile.wall) },
-            { iconSrc: assetsRoot + "wall-tool.png", tool: new TileTownEditorTool(TownTile.land) },
-            { iconSrc: assetsRoot + "sign-tool.png", tool: new SignTownEditorTool(1) },
-            { iconSrc: assetsRoot + "sign-tool.png", tool: new SignTownEditorTool(-1) }
+            { iconSrc: assetsRoot + "wall-tool.png", action: TownEditorToolButtonAction.add, tool: new TileTownEditorTool(TownTile.wall) },
+            { iconSrc: assetsRoot + "wall-tool.png", action: TownEditorToolButtonAction.remove, tool: new TileTownEditorTool(TownTile.land) },
+            { iconSrc: assetsRoot + "sign-tool.png", action: TownEditorToolButtonAction.add, tool: new SignTownEditorTool(1) },
+            { iconSrc: assetsRoot + "sign-tool.png", action: TownEditorToolButtonAction.remove, tool: new SignTownEditorTool(-1) }
         ];
         this.selectedTool = this.tools[0].tool;
     }
@@ -111,4 +112,38 @@ export class TownEditorComponent {
         const newHeight = newHeightText !== undefined ? window.parseInt(newHeightText, 10) : this.town.height;
         this.town.resize(newWidth, newHeight);
     }
+
+    getToolButtonActionText(toolButton: TownEditorToolButton) {
+        if (toolButton.action === undefined)
+            return "";
+        else if (toolButton.action === TownEditorToolButtonAction.add)
+            return "+";
+        else if (toolButton.action === TownEditorToolButtonAction.remove)
+            return "-";
+        else
+            throw new Error();
+    }
+
+    getToolButtonActionColor(toolButton: TownEditorToolButton) {
+        if (toolButton.action === undefined)
+            return "primary";
+        else if (toolButton.action === TownEditorToolButtonAction.add)
+            return "primary";
+        else if (toolButton.action === TownEditorToolButtonAction.remove)
+            return "warn";
+        else
+            throw new Error();
+    }
+}
+
+interface TownEditorToolButton {
+    iconSrc?: string;
+    iconName?: string;
+    action?: TownEditorToolButtonAction;
+    tool: TownEditorTool
+}
+
+enum TownEditorToolButtonAction {
+    add,
+    remove
 }

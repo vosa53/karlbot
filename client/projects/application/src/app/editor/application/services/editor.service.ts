@@ -41,7 +41,7 @@ export class EditorService {
     private readonly selectedCodeFile = new BehaviorSubject<CodeFile | null>(null);
     private readonly selectedTownFile = new BehaviorSubject<TownFile | null>(null);
     private readonly currentTown = new BehaviorSubject<MutableTown | null>(null);
-    private readonly townCamera = new BehaviorSubject(new TownCamera(new Vector(10, 10), 1));
+    private readonly townCamera = new BehaviorSubject(new TownCamera(new Vector(5, 5), 1));
     private readonly interpreter = new BehaviorSubject<Interpreter | null>(null);
     private readonly interpretStopToken = new BehaviorSubject<InterpretStopToken | null>(null);
     private readonly callStack = new BehaviorSubject<readonly ReadonlyCallStackFrame[] | null>(null);
@@ -440,8 +440,8 @@ end
         const files = [
             new CodeFile(CompilationUnitParser.parse(code, "Programs"), []),
             new CodeFile(CompilationUnitParser.parse(code2, "Programs2"), []),
-            new TownFile("Town", Town.createEmpty(20, 20)),
-            new TownFile("Town2", Town.createEmpty(10, 10))
+            new TownFile("Village", Town.createEmpty(10, 10)),
+            new TownFile("Town", Town.createEmpty(20, 20))
         ];
         const externalPrograms: ExternalProgramReference[] = StandardLibrary.getProgramReferences();
         const settings = new Settings("main", 200, 1000);

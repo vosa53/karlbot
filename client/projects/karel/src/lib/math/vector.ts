@@ -25,4 +25,13 @@ export class Vector {
         this.x = x;
         this.y = y;
     }
+
+    /**
+     * Returns the euclidean distance between `a` and `b`.
+     * @param a Vector `a`.
+     * @param b Vector `b`.
+     */
+    static calculateDistance(a: Vector, b: Vector) {
+        return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+    }
 }

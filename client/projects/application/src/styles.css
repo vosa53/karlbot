@@ -7,6 +7,14 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
 
+.light-theme {
+    color-scheme: light;
+}
+
+.dark-theme {
+    color-scheme: dark;
+}
+
 .disable-form-underline .mdc-line-ripple::before {
     border-bottom: none !important;
 }

@@ -1,6 +1,7 @@
 :host {
     display: block;
     position: relative;
+    touch-action: none;
 }
 
 .canvas {

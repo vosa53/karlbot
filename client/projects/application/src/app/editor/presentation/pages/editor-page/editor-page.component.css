@@ -11,7 +11,7 @@
     display: grid;
     grid-template-rows: minmax(auto, auto) minmax(0, 2fr) minmax(0, 1fr);
     
-    grid-template-columns: 17rem 1fr 1fr;
+    grid-template-columns: 17rem minmax(0, 1fr) minmax(0, 1fr);
     grid-template-areas: "header header header"
         "file-explorer code-editor town-editor"
         "settings error-list town-editor";

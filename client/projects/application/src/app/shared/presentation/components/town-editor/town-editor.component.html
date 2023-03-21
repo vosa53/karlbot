@@ -1,13 +1,15 @@
 <app-town-view class="town-view" [town]="town" [camera]="camera" (cameraChange)="onTownViewCameraChange($event)" 
-    appTownViewMove 
+    appTownViewMove  [touchMoveDisabled]="!selectionDisabled"
     appTownViewSelect [selectionDisabled]="selectionDisabled" [selectionMode]="selectionMode" (select)="onSelect($event)"
 ></app-town-view>
 
 <mat-toolbar class="toolbar">
     <mat-button-toggle-group class="toolbar-tools" [value]="selectedTool" (valueChange)="selectedTool = $event">
         <mat-button-toggle [value]="tool.tool" *ngFor="let tool of tools">
-            <img *ngIf="tool.iconSrc !== undefined" class="toolbar-tool-icon" [src]="tool.iconSrc">
-            <mat-icon *ngIf="tool.iconName !== undefined" class="toolbar-tool-icon">{{tool.iconName}}</mat-icon>
+            <mat-icon *ngIf="tool.iconSrc !== undefined" [matBadgeHidden]="tool.action === undefined" [matBadge]="getToolButtonActionText(tool)" [matBadgeColor]="getToolButtonActionColor(tool)" matBadgeSize="small" matBadgePosition="below after">
+                <img class="toolbar-tool-icon" [src]="tool.iconSrc">
+            </mat-icon>
+            <mat-icon *ngIf="tool.iconName !== undefined" class="toolbar-tool-icon" [matBadgeHidden]="tool.action === undefined" [matBadge]="getToolButtonActionText(tool)" [matBadgeColor]="getToolButtonActionColor(tool)" matBadgeSize="small" matBadgePosition="below after">{{tool.iconName}}</mat-icon>
         </mat-button-toggle>
     </mat-button-toggle-group>
 
