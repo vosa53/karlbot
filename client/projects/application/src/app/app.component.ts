@@ -44,4 +44,9 @@ export class AppComponent implements OnInit, OnDestroy {
         const colorTheme = checked ? ColorTheme.dark : ColorTheme.light;
         this.colorThemeService.setColorTheme(colorTheme);
     }
+
+    async onSignOutClick() {
+        await this.authenticationService.signOut();
+        this.router.navigateByUrl("/user/sign-in");
+    }
 }

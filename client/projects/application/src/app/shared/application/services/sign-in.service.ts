@@ -35,8 +35,8 @@ export class SignInService implements OnDestroy {
         });
     }
 
-    signOut() {
-        this.firebaseAuthentication.signOut();
+    async signOut(): Promise<void> {
+        return await this.firebaseAuthentication.signOut();
     }
 
     ngOnDestroy() {

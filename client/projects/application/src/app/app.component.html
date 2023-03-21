@@ -65,7 +65,7 @@
                     <mat-icon>person</mat-icon>
                     <span>{{(authenticationService.currentUser | async)?.email}}</span>
                 </button>
-                <button mat-menu-item (click)="authenticationService.signOut()">
+                <button mat-menu-item (click)="onSignOutClick()">
                     <mat-icon>logout</mat-icon>
                     <span>Sign out</span>
                 </button>
