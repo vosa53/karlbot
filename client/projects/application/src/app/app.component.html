@@ -57,8 +57,7 @@
             <div style="width: 48px;"></div>
             <a mat-button *ngIf="(authenticationService.currentUser | async) === null" routerLink="/user/sign-in">Sign
                 in</a>
-            <button *ngIf="(authenticationService.currentUser | async) !== null" matListItemMeta mat-icon-button
-                [matMenuTriggerFor]="menu">
+            <button *ngIf="(authenticationService.currentUser | async) !== null" mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>account_circle</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
