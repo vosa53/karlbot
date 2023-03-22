@@ -61,16 +61,16 @@
     font-weight: 500;
     text-decoration: none;
     color: inherit;
-    padding: 8px 10px;
+    padding: 0 8px;
     border-radius: 4px;
     -webkit-tap-highlight-color: transparent;
-    margin-bottom: 5px;
-    height: 44px;
+    margin-bottom: 8px;
+    height: 40px;
     box-sizing: border-box;
 }
 
 .drawer-navigation-item.active {
-    background: #b4e61d22;
+    background: #b4e61d1f;
     color: var(--color-primary);
 }
 
