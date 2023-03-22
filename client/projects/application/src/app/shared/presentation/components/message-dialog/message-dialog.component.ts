@@ -17,5 +17,5 @@ export class MessageDialogComponent {
 
 export interface MessageDialogData {
     readonly title: string;
-    message: string;
+    readonly message: string;
 }

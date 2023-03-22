@@ -88,7 +88,7 @@ export class HeaderComponent {
     }
 
     async onChangeProjectNameClick() {
-        const newProjectName = await this.dialogService.showPrompt("Change project name", "Please entrer a new project name.", 
+        const newProjectName = await this.dialogService.showPrompt("Change project name", "Please enter a new project name.", 
             this.projectName, HeaderComponent.PROJECT_NAME_VALIDATOR);
         if (newProjectName === null)
             return;
