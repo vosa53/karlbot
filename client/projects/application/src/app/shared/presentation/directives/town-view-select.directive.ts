@@ -214,10 +214,10 @@ export interface TownViewSelectionEvent {
     /**
      * Selected town region in tile coordinates.
      */
-    region: Rectangle,
+    readonly region: Rectangle,
 
     /**
      * Mouse button used to select the region.
      */
-    button: TownViewSelectionButton
+    readonly button: TownViewSelectionButton
 }

@@ -31,6 +31,7 @@
         (codeFileAdd)="editorService.addCodeFile($event)"
         (townFileAdd)="editorService.addTownFile($event)"
         (fileRemove)="editorService.removeFile($event)"
+        (fileRename)="editorService.renameFile($event.file, $event.newName)"
         (fileSelect)="editorService.selectFile($event)">
     </app-file-explorer>
 </ng-template>

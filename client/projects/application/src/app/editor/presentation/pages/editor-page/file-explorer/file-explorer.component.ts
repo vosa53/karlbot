@@ -38,6 +38,9 @@ export class FileExplorerComponent {
     fileRemove = new EventEmitter<File>();
 
     @Output()
+    fileRename = new EventEmitter<FileExplorerRenameEvent>();
+
+    @Output()
     fileSelect = new EventEmitter<File>();
 
     constructor(private readonly dialogService: DialogService) { }
@@ -45,7 +48,6 @@ export class FileExplorerComponent {
     async onFileAdd(fileType: "code" | "town") {
         const validator = this.createFileNameValidator(null);
         const fileName = await this.dialogService.showPrompt("Add file", "Enter a name of the new file", "", validator);
-
         if (fileName === null)
             return;
 
@@ -58,6 +60,15 @@ export class FileExplorerComponent {
     async onFileRemove(file: File) {
         // TODO: Add a confirm dialog.
         this.fileRemove.emit(file);
+    }
+
+    async onFileRename(file: File) {
+        const validator = this.createFileNameValidator(file);
+        const newName = await this.dialogService.showPrompt("Rename file", "Enter a new name of the file", file.name, validator);
+        if (newName === null)
+            return;
+
+        this.fileRename.emit({ file, newName });
     }
 
     getFileIconURL(file: File): string {
@@ -77,4 +88,9 @@ export class FileExplorerComponent {
             return this.files.every(f => f.name !== fileName || f.name === file?.name);
         };
     }
+}
+
+interface FileExplorerRenameEvent {
+    readonly file: File;
+    readonly newName: string;
 }
