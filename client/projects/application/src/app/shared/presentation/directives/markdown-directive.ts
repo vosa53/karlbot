@@ -1,7 +1,6 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 import { MarkdownService } from '../../application/services/markdown-service';
 
-
 @Directive({
     standalone: true,
     selector: '[appMarkdown]'

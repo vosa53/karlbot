@@ -7,12 +7,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import { TownViewComponent } from 'projects/application/src/app/shared/presentation/components/town-view/town-view.component';
-import { Project, ProjectDeserializer, ProjectSerializer, Settings, Town, TownFile } from 'projects/karel/src/public-api';
+import { Project, Settings, Town, TownFile } from 'projects/karel/src/public-api';
+import { StopClickPropagationDirective } from 'projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive';
 
 @Component({
     selector: 'app-saved-project-view',
     standalone: true,
-    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatMenuModule, MatRippleModule, TownViewComponent],
+    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatMenuModule, MatRippleModule, TownViewComponent, StopClickPropagationDirective],
     templateUrl: './saved-project-view.component.html',
     styleUrls: ['./saved-project-view.component.css']
 })

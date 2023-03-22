@@ -13,11 +13,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { ChallengeTestCaseEditorComponent } from './challenge-test-case-editor/challenge-test-case-editor.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { StopClickPropagationDirective } from 'projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive';
 
 @Component({
     selector: 'app-challenge-editor-page',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatInputModule, PageComponent, MatIconModule, ChallengeTestCaseEditorComponent, MatExpansionModule, MatCheckboxModule],
+    imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatInputModule, PageComponent, MatIconModule, ChallengeTestCaseEditorComponent, MatExpansionModule, MatCheckboxModule, StopClickPropagationDirective],
     templateUrl: './challenge-editor-page.component.html',
     styleUrls: ['./challenge-editor-page.component.css']
 })

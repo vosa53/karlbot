@@ -20,10 +20,10 @@
                     <mat-panel-title>Test case {{i + 1}}</mat-panel-title>
                     <mat-panel-description class="test-case-description">
                         <div class="test-case-description-actions">
-                            <mat-checkbox [checked]="testCase.isPublic" (change)="onChangeIsPublic(testCase, $event.checked)">
+                            <mat-checkbox [checked]="testCase.isPublic" (change)="onChangeIsPublic(testCase, $event.checked)" appStopClickPropagation>
                                 Public
                             </mat-checkbox>
-                            <button mat-icon-button (click)="onRemoveTestCase(testCase)">
+                            <button type="button" mat-icon-button (click)="onRemoveTestCase(testCase)" appStopClickPropagation>
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>
