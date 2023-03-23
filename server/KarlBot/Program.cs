@@ -15,6 +15,8 @@ using System.Text;
 using KarlBot.Controllers;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace KarlBot
 {
@@ -40,6 +42,7 @@ namespace KarlBot
             });
 
             builder.Services.AddTransient<IFirebaseAuthenticationService, FirebaseAuthenticationService>();
+            builder.Services.AddTransient<IChallengeEvaluationService, ChallengeEvaluationService>();
             builder.Services.AddTransient<IChallengeRepository, DbContextChallengeRepository>();
             builder.Services.AddTransient<IChallengeSubmissionRepository, DbContextChallengeSubmissionRepository>();
             builder.Services.AddTransient<IProjectRepository, DbContextProjectRepository>();

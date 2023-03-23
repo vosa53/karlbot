@@ -1,7 +1,7 @@
 <mat-card matRipple>
     <mat-card-header>
       <mat-card-title>{{project.name}}</mat-card-title>
-      <mat-card-subtitle>{{savedProject.modified | date}}</mat-card-subtitle>
+      <mat-card-subtitle>{{savedProject.modified | appDateAgo}}</mat-card-subtitle>
     </mat-card-header>
     <app-town-view mat-card-image [town]="town" class="town-view"></app-town-view>
     <mat-card-actions align="end">

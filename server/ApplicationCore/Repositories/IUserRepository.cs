@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Repositories
 {
+    /// <summary>
+    /// Repository of users.
+    /// </summary>
     public interface IUserRepository : IRepository<User, string>
     {
     }

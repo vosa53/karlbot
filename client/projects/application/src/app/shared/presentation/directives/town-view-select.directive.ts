@@ -59,6 +59,8 @@ export class TownViewSelectDirective {
 
     @HostListener("pointerenter", ["$event"])
     onPointerEnter(event: PointerEvent) {
+        event.preventDefault();
+
         this.pointersHover.set(event.pointerId, new Vector(event.offsetX, event.offsetY));
     }
 
@@ -66,6 +68,8 @@ export class TownViewSelectDirective {
     @HostListener("pointercancel", ["$event"])
     @HostListener("pointerout", ["$event"])
     onPointerLeave(event: PointerEvent) {
+        event.preventDefault();
+
         this.pointersHover.delete(event.pointerId);
         this.pointersDown.delete(event.pointerId);
         if (this.currentDrag?.pointerId === event.pointerId)
@@ -74,22 +78,27 @@ export class TownViewSelectDirective {
 
     @HostListener("pointermove", ["$event"])
     onPointerMove(event: PointerEvent) {
+        event.preventDefault();
+
         this.pointersHover.set(event.pointerId, new Vector(event.offsetX, event.offsetY));
     }
 
     @HostListener("pointerdown", ["$event"])
     onPointerDown(event: PointerEvent) {
+        event.preventDefault();
+
         this.pointersDown.add(event.pointerId);
 
         if (this.selectionDisabled || this.pointersDown.size !== 1 || (event.pointerType === "mouse" && event.button !== 0 && event.button !== 2))
             this.currentDrag = null;
         else
             this.currentDrag = { pointerId: event.pointerId, startTile: this.positionToTile(event.offsetX, event.offsetY) };
-
     }
 
     @HostListener("pointerup", ["$event"])
     onPointerUp(event: PointerEvent) {
+        event.preventDefault();
+
         this.pointersDown.delete(event.pointerId);
         if (this.currentDrag?.pointerId !== event.pointerId || (event.pointerType === "mouse" && event.button !== 0 && event.button !== 2))
             return;
@@ -113,9 +122,9 @@ export class TownViewSelectDirective {
         });
     }
 
-    @HostListener("contextmenu")
-    onContextMenu() {
-        return false;
+    @HostListener("contextmenu", ["$event"])
+    onContextMenu(event: MouseEvent) {
+        event.preventDefault();
     };
 
     private render(context: CanvasRenderingContext2D) {

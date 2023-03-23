@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { SavedProject } from 'projects/application/src/app/shared/application/models/saved-project';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,11 +9,12 @@ import { MatRippleModule } from '@angular/material/core';
 import { TownViewComponent } from 'projects/application/src/app/shared/presentation/components/town-view/town-view.component';
 import { Project, Settings, Town, TownFile } from 'projects/karel/src/public-api';
 import { StopClickPropagationDirective } from 'projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive';
+import { DateAgoPipe } from 'projects/application/src/app/shared/presentation/pipes/date-ago.pipe';
 
 @Component({
     selector: 'app-saved-project-view',
     standalone: true,
-    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatMenuModule, MatRippleModule, TownViewComponent, StopClickPropagationDirective],
+    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatMenuModule, MatRippleModule, TownViewComponent, StopClickPropagationDirective, DatePipe, DateAgoPipe],
     templateUrl: './saved-project-view.component.html',
     styleUrls: ['./saved-project-view.component.css']
 })

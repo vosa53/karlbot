@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Repositories;
+using ApplicationCore.Services;
 using Infrastructure;
 using KarlBot.Authorization;
 using KarlBot.DataModels.Challenges;
@@ -16,12 +17,15 @@ namespace KarlBot.Controllers
         private readonly IChallengeRepository _challengeRepository;
         private readonly IChallengeSubmissionRepository _challengeSubmissionRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IChallengeEvaluationService _challengeEvaluationService;
 
-        public ChallengeSubmissionsController(IChallengeRepository challengeRepository, IChallengeSubmissionRepository challengeSubmissionRepository, IUserRepository userRepository)
+        public ChallengeSubmissionsController(IChallengeRepository challengeRepository, IChallengeSubmissionRepository challengeSubmissionRepository, 
+            IUserRepository userRepository, IChallengeEvaluationService challengeEvaluationService)
         {
             _challengeRepository = challengeRepository;
             _challengeSubmissionRepository = challengeSubmissionRepository;
             _userRepository = userRepository;
+            _challengeEvaluationService = challengeEvaluationService;
         }
 
         [HttpGet]
@@ -64,10 +68,9 @@ namespace KarlBot.Controllers
                 return NotFound();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            var submission = new ChallengeSubmission(challengeId, userId, dataModel.ProjectFile);
+            var submission = new ChallengeSubmission(challengeId, userId, DateTime.UtcNow, dataModel.ProjectFile);
 
-            var evaluator = new ChallengeEvaluator();
-            var evaluationResult = await evaluator.EvaluateAsync(submission.ProjectFile, challenge.TestCases!);
+            var evaluationResult = await _challengeEvaluationService.EvaluateAsync(submission.ProjectFile, challenge.TestCases!);
 
             submission.EvaluationResult = new ChallengeSubmissionEvaluationResult(evaluationResult.SuccessRate, evaluationResult.Message);
 
@@ -84,6 +87,7 @@ namespace KarlBot.Controllers
             {
                 Id = submission.Id,
                 UserId = submission.UserId,
+                Created = submission.Created,
                 ProjectFile = submission.ProjectFile,
                 EvaluationResult = submission.EvaluationResult != null ? ToDataModel(submission.EvaluationResult) : null
             };

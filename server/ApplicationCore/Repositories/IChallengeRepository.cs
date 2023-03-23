@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Repositories
 {
+    /// <summary>
+    /// Repository of challenges.
+    /// </summary>
     public interface IChallengeRepository : IRepository<Challenge, int>
     {
     }

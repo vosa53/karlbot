@@ -23,11 +23,15 @@ export class TownViewMoveDirective {
 
     @HostListener("pointerdown", ["$event"])
     onPointerDown(event: PointerEvent) {
+        event.preventDefault();
+
         this.pointersDown.set(event.pointerId, new Vector(event.offsetX, event.offsetY));
     }
 
     @HostListener("pointermove", ["$event"])
     onPointerMove(event: PointerEvent) {
+        event.preventDefault();
+
         if (!this.pointersDown.has(event.pointerId))
             return;
         
@@ -63,20 +67,22 @@ export class TownViewMoveDirective {
     @HostListener("pointerout", ["$event"])
     @HostListener("pointerleave", ["$event"])
     onPointerUp(event: PointerEvent) {
+        event.preventDefault();
+
         this.pointersDown.delete(event.pointerId);
     }
 
-    @HostListener("wheel", ["$event.deltaY", "$event.offsetX", "$event.offsetY"])
-    onWheel(mouseDeltaY: number, offsetX: number, offsetY: number) {
-        const zoom = Math.pow(1.2, mouseDeltaY / -120);
-        this.zoom(offsetX, offsetY, zoom);
+    @HostListener("wheel", ["$event"])
+    onWheel(event: WheelEvent) {
+        event.preventDefault();
 
-        return false;
+        const zoom = Math.pow(1.2, event.deltaY / -120);
+        this.zoom(event.offsetX, event.offsetY, zoom);
     };
 
-    @HostListener("contextmenu")
-    onContextMenu() {
-        return false;
+    @HostListener("contextmenu", ["$event"])
+    onContextMenu(event: MouseEvent) {
+        event.preventDefault();
     };
 
     private move(deltaX: number, deltaY: number) {

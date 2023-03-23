@@ -4,11 +4,12 @@ import { ChallengeSubmission } from 'projects/application/src/app/shared/applica
 import { Project, Settings } from 'projects/karel/src/public-api';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { DateAgoPipe } from 'projects/application/src/app/shared/presentation/pipes/date-ago.pipe';
 
 @Component({
     selector: 'app-challenge-submission',
     standalone: true,
-    imports: [CommonModule, MatProgressBarModule, MatCardModule],
+    imports: [CommonModule, MatProgressBarModule, MatCardModule, DateAgoPipe],
     templateUrl: './challenge-submission.component.html',
     styleUrls: ['./challenge-submission.component.css']
 })
@@ -29,6 +30,7 @@ export class ChallengeSubmissionComponent {
         return {
             id: 0,
             userId: "",
+            created: new Date(),
             project: Project.create("", [], [], new Settings("", 0, 0)),
             evaluationResult: null
         };

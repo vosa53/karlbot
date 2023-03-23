@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 using FirebaseAdmin.Messaging;
 using ApplicationCore.Entities;
 using System.Text.Json;
+using ApplicationCore;
+using ApplicationCore.Services;
 
-namespace Infrastructure
+namespace Infrastructure.Services
 {
-    public class ChallengeEvaluator
+    public class ChallengeEvaluationService : IChallengeEvaluationService
     {
         private static readonly string KAREL_LIBRARY = File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel\dist\bundle.js");
         private static readonly string KAREL_EVALUATION_LIBRARY = File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel-evaluation\dist\bundle.js");
@@ -71,6 +73,4 @@ namespace Infrastructure
             return new Exception("Error in challenge evaluation script: " + errorMessage);
         }
     }
-
-    public record ChallengeEvaluationResult(double SuccessRate, string Message);
 }

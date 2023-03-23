@@ -61,6 +61,7 @@ export class ChallengePageComponent {
         const submission: ChallengeSubmission = {
             id: 0,
             userId: currentUser!.id,
+            created: new Date(),
             project: project,
             evaluationResult: null
         }

@@ -4,8 +4,6 @@ using KarlBot.Authorization;
 using KarlBot.DataModels.Projects;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace KarlBot.Controllers
 {
     [Route("[controller]")]

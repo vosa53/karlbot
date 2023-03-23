@@ -1,7 +1,7 @@
 <mat-card>
     <mat-card-header>
         <mat-card-title>{{evaluationStateText}}</mat-card-title>
-        <mat-card-subtitle>Mar 13, 2023</mat-card-subtitle>
+        <mat-card-subtitle>{{challengeSubmission.created | appDateAgo}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <p>{{challengeSubmission.evaluationResult?.message}}</p>

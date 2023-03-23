@@ -4,6 +4,7 @@ import { ChallengeSubmissionEvaluationResult } from "./challenge-submission-eval
 export interface ChallengeSubmission {
     readonly id: number;
     readonly userId: string;
+    readonly created: Date;
     readonly project: Project;
     readonly evaluationResult: ChallengeSubmissionEvaluationResult | null;
 }

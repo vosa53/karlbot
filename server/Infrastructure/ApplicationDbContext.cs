@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,20 @@ namespace Infrastructure
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ChallengeSubmission>().OwnsOne(cs => cs.EvaluationResult);
+        }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder
+                .Properties<DateTime>()
+                .HaveConversion<DateTimeValueConverter>();
+        }
+
+        class DateTimeValueConverter : ValueConverter<DateTime, DateTime>
+        {
+            public DateTimeValueConverter() : base(d => d, d => DateTime.SpecifyKind(d, DateTimeKind.Utc))
+            {
+            }
         }
     }
 }

@@ -42,6 +42,7 @@ export class ChallengeSubmissionService {
         return {
             id: challengeSubmission.id,
             userId: challengeSubmission.userId,
+            created: challengeSubmission.created.toISOString(),
             projectFile: ProjectSerializer.serialize(challengeSubmission.project),
             evaluationResult: challengeSubmission.evaluationResult
         };
@@ -51,6 +52,7 @@ export class ChallengeSubmissionService {
         return {
             id: dto.id,
             userId: dto.userId,
+            created: new Date(dto.created),
             project: ProjectDeserializer.deserialize(dto.projectFile, []),
             evaluationResult: dto.evaluationResult
         };
@@ -60,6 +62,7 @@ export class ChallengeSubmissionService {
 interface ChallengeSubmissionDTO {
     readonly id: number;
     readonly userId: string;
+    readonly created: string;
     readonly projectFile: string;
     readonly evaluationResult: ChallengeSubmissionEvaluationResult | null;
 }
