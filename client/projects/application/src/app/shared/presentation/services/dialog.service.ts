@@ -1,7 +1,7 @@
 import { ComponentType } from "@angular/cdk/portal";
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { ConfirmDialogComponent } from "../components/confirm-dialog/confirm-dialog.component";
+import { ConfirmationDialogComponent } from "../components/confirm-dialog/confirmation-dialog.component";
 import { MessageDialogComponent } from "../components/message-dialog/message-dialog.component";
 import { PromptDialogComponent, PromptDialogValidator } from "../components/prompt-dialog/prompt-dialog.component";
 
@@ -17,8 +17,8 @@ export class DialogService {
         });
     }
 
-    showConfirm(title: string, message: string): Promise<boolean> {
-        return this.show(ConfirmDialogComponent, {
+    showConfirmation(title: string, message: string): Promise<boolean> {
+        return this.show(ConfirmationDialogComponent, {
             data: { title, message }
         });
     }

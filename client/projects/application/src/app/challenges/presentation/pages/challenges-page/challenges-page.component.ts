@@ -29,7 +29,7 @@ export class ChallengesPageComponent implements OnInit {
     }
 
     async onRemoveClick(challenge: Challenge) {
-        const confirmed = await this.dialogService.showConfirm("Are you sure?", `Do you really want to delete challenge '${challenge.name}'?`);
+        const confirmed = await this.dialogService.showConfirmation("Are you sure?", `Do you really want to delete challenge '${challenge.name}'?`);
         if (!confirmed)
             return;
 

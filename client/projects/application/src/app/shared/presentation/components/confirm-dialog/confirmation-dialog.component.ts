@@ -6,16 +6,16 @@ import { ValidatedInputDirective } from '../../directives/validated-input.direct
 
 @Component({
     standalone: true,
-    selector: 'app-confirm-dialog',
+    selector: 'app-confirmation-dialog',
     imports: [CommonModule, MatDialogModule, ValidatedInputDirective, MatButtonModule],
-    templateUrl: './confirm-dialog.component.html',
-    styleUrls: ['./confirm-dialog.component.css']
+    templateUrl: './confirmation-dialog.component.html',
+    styleUrls: ['./confirmation-dialog.component.css']
 })
-export class ConfirmDialogComponent {
-    constructor(@Inject(MAT_DIALOG_DATA) readonly data: ConfirmDialogData) { }
+export class ConfirmationDialogComponent {
+    constructor(@Inject(MAT_DIALOG_DATA) readonly data: ConfirmationDialogData) { }
 }
 
-export interface ConfirmDialogData {
+export interface ConfirmationDialogData {
     readonly title: string;
     readonly message: string;
 }

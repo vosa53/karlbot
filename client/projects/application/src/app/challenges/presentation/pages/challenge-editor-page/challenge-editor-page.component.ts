@@ -74,7 +74,7 @@ export class ChallengeEditorPageComponent {
 
     async onRemoveTestCase(testCase: EditorChallengeTestCase) {
         const index = this.testCases.indexOf(testCase);
-        const confirmed = await this.dialogService.showConfirm("Are you sure?", `Do you really want to delete test case '${this.getTestCaseName(index)}'?`);
+        const confirmed = await this.dialogService.showConfirmation("Are you sure?", `Do you really want to delete test case '${this.getTestCaseName(index)}'?`);
         if (!confirmed)
             return;
 

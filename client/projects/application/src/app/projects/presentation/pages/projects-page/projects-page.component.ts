@@ -28,10 +28,10 @@ export class ProjectsPageComponent implements OnInit {
     }
 
     async onRemoveClick(project: SavedProject) {
-        const confirmed = await this.dialogService.showConfirm("Are you sure?", `Do you really want to delete project '${project.project.name}'?`);
+        const confirmed = await this.dialogService.showConfirmation("Are you sure?", `Do you really want to delete project '${project.project.name}'?`);
         if (!confirmed)
             return;
-            
+
         await this.projectService.delete(project);
         this.loadProjects();
     }
