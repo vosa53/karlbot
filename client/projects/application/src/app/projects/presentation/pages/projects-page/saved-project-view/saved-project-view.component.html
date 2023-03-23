@@ -1,9 +1,9 @@
 <mat-card matRipple>
+    <app-town-view mat-card-image [town]="town" class="town-view"></app-town-view>
     <mat-card-header>
       <mat-card-title>{{project.name}}</mat-card-title>
       <mat-card-subtitle>{{savedProject.modified | appDateAgo}}</mat-card-subtitle>
     </mat-card-header>
-    <app-town-view mat-card-image [town]="town" class="town-view"></app-town-view>
     <mat-card-actions align="end">
         <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" appStopClickPropagation>
             <mat-icon>more_vert</mat-icon>

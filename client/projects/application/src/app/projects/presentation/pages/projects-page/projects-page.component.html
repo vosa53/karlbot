@@ -5,6 +5,6 @@
     </button>
     
     <div class="projects">
-        <app-saved-project-view routerLink="/editor/{{savedProject.id}}" *ngFor="let savedProject of projects" [savedProject]="savedProject" (removeClick)="onRemoveClick(savedProject)"></app-saved-project-view>
+        <app-saved-project-view class="project" routerLink="/editor/{{savedProject.id}}" *ngFor="let savedProject of projects" [savedProject]="savedProject" (removeClick)="onRemoveClick(savedProject)"></app-saved-project-view>
     </div>
 </app-page>

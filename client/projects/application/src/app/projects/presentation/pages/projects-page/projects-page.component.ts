@@ -38,5 +38,6 @@ export class ProjectsPageComponent implements OnInit {
 
     private async loadProjects() {
         this.projects = await this.projectService.get();
+        this.projects.sort((a, b) => b.modified.getTime() - a.modified.getTime());
     }
 }
