@@ -1,18 +1,14 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { EditorView, keymap, ViewUpdate } from "@codemirror/view";
 import { defaultKeymap } from "@codemirror/commands";
 import { basicSetup } from "codemirror";
 import { karel } from "./codemirror/karel-language";
 import { applicationStyleLight } from "./codemirror/application-theme-light";
-import { linter, Diagnostic, setDiagnostics } from "@codemirror/lint"
-import { autocompletion, Completion } from "@codemirror/autocomplete";
 import { Error } from "projects/karel/src/lib/compiler/errors/error";
 import { CompletionItem } from "projects/karel/src/lib/compiler/language-service/completion-item";
-import { CompletionItemType } from "projects/karel/src/lib/compiler/language-service/completion-item-type";
 import { CommonModule } from "@angular/common";
 import { LineTextRange } from "projects/karel/src/public-api";
-import { Decoration, DecorationSet } from "@codemirror/view"
-import { Compartment } from "@codemirror/state"
+import { Compartment, TransactionSpec, EditorState } from "@codemirror/state"
 import { codeCompletion } from "./codemirror/code-completion";
 import { setErrors } from "./codemirror/error-highlighting";
 import { currentRangeHighlighting, setCurrentRange } from "./codemirror/current-range-highlighting";
@@ -30,46 +26,21 @@ import { ColorTheme, ColorThemeService } from "../../../application/services/col
     templateUrl: "./code-editor.component.html",
     styleUrls: ["./code-editor.component.css"]
 })
-export class CodeEditorComponent implements AfterViewInit {
+export class CodeEditorComponent implements AfterViewInit, OnChanges {
     @Input()
-    get code(): string {
-        return this._code;
-    }
-
-    set code(value: string) {
-        this._code = value;
-        this.updateCode();
-    }
+    code = "";
 
     @Input()
-    get errors(): readonly Error[] {
-        return this._errors;
-    }
-
-    set errors(value: readonly Error[]) {
-        this._errors = value;
-        this.updateDiagnostics();
-    }
+    readonly = false;
 
     @Input()
-    get currentRange(): LineTextRange | null {
-        return this._currentRange;
-    }
-
-    set currentRange(value: LineTextRange | null) {
-        this._currentRange = value;
-        this.updateCurrentRange();
-    }
+    errors: readonly Error[] = [];
 
     @Input()
-    get breakpoints(): readonly number[] {
-        return this._breakpoints;
-    }
+    currentRange: LineTextRange | null = null;
 
-    set breakpoints(value: readonly number[]) {
-        this._breakpoints = value;
-        this.updateBreakpoints();
-    }
+    @Input()
+    breakpoints: readonly number[] = [];
 
     @Input()
     completionItemsProvider: (line: number, column: number) => CompletionItem[] = (l, c) => [];
@@ -80,15 +51,14 @@ export class CodeEditorComponent implements AfterViewInit {
     @Output()
     breakpointsChange = new EventEmitter<readonly number[]>();
 
-    private _code = "";
     private codeInEditor = "";
-    private _errors: readonly Error[] = [];
-    private _currentRange: LineTextRange | null = null;
-    private _breakpoints: readonly number[] = [];
     private breakpointsInEditor: readonly number[] = [];
+
     private editorView: EditorView | null = null;
     private readonly editorTheme = new Compartment();
-    private colorTheme = ColorTheme.light; 
+    private readonly editorReadonly = new Compartment();
+
+    private colorTheme = ColorTheme.light;
 
     constructor(private readonly hostElement: ElementRef, private readonly colorThemeService: ColorThemeService) {
         this.colorThemeService.colorTheme$.subscribe(ct => {
@@ -99,7 +69,7 @@ export class CodeEditorComponent implements AfterViewInit {
 
     ngAfterViewInit(): void {
         this.editorView = new EditorView({
-            doc: this._code,
+            doc: this.code,
             extensions: [
                 currentRangeHighlighting(),
                 breakpoints(),
@@ -107,6 +77,7 @@ export class CodeEditorComponent implements AfterViewInit {
                 basicSetup,
                 applicationStyle,
                 this.editorTheme.of(this.colorThemeToStyle(this.colorTheme)),
+                this.editorReadonly.of(EditorState.readOnly.of(this.readonly)),
                 karel(),
                 codeCompletion((line, column) => this.completionItemsProvider(line, column)),
                 EditorView.updateListener.of(u => this.onEditorViewUpdate(u))
@@ -114,10 +85,12 @@ export class CodeEditorComponent implements AfterViewInit {
             ],
             parent: this.hostElement.nativeElement.children[0]
         });
-        this.updateCode();
-        this.updateDiagnostics();
-        this.updateCurrentRange();
-        this.updateBreakpoints();
+        this.updateEditorFromInputs(this.editorView, null);
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.editorView !== null)
+            this.updateEditorFromInputs(this.editorView, changes);
     }
 
     private onEditorViewUpdate(update: ViewUpdate) {
@@ -132,28 +105,34 @@ export class CodeEditorComponent implements AfterViewInit {
         }
     }
 
-    private updateCode() {
-        if (this.editorView !== null && this.codeInEditor !== this.code) {
+    private updateEditorFromInputs(view: EditorView, changes: SimpleChanges | null) {
+        const transactionSpecs: TransactionSpec[] = [];
+
+        if ((changes === null || "code" in changes) && this.codeInEditor !== this.code) {
             this.codeInEditor = this.code;
-            this.editorView.dispatch({ changes: { from: 0, to: this.editorView.state.doc.length, insert: this.code } });
+            
+            // Dispatch code change first because next changes can depend on new positions of lines.
+            view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: this.code } });
         }
-    }
 
-    private updateDiagnostics() {
-        if (this.editorView !== null)
-            this.editorView.dispatch(setErrors(this.editorView.state, this.errors));
-    }
+        if (changes === null || "readonly" in changes)
+            transactionSpecs.push({ effects: this.editorReadonly.reconfigure(EditorState.readOnly.of(this.readonly)) });
 
-    private updateCurrentRange() {
-        if (this.editorView !== null)
-            this.editorView.dispatch(setCurrentRange(this.editorView.state, this.currentRange));
-    }
+        if (changes === null || "errors" in changes)
+            transactionSpecs.push(setErrors(view.state, this.errors));
 
-    private updateBreakpoints() {
-        if (this.editorView !== null && this.breakpointsInEditor !== this.breakpoints) {
+        if (changes === null || "currentRange" in changes) {
+            transactionSpecs.push(setCurrentRange(view.state, this.currentRange));
+            if (this.currentRange !== null)
+                transactionSpecs.push({ effects: EditorView.scrollIntoView(view.state.doc.line(this.currentRange.startLine).from, { y: "center"  }) });
+        }
+
+        if ((changes === null || "breakpoints" in changes) && this.breakpointsInEditor !== this.breakpoints) {
             this.breakpointsInEditor = this.breakpoints;
-            this.editorView.dispatch(setBreakpoints(this.editorView.state, this.breakpoints));
+            transactionSpecs.push(setBreakpoints(view.state, this.breakpoints));
         }
+
+        view.dispatch(...transactionSpecs);
     }
 
     private updateTheme() {

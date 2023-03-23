@@ -40,6 +40,7 @@
     <app-code-editor 
         class="code-editor" 
         [code]="(editorService.currentCode$ | async)!"
+        [readonly]="(editorService.editorState$ | async)! !== 'ready'"
         [errors]="(editorService.errorsInCurrentCodeFile$ | async)!"
         [currentRange]="(editorService.currentRange$ | async)!"
         [breakpoints]="(editorService.selectedCodeFile$ | async)?.breakpoints ?? []"
