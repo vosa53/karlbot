@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authenticatedCanActivate } from './shared/application/authenticated-can-activate';
+import { NotFoundPageComponent } from './shared/presentation/pages/not-found-page/not-found-page.component';
 
 export const appRoutes: Routes = [
     {
@@ -24,6 +25,10 @@ export const appRoutes: Routes = [
     {
         path: "user",
         loadChildren: () => import("./user/user.routes").then(m => m.userRoutes)
+    },
+    {
+        path: "**",
+        component: NotFoundPageComponent
     }
 ];
 
