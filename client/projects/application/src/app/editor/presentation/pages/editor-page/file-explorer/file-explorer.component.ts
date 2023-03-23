@@ -58,7 +58,10 @@ export class FileExplorerComponent {
     }
 
     async onFileRemove(file: File) {
-        // TODO: Add a confirm dialog.
+        const confirmed = await this.dialogService.showConfirmation("Are you sure?", `Do you really want to delete file '${file.name}'?`);
+        if (!confirmed)
+            return;
+        
         this.fileRemove.emit(file);
     }
 
