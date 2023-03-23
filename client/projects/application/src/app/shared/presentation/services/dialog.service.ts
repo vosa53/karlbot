@@ -1,6 +1,7 @@
 import { ComponentType } from "@angular/cdk/portal";
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { ConfirmDialogComponent } from "../components/confirm-dialog/confirm-dialog.component";
 import { MessageDialogComponent } from "../components/message-dialog/message-dialog.component";
 import { PromptDialogComponent, PromptDialogValidator } from "../components/prompt-dialog/prompt-dialog.component";
 
@@ -12,6 +13,12 @@ export class DialogService {
 
     showMessage(title: string, message: string): Promise<void> {
         return this.show(MessageDialogComponent, {
+            data: { title, message }
+        });
+    }
+
+    showConfirm(title: string, message: string): Promise<boolean> {
+        return this.show(ConfirmDialogComponent, {
             data: { title, message }
         });
     }

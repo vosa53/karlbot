@@ -7,6 +7,7 @@ import { SavedProjectViewComponent } from './saved-project-view/saved-project-vi
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
+import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
 
 @Component({
     selector: 'app-projects-page',
@@ -18,7 +19,7 @@ import { PageComponent } from 'projects/application/src/app/shared/presentation/
 export class ProjectsPageComponent implements OnInit {
     projects: SavedProject[] = [];
 
-    constructor(private readonly projectService: ProjectService) {
+    constructor(private readonly projectService: ProjectService, private readonly dialogService: DialogService) {
 
     }
 
@@ -27,6 +28,10 @@ export class ProjectsPageComponent implements OnInit {
     }
 
     async onRemoveClick(project: SavedProject) {
+        const confirmed = await this.dialogService.showConfirm("Are you sure?", `Do you really want to delete project '${project.project.name}'?`);
+        if (!confirmed)
+            return;
+            
         await this.projectService.delete(project);
         this.loadProjects();
     }

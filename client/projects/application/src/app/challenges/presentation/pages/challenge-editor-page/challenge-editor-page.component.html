@@ -17,7 +17,7 @@
         <mat-accordion class="example-headers-align" multi>
             <mat-expansion-panel *ngFor="let testCase of testCases; let i = index; trackBy: trackTestCase">
                 <mat-expansion-panel-header>
-                    <mat-panel-title>Test case {{i + 1}}</mat-panel-title>
+                    <mat-panel-title>{{getTestCaseName(i)}}</mat-panel-title>
                     <mat-panel-description class="test-case-description">
                         <div class="test-case-description-actions">
                             <mat-checkbox [checked]="testCase.isPublic" (change)="onChangeIsPublic(testCase, $event.checked)" appStopClickPropagation>

@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
+import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
 
 @Component({
     selector: 'app-challenges-page',
@@ -19,7 +20,7 @@ export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] = [];
     displayedColumns: string[] = ["name", "actions"];
 
-    constructor(private readonly challengeService: ChallengeService) {
+    constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService) {
 
     }
 
@@ -28,6 +29,10 @@ export class ChallengesPageComponent implements OnInit {
     }
 
     async onRemoveClick(challenge: Challenge) {
+        const confirmed = await this.dialogService.showConfirm("Are you sure?", `Do you really want to delete challenge '${challenge.name}'?`);
+        if (!confirmed)
+            return;
+
         await this.challengeService.delete(challenge);
         this.loadChallenges();
     }

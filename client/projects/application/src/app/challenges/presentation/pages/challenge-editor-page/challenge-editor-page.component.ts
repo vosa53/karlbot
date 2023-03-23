@@ -14,6 +14,7 @@ import { ChallengeTestCaseEditorComponent } from './challenge-test-case-editor/c
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { StopClickPropagationDirective } from 'projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive';
+import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
 
 @Component({
     selector: 'app-challenge-editor-page',
@@ -31,7 +32,8 @@ export class ChallengeEditorPageComponent {
     challenge: Challenge | null = null;
     testCases: EditorChallengeTestCase[] = [];
 
-    constructor(private readonly challengeService: ChallengeService, private readonly activatedRoute: ActivatedRoute, private readonly router: Router) {
+    constructor(private readonly challengeService: ChallengeService, private readonly activatedRoute: ActivatedRoute, 
+        private readonly router: Router, private readonly dialogService: DialogService) {
 
     }
 
@@ -70,9 +72,10 @@ export class ChallengeEditorPageComponent {
         this.testCases.push(newTestCase);
     }
 
-    onRemoveTestCase(testCase: EditorChallengeTestCase) {
+    async onRemoveTestCase(testCase: EditorChallengeTestCase) {
         const index = this.testCases.indexOf(testCase);
-        if (index === -1)
+        const confirmed = await this.dialogService.showConfirm("Are you sure?", `Do you really want to delete test case '${this.getTestCaseName(index)}'?`);
+        if (!confirmed)
             return;
 
         this.testCases.splice(index, 1);
@@ -93,6 +96,10 @@ export class ChallengeEditorPageComponent {
 
     trackTestCase(index: number, element: any): number {
         return index;
+    }
+
+    getTestCaseName(testCaseIndex: number) {
+        return "Test case " + (testCaseIndex + 1);
     }
 
     private getChallenge(): Challenge {
