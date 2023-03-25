@@ -11,6 +11,8 @@
         (shareClick)="editorService.share()"
         (importClick)="editorService.importProject()"
         (exportClick)="editorService.exportProject()"
+        (undoClick)="onUndoClick()"
+        (redoClick)="onRedoClick()"
         (runClick)="editorService.run(false)"
         (runReadonlyClick)="editorService.run(true)"
         (stopClick)="editorService.stop()"
@@ -37,7 +39,7 @@
 </ng-template>
 
 <ng-template #codeEditor>
-    <app-code-editor 
+    <app-code-editor
         class="code-editor" 
         [code]="(editorService.currentCode$ | async)!"
         [readonly]="(editorService.editorState$ | async)! !== 'ready'"

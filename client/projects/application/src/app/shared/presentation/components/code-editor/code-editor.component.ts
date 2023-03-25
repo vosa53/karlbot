@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { EditorView, keymap, ViewUpdate } from "@codemirror/view";
-import { defaultKeymap } from "@codemirror/commands";
+import { defaultKeymap, undo, redo } from "@codemirror/commands";
 import { basicSetup } from "codemirror";
 import { karel } from "./codemirror/karel-language";
 import { applicationStyleLight } from "./codemirror/application-theme-light";
@@ -149,5 +149,15 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
             return applicationStyleLight;
         else
             return applicationStyleDark;
+    }
+
+    undo() {
+        if (this.editorView !== null)
+            undo(this.editorView);
+    }
+
+    redo() {
+        if (this.editorView !== null)
+            redo(this.editorView);
     }
 }

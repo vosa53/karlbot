@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { EditorService } from "../../../application/services/editor.service";
 import { ErrorListComponent } from "./error-list/error-list.component";
 import { FileExplorerComponent } from "./file-explorer/file-explorer.component";
@@ -8,7 +8,6 @@ import { SettingsComponent } from "./settings/settings.component";
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
 import { ActivatedRoute } from "@angular/router";
-import { LineTextRange } from "projects/karel/src/public-api";
 import { CallStackComponent } from "./call-stack/call-stack.component";
 import { CodeEditorComponent } from "projects/application/src/app/shared/presentation/components/code-editor/code-editor.component";
 import { TownEditorComponent } from "projects/application/src/app/shared/presentation/components/town-editor/town-editor.component";
@@ -22,6 +21,9 @@ import { TownEditorComponent } from "projects/application/src/app/shared/present
     providers: [EditorService, { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 100 }}]
 })
 export class EditorPageComponent {
+    @ViewChild(CodeEditorComponent)
+    codeEditor: CodeEditorComponent | null = null;
+
     readonly completionItemsProvider = (line: number, column: number) => this.editorService.provideCompletionItems(line, column);
     isSmallScreen: boolean = false;
 
@@ -31,5 +33,13 @@ export class EditorPageComponent {
         const projectId = activatedRoute.snapshot.paramMap.get("id");
         if (projectId !== null)
             editorService.openProject(parseInt(projectId, 10));
+    }
+
+    onUndoClick() {
+        this.codeEditor?.undo();
+    }
+
+    onRedoClick() {
+        this.codeEditor?.redo();
     }
 }

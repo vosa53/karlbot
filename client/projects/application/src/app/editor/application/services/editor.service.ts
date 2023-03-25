@@ -281,14 +281,6 @@ export class EditorService {
         }
     }
 
-    undo() {
-
-    }
-
-    redo() {
-
-    }
-
     private setReadyState() {
         this.interpreter.next(null);
         this.callStack.next(null);
