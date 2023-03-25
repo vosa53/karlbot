@@ -45,7 +45,7 @@ namespace KarlBot.Controllers
                 return BadRequest();
 
             var challengeTestCases = dataModel.TestCases?.Select(tc => ToTestCase(tc)).ToList();
-            var challenge = new Challenge(dataModel.Name, dataModel.Description, challengeTestCases);
+            var challenge = new Challenge(dataModel.Name, dataModel.Description, dataModel.Difficulty, challengeTestCases);
             await _challengeRepository.AddAsync(challenge);
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id = challenge.Id }, ToDataModel(challenge));
@@ -66,6 +66,7 @@ namespace KarlBot.Controllers
 
             challenge.Name = dataModel.Name;
             challenge.Description = dataModel.Description;
+            challenge.Difficulty = dataModel.Difficulty;
             challenge.TestCases = dataModel.TestCases?.Select(tc => ToTestCase(tc)).ToList();
 
             await _challengeRepository.UpdateAsync(challenge);
@@ -95,6 +96,7 @@ namespace KarlBot.Controllers
                 Id = challenge.Id,
                 Name = challenge.Name,
                 Description = challenge.Description,
+                Difficulty = challenge.Difficulty,
                 TestCases = challenge.TestCases?.Where(tc => tc.IsPublic || isAdmin)?.Select(tc => ToDataModel(tc)).ToList()
             };
         }

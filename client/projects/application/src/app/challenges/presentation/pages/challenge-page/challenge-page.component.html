@@ -1,6 +1,9 @@
 <app-page *ngIf="challenge !== null" [title]="challenge.name" [fullWidth]="true">
     <div class="content">
         <div class="assignment">
+            <div class="difficulty mat-subtitle-1">
+                <app-challenge-difficulty [difficulty]="challenge.difficulty"></app-challenge-difficulty>
+            </div>
             <div [appMarkdown]="challenge.description"></div>
 
             <h2 *ngIf="challengeTestCases.length !== 0">Examples</h2>

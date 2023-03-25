@@ -1,6 +1,11 @@
-.inputs {
-    display: flex;
-    flex-direction: column;
+.fields {
+    display: grid;
+    column-gap: 16px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.field-full {
+    grid-column: span 2;
 }
 
 .add-button {
@@ -21,4 +26,11 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-right: 8px;
+}
+
+@media (max-width: 700px) {
+    .field-half {
+        grid-column: span 2;
+    }
 }

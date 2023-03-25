@@ -20,11 +20,12 @@ import { ChallengeTestCase } from 'projects/application/src/app/shared/applicati
 import { TownViewComponent } from 'projects/application/src/app/shared/presentation/components/town-view/town-view.component';
 import { TownCamera } from 'projects/application/src/app/shared/presentation/town/town-camera';
 import { MarkdownDirective } from 'projects/application/src/app/shared/presentation/directives/markdown-directive';
+import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
 
 @Component({
     selector: 'app-challenge-page',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownDirective],
+    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownDirective, ChallengeDifficultyComponent],
     templateUrl: './challenge-page.component.html',
     styleUrls: ['./challenge-page.component.css']
 })

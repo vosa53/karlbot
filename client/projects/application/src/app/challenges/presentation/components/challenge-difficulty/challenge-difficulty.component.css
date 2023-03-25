@@ -1,0 +1,15 @@
+.text {
+    font-weight: 500;
+}
+
+.text-easy {
+    color: var(--color-easy);
+}
+
+.text-medium {
+    color: var(--color-medium);
+}
+
+.text-hard {
+    color: var(--color-hard);
+}

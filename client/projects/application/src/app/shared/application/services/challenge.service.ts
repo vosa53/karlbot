@@ -3,6 +3,7 @@ import { TownDeserializer } from 'projects/karel/src/lib/town/town-deserializer'
 import { TownSerializer } from 'projects/karel/src/lib/town/town-serializer';
 import { API_BASE_URL } from '../api-base-url';
 import { Challenge } from '../models/challenge';
+import { ChallengeDifficulty } from '../models/challenge-difficulty';
 import { ApiService } from './api-service';
 
 @Injectable({
@@ -48,6 +49,7 @@ export class ChallengeService {
             id: challenge.id,
             name: challenge.name,
             description: challenge.description,
+            difficulty: challenge.difficulty,
             testCases: challenge.testCases?.map(tc => ({
                 inputTown: TownSerializer.serialize(tc.inputTown),
                 outputTown: TownSerializer.serialize(tc.outputTown),
@@ -64,6 +66,7 @@ export class ChallengeService {
             id: dto.id, 
             name: dto.name,
             description: dto.description,
+            difficulty: dto.difficulty,
             testCases: dto.testCases?.map(tc => ({
                 inputTown: TownDeserializer.deserialize(tc.inputTown),
                 outputTown: TownDeserializer.deserialize(tc.outputTown),
@@ -80,6 +83,7 @@ interface ChallengeDTO {
     readonly id: number;
     readonly name: string;
     readonly description: string;
+    readonly difficulty: ChallengeDifficulty,
     readonly testCases: ChallengeTestCaseDTO[] | null;
 }
 

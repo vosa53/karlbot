@@ -11,27 +11,26 @@
 .toolbar {
     overflow-x: auto;
     overflow-y: hidden;
-    display: grid;
-    grid-template-columns: max-content 1fr auto auto;
-    grid-template-areas: "tools . width height";
+    display: flex;
     gap: 16px;
     height: auto;
+}
+
+.toolbar-tools {
+    margin-right: auto;
+    flex-shrink: 0;
 }
 
 .toolbar-tool-icon {
     width: 24px;
 }
 
-.toolbar-tools {
-    grid-area: tools;
-}
-
 .toolbar-width {
-    grid-area: width;
+    flex-shrink: 0;
 }
 
 .toolbar-height {
-    grid-area: height;
+    flex-shrink: 0;
 }
 
 .toolbar-width, .toolbar-height {

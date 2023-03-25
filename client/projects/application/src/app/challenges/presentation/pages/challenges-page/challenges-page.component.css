@@ -1,0 +1,28 @@
+.table-scroll-wrapper {
+    overflow: auto; 
+    width: 100%;
+}
+
+.table {
+    background: transparent;
+}
+
+.table tr {
+    min-height: 52px;
+}
+
+.table button {
+    text-align: left;
+}
+
+.table-name-column {
+    min-width: 175px;
+}
+
+.table-actions-column {
+    white-space: nowrap;
+}
+
+.table-actions-column button {
+    opacity: 0.3;
+}

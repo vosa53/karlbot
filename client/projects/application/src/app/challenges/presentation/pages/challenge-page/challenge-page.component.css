@@ -15,6 +15,11 @@
     flex-basis: 0;
 }
 
+.difficulty {
+    margin-top: -12px;
+    margin-bottom: 16px;
+}
+
 .test-cases {
     display: flex;
     flex-direction: column;

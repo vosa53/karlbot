@@ -8,17 +8,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
+import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
 
 @Component({
     selector: 'app-challenges-page',
     standalone: true,
-    imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatTableModule, PageComponent],
+    imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatTableModule, PageComponent, ChallengeDifficultyComponent],
     templateUrl: './challenges-page.component.html',
     styleUrls: ['./challenges-page.component.css']
 })
 export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] = [];
-    displayedColumns: string[] = ["name", "actions"];
+    displayedColumns: string[] = ["name", "difficulty", "actions"];
 
     constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService) {
 

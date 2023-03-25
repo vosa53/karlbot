@@ -1,12 +1,21 @@
 <app-page title="Challenge editor">
     <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div class="inputs">
-            <mat-form-field appearance="fill">
+        <div class="fields">
+            <mat-form-field appearance="fill" class="field-half">
                 <mat-label>Name</mat-label>
                 <input matInput formControlName="name">
             </mat-form-field>
 
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="field-half">
+                <mat-label>Difficulty</mat-label>
+                <mat-select formControlName="difficulty">
+                    <mat-option value="easy">Easy</mat-option>
+                    <mat-option value="medium">Medium</mat-option>
+                    <mat-option value="hard">Hard</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="field-full">
                 <mat-label>Description (supports Markdown)</mat-label>
                 <textarea matInput formControlName="description" style="height: 300px;"></textarea>
             </mat-form-field>
