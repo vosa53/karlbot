@@ -20,15 +20,15 @@
             </div>
             <mat-divider></mat-divider>
             <div class="drawer-navigation">
-                <a class="drawer-navigation-item" routerLink="/editor" routerLinkActive="active" matRipple>
+                <a class="drawer-navigation-item" routerLink="/editor" routerLinkActive="active" matRipple (click)="drawer.close()">
                     <mat-icon class="drawer-navigation-item-icon">code</mat-icon>
                     Editor
                 </a>
-                <a class="drawer-navigation-item" routerLink="/projects" routerLinkActive="active" matRipple>
+                <a class="drawer-navigation-item" routerLink="/projects" routerLinkActive="active" matRipple (click)="drawer.close()">
                     <mat-icon class="drawer-navigation-item-icon">apps</mat-icon>
                     Projects
                 </a>
-                <a class="drawer-navigation-item" routerLink="/challenges" routerLinkActive="active" matRipple>
+                <a class="drawer-navigation-item" routerLink="/challenges" routerLinkActive="active" matRipple (click)="drawer.close()">
                     <mat-icon class="drawer-navigation-item-icon">star</mat-icon>
                     Challenges
                 </a>
