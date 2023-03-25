@@ -27,6 +27,8 @@ export class TileTownEditorTool extends TownEditorTool {
         const signCount = town.getSignCountAt(tileX, tileY);
         if (signCount !== 0)
             return;
+        if (town.karelPosition.x === tileX && town.karelPosition.y === tileY)
+            return;
 
         let setWall = this.tile === TownTile.wall;
         if (button === TownViewSelectionButton.secondary)

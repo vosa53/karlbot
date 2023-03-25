@@ -295,6 +295,7 @@ export class MutableTown {
         );
         this.tiles = newTiles;
         this.signCounts = newSignCounts;
+        this.setTileAt(this.karelPosition.x, this.karelPosition.y, TownTile.land);
     }
 
     /**

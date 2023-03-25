@@ -20,7 +20,7 @@ export async function step(town: MutableTown, actionDelay: number, stopToken: In
     if (isLandAt(town, nextPosition.x, nextPosition.y))
         town.karelPosition = nextPosition;
     else
-        return new ExternalProgramException("Wall in a way.");
+        return new ExternalProgramException("Karel hit the wall.");
 }
 
 /**
@@ -58,11 +58,14 @@ export async function pick(town: MutableTown, actionDelay: number, stopToken: In
  * @param actionDelay Delay before the program is executed.
  * @param stopToken Token to stop the program execution.
  */
-export async function put(town: MutableTown, actionDelay: number, stopToken: InterpretStopToken): Promise<void> {
+export async function put(town: MutableTown, actionDelay: number, stopToken: InterpretStopToken): Promise<void | ExternalProgramException> {
     await delay(actionDelay, stopToken);
     const currentSignCount = town.getSignCountAt(town.karelPosition.x, town.karelPosition.y);
 
-    town.setSignCountAt(town.karelPosition.x, town.karelPosition.y, currentSignCount + 1);
+    if (currentSignCount >= MutableTown.MAX_SIGN_COUNT)
+        return new ExternalProgramException(`Tile can not contain more than ${MutableTown.MAX_SIGN_COUNT} signs.`);
+    else
+        town.setSignCountAt(town.karelPosition.x, town.karelPosition.y, currentSignCount + 1);
 }
 
 /**
