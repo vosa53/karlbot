@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { authenticatedCanActivate } from "../shared/application/authenticated-can-activate";
 import { ChallengeEditorPageComponent } from "./presentation/pages/challenge-editor-page/challenge-editor-page.component";
 import { ChallengePageComponent } from "./presentation/pages/challenge-page/challenge-page.component";
 import { ChallengesPageComponent } from "./presentation/pages/challenges-page/challenges-page.component";
@@ -10,11 +11,13 @@ export const challengesRoutes: Routes = [
     },
     {
         path: "editor",
-        component: ChallengeEditorPageComponent
+        component: ChallengeEditorPageComponent,
+        canActivate: [authenticatedCanActivate(true)]
     },
     {
         path: "editor/:id",
-        component: ChallengeEditorPageComponent
+        component: ChallengeEditorPageComponent,
+        canActivate: [authenticatedCanActivate(true)]
     },
     {
         path: ":id",

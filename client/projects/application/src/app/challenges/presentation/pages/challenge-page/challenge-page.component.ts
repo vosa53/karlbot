@@ -22,6 +22,7 @@ import { TownCamera } from 'projects/application/src/app/shared/presentation/tow
 import { MarkdownDirective } from 'projects/application/src/app/shared/presentation/directives/markdown-directive';
 import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
 import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
+import { User } from 'projects/application/src/app/shared/application/models/user';
 
 @Component({
     selector: 'app-challenge-page',
@@ -55,11 +56,11 @@ export class ChallengePageComponent {
     }
 
     async onSubmitProject() {
-        const project = await this.selectProject();
+        const currentUser = await this.signInService.currentUser;
+        const project = await this.selectProject(currentUser!);
         if (project === null)
             return;
 
-        const currentUser = await this.signInService.currentUser;
         const submission: ChallengeSubmission = {
             id: 0,
             userId: currentUser!.id,
@@ -77,8 +78,8 @@ export class ChallengePageComponent {
         this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUser!.id);
     }
 
-    private async selectProject(): Promise<Project | null> {
-        const savedProjects = await this.projectService.get();
+    private async selectProject(currentUser: User): Promise<Project | null> {
+        const savedProjects = await this.projectService.get(currentUser.id);
         const bottomSheet = this.bottomSheet.open<ProjectSelectorComponent, SavedProject[], SavedProject>(ProjectSelectorComponent, { data: savedProjects });
         const result = await lastValueFrom(bottomSheet.afterDismissed());
 

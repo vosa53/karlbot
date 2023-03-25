@@ -15,12 +15,12 @@ export const appRoutes: Routes = [
     {
         path: "projects",
         loadChildren: () => import("./projects/projects.routes").then(m => m.projectsRoutes),
-        canActivate: [authenticatedCanActivate]
+        canActivate: [authenticatedCanActivate()]
     },
     {
         path: "challenges",
         loadChildren: () => import("./challenges/challenges.routes").then(m => m.challengesRoutes),
-        canActivate: [authenticatedCanActivate]
+        canActivate: [authenticatedCanActivate()]
     },
     {
         path: "user",

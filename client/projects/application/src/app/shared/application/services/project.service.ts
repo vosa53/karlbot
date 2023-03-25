@@ -14,8 +14,12 @@ export class ProjectService {
         this.projectsBaseUrl = `${apiBaseUrl}/projects`;
     }
 
-    async get(): Promise<SavedProject[]> {
-        const dto = await this.apiService.get<ProjectDTO[]>(this.projectsBaseUrl);
+    async get(authorId?: string): Promise<SavedProject[]> {
+        const params: any = { };
+        if (authorId !== undefined)
+            params.authorId = authorId;
+
+        const dto = await this.apiService.get<ProjectDTO[]>(this.projectsBaseUrl, { params });
         return dto.map(d => this.fromDTO(d));
     }
 

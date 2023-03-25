@@ -1,5 +1,5 @@
 <app-page title="Challenges">
-    <button mat-flat-button color="primary" class="create-project-button" routerLink="/challenges/editor">
+    <button *ngIf="(signInService.currentUser | async)?.isAdmin ?? false" mat-flat-button color="primary" class="create-project-button" routerLink="/challenges/editor">
         <mat-icon>add</mat-icon>
         Create new
     </button>

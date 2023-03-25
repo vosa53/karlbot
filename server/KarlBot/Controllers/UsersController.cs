@@ -30,7 +30,8 @@ namespace KarlBot.Controllers
             return new UserDataModel
             {
                 Id = user.Id,
-                Email = user.Email!
+                Email = user.Email!,
+                IsAdmin = User.IsInRole("Admin")
             };
         }
     }

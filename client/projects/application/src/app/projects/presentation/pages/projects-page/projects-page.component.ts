@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
+import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
 
 @Component({
     selector: 'app-projects-page',
@@ -19,7 +20,8 @@ import { DialogService } from 'projects/application/src/app/shared/presentation/
 export class ProjectsPageComponent implements OnInit {
     projects: SavedProject[] = [];
 
-    constructor(private readonly projectService: ProjectService, private readonly dialogService: DialogService) {
+    constructor(private readonly projectService: ProjectService, private readonly dialogService: DialogService, 
+        private readonly signInService: SignInService) {
 
     }
 
@@ -37,7 +39,8 @@ export class ProjectsPageComponent implements OnInit {
     }
 
     private async loadProjects() {
-        this.projects = await this.projectService.get();
+        const currentUser = await this.signInService.currentUser;
+        this.projects = await this.projectService.get(currentUser!.id);
         this.projects.sort((a, b) => b.modified.getTime() - a.modified.getTime());
     }
 }

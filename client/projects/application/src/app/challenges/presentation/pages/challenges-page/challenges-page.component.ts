@@ -9,6 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
 import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
+import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
 
 @Component({
     selector: 'app-challenges-page',
@@ -19,13 +20,17 @@ import { ChallengeDifficultyComponent } from '../../components/challenge-difficu
 })
 export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] = [];
-    displayedColumns: string[] = ["name", "difficulty", "actions"];
+    displayedColumns: string[] = ["name", "difficulty"];
 
-    constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService) {
-
+    constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService, readonly signInService: SignInService) {
+        
     }
 
     async ngOnInit() {
+        const currentUser = await this.signInService.currentUser;
+        if (currentUser!.isAdmin)
+            this.displayedColumns.push("actions");
+
         this.loadChallenges();
     }
 

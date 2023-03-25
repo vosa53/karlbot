@@ -6,6 +6,6 @@ export const userRoutes: Routes = [
     {
         path: "sign-in",
         component: SignInPageComponent,
-        canActivate: [anonymousCanActivate]
+        canActivate: [anonymousCanActivate()]
     }
 ];
