@@ -30,6 +30,12 @@ export class HeaderComponent {
     @Input()
     entryPoint: string = "";
 
+    @Input()
+    canUndo = false;
+
+    @Input()
+    canRedo = false;
+
     @Output()
     projectNameChange = new EventEmitter<string>();
 

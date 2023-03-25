@@ -31,11 +31,11 @@
 
     <button mat-button [matMenuTriggerFor]="editMenu">Edit</button>
     <mat-menu #editMenu="matMenu">
-        <button mat-menu-item (click)="undoClick.emit()">
+        <button mat-menu-item (click)="undoClick.emit()" [disabled]="!canUndo">
             <mat-icon>undo</mat-icon>
             Undo
         </button>
-        <button mat-menu-item (click)="redoClick.emit()">
+        <button mat-menu-item (click)="redoClick.emit()" [disabled]="!canRedo">
             <mat-icon>redo</mat-icon>
             Redo
         </button>
@@ -67,10 +67,10 @@
         <mat-icon>save</mat-icon>
     </button>
 
-    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="undoClick.emit()">
+    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="undoClick.emit()" [disabled]="!canUndo">
         <mat-icon>undo</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="redoClick.emit()">
+    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="redoClick.emit()" [disabled]="!canRedo">
         <mat-icon>redo</mat-icon>
     </button>
 

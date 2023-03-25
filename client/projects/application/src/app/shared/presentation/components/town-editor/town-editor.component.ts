@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output } from "@angular/core";
 import { TownViewSelectDirective, TownViewSelectionEvent, TownViewSelectionMode } from "projects/application/src/app/shared/presentation/directives/town-view-select.directive";
 import { TownCamera } from "projects/application/src/app/shared/presentation/town/town-camera";
 import { Vector } from "projects/karel/src/lib/math/vector";
@@ -81,7 +81,13 @@ export class TownEditorComponent {
      */
     readonly sizeValidator = ValidatedInputValidatorFactory.integer(s => s > 0 && s <= 100);
 
-    constructor() {
+    /**
+     * Value of `tabindex` attribute of the component host element.
+     */
+    @HostBinding("attr.tabindex")
+    readonly tabIndex = 0;
+
+    constructor(private readonly hostElement: ElementRef) {
         const assetsRoot = "/assets/editor/presentation/pages/editor/town-editor/";
         this.tools = [
             { iconName: "open_with", tool: new MoveTownEditorTool() },
@@ -133,6 +139,11 @@ export class TownEditorComponent {
             return "warn";
         else
             throw new Error();
+    }
+
+    @HostListener("pointerdown")
+    onPointerDown() {
+        this.hostElement.nativeElement.focus();
     }
 }
 

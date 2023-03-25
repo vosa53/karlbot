@@ -4,6 +4,10 @@
     height: 100%;
 }
 
+:host:focus {
+    outline: none;
+}
+
 .town-view {
     flex-grow: 1;
 }

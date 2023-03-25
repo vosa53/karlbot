@@ -5,6 +5,8 @@
         [projectName]="(editorService.project$ | async)!.name"
         [availableEntryPoints]="(editorService.availableEntryPoints$ | async)!"
         [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
+        [canUndo]="(editorService.activeArea$ | async) === 'code'"
+        [canRedo]="(editorService.activeArea$ | async) === 'code'"
         (projectNameChange)="editorService.changeProjectName($event)"
         (entryPointChange)="editorService.changeEntryPoint($event)"
         (saveClick)="editorService.saveProject()"
@@ -48,7 +50,8 @@
         [breakpoints]="(editorService.selectedCodeFile$ | async)?.breakpoints ?? []"
         [completionItemsProvider]="completionItemsProvider"
         (codeChange)="editorService.changeCode($event)"
-        (breakpointsChange)="editorService.changeBreakpoints($event)">
+        (breakpointsChange)="editorService.changeBreakpoints($event)"
+        (focusin)="onCodeEditorFocusIn()">
     </app-code-editor>
 </ng-template>
 
@@ -57,7 +60,8 @@
         class="town-editor" 
         [town]="(editorService.currentTown$ | async)!" 
         [camera]="(editorService.townCamera$ | async)!"
-        (cameraChange)="editorService.changeTownCamera($event)">
+        (cameraChange)="editorService.changeTownCamera($event)"
+        (focusin)="onTownEditorFocusIn()">
     </app-town-editor>
 </ng-template>
 
@@ -94,7 +98,7 @@
 
 <div class="small-screen" *ngIf="isSmallScreen">
     <ng-container *ngTemplateOutlet="header"></ng-container>
-    <mat-tab-group preserveContent class="content tab-full-height">
+    <mat-tab-group preserveContent class="content tab-full-height" [selectedIndex]="selectedTabIndex$ | async" (selectedIndexChange)="onSelectedTabIndexChange($event)">
         <mat-tab label="Project">
             <div class="project">
                 <ng-container *ngTemplateOutlet="fileExplorer"></ng-container>

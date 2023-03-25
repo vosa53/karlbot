@@ -45,6 +45,7 @@ export class EditorService {
     private readonly interpreter = new BehaviorSubject<Interpreter | null>(null);
     private readonly interpretStopToken = new BehaviorSubject<InterpretStopToken | null>(null);
     private readonly callStack = new BehaviorSubject<readonly ReadonlyCallStackFrame[] | null>(null);
+    private readonly activeArea = new BehaviorSubject<EditorArea>(EditorArea.code);
 
     readonly project$ = this.project.asObservable();
     readonly selectedCodeFile$ = this.selectedCodeFile.asObservable();
@@ -56,6 +57,7 @@ export class EditorService {
     readonly interpretStopToken$ = this.interpretStopToken.asObservable();
 
     readonly callStack$ = this.callStack.asObservable();
+    readonly activeArea$ = this.activeArea.asObservable();
 
     readonly currentCode$ = this.selectedCodeFile.pipe(map(cf => {
         return cf?.compilationUnit?.buildText() ?? "";
@@ -114,6 +116,10 @@ export class EditorService {
             this.currentTown.next(newValue?.town?.toMutable() ?? null);
         });
         this.availableEntryPoints$.subscribe(ae => this.availableEntryPoints = ae);
+    }
+
+    setActiveArea(area: EditorArea) {
+        this.activeArea.next(area);
     }
 
     async openProject(projectId: number) {
@@ -446,4 +452,13 @@ export enum EditorState {
     ready = "ready",
     running = "running",
     paused = "paused"
+}
+
+export enum EditorArea {
+    files = "files",
+    settings = "settings",
+    code = "code",
+    errors = "errors",
+    callStack = "callStack",
+    town = "town"
 }
