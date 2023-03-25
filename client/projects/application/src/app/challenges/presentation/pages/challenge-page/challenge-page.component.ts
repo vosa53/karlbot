@@ -21,6 +21,7 @@ import { TownViewComponent } from 'projects/application/src/app/shared/presentat
 import { TownCamera } from 'projects/application/src/app/shared/presentation/town/town-camera';
 import { MarkdownDirective } from 'projects/application/src/app/shared/presentation/directives/markdown-directive';
 import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
+import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
 
 @Component({
     selector: 'app-challenge-page',
@@ -37,7 +38,7 @@ export class ChallengePageComponent {
 
     constructor(private readonly challengeService: ChallengeService, private readonly challengeSubmissionService: ChallengeSubmissionService,
         private readonly projectService: ProjectService, private readonly signInService: SignInService,
-        private readonly activatedRoute: ActivatedRoute, private bottomSheet: MatBottomSheet) {
+        private readonly activatedRoute: ActivatedRoute, private bottomSheet: MatBottomSheet, private notificationService: NotificationService) {
 
     }
 
@@ -66,7 +67,13 @@ export class ChallengePageComponent {
             project: project,
             evaluationResult: null
         }
-        await this.challengeSubmissionService.add(this.challenge!.id, submission);
+        const result = await this.challengeSubmissionService.add(this.challenge!.id, submission);
+        
+        if (result.evaluationResult !== null) {
+            const message = result.evaluationResult.successRate === 1 ? "Success! Good job 👍" : "Not now :( Try again!";
+            this.notificationService.show(message);
+        }
+        
         this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUser!.id);
     }
 

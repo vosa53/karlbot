@@ -18,6 +18,7 @@ import { DialogService } from 'projects/application/src/app/shared/presentation/
 import { MatSelectModule } from '@angular/material/select';
 import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
 import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
+import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
 
 @Component({
     selector: 'app-challenge-editor-page',
@@ -37,7 +38,7 @@ export class ChallengeEditorPageComponent {
     testCases: EditorChallengeTestCase[] = [];
 
     constructor(private readonly challengeService: ChallengeService, private readonly activatedRoute: ActivatedRoute, 
-        private readonly router: Router, private readonly dialogService: DialogService) {
+        private readonly router: Router, private readonly dialogService: DialogService, private readonly notificationService: NotificationService) {
 
     }
 
@@ -61,6 +62,7 @@ export class ChallengeEditorPageComponent {
         else
             await this.challengeService.update(challenge);
 
+        this.notificationService.show("Challenge was successfully saved.");
         this.router.navigateByUrl(`/challenges/${this.challenge.id}`);
     }
 

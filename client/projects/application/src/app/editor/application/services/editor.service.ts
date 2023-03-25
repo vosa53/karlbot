@@ -31,6 +31,7 @@ import { SavedProject } from '../../../shared/application/models/saved-project';
 import { FileService } from '../../../shared/application/services/file-service';
 import { ProjectService } from '../../../shared/application/services/project.service';
 import { SignInService } from '../../../shared/application/services/sign-in.service';
+import { NotificationService } from '../../../shared/presentation/services/notification.service';
 import { TownCamera } from '../../../shared/presentation/town/town-camera';
 import { EditorDialogService } from '../../presentation/services/editor-dialog.service';
 
@@ -104,7 +105,7 @@ export class EditorService {
 
     constructor(private readonly dialogService: EditorDialogService, private readonly projectService: ProjectService, 
         private readonly signInService: SignInService, private readonly router: Router, private readonly activatedRoute: ActivatedRoute,
-        private readonly location: Location, private readonly fileService: FileService) {
+        private readonly location: Location, private readonly fileService: FileService, private readonly notificationService: NotificationService) {
         this.selectedTownFile.pipe(pairwise()).subscribe(([oldValue, newValue]) => {
             if (oldValue !== null) {
                 const newTown = this.currentTown.value!.toImmutable();
@@ -159,6 +160,7 @@ export class EditorService {
             savedProject = await this.projectService.getById(toSave.id);
         }
         this.savedProject.next(savedProject);
+        this.notificationService.show("Project was successfully saved.");
     }
 
     async importProject() {
