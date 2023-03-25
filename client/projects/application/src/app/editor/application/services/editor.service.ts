@@ -207,10 +207,14 @@ export class EditorService {
     }
 
     selectFile(file: File) {
-        if (file instanceof CodeFile)
+        if (file instanceof CodeFile) {
             this.selectedCodeFile.next(file);
-        else if (file instanceof TownFile)
+            this.activeArea.next(EditorArea.code);
+        }
+        else if (file instanceof TownFile) {
             this.selectedTownFile.next(file);
+            this.activeArea.next(EditorArea.town);
+        }
     }
 
     async run(readonly: boolean) {
@@ -228,6 +232,8 @@ export class EditorService {
             await this.dialogService.showSelectTownMessage();
             return;
         }
+
+        this.activeArea.next(EditorArea.town);
 
         this.interpreter.next(this.createInterpreter());
         this.setInterpreterBreakpoints();
@@ -280,6 +286,7 @@ export class EditorService {
         }
         else {
             this.callStack.next(callStack);
+            this.activeArea.next(EditorArea.code);
             if (result instanceof ExceptionInterpretResult) {
                 this.callStack.next(result.exception.callStack);
                 await this.dialogService.showExceptionMessage(result.exception);
@@ -305,9 +312,6 @@ export class EditorService {
                     breakpointInstructions.push(breakpointLineInstruction[0]);
             }
         }
-
-        //console.log(breakpointInstructions[0]);
-        //console.log(this.assembly?.sourceMap.getRangeByInstruction(breakpointInstructions[0]));
         this.interpreter.value!.setBreakpoints(breakpointInstructions);
     }
 
@@ -321,13 +325,6 @@ export class EditorService {
         
         this.selectedCodeFile.next(newCodeFile);
         this.project.next(newProject);
-
-        /*if (!this.availableEntryPoints.includes(this._project.settings.entryPoint)) {
-            const newEntryPoint = this.availableEntryPoints[0] ?? "";
-            const newSettings = this._project.settings.withEntryPoint(newEntryPoint);
-            const newProject = this._project.withSettings(newSettings);
-            this._project = newProject
-        }*/
     }
 
     changeBreakpoints(breakpoints: readonly number[]) {
