@@ -1,7 +1,6 @@
 import { parser } from "./lezer/karel-parser";
 import { styleTags, tags as t } from "@lezer/highlight";
-import { LRLanguage } from "@codemirror/language";
-import { LanguageSupport } from "@codemirror/language";
+import { LRLanguage, LanguageSupport, continuedIndent, indentNodeProp } from "@codemirror/language";
 
 /**
  * Karel codemirror language.
@@ -14,15 +13,15 @@ export const karelLanguage = LRLanguage.define({
                 SingleLineComment: t.lineComment,
                 MultiLineComment: t.blockComment,
                 Number: t.number,
-                "program if while repeat times end": t.controlKeyword,
+                "program if else while repeat times end": t.controlKeyword,
                 Operator: t.operatorKeyword,
-            })/*,
+            }),
             indentNodeProp.add({
-                Program: delimitedIndent({ closing: "end" }),
-                While: delimitedIndent({ closing: "end", }),
-                If: delimitedIndent({ closing: "end" }),
-                Repeat: delimitedIndent({ closing: "end" })
-            })*/
+                Program: continuedIndent(),
+                If: continuedIndent({ except: /^else\b/ }),
+                While: continuedIndent(),
+                Repeat: continuedIndent()
+            })
         ]
     })
 });

@@ -17,6 +17,7 @@ import { applicationStyle } from "./codemirror/application-theme";
 import { applicationStyleDark } from "./codemirror/application-theme-dark";
 import { tabKeymap } from "./codemirror/tab-keymap";
 import { ColorTheme, ColorThemeService } from "../../../application/services/color-theme.service";
+import { indentUnit } from "@codemirror/language";
 
 
 @Component({
@@ -78,10 +79,10 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
                 applicationStyle,
                 this.editorTheme.of(this.colorThemeToStyle(this.colorTheme)),
                 this.editorReadonly.of(EditorState.readOnly.of(this.readonly)),
+                indentUnit.of("    "),
                 karel(),
                 codeCompletion((line, column) => this.completionItemsProvider(line, column)),
                 EditorView.updateListener.of(u => this.onEditorViewUpdate(u))
-                //indentUnit.of("  ")
             ],
             parent: this.hostElement.nativeElement.children[0]
         });
