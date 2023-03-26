@@ -50,8 +50,7 @@ $application-light-theme: mat.define-light-theme((
     color: (
         primary: $application-primary,
         accent: $application-accent,
-        warn: $application-warn,
-        aaa: $application-warn
+        warn: $application-warn
     ),
     density: 0,
     typography: $my-typography

@@ -1,17 +1,17 @@
 <app-panel header="File explorer" class="panel">
     <mat-nav-list class="list">
-        <mat-list-item *ngFor="let file of files" (click)="fileSelect.emit(file)" [class.selected]="file === selectedCodeFile || file === selectedTownFile">
+        <mat-list-item *ngFor="let file of files" (click)="onFileSelect(file)" [class.selected]="file === selectedCodeFile || file === selectedTownFile" [disabled]="isDisabled(file)">
             <img matListItemIcon [src]="getFileIconURL(file)" class="file-icon">
             <div matListItemTitle>{{file.name}}</div>
             <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" appStopClickPropagation>
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="onFileRename(file)">
+                <button mat-menu-item (click)="onFileRename(file)" [disabled]="readonly">
                     <mat-icon>edit</mat-icon>
                     <span>Rename</span>
                 </button>
-                <button mat-menu-item (click)="onFileRemove(file)">
+                <button mat-menu-item (click)="onFileRemove(file)" [disabled]="readonly">
                     <mat-icon>delete</mat-icon>
                     <span>Delete</span>
                 </button>
@@ -23,11 +23,11 @@
         <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addMenu="matMenu" xPosition="before" yPosition="above">
-        <button mat-menu-item (click)="onFileAdd('code')">
+        <button mat-menu-item (click)="onFileAdd('code')" [disabled]="readonly">
             <img src="http://karlbot.cz/assets/files/code-file.png" class="menu-icon">
             <span>Code</span>
         </button>
-        <button mat-menu-item (click)="onFileAdd('town')">
+        <button mat-menu-item (click)="onFileAdd('town')" [disabled]="readonly">
             <img src="http://karlbot.cz/assets/files/town-file.png" class="menu-icon">
             <span>Town</span>
         </button>

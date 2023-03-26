@@ -28,6 +28,15 @@ export class FileExplorerComponent {
     @Input()
     selectedTownFile: TownFile | null = null;
 
+    @Input()
+    disableCodeFileSelect = false;
+
+    @Input()
+    disableTownFileSelect = false;
+
+    @Input()
+    readonly = false;
+
     @Output()
     codeFileAdd = new EventEmitter<string>();
 
@@ -74,6 +83,13 @@ export class FileExplorerComponent {
         this.fileRename.emit({ file, newName });
     }
 
+    onFileSelect(file: File) {
+        if (this.isDisabled(file))
+            return;
+        
+        this.fileSelect.emit(file);
+    }
+
     getFileIconURL(file: File): string {
         if (file instanceof CodeFile)
             return "http://karlbot.cz/assets/files/code-file.png";
@@ -81,6 +97,15 @@ export class FileExplorerComponent {
             return "http://karlbot.cz/assets/files/town-file.png";
         else
             throw new Error("");
+    }
+
+    isDisabled(file: File) {
+        if (file instanceof CodeFile && this.disableCodeFileSelect && file !== this.selectedCodeFile)
+            return true;
+        if (file instanceof TownFile && this.disableTownFileSelect && file !== this.selectedTownFile)
+            return true;
+
+        return false;
     }
 
     private createFileNameValidator(file: File | null) {

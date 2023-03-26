@@ -108,6 +108,9 @@ export class EditorService {
         private readonly signInService: SignInService, private readonly router: Router, private readonly activatedRoute: ActivatedRoute,
         private readonly location: Location, private readonly fileService: FileService, private readonly notificationService: NotificationService) {
         this.selectedTownFile.pipe(pairwise()).subscribe(([oldValue, newValue]) => {
+            if (oldValue === newValue)
+                return;
+            
             if (oldValue !== null) {
                 const newTown = this.currentTown.value!.toImmutable();
                 const newTownFile = oldValue.withTown(newTown);

@@ -29,9 +29,11 @@
 <ng-template #fileExplorer>
     <app-file-explorer 
         class="file-explorer"
+        [files]="(editorService.project$ | async)!.files"
         [selectedCodeFile]="(editorService.selectedCodeFile$ | async)!"
         [selectedTownFile]="(editorService.selectedTownFile$ | async)!"
-        [files]="(editorService.project$ | async)!.files" 
+        [disableTownFileSelect]="(editorService.editorState$ | async)! !== 'ready'"
+        [readonly]="(editorService.editorState$ | async)! !== 'ready'"
         (codeFileAdd)="editorService.addCodeFile($event)"
         (townFileAdd)="editorService.addTownFile($event)"
         (fileRemove)="editorService.removeFile($event)"
