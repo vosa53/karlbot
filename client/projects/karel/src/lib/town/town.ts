@@ -1,3 +1,4 @@
+import { Event } from '../event';
 import { Vector } from '../math/vector';
 import { TownDirection } from './town-direction';
 import { TownTile } from './town-tile';
@@ -47,6 +48,11 @@ export class Town {
     get homePosition(): Vector {
         return this.mutableTown.homePosition;
     }
+
+    /**
+     * Called when the town is changed.
+     */
+    readonly changed = new Event();
 
     private constructor(
         private readonly mutableTown: MutableTown
@@ -155,12 +161,20 @@ export class MutableTown {
     set karelPosition(value: Vector) {
         MutableTown.throwIfInvalidCoordinates(value.x, value.y, this.width, this.height);
         this._karelPosition = value;
+        this.changed.emit();
     }
 
     /**
      * Karel direction.
      */
-    karelDirection: TownDirection;
+    get karelDirection(): TownDirection {
+        return this._karelDirection;
+    }
+
+    set karelDirection(value: TownDirection) {
+        this._karelDirection = value;
+        this.changed.emit();
+    }
     
     /**
      * Home position.
@@ -172,11 +186,18 @@ export class MutableTown {
     set homePosition(value: Vector) {
         MutableTown.throwIfInvalidCoordinates(value.x, value.y, this.width, this.height);
         this._homePosition = value;
+        this.changed.emit();
     }
+
+    /**
+     * Called when the town is changed.
+     */
+    readonly changed = new Event();
 
     private _width: number;
     private _height: number;
     private _karelPosition: Vector;
+    private _karelDirection: TownDirection;
     private _homePosition: Vector;
     private signCounts: number[];
     private tiles: TownTile[];
@@ -186,7 +207,7 @@ export class MutableTown {
         this._width = width;
         this._height = height;
         this._karelPosition = karelPosition;
-        this.karelDirection = karelDirection;
+        this._karelDirection = karelDirection;
         this._homePosition = homePosition;
         this.tiles = tiles;
         this.signCounts = signCounts;
@@ -295,7 +316,8 @@ export class MutableTown {
         );
         this.tiles = newTiles;
         this.signCounts = newSignCounts;
-        this.setTileAt(this.karelPosition.x, this.karelPosition.y, TownTile.land);
+
+        this.changed.emit();
     }
 
     /**
@@ -317,6 +339,7 @@ export class MutableTown {
     setTileAt(x: number, y: number, tile: TownTile) {
         MutableTown.throwIfInvalidCoordinates(x, y, this.width, this.height);
         this.tiles[this.convert2DTo1D(x, y)] = tile;
+        this.changed.emit();
     }
 
     /**
@@ -339,6 +362,7 @@ export class MutableTown {
         MutableTown.throwIfInvalidCoordinates(x, y, this.width, this.height);
         MutableTown.throwIfInvalidSignCount(signCount);
         this.signCounts[this.convert2DTo1D(x, y)] = signCount;
+        this.changed.emit();
     }
 
     /**

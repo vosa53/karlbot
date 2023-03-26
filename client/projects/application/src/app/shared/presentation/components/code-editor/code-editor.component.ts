@@ -96,6 +96,7 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
                 indentUnit.of("    "),
                 karel(),
                 codeCompletion((line, column) => this.completionItemsProvider(line, column)),
+                EditorView.contentAttributes.of({ autocorrect: "off", autocomplete: "off", spellcheck: "false" }),
                 EditorView.updateListener.of(u => this.onEditorViewUpdate(u))
             ]
         });

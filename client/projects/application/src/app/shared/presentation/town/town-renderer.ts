@@ -7,21 +7,22 @@ import { TownRenderingEnvironment } from "./town-rendering-environment";
  * Renders a town on canvas.
  */
 export class TownRenderer {
-    private static readonly karelImage = new Image();
-    private static readonly homeImage = new Image();
-    private static readonly wallTileImage = new Image();
-    private static readonly landTileImage = new Image();
-    private static readonly signEvenImage = new Image();
-    private static readonly signOddImage = new Image();
+    private static readonly imageLoadPromises: Promise<void>[] = [];
+    private static imagesLoadPromise: Promise<void[]>;
+
+    private static readonly karelImage = this.loadImage("karel.png");
+    private static readonly homeImage = this.loadImage("home.png");
+    private static readonly wallTileImage = this.loadImage("tiles/wall-tile.png");
+    private static readonly landTileImage = this.loadImage("tiles/land-tile.png");
+    private static readonly signEvenImage = this.loadImage("signs/sign-even.png");
+    private static readonly signOddImage = this.loadImage("signs/sign-odd.png");
 
     static {
-        const assetsRoot = "/assets/shared/presentation/components/town-view/";
-        this.karelImage.src = assetsRoot + "karel.png";
-        this.homeImage.src = assetsRoot + "home.png";
-        this.wallTileImage.src = assetsRoot + "tiles/wall-tile.png";
-        this.landTileImage.src = assetsRoot + "tiles/land-tile.png";
-        this.signEvenImage.src = assetsRoot + "signs/sign-even.png";
-        this.signOddImage.src = assetsRoot + "signs/sign-odd.png";
+        this.imagesLoadPromise = Promise.all(this.imageLoadPromises);
+    }
+
+    static async waitForImagesLoad() {
+        await this.imagesLoadPromise;
     }
 
     /**
@@ -94,5 +95,14 @@ export class TownRenderer {
             return TownRenderer.landTileImage;
         else
             throw new Error("Unknown tile.");
+    }
+
+    private static loadImage(filePath: string): HTMLImageElement {
+        const ASSETS_ROOT = "/assets/shared/presentation/components/town-view/";
+        const image = new Image();
+        const imageLoadPromise = new Promise<void>(resolve => image.addEventListener("load", () => resolve()));
+        image.src = ASSETS_ROOT + filePath;
+        this.imageLoadPromises.push(imageLoadPromise);
+        return image;
     }
 }

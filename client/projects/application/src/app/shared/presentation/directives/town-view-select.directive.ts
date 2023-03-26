@@ -62,6 +62,8 @@ export class TownViewSelectDirective {
         event.preventDefault();
 
         this.pointersHover.set(event.pointerId, new Vector(event.offsetX, event.offsetY));
+
+        this.townView.requestRender();
     }
 
     @HostListener("pointerleave", ["$event"])
@@ -74,6 +76,8 @@ export class TownViewSelectDirective {
         this.pointersDown.delete(event.pointerId);
         if (this.currentDrag?.pointerId === event.pointerId)
             this.currentDrag = null;
+        
+        this.townView.requestRender();
     }
 
     @HostListener("pointermove", ["$event"])
@@ -81,6 +85,8 @@ export class TownViewSelectDirective {
         event.preventDefault();
 
         this.pointersHover.set(event.pointerId, new Vector(event.offsetX, event.offsetY));
+
+        this.townView.requestRender();
     }
 
     @HostListener("pointerdown", ["$event"])

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Vector } from 'projects/karel/src/lib/math/vector';
 import { ReadonlyTown } from 'projects/karel/src/public-api';
 import { TownCamera } from '../../town/town-camera';
@@ -22,7 +22,17 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
      * Town to display.
      */
     @Input()
-    town: ReadonlyTown | null = null;
+    get town(): ReadonlyTown | null {
+        return this._town;
+    }
+
+    set town(value: ReadonlyTown | null) {
+        this.town?.changed.removeListener(this.townChangedHandler);
+        value?.changed.addListener(this.townChangedHandler);
+
+        this._town = value;
+        this.requestRender();
+    }
 
     /**
      * Camera for display.
@@ -50,8 +60,11 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
         return this._renderingEnvironment;
     }
 
+    private _town: ReadonlyTown | null = null;
     private _camera = new TownCamera(Vector.ZERO, 1);
     private _renderingEnvironment = new TownRenderingEnvironment(this.camera, new TownViewport(0, 0), 32);
+
+    private readonly townChangedHandler = () => this.requestRender();
 
     @ViewChild("canvas", { static: true })
     private readonly canvasElementRef!: ElementRef<HTMLCanvasElement>;
@@ -61,29 +74,23 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
     private requestAnimationFrameId: number | null = null;
 
     ngAfterViewInit() {
-        this.updateRenderingEnvironment();
-
-        const canvasElement = this.canvasElementRef.nativeElement;
-        this.canvasRenderingContext = canvasElement.getContext("2d");
-        if (this.canvasRenderingContext === null)
-            throw new Error("Can not get a canvas 2d rendering context.");
-
-        const animationFrameCallback = () => {
-            this.render(this.canvasRenderingContext!);
-            this.requestAnimationFrameId = requestAnimationFrame(animationFrameCallback);
-
-        };
-        this.requestAnimationFrameId = requestAnimationFrame(animationFrameCallback);
-
         this.registerRenderer(0, c => {
             if (this.town !== null)
                 TownRenderer.render(c, this.renderingEnvironment, this.town);
         });
+        this.updateRenderingEnvironment();
+        this.canvasResizeObserver.observe(this.canvasElementRef.nativeElement);
 
-        this.canvasResizeObserver.observe(canvasElement);
+        this.canvasRenderingContext = this.canvasElementRef.nativeElement.getContext("2d");
+        if (this.canvasRenderingContext === null)
+            throw new Error("Can not get a canvas 2d rendering context.");
+        
+        TownRenderer.waitForImagesLoad().then(() => this.requestRender());
     }
 
     ngOnDestroy(): void {
+        this.town?.changed.removeListener(this.townChangedHandler);
+
         if (this.requestAnimationFrameId !== null)
             cancelAnimationFrame(this.requestAnimationFrameId);
         
@@ -108,6 +115,19 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
         const rendererIndex = this.renderers.findIndex(r => r.renderer === renderer);
         if (rendererIndex !== -1)
             this.renderers.splice(rendererIndex, 1);
+    }
+
+    /**
+     * Requests re-render.
+     */
+    requestRender() {
+        if (this.requestAnimationFrameId !== null || this.canvasRenderingContext === null)
+            return;
+
+        this.requestAnimationFrameId = requestAnimationFrame(() => {
+            this.render(this.canvasRenderingContext!);
+            this.requestAnimationFrameId = null;
+        });
     }
 
     private render(context: CanvasRenderingContext2D) {
