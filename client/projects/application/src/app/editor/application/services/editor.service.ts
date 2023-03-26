@@ -118,6 +118,7 @@ export class EditorService {
             this.currentTown.next(newValue?.town?.toMutable() ?? null);
         });
         this.availableEntryPoints$.subscribe(ae => this.availableEntryPoints = ae);
+        this.openFirstFiles();
     }
 
     setActiveArea(area: EditorArea) {
@@ -130,6 +131,7 @@ export class EditorService {
 
         this.savedProject.next(savedProject);
         this.project.next(project);
+        this.openFirstFiles();
     }
 
     async saveProject() {
@@ -408,6 +410,16 @@ export class EditorService {
         return errors.length !== 0;
     }
 
+    private openFirstFiles() {
+        const codeFile = this.project.value.files.find(f => f instanceof CodeFile);
+        if (codeFile !== undefined)
+            this.selectFile(codeFile);
+
+        const townFile = this.project.value.files.find(f => f instanceof TownFile);
+        if (townFile !== undefined)
+            this.selectFile(townFile);
+    }
+
     private createNewProject(): Project {
         const code = `/**
  * Karel program doing a depth first search algorithm.
@@ -442,13 +454,13 @@ end
 `;
 
         const files = [
-            new CodeFile(CompilationUnitParser.parse(code, "Programs"), []),
-            new CodeFile(CompilationUnitParser.parse(code2, "Programs2"), []),
+            new CodeFile(CompilationUnitParser.parse(code, "DFS"), []),
+            new CodeFile(CompilationUnitParser.parse(code2, "Utils"), []),
             new TownFile("Village", Town.createEmpty(10, 10)),
             new TownFile("Town", Town.createEmpty(20, 20))
         ];
         const externalPrograms: ExternalProgramReference[] = StandardLibrary.getProgramReferences();
-        const settings = new Settings("main", 200, 1000);
+        const settings = new Settings("DFS", 200, 1000);
         
         return Project.create("Project", files, externalPrograms, settings);
     }
