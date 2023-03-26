@@ -10,11 +10,12 @@ import { TownViewComponent } from 'projects/application/src/app/shared/presentat
 import { Project, Settings, Town, TownFile } from 'projects/karel/src/public-api';
 import { StopClickPropagationDirective } from 'projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive';
 import { DateAgoPipe } from 'projects/application/src/app/shared/presentation/pipes/date-ago.pipe';
+import { TownViewFitContainDirective } from 'projects/application/src/app/shared/presentation/directives/town-view-fit-contain.directive';
 
 @Component({
     selector: 'app-saved-project-view',
     standalone: true,
-    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatMenuModule, MatRippleModule, TownViewComponent, StopClickPropagationDirective, DatePipe, DateAgoPipe],
+    imports: [CommonModule, MatCardModule, MatIconModule, MatButtonModule, MatMenuModule, MatRippleModule, TownViewComponent, StopClickPropagationDirective, DatePipe, DateAgoPipe, TownViewFitContainDirective],
     templateUrl: './saved-project-view.component.html',
     styleUrls: ['./saved-project-view.component.css']
 })

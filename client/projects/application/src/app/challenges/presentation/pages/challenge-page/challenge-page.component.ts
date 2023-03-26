@@ -23,11 +23,12 @@ import { MarkdownDirective } from 'projects/application/src/app/shared/presentat
 import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
 import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
 import { User } from 'projects/application/src/app/shared/application/models/user';
+import { TownViewFitContainDirective } from 'projects/application/src/app/shared/presentation/directives/town-view-fit-contain.directive';
 
 @Component({
     selector: 'app-challenge-page',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownDirective, ChallengeDifficultyComponent],
+    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownDirective, ChallengeDifficultyComponent, TownViewFitContainDirective],
     templateUrl: './challenge-page.component.html',
     styleUrls: ['./challenge-page.component.css']
 })
@@ -35,7 +36,6 @@ export class ChallengePageComponent {
     challenge: Challenge | null = null;
     challengeTestCases: ChallengeTestCase[] = [];
     challengeSubmissions: ChallengeSubmission[] = [];
-    camera = new TownCamera(new Vector(5, 5), 0.7);
 
     constructor(private readonly challengeService: ChallengeService, private readonly challengeSubmissionService: ChallengeSubmissionService,
         private readonly projectService: ProjectService, private readonly signInService: SignInService,
