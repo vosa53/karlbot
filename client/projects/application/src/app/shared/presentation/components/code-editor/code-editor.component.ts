@@ -70,6 +70,20 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
 
     ngAfterViewInit(): void {
         this.editorView = new EditorView({
+            state: this.createEditorState(),
+            parent: this.hostElement.nativeElement.children[0]
+        });
+        this.codeInEditor = this.code;
+        this.updateEditorFromInputs(this.editorView, null);
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.editorView !== null)
+            this.updateEditorFromInputs(this.editorView, changes);
+    }
+
+    private createEditorState(): EditorState {
+        return EditorState.create({
             doc: this.code,
             extensions: [
                 currentRangeHighlighting(),
@@ -83,15 +97,8 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
                 karel(),
                 codeCompletion((line, column) => this.completionItemsProvider(line, column)),
                 EditorView.updateListener.of(u => this.onEditorViewUpdate(u))
-            ],
-            parent: this.hostElement.nativeElement.children[0]
+            ]
         });
-        this.updateEditorFromInputs(this.editorView, null);
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (this.editorView !== null)
-            this.updateEditorFromInputs(this.editorView, changes);
     }
 
     private onEditorViewUpdate(update: ViewUpdate) {
@@ -109,11 +116,13 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
     private updateEditorFromInputs(view: EditorView, changes: SimpleChanges | null) {
         const transactionSpecs: TransactionSpec[] = [];
 
+        // Code change first because next changes can depend on new positions of lines.
         if ((changes === null || "code" in changes) && this.codeInEditor !== this.code) {
             this.codeInEditor = this.code;
-            
-            // Dispatch code change first because next changes can depend on new positions of lines.
-            view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: this.code } });
+
+            // Create a whole new state to clear undo redo history.
+            const state = this.createEditorState();
+            view.setState(state);
         }
 
         if (changes === null || "readonly" in changes)
