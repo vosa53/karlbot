@@ -1,6 +1,6 @@
 <app-panel header="File explorer" class="panel">
     <mat-nav-list class="list">
-        <mat-list-item *ngFor="let file of files" (click)="onFileSelect(file)" [class.selected]="file === selectedCodeFile || file === selectedTownFile" [disabled]="isDisabled(file)">
+        <mat-list-item *ngFor="let file of sortedFiles" (click)="onFileSelect(file)" [class.selected]="file === selectedCodeFile || file === selectedTownFile" [disabled]="isDisabled(file)">
             <img matListItemIcon [src]="getFileIconURL(file)" class="file-icon">
             <div matListItemTitle>{{file.name}}</div>
             <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" appStopClickPropagation>

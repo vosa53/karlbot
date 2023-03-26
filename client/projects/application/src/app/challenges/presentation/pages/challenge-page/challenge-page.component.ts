@@ -51,7 +51,7 @@ export class ChallengePageComponent {
 
             this.challenge = await this.challengeService.getById(id);
             this.challengeTestCases = this.challenge.testCases!.filter(tc => tc.isPublic);
-            this.challengeSubmissions = await this.challengeSubmissionService.get(id, currentUserId);
+            await this.loadSubmissions();
         });
     }
 
@@ -75,11 +75,18 @@ export class ChallengePageComponent {
             this.notificationService.show(message);
         }
         
-        this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUser!.id);
+        await this.loadSubmissions();
+    }
+
+    private async loadSubmissions() {
+        const currentUserId = (await this.signInService.currentUser)!.id;
+        this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUserId);
+        this.challengeSubmissions.sort((a, b) => b.created.getTime() - a.created.getTime());
     }
 
     private async selectProject(currentUser: User): Promise<Project | null> {
         const savedProjects = await this.projectService.get(currentUser.id);
+        savedProjects.sort((a, b) => b.modified.getTime() - a.modified.getTime());
         const bottomSheet = this.bottomSheet.open<ProjectSelectorComponent, SavedProject[], SavedProject>(ProjectSelectorComponent, { data: savedProjects });
         const result = await lastValueFrom(bottomSheet.afterDismissed());
 

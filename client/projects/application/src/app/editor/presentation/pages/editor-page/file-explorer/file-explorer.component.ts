@@ -52,6 +52,18 @@ export class FileExplorerComponent {
     @Output()
     fileSelect = new EventEmitter<File>();
 
+    get sortedFiles(): readonly File[] {
+        const sortedFiles = [...this.files];
+        sortedFiles.sort((a, b) => {
+            const aTypeSortOrder = this.getFileTypeSortOrder(a);
+            const bTypeSortOrder = this.getFileTypeSortOrder(b);
+            if (aTypeSortOrder < bTypeSortOrder) return -1;
+            if (aTypeSortOrder > bTypeSortOrder) return 1;
+            return a.name.localeCompare(b.name, "en");
+        });
+        return sortedFiles;
+    }
+
     constructor(private readonly dialogService: DialogService) { }
 
     async onFileAdd(fileType: "code" | "town") {
@@ -115,6 +127,15 @@ export class FileExplorerComponent {
 
             return this.files.every(f => f.name !== fileName || f.name === file?.name);
         };
+    }
+
+    private getFileTypeSortOrder(file: File) {
+        if (file instanceof CodeFile)
+            return 0;
+        else if (file instanceof TownFile)
+            return 1;
+        else
+            throw new Error();
     }
 }
 
