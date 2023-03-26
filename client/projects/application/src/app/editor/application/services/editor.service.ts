@@ -102,6 +102,7 @@ export class EditorService {
     private availableEntryPoints: readonly string[] = [];
     private assembly: Assembly | null = null;
     private willPause = false;
+    private isDebuggerStep = false;
 
     constructor(private readonly dialogService: EditorDialogService, private readonly projectService: ProjectService, 
         private readonly signInService: SignInService, private readonly router: Router, private readonly activatedRoute: ActivatedRoute,
@@ -262,15 +263,21 @@ export class EditorService {
     }
 
     async stepInto() {
+        this.isDebuggerStep = true;
         await this._run(st => this.interpreter.value!.interpretStepInto(st));
+        this.isDebuggerStep = false;
     }
 
     async stepOver() {
+        this.isDebuggerStep = true;
         await this._run(st => this.interpreter.value!.interpretStepOver(st));
+        this.isDebuggerStep = false;
     }
 
     async stepOut() {
+        this.isDebuggerStep = true;
         await this._run(st => this.interpreter.value!.interpretStepOut(st));
+        this.isDebuggerStep = false;
     }
 
     private async _run(action: (stopToken: InterpretStopToken) => Promise<InterpretResult>) {
@@ -391,7 +398,7 @@ export class EditorService {
     private createInterpreter(): Interpreter {
         this.assembly = Emitter.emit(this.project.value.compilation);
         const entryPoint = this.assembly.programs.find(p => p.name === this.project.value.settings.entryPoint)!;
-        const externalPrograms = StandardLibrary.getPrograms(this.currentTown.value!, () => this.project.value.settings.karelSpeed);
+        const externalPrograms = StandardLibrary.getPrograms(this.currentTown.value!, () => this.isDebuggerStep ? 0 : this.project.value.settings.karelSpeed);
 
         return new Interpreter(this.assembly, entryPoint, externalPrograms);
     }
