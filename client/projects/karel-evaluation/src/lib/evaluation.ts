@@ -37,6 +37,8 @@ async function evaluateTestCases(testCases: TestCase[], assembly: Assembly, entr
         const town = inputTown.toMutable();
         const externalPrograms = StandardLibrary.getPrograms(town, () => 0);
         const interpreter = new Interpreter(assembly, entryPoint, externalPrograms);
+        interpreter.maxCallStackSize = 1_000;
+        interpreter.maxInterpretedInstructionCount = 100_000;
         
         const result = await interpreter.interpretAll(new InterpretStopToken());
 

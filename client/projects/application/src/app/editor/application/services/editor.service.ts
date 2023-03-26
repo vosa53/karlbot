@@ -405,7 +405,12 @@ export class EditorService {
         const entryPoint = this.assembly.programs.find(p => p.name === this.project.value.settings.entryPoint)!;
         const externalPrograms = StandardLibrary.getPrograms(this.currentTown.value!, () => this.isDebuggerStep ? 0 : this.project.value.settings.karelSpeed);
 
-        return new Interpreter(this.assembly, entryPoint, externalPrograms);
+        const interpreter = new Interpreter(this.assembly, entryPoint, externalPrograms);
+        interpreter.maxCallStackSize = this.project.value.settings.maxRecursionDepth;
+        interpreter.interpretedInstructionCountBeforeYield = 1000;
+        interpreter.yieldFunction = () => new Promise(resolve => setTimeout(() => resolve(), 0));
+
+        return interpreter;
     }
 
     private hasErrors(): boolean {

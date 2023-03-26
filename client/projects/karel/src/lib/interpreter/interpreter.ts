@@ -30,9 +30,25 @@ import { Program } from '../assembly/program';
  */
 export class Interpreter {
     /**
-     * Maximum size of the call stack.
+     * Maximum allowed size of the call stack.
      */
     maxCallStackSize: number | null = null;
+
+    /**
+     * Maximum allowed number of instructions interpreted by one of the `interperet*` methods.
+     */
+    maxInterpretedInstructionCount: number | null = null;
+
+    /**
+     * After this number of instructions the interpreter will call {@link yieldFunction}.
+     */
+    interpretedInstructionCountBeforeYield: number | null = null;
+
+    /**
+     * Will be called after {@link interpretedInstructionCountBeforeYield} instructions. 
+     * It allows for example yield the control to the browser to keep the UI responsive or to display some statistics.
+     */
+    yieldFunction = (stopToken: InterpretStopToken) => Promise.resolve();
 
     /**
      * Whether the breakpoint on the first instruction should be skipped.
@@ -141,8 +157,14 @@ export class Interpreter {
             if (stopToken.isStopRequested)
                 return new StopInterpretResult();
 
+            if (this.maxInterpretedInstructionCount !== null && interpretedCount >= this.maxInterpretedInstructionCount)
+                return new ExceptionInterpretResult(this.throwException("Max interpreted instruction count limit exceeded."));
+
             if (this.breakpoints.has(this.callStackTop.currentInstruction) && (interpretedCount !== 0 || !this.skipBreakpointOnFirstInstruction))
                 return new BreakpointInterpretResult();
+
+            if (this.interpretedInstructionCountBeforeYield !== null && (this.interpretedInstructionCountBeforeYield === 0 || interpretedCount % this.interpretedInstructionCountBeforeYield === 0))
+                await this.yieldFunction(stopToken);
 
             let result = this.interpretCurrent(stopToken);
             if (result instanceof Promise)
