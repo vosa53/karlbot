@@ -110,6 +110,15 @@ jobs:
         mv client/dist/application server/dist/wwwroot
         mv client/projects/karel/dist/karel.js server/dist/karel.js
         mv client/projects/karel-evaluation/dist/karel-evaluation.js server/dist/karel-evaluation.js
+    - name: Write secrets
+      shell: bash
+      env:
+        SERVER_APP_SETTINGS: ${{ secrets.SERVER_APP_SETTINGS }}
+        SERVER_FIREBASE_CREDENTIAL: ${{ secrets.SERVER_FIREBASE_CREDENTIAL }}
+      run: |
+        cd server/dist
+        echo "$SERVER_APP_SETTINGS" > appsettings.json
+        echo "$SERVER_FIREBASE_CREDENTIAL" > firebase.json
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
