@@ -11,13 +11,18 @@ using ApplicationCore.Entities;
 using System.Text.Json;
 using ApplicationCore;
 using ApplicationCore.Services;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services
 {
     public class ChallengeEvaluationService : IChallengeEvaluationService
     {
-        private static readonly string KAREL_LIBRARY = File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel\dist\bundle.js");
-        private static readonly string KAREL_EVALUATION_LIBRARY = File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel-evaluation\dist\bundle.js");
+        private readonly ChallengeEvaluationOptions _options;
+
+        public ChallengeEvaluationService(IOptions<ChallengeEvaluationOptions> options)
+        {
+            _options = options.Value;
+        }
 
         public async Task<ChallengeEvaluationResult> EvaluateAsync(string projectFile, IList<ChallengeTestCase> testCases)
         {
@@ -34,8 +39,8 @@ namespace Infrastructure.Services
 
         private Task<ChallengeEvaluationResult> EvaluateInternalAsync(V8ScriptEngine engine, string projectFile, IList<ChallengeTestCase> testCases)
         {
-            engine.Evaluate(KAREL_LIBRARY);
-            engine.Evaluate(File.ReadAllText(@"C:\Users\janjo\Desktop\karlbot\client\projects\karel-evaluation\dist\bundle.js"));
+            engine.Evaluate(_options.KarelLibrarySource);
+            engine.Evaluate(_options.KarelEvaluationLibrarySource);
 
             var taskCompletionSource = new TaskCompletionSource<ChallengeEvaluationResult>();
 

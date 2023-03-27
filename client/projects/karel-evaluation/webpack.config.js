@@ -22,7 +22,7 @@ module.exports = {
         karel: "karel"
     },
     output: {
-        filename: "bundle.js",
+        filename: "karel-evaluation.js",
         path: path.resolve(__dirname, "dist"),
         library: "karelEvaluation"
     },
