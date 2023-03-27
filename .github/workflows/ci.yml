@@ -13,15 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Use Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 14.x
-
-    - name: Build
+    - name: Restore client dependencies
       run: |
         cd client
         npm install
+    - name: Build client
+      run: |
+        cd client
         npm run build -- karel --configuration production
         npm run build -- karel-evaluation --configuration production
         npm run build -- application --configuration production
@@ -34,9 +36,25 @@ jobs:
         npm install
         npm run build
         cd ../..
-        
-    - name: Test
+    - name: Test client
       run: |
         cd client
         npm run test -- --browsers=ChromeHeadless
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore server dependencies
+      run: |
+        cd server
+        dotnet restore
+    - name: Build server
+      run: |
+        cd server
+        dotnet build --no-restore
+    - name: Test server
+      run: |
+        cd server
+        dotnet test --no-build --verbosity normal
         
