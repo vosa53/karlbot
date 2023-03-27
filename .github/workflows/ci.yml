@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,9 +24,9 @@ jobs:
     - name: Build client
       run: |
         cd client
-        npm run build -- karel --configuration production
-        npm run build -- karel-evaluation --configuration production
-        npm run build -- application --configuration production
+        npm run build -- karel
+        npm run build -- karel-evaluation
+        npm run build -- application
         cd projects
         cd karel
         npm install
@@ -57,4 +57,72 @@ jobs:
       run: |
         cd server
         dotnet test --no-build --verbosity normal
+        
+        
+        
+        
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14.x
+    - name: Restore client dependencies
+      run: |
+        cd client
+        npm install
+    - name: Build client
+      run: |
+        cd client
+        npm run build -- karel --configuration production
+        npm run build -- karel-evaluation --configuration production
+        npm run build -- application --configuration production
+        cd projects
+        cd karel
+        npm install
+        npm run build
+        cd ..
+        cd karel-evaluation
+        npm install
+        npm run build
+        cd ../..
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore server dependencies
+      run: |
+        cd server
+        dotnet restore
+    - name: Build server
+      run: |
+        cd server
+        dotnet publish --configuration Release -o dist --os win
+        
+    - name: Move
+      run: |
+        mv client/dist/application server/dist/wwwroot
+        mv client/projects/karel/dist/karel.js server/dist/karel.js
+        mv client/projects/karel-evaluation/dist/karel-evaluation.js server/dist/karel-evaluation.js
+    - name: Write secrets
+      shell: bash
+      env:
+        SERVER_APP_SETTINGS: ${{ secrets.SERVER_APP_SETTINGS }}
+        SERVER_FIREBASE_CREDENTIAL: ${{ secrets.SERVER_FIREBASE_CREDENTIAL }}
+      run: |
+        cd server/dist
+        echo "$SERVER_APP_SETTINGS" > appsettings.json
+        echo "$SERVER_FIREBASE_CREDENTIAL" > firebase.json
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: bundle
+        path: server/dist
+        
         
