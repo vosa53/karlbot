@@ -25,10 +25,11 @@ namespace Infrastructure.Services
 
             var user = await firebaseAuth.GetUserAsync(decodedToken.Uid);
 
-            if (user.Email == null)
+            var email = user.Email ?? user.ProviderData.FirstOrDefault(p => p.Email != null)?.Email;
+            if (email == null)
                 throw new Exception();
 
-            return new FirebaseUser(user.Uid, user.Email);
+            return new FirebaseUser(user.Uid, email);
         }
     }
 }

@@ -26,7 +26,6 @@
             ],
             "styles": [
               "projects/application/src/custom-theme.scss",
-              "node_modules/firebaseui/dist/firebaseui.css",
               "projects/application/src/styles.css"
             ],
             "scripts": []
@@ -53,7 +52,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/application/src/environments/environment.ts",
+                  "with": "projects/application/src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -89,7 +94,6 @@
               "projects/application/src/assets"
             ],
             "styles": [
-              "node_modules/firebaseui/dist/firebaseui.css",
               "projects/application/src/styles.css"
             ],
             "scripts": []

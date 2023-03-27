@@ -1,8 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import firebase from 'firebase/compat/app';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { BehaviorSubject, distinctUntilChanged, firstValueFrom, from, map, of, shareReplay, skip, Subscription, switchMap } from 'rxjs';
+import { Auth, authState, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
+import { firstValueFrom, skip, Subscription } from 'rxjs';
 import { User } from '../models/user';
 import { AuthenticationService } from './authentication.service';
 import { UserService } from './user.service';
@@ -23,20 +21,26 @@ export class SignInService implements OnDestroy {
     private _currentUserToken: Promise<string | null>;
     private authStateSubscription: Subscription | null = null;
 
-    constructor(private readonly firebaseAuthentication: AngularFireAuth, private readonly authenticationService: AuthenticationService, 
+    constructor(private readonly firebaseAuthentication: Auth, private readonly authenticationService: AuthenticationService, 
         private readonly userService: UserService) {
 
         this._currentUserToken = this.getCurrentUserToken();
         this._currentUser = this.getCurrentUser();
 
-        this.authStateSubscription = this.firebaseAuthentication.authState.pipe(skip(1)).subscribe(u => {
+        this.authStateSubscription = authState(firebaseAuthentication).pipe(skip(1)).subscribe(u => {
             this._currentUserToken = this.getCurrentUserToken();
             this._currentUser = this.getCurrentUser();
         });
     }
 
+    async signInWithGoogle(): Promise<void> {
+        await signInWithPopup(this.firebaseAuthentication, new GoogleAuthProvider());
+        await firstValueFrom(authState(this.firebaseAuthentication));
+    }
+
     async signOut(): Promise<void> {
-        return await this.firebaseAuthentication.signOut();
+        await signOut(this.firebaseAuthentication);
+        await firstValueFrom(authState(this.firebaseAuthentication));
     }
 
     ngOnDestroy() {
@@ -44,7 +48,7 @@ export class SignInService implements OnDestroy {
     }
 
     private async getCurrentUserToken() {
-        const user = await firstValueFrom(this.firebaseAuthentication.authState);
+        const user = await firstValueFrom(authState(this.firebaseAuthentication));
         if (user === null)
             return null;
 

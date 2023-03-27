@@ -1,6 +1,6 @@
 export const environment = {
-    apiBaseURL: "",
-    firebaseAuthenticationEmulatorURL: null,
+    apiBaseURL: "http://localhost:5071",
+    firebaseAuthenticationEmulatorURL: "http://localhost:9099",
     firebase: {
         projectId: "karlbot-app",
         appId: "1:797422519674:web:dbda2c6c7eef88d26082c3",

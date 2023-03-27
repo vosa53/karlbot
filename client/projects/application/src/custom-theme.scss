@@ -90,6 +90,10 @@ $application-dark-theme: mat.define-dark-theme((
     --background-secondary: #{mat.get-color-from-palette($background-palette, 'app-bar')};
     --background-tertiary: #eaeaea;
     --background-designer: url("/assets/designer-background-light.png");
+    --google-sign-in-button-normal: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_light_normal_web.png");
+    --google-sign-in-button-focus: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_light_focus_web.png");
+    --google-sign-in-button-pressed: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_light_pressed_web.png");
+    --google-sign-in-button-disabled: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_light_disabled_web.png");
 }
 
 .dark-theme {
@@ -111,4 +115,8 @@ $application-dark-theme: mat.define-dark-theme((
     --background-secondary: #{mat.get-color-from-palette($background-palette, 'app-bar')};
     --background-tertiary: #333333;
     --background-designer: url("/assets/designer-background-dark.png");
+    --google-sign-in-button-normal: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_dark_normal_web.png");
+    --google-sign-in-button-focus: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_dark_focus_web.png");
+    --google-sign-in-button-pressed: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_dark_pressed_web.png");
+    --google-sign-in-button-disabled: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_dark_disabled_web.png");
 }

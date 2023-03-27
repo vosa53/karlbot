@@ -17,6 +17,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using FirebaseAdmin.Auth;
+using NuGet.ContentModel;
 
 namespace KarlBot
 {
@@ -36,10 +38,13 @@ namespace KarlBot
                 o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
             });
 
+            Environment.SetEnvironmentVariable("FIREBASE_AUTH_EMULATOR_HOST", "localhost:9099");
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile("karlbot-app-firebase-adminsdk-azcla-72e48f58a6.json")
+                Credential = GoogleCredential.FromAccessToken("test"),
+                ProjectId = "demo-test",
             });
+            
 
             builder.Services.AddTransient<IFirebaseAuthenticationService, FirebaseAuthenticationService>();
             builder.Services.AddTransient<IChallengeEvaluationService, ChallengeEvaluationService>();
@@ -106,7 +111,7 @@ namespace KarlBot
             var app = builder.Build();
 
             app.UseCors(
-                options => options.WithOrigins("http://localhost:4200").AllowAnyMethod().AllowAnyHeader()
+                options => options/*.WithOrigins("http://localhost:4200")*/.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             );
 
             if (app.Environment.IsDevelopment())

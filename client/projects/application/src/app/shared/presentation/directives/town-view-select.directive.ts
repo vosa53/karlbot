@@ -1,4 +1,4 @@
-import { Directive, EventEmitter, HostListener, Input, Output } from "@angular/core";
+import { Directive, EventEmitter, HostListener, Input, Output, ElementRef } from "@angular/core";
 import { Rectangle } from "projects/karel/src/lib/math/rectangle";
 import { Vector } from "projects/karel/src/lib/math/vector";
 import { ReadonlyTown } from "projects/karel/src/public-api";
@@ -46,7 +46,9 @@ export class TownViewSelectDirective {
     private currentDrag: { pointerId: number, startTile: Vector } | null = null;
     private _selectionDisabled = false;
 
-    constructor(private readonly townView: TownViewComponent) { }
+    constructor(private readonly townView: TownViewComponent, elementRef: ElementRef) { 
+        elementRef.nativeElement.style.touchAction = "none";
+    }
 
     ngOnInit() {
         const RENDERER_ORDER = 10;

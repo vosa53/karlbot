@@ -1,9 +1,5 @@
 <app-page title="Sign in">
-    <div class="container">
-        <mat-card class="form">
-            <div class="sign-in-options">
-                <firebase-ui (signInSuccessWithAuthResult)="onSignInSuccess()"></firebase-ui>
-            </div>
-        </mat-card>
+    <div class="sign-in-options">
+        <app-google-sign-in-button (click)="onSignInWithGoogleClick()"></app-google-sign-in-button>
     </div>
 </app-page>

@@ -419,13 +419,13 @@ export class EditorService {
     }
 
     private openFirstFiles() {
-        const codeFile = this.project.value.files.find(f => f instanceof CodeFile);
-        if (codeFile !== undefined)
-            this.selectFile(codeFile);
-
         const townFile = this.project.value.files.find(f => f instanceof TownFile);
         if (townFile !== undefined)
             this.selectFile(townFile);
+
+        const codeFile = this.project.value.files.find(f => f instanceof CodeFile);
+        if (codeFile !== undefined)
+            this.selectFile(codeFile);
     }
 
     private createNewProject(): Project {

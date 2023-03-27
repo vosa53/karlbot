@@ -1,0 +1,20 @@
+.google-sign-in-button {
+    width: 191px;
+    height: 46px;
+    border: none;
+    padding: none;
+    cursor: pointer;
+    background: var(--google-sign-in-button-normal);
+}
+
+.google-sign-in-button:focus {
+    background: var(--google-sign-in-button-focus);
+}
+
+.google-sign-in-button:active {
+    background: var(--google-sign-in-button-pressed);
+}
+
+.google-sign-in-button:disabled {
+    background: var(--google-sign-in-button-disabled);
+}

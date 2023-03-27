@@ -19,7 +19,9 @@ export class TownViewMoveDirective {
 
     private readonly pointersDown = new Map<number, Vector>();
 
-    constructor(private readonly townView: TownViewComponent) { }
+    constructor(private readonly townView: TownViewComponent, elementRef: ElementRef) {
+        elementRef.nativeElement.style.touchAction = "none";
+    }
 
     @HostListener("pointerdown", ["$event"])
     onPointerDown(event: PointerEvent) {

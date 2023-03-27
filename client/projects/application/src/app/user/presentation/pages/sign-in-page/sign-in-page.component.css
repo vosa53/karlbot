@@ -1,14 +1,6 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.form {
-    width: 400px;
-    max-width: 100%;
-}
-
 .sign-in-options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 48px 0;
 }
