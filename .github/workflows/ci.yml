@@ -22,9 +22,9 @@ jobs:
       run: |
         cd client
         npm install
-        npm run build -- application --configuration production
         npm run build -- karel --configuration production
         npm run build -- karel-evaluation --configuration production
+        npm run build -- application --configuration production
         cd projects
         cd karel
         npm run build
