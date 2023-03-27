@@ -27,9 +27,11 @@ jobs:
         npm run build -- application --configuration production
         cd projects
         cd karel
+        npm install
         npm run build
         cd ..
         cd karel-evaluation
+        npm install
         npm run build
         cd ../..
         
