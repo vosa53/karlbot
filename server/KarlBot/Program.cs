@@ -101,6 +101,13 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+// Migrate database
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
+
 InitializeFirebase(app.Services.GetService<IOptions<FirebaseOptions>>()!.Value);
 
 if (app.Environment.IsDevelopment())
