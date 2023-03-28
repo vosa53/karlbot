@@ -245,8 +245,7 @@ export class EditorService {
 
         this.interpreter.next(this.createInterpreter());
         this.setInterpreterBreakpoints();
-        await this.continue();
-        this.interpreter.value!.skipBreakpointOnFirstInstruction = true;
+        await this._run(st => this.interpreter.value!.interpretAll(st));
     }
 
     stop() {
@@ -264,24 +263,26 @@ export class EditorService {
     }
 
     async continue() {
+        this.interpreter.value!.skipBreakpointOnFirstInstruction = true;
         await this._run(st => this.interpreter.value!.interpretAll(st));
     }
 
     async stepInto() {
-        this.isDebuggerStep = true;
-        await this._run(st => this.interpreter.value!.interpretStepInto(st));
-        this.isDebuggerStep = false;
+        await this.step(st => this.interpreter.value!.interpretStepInto(st));
     }
 
     async stepOver() {
-        this.isDebuggerStep = true;
-        await this._run(st => this.interpreter.value!.interpretStepOver(st));
-        this.isDebuggerStep = false;
+        await this.step(st => this.interpreter.value!.interpretStepOver(st));
     }
 
     async stepOut() {
+        await this.step(st => this.interpreter.value!.interpretStepOut(st));
+    }
+
+    private async step(action: (stopToken: InterpretStopToken) => Promise<InterpretResult>) {
+        this.interpreter.value!.skipBreakpointOnFirstInstruction = true;
         this.isDebuggerStep = true;
-        await this._run(st => this.interpreter.value!.interpretStepOut(st));
+        await this._run(action);
         this.isDebuggerStep = false;
     }
 
@@ -344,8 +345,6 @@ export class EditorService {
     changeBreakpoints(breakpoints: readonly number[]) {
         if (this.selectedCodeFile.value === null)
             return;
-
-        console.log(this.selectedCodeFile.value.name + " " + JSON.stringify(breakpoints));
 
         const newCodeFile = this.selectedCodeFile.value.withBreakpoints(breakpoints);
         const newProject = this.project.value.replaceFile(this.selectedCodeFile.value, newCodeFile);

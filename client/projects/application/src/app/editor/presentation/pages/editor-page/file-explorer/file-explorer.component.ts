@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
@@ -18,7 +18,7 @@ import { PanelComponent } from "../../../components/panel/panel.component";
     templateUrl: "./file-explorer.component.html",
     styleUrls: ["./file-explorer.component.css"]
 })
-export class FileExplorerComponent {
+export class FileExplorerComponent implements OnChanges {
     @Input()
     files: readonly File[] = [];
 
@@ -52,19 +52,14 @@ export class FileExplorerComponent {
     @Output()
     fileSelect = new EventEmitter<File>();
 
-    get sortedFiles(): readonly File[] {
-        const sortedFiles = [...this.files];
-        sortedFiles.sort((a, b) => {
-            const aTypeSortOrder = this.getFileTypeSortOrder(a);
-            const bTypeSortOrder = this.getFileTypeSortOrder(b);
-            if (aTypeSortOrder < bTypeSortOrder) return -1;
-            if (aTypeSortOrder > bTypeSortOrder) return 1;
-            return a.name.localeCompare(b.name, "en");
-        });
-        return sortedFiles;
-    }
+    sortedFiles: readonly File[] = [];
 
     constructor(private readonly dialogService: DialogService) { }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if ("files" in changes)
+            this.sortedFiles = this.sortFiles(this.files);
+    }
 
     async onFileAdd(fileType: "code" | "town") {
         const validator = this.createFileNameValidator(null);
@@ -82,7 +77,7 @@ export class FileExplorerComponent {
         const confirmed = await this.dialogService.showConfirmation("Are you sure?", `Do you really want to delete file '${file.name}'?`);
         if (!confirmed)
             return;
-        
+
         this.fileRemove.emit(file);
     }
 
@@ -98,7 +93,7 @@ export class FileExplorerComponent {
     onFileSelect(file: File) {
         if (this.isDisabled(file))
             return;
-        
+
         this.fileSelect.emit(file);
     }
 
@@ -129,7 +124,19 @@ export class FileExplorerComponent {
         };
     }
 
-    private getFileTypeSortOrder(file: File) {
+    private sortFiles(files: readonly File[]): readonly File[] {
+        const sortedFiles = [...files];
+        sortedFiles.sort((a, b) => {
+            const aTypeSortOrder = this.getFileTypeSortOrder(a);
+            const bTypeSortOrder = this.getFileTypeSortOrder(b);
+            if (aTypeSortOrder < bTypeSortOrder) return -1;
+            if (aTypeSortOrder > bTypeSortOrder) return 1;
+            return a.name.localeCompare(b.name, "en");
+        });
+        return sortedFiles;
+    }
+
+    private getFileTypeSortOrder(file: File): number {
         if (file instanceof CodeFile)
             return 0;
         else if (file instanceof TownFile)
