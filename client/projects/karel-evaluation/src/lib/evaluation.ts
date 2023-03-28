@@ -64,7 +64,7 @@ function areSame(expected: ReadonlyTown, actual: ReadonlyTown, testCase: TestCas
         return false;
     if (testCase.checkKarelDirection && expected.karelDirection !== actual.karelDirection)
         return false;
-    if (testCase.checkSigns && !areSignsEqual(expected.getSignCounts(), actual.getSignCounts()))
+    if (testCase.checkSigns && (!areSignsEqual(expected.getSignCounts(), actual.getSignCounts()) || expected.width !== actual.width || expected.height !== actual.height))
         return false;
 
     return true;

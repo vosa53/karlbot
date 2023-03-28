@@ -286,6 +286,9 @@ export class MutableTown {
         MutableTown.throwIfInvalidSize(newWidth);
         MutableTown.throwIfInvalidSize(newHeight);
 
+        if (this.width === newWidth && this.height === newHeight)
+            return;
+
         const tileCount = newWidth * newHeight;
 
         const newTiles: TownTile[] = new Array(tileCount);

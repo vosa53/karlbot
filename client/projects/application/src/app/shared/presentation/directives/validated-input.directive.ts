@@ -60,10 +60,12 @@ export class ValidatedInputDirective {
         this.commitChange();
     }
 
-    @HostListener("keypress", ["$event.key"])
-    onKeyPress(key: string) {
-        if (key === "Enter")
+    @HostListener("keypress", ["$event"])
+    onKeyPress(event: KeyboardEvent) {
+        if (event.key === "Enter") {
+            event.preventDefault();
             this.commitChange();
+        }
     }
 
     private commitChange() {
