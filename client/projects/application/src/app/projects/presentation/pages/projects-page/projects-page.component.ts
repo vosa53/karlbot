@@ -18,7 +18,7 @@ import { SignInService } from 'projects/application/src/app/shared/application/s
     styleUrls: ['./projects-page.component.css']
 })
 export class ProjectsPageComponent implements OnInit {
-    projects: SavedProject[] = [];
+    projects: SavedProject[] | null = null;
 
     constructor(private readonly projectService: ProjectService, private readonly dialogService: DialogService, 
         private readonly signInService: SignInService) {

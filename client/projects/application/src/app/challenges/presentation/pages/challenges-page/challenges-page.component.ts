@@ -20,7 +20,7 @@ import { ChallengeDifficulty } from 'projects/application/src/app/shared/applica
     styleUrls: ['./challenges-page.component.css']
 })
 export class ChallengesPageComponent implements OnInit {
-    challenges: Challenge[] = [];
+    challenges: Challenge[] | null = null;
     displayedColumns: string[] = ["name", "difficulty"];
 
     constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService, readonly signInService: SignInService) {

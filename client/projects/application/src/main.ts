@@ -14,12 +14,13 @@ import { environment } from './environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
 import { ApplicationErrorHandler } from './app/shared/application/application-error-handler';
+import { LoadingInterceptor } from './app/shared/application/services/loading-interceptor';
 
 bootstrapApplication(AppComponent, {
     providers: [
         provideRouter(appRoutes),
         provideHttpClient(
-            withInterceptors([TokenInterceptor])
+            withInterceptors([TokenInterceptor, LoadingInterceptor])
         ),
         provideAnimations(),
         importProvidersFrom(
