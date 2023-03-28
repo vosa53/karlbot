@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
 
 @Component({
     selector: 'app-share-dialog',
@@ -18,7 +19,8 @@ export class ShareDialogComponent {
     isProjectPublic = false;
     projectUrl = "https://";
 
-    constructor(readonly dialogRef: MatDialogRef<ShareDialogComponent>, @Inject(MAT_DIALOG_DATA) readonly data: ShareDialogData) {
+    constructor(readonly dialogRef: MatDialogRef<ShareDialogComponent>, @Inject(MAT_DIALOG_DATA) readonly data: ShareDialogData, 
+        private readonly notificationService: NotificationService) {
         this.isProjectPublic = data.isProjectPublic;
         this.projectUrl = data.projectUrl;
     }
@@ -29,6 +31,7 @@ export class ShareDialogComponent {
 
     onCopyProjectUrlClick() {
         navigator.clipboard.writeText(this.projectUrl);
+        this.notificationService.show("Copied to the clipboard.");
     }
 }
 
