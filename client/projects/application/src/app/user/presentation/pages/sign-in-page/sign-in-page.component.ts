@@ -24,8 +24,9 @@ export class SignInPageComponent {
         this.inProgress = true;
         this.loadingService.addLoading();
         try {
-            await this.signInService.signInWithGoogle();
-            await this.router.navigateByUrl("/projects");
+            const success = await this.signInService.signInWithGoogle();
+            if (success)
+                await this.router.navigateByUrl("/projects");
         }
         finally {
             this.inProgress = false;

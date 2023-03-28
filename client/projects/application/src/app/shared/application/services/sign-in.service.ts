@@ -1,4 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { FirebaseError } from '@angular/fire/app';
 import { Auth, authState, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { firstValueFrom, skip, Subscription } from 'rxjs';
 import { User } from '../models/user';
@@ -33,9 +34,17 @@ export class SignInService implements OnDestroy {
         });
     }
 
-    async signInWithGoogle(): Promise<void> {
-        await signInWithPopup(this.firebaseAuthentication, new GoogleAuthProvider());
+    async signInWithGoogle(): Promise<boolean> {
+        try {
+            await signInWithPopup(this.firebaseAuthentication, new GoogleAuthProvider());
+        } catch (error) {
+            if (error instanceof FirebaseError && error.code === "auth/popup-closed-by-user")
+                return false;
+            else
+                throw error;
+        }
         await firstValueFrom(authState(this.firebaseAuthentication));
+        return true;
     }
 
     async signOut(): Promise<void> {
