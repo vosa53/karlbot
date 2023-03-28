@@ -18,7 +18,6 @@ namespace KarlBot.Controllers
             _userManager = userManager;
         }
 
-        [Authorize]
         [HttpGet("current")]
         public async Task<ActionResult<UserDataModel>> GetCurrentAsync()
         {

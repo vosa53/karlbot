@@ -2,6 +2,7 @@
 using ApplicationCore.Repositories;
 using KarlBot.Authorization;
 using KarlBot.DataModels.Projects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KarlBot.Controllers
@@ -28,12 +29,16 @@ namespace KarlBot.Controllers
             return projects.Select(p => ToDataModel(p)).ToList();
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDataModel>> GetByIdAsync(int id)
         {
             var project = await _projectRepository.GetByIdAsync(id);
             if (project == null)
                 return NotFound();
+
+            if (!project.IsPublic && (User == null || project.AuthorId != User.GetId() && !User.IsInRole("Admin")))
+                return Forbid();
 
             return ToDataModel(project);
         }
@@ -57,6 +62,9 @@ namespace KarlBot.Controllers
             if (project == null)
                 return NotFound();
 
+            if (project.AuthorId != User.GetId() && !User.IsInRole("Admin"))
+                return Forbid();
+
             project.IsPublic = dataModel.IsPublic;
             project.ProjectFile = dataModel.ProjectFile;
             project.Modified = DateTime.UtcNow;
@@ -72,6 +80,9 @@ namespace KarlBot.Controllers
             var project = await _projectRepository.GetByIdAsync(id);
             if (project == null)
                 return NotFound();
+
+            if (project.AuthorId != User.GetId() && !User.IsInRole("Admin"))
+                return Forbid();
 
             await _projectRepository.RemoveAsync(project);
 

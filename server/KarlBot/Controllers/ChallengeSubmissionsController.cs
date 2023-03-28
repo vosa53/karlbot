@@ -57,6 +57,9 @@ namespace KarlBot.Controllers
             if (submission == null)
                 return NotFound();
 
+            if (submission.UserId != User.GetId() && !User.IsInRole("Admin"))
+                return Forbid();
+
             return ToDataModel(submission);
         }
 
