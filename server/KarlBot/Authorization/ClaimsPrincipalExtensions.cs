@@ -7,11 +7,16 @@ namespace KarlBot.Authorization
     {
         public static string GetId(this ClaimsPrincipal claimsPrincipal)
         {
-            var id = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var id = GetIdOrNull(claimsPrincipal);
             if (id == null)
                 throw new Exception();
 
             return id;
+        }
+
+        public static string? GetIdOrNull(this ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace KarlBot.Controllers
             if (project == null)
                 return NotFound();
 
-            if (!project.IsPublic && (User == null || project.AuthorId != User.GetId() && !User.IsInRole("Admin")))
+            if (!project.IsPublic && project.AuthorId != User.GetIdOrNull() && !User.IsInRole("Admin"))
                 return Forbid();
 
             return ToDataModel(project);
