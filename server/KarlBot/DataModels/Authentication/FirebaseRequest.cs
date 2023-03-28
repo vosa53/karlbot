@@ -1,7 +1,10 @@
-﻿namespace KarlBot.DataModels.Authentication
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KarlBot.DataModels.Authentication
 {
     public class FirebaseRequest
     {
-        public string FirebaseIdToken { get; init; }
+        [StringLength(10_000)]
+        public required string FirebaseIdToken { get; init; }
     }
 }

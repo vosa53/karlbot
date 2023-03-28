@@ -1,9 +1,12 @@
-﻿namespace KarlBot.DataModels.Users
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KarlBot.DataModels.Users
 {
     public class UserDataModel
     {
-        public string Id { get; set; }
-        public string Email { get; set; }
-        public bool IsAdmin { get; set; }
+        [StringLength(36, MinimumLength = 36)]
+        public required string Id { get; init; }
+        public required string Email { get; init; }
+        public required bool IsAdmin { get; init; }
     }
 }

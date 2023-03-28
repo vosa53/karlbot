@@ -1,17 +1,21 @@
 ﻿using ApplicationCore.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace KarlBot.DataModels.Challenges
 {
     public class ChallengeDataModel
     {
-        public int Id { get; set; }
+        [Range(0, int.MaxValue)]
+        public required int Id { get; init; }
 
-        public string Name { get; set; }
+        [StringLength(100, MinimumLength = 1)]
+        public required string Name { get; init; }
 
-        public string Description { get; set; }
+        [StringLength(10_000)]
+        public required string Description { get; init; }
 
-        public ChallengeDifficulty Difficulty { get; set; }
+        public required ChallengeDifficulty Difficulty { get; init; }
 
-        public IList<ChallengeTestCaseDataModel>? TestCases { get; set; }
+        public required IList<ChallengeTestCaseDataModel>? TestCases { get; init; }
     }
 }

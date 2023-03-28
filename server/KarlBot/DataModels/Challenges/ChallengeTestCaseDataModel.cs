@@ -1,12 +1,17 @@
-﻿namespace KarlBot.DataModels.Challenges
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KarlBot.DataModels.Challenges
 {
     public class ChallengeTestCaseDataModel
     {
-        public string InputTown { get; set; }
-        public string OutputTown { get; set; }
-        public bool CheckKarelPosition { get; set; }
-        public bool CheckKarelDirection { get; set; }
-        public bool CheckSigns { get; set; }
-        public bool IsPublic { get; set; }
+        [StringLength(10_000)]
+        public required string InputTown { get; init; }
+
+        [StringLength(10_000)]
+        public required string OutputTown { get; init; }
+        public required bool CheckKarelPosition { get; init; }
+        public required bool CheckKarelDirection { get; init; }
+        public required bool CheckSigns { get; init; }
+        public required bool IsPublic { get; init; }
     }
 }

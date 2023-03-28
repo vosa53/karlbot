@@ -29,8 +29,8 @@ import { NotificationService } from 'projects/application/src/app/shared/present
 })
 export class ChallengeEditorPageComponent {
     form = new FormGroup({
-        name: new FormControl("", Validators.required),
-        description: new FormControl("", Validators.required),
+        name: new FormControl("", [Validators.required, Validators.maxLength(100)]),
+        description: new FormControl("", Validators.maxLength(10_000)),
         difficulty: new FormControl(ChallengeDifficulty.easy, Validators.required)
     });
 

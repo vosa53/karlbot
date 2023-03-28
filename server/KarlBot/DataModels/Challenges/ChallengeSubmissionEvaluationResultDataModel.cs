@@ -1,8 +1,11 @@
-﻿namespace KarlBot.DataModels.Challenges
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace KarlBot.DataModels.Challenges
 {
     public class ChallengeSubmissionEvaluationResultDataModel
     {
-        public double SuccessRate { get; set; }
-        public string Message { get; set; }
+        [Range(0, 1)]
+        public required double SuccessRate { get; init; }
+        public required string Message { get; init; }
     }
 }

@@ -13,7 +13,7 @@ import { TokenInterceptor } from './app/shared/application/services/token-interc
 import { environment } from './environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
-import { DevelopmentErrorHandler } from './app/shared/application/development-error-handler';
+import { ApplicationErrorHandler } from './app/shared/application/application-error-handler';
 
 bootstrapApplication(AppComponent, {
     providers: [
@@ -39,7 +39,7 @@ bootstrapApplication(AppComponent, {
             MatSnackBarModule
         ),
         { provide: API_BASE_URL, useValue: environment.apiBaseURL },
-        ...(isDevMode() ? [{ provide: ErrorHandler, useClass: DevelopmentErrorHandler }] : [])
+        ...(isDevMode() ? [{ provide: ErrorHandler, useClass: ApplicationErrorHandler }] : [])
     ]
 });
 
