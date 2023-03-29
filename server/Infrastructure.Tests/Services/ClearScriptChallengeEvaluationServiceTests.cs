@@ -2,7 +2,7 @@ using ApplicationCore.Entities;
 using Infrastructure.Services;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Tests
+namespace Infrastructure.Tests.Services
 {
     public class ClearScriptChallengeEvaluationServiceTests
     {

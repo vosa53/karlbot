@@ -22,20 +22,20 @@ namespace Infrastructure.Services
     public class UserTokenService : IUserTokenService
     {
         private readonly UserTokenOptions _options;
-        private readonly UserManager<User> _userManager;
+        private readonly IUserRepository _userRepository;
 
         /// <param name="options">Options.</param>
         /// <param name="userManager">User manager.</param>
-        public UserTokenService(IOptions<UserTokenOptions> options, UserManager<User> userManager)
+        public UserTokenService(IOptions<UserTokenOptions> options, IUserRepository userRepository)
         {
             _options = options.Value;
-            _userManager = userManager;
+            _userRepository = userRepository;
         }
 
         /// <inheritdoc/>
         public async Task<string> CreateTokenAsync(User user)
         {
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _userRepository.GetRolesAsync(user.Id);
 
             var claims = new List<Claim>
             {

@@ -12,5 +12,6 @@ namespace ApplicationCore.Repositories
     /// </summary>
     public interface IUserRepository : IRepository<User, string>
     {
+        Task<IList<string>?> GetRolesAsync(string userId);
     }
 }
