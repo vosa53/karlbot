@@ -8,8 +8,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
-    public class FirebaseAuthenticationService : IFirebaseAuthenticationService
+    /// <summary>
+    /// Firebase Authentication service using <see href="https://github.com/firebase/firebase-admin-dotnet">Firebase Admin .NET SDK</see>.
+    /// </summary>
+    public class AdminSdkFirebaseAuthenticationService : IFirebaseAuthenticationService
     {
+        /// <inheritdoc/>
         public async Task<FirebaseUser?> VerifyIdTokenAsync(string idToken)
         {
             var firebaseAuth = FirebaseAuth.DefaultInstance;

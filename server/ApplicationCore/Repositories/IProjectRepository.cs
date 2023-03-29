@@ -12,6 +12,10 @@ namespace ApplicationCore.Repositories
     /// </summary>
     public interface IProjectRepository : IRepository<Project, int>
     {
+        /// <summary>
+        /// Returns all projects of the given user.
+        /// </summary>
+        /// <param name="authorId">User id.</param>
         Task<List<Project>> GetAsync(string? authorId);
     }
 }

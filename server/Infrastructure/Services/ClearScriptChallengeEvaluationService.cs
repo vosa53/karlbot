@@ -15,15 +15,20 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services
 {
-    public class ChallengeEvaluationService : IChallengeEvaluationService
+    /// <summary>
+    /// Challenge evaluation service using JavaScript execution library <see href="https://github.com/microsoft/ClearScript">ClearScript</see>.
+    /// </summary>
+    public class ClearScriptChallengeEvaluationService : IChallengeEvaluationService
     {
-        private readonly ChallengeEvaluationOptions _options;
+        private readonly ClearScriptChallengeEvaluationServiceOptions _options;
 
-        public ChallengeEvaluationService(IOptions<ChallengeEvaluationOptions> options)
+        /// <param name="options">Options.</param>
+        public ClearScriptChallengeEvaluationService(IOptions<ClearScriptChallengeEvaluationServiceOptions> options)
         {
             _options = options.Value;
         }
 
+        /// <inheritdoc/>
         public async Task<ChallengeEvaluationResult> EvaluateAsync(string projectFile, IList<ChallengeTestCase> testCases)
         {
             using var engine = new V8ScriptEngine();

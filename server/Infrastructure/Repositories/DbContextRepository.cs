@@ -9,64 +9,64 @@ using System.Threading.Tasks;
 namespace Infrastructure.Repositories
 {
     /// <summary>
-    /// Repository implementation using the Application Entity Framework DbContext.
+    /// Repository using the Application Entity Framework DbContext.
     /// </summary>
-    /// <typeparam name="T">Entity type.</typeparam>
-    /// <typeparam name="K">Entity key type.</typeparam>
-    public class DbContextRepository<T, K> : IRepository<T, K> where T : class
+    /// <typeparam name="TEntity">Entity type.</typeparam>
+    /// <typeparam name="TKey">Entity key type.</typeparam>
+    public class DbContextRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
     {
         /// <summary>
-        /// DbContext.
+        /// Application DbContext.
         /// </summary>
         protected ApplicationDbContext DbContext { get; }
 
         /// <summary>
         /// Entity DbSet.
         /// </summary>
-        protected DbSet<T> DbSet { get; }
+        protected DbSet<TEntity> DbSet { get; }
 
         /// <param name="dbContext">Application DbContext.</param>
         public DbContextRepository(ApplicationDbContext dbContext)
         {
             DbContext = dbContext;
-            DbSet = DbContext.Set<T>();
+            DbSet = DbContext.Set<TEntity>();
         }
 
         /// <inheritdoc/>
-        public virtual async Task<List<T>> GetAsync()
+        public virtual async Task<List<TEntity>> GetAsync()
         {
             return await DbSet.ToListAsync();
         }
 
         /// <inheritdoc/>
-        public virtual async Task<T?> GetByIdAsync(K id)
+        public virtual async Task<TEntity?> GetByIdAsync(TKey id)
         {
             return await DbSet.FindAsync(id).AsTask();
         }
 
         /// <inheritdoc/>
-        public virtual async Task<bool> ExistsByIdAsync(K id)
+        public virtual async Task<bool> ExistsByIdAsync(TKey id)
         {
             var entity = await DbSet.FindAsync(id);
             return entity != null;
         }
 
         /// <inheritdoc/>
-        public virtual async Task AddAsync(T entity)
+        public virtual async Task AddAsync(TEntity entity)
         {
             DbSet.Add(entity);
             await DbContext.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
-        public virtual async Task RemoveAsync(T entity)
+        public virtual async Task RemoveAsync(TEntity entity)
         {
             DbSet.Remove(entity);
             await DbContext.SaveChangesAsync();
         }
 
         /// <inheritdoc/>
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
             DbSet.Update(entity);
             await DbContext.SaveChangesAsync();

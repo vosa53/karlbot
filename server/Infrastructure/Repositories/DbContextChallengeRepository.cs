@@ -10,12 +10,17 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
+    /// <summary>
+    /// Challenge repository using the Application Entity Framework DbContext.
+    /// </summary>
     public class DbContextChallengeRepository : DbContextRepository<Challenge, int>, IChallengeRepository
     {
+        /// <param name="dbContext">Application DbContext.</param>
         public DbContextChallengeRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
+        /// <inheritdoc/>
         public override async Task<Challenge?> GetByIdAsync(int id)
         {
             var challenge = await DbSet
@@ -29,6 +34,7 @@ namespace Infrastructure.Repositories
             return challenge;
         }
 
+        /// <inheritdoc/>
         public override async Task AddAsync(Challenge entity)
         {
             SetOrders(entity.TestCases);
@@ -36,6 +42,7 @@ namespace Infrastructure.Repositories
             await DbContext.SaveChangesAsync();
         }
 
+        /// <inheritdoc/>
         public async Task UpdateAsync(Challenge entity)
         {
             SetOrders(entity.TestCases);

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 
 namespace KarlBot.OptionsConfigurations
 {
-    public class ChallengeEvaluationOptionsConfiguration : IConfigureOptions<ChallengeEvaluationOptions>
+    public class ChallengeEvaluationOptionsConfiguration : IConfigureOptions<ClearScriptChallengeEvaluationServiceOptions>
     {
         private readonly IConfiguration _configuration;
 
@@ -12,7 +12,7 @@ namespace KarlBot.OptionsConfigurations
             _configuration = configuration;
         }
 
-        public void Configure(ChallengeEvaluationOptions options)
+        public void Configure(ClearScriptChallengeEvaluationServiceOptions options)
         {
             var challengeEvaluationConfiguration = _configuration.GetSection("ChallengeEvaluation");
             var karelLibraryPath = challengeEvaluationConfiguration.GetValue<string>("KarelLibraryPath");

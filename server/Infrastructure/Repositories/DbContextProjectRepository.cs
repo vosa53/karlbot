@@ -9,12 +9,17 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
+    /// <summary>
+    /// Project repository using the Application Entity Framework DbContext.
+    /// </summary>
     public class DbContextProjectRepository : DbContextRepository<Project, int>, IProjectRepository
     {
+        /// <param name="dbContext">Application DbContext.</param>
         public DbContextProjectRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
+        /// <inheritdoc/>
         public async Task<List<Project>> GetAsync(string? authorId)
         {
             IQueryable<Project> query = DbSet;

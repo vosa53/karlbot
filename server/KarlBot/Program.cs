@@ -35,8 +35,8 @@ builder.Services.ConfigureOptions<ChallengeEvaluationOptionsConfiguration>();
 builder.Services.Configure<FirebaseOptions>(builder.Configuration.GetSection("Firebase"));
 builder.Services.Configure<UserTokenOptions>(builder.Configuration.GetSection("UserToken"));
 
-builder.Services.AddTransient<IFirebaseAuthenticationService, FirebaseAuthenticationService>();
-builder.Services.AddTransient<IChallengeEvaluationService, ChallengeEvaluationService>();
+builder.Services.AddTransient<IFirebaseAuthenticationService, AdminSdkFirebaseAuthenticationService>();
+builder.Services.AddTransient<IChallengeEvaluationService, ClearScriptChallengeEvaluationService>();
 builder.Services.AddTransient<IUserTokenService, UserTokenService>();
 builder.Services.AddTransient<IChallengeRepository, DbContextChallengeRepository>();
 builder.Services.AddTransient<IChallengeSubmissionRepository, DbContextChallengeSubmissionRepository>();

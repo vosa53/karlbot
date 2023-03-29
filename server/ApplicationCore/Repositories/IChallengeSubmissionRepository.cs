@@ -12,6 +12,11 @@ namespace ApplicationCore.Repositories
     /// </summary>
     public interface IChallengeSubmissionRepository : IRepository<ChallengeSubmission, int>
     {
+        /// <summary>
+        /// Returrns all submissions of the given challenge that were submitted by the given user.
+        /// </summary>
+        /// <param name="challlengeId">Id of the challenge.</param>
+        /// <param name="userId">Id of the user.</param>
         Task<List<ChallengeSubmission>> GetAsync(int challlengeId, string? userId);
     }
 }

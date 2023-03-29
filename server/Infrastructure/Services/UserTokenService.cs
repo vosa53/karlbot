@@ -16,17 +16,23 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {
+    /// <summary>
+    /// Service to issue tokens for users.
+    /// </summary>
     public class UserTokenService : IUserTokenService
     {
         private readonly UserTokenOptions _options;
         private readonly UserManager<User> _userManager;
 
+        /// <param name="options">Options.</param>
+        /// <param name="userManager">User manager.</param>
         public UserTokenService(IOptions<UserTokenOptions> options, UserManager<User> userManager)
         {
             _options = options.Value;
             _userManager = userManager;
         }
 
+        /// <inheritdoc/>
         public async Task<string> CreateTokenAsync(User user)
         {
             var roles = await _userManager.GetRolesAsync(user);

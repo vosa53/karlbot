@@ -9,12 +9,17 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
+    /// <summary>
+    /// Challenge submission repository using the Application Entity Framework DbContext.
+    /// </summary>
     public class DbContextChallengeSubmissionRepository : DbContextRepository<ChallengeSubmission, int>, IChallengeSubmissionRepository
     {
+        /// <param name="dbContext">Application DbContext.</param>
         public DbContextChallengeSubmissionRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
+        /// <inheritdoc/>
         public async Task<List<ChallengeSubmission>> GetAsync(int challengeId, string? userId)
         {
             IQueryable<ChallengeSubmission> query = DbSet.Where(cs => cs.ChallengeId == challengeId);
