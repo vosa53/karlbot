@@ -43,7 +43,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task UpdateAsync(Challenge entity)
+        public override async Task UpdateAsync(Challenge entity)
         {
             SetOrders(entity.TestCases);
             DbSet.Update(entity);

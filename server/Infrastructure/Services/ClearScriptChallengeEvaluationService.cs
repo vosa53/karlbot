@@ -12,6 +12,7 @@ using System.Text.Json;
 using ApplicationCore;
 using ApplicationCore.Services;
 using Microsoft.Extensions.Options;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Infrastructure.Services
 {
@@ -38,7 +39,7 @@ namespace Infrastructure.Services
             }
             catch (ScriptEngineException exception)
             {
-                throw CreateEvaluationScriptErrorException(exception.ScriptException);
+                throw CreateEvaluationScriptErrorException(exception.ScriptException, exception);
             }
         }
 
@@ -71,16 +72,23 @@ namespace Infrastructure.Services
                 checkSigns = tc.CheckSigns
             }).ToArray();
 
-            var resultPromise = engine.Script.karelEvaluation.evaluate(projectFile, JsonSerializer.Serialize(evaluationScriptTestCases));
-            resultPromise.then(resolveHandler, rejectHandler);
+            try
+            {
+                var resultPromise = engine.Script.karelEvaluation.evaluate(projectFile, JsonSerializer.Serialize(evaluationScriptTestCases));
+                resultPromise.then(resolveHandler, rejectHandler);
+            }
+            catch (RuntimeBinderException exception)
+            {
+                throw new Exception("Can not find a function with name 'evaluate' returning a Promise.", exception);
+            }
 
             return taskCompletionSource.Task;
         }
 
-        private Exception CreateEvaluationScriptErrorException(dynamic scriptError)
+        private Exception CreateEvaluationScriptErrorException(dynamic scriptError, Exception? innerException = null)
         {
             var errorMessage = scriptError.stack;
-            return new Exception("Error in challenge evaluation script: " + errorMessage);
+            return new Exception("Error in challenge evaluation script: " + errorMessage, innerException);
         }
     }
 }
