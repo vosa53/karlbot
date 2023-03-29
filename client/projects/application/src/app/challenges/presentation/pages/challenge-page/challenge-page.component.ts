@@ -24,6 +24,7 @@ import { ChallengeDifficultyComponent } from '../../components/challenge-difficu
 import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
 import { User } from 'projects/application/src/app/shared/application/models/user';
 import { TownViewFitContainDirective } from 'projects/application/src/app/shared/presentation/directives/town-view-fit-contain.directive';
+import party from "party-js";
 
 @Component({
     selector: 'app-challenge-page',
@@ -71,7 +72,17 @@ export class ChallengePageComponent {
         const result = await this.challengeSubmissionService.add(this.challenge!.id, submission);
         
         if (result.evaluationResult !== null) {
-            const message = result.evaluationResult.successRate === 1 ? "Success! Good job 👍" : "Not now :( Try again!";
+            const isSuccess = result.evaluationResult.successRate === 1;
+            
+            if (isSuccess) {
+                for (let i = 0; i < 3; i++)
+                party.confetti(document.body, {
+                    count: party.variation.range(20, 40),
+                    size: party.variation.range(1.4, 1.8)
+                });
+            }
+            
+            const message = isSuccess ? "Success! Good job 👍" : "Not now :( Try again!";
             this.notificationService.show(message);
         }
         
