@@ -29,6 +29,8 @@ export class TileTownEditorTool extends TownEditorTool {
             return;
         if (town.karelPosition.x === tileX && town.karelPosition.y === tileY)
             return;
+        if (town.homePosition.x === tileX && town.homePosition.y === tileY)
+            return;
 
         let setWall = this.tile === TownTile.wall;
         if (button === TownViewSelectionButton.secondary)
