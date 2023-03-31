@@ -104,7 +104,7 @@ jobs:
     - name: Build server
       run: |
         cd server
-        dotnet publish --configuration Release -o dist --os win
+        dotnet publish --configuration Release -o dist --os win --self-contained true
         
     - name: Move
       run: |
