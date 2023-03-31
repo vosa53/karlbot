@@ -51,9 +51,32 @@
             <mat-icon>play_arrow</mat-icon>
             Run read-only
         </button>
-        <button mat-menu-item *ngIf="editorState === 'running'" (click)="stopClick.emit()">
+
+        <button mat-menu-item *ngIf="editorState === 'running' || editorState === 'paused'" (click)="stopClick.emit()">
             <mat-icon>stop</mat-icon>
             Stop
+        </button>
+        <button mat-menu-item *ngIf="editorState === 'running'" (click)="pauseClick.emit()">
+            <mat-icon>pause</mat-icon>
+            Pause
+        </button>
+
+        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="continueClick.emit()">
+            <mat-icon>play_arrow</mat-icon>
+            Continue
+        </button>
+        <mat-divider *ngIf="editorState === 'paused'" style="margin: 6px 20px;"></mat-divider>
+        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="stepIntoClick.emit()">
+            <mat-icon>step_into</mat-icon>
+            Step into
+        </button>
+        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="stepOverClick.emit()">
+            <mat-icon>step_over</mat-icon>
+            Step over
+        </button>
+        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="stepOutClick.emit()">
+            <mat-icon>step_out</mat-icon>
+            Step out
         </button>
     </mat-menu>
 
@@ -91,6 +114,7 @@
         <mat-icon>play_arrow</mat-icon>
         Run read-only
     </button>
+
     <button mat-button *ngIf="editorState === 'running' || editorState === 'paused'" (click)="stopClick.emit()">
         <mat-icon>stop</mat-icon>
         Stop
