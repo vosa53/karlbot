@@ -278,6 +278,23 @@ export class MutableTown {
     }
 
     /**
+     * Copies all properties from the given town and assigns them to this town.
+     * @param town Copy from.
+     */
+    assign(town: ReadonlyTown) {
+        this.resize(town.width, town.height);
+        this.karelPosition = town.karelPosition;
+        this.karelDirection = town.karelDirection;
+        this.homePosition = town.homePosition;
+        for (let y = 0; y < town.height; y++) {
+            for (let x = 0; x < town.width; x++) {
+                this.setTileAt(x, y, town.getTileAt(x, y));
+                this.setSignCountAt(x, y, town.getSignCountAt(x, y));
+            }
+        }
+    }
+
+    /**
      * Resizes the town.
      * @param newWidth New width.
      * @param newHeight New height.

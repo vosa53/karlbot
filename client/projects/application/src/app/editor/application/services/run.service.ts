@@ -6,7 +6,7 @@ import { InterpretStopToken } from "projects/karel/src/lib/interpreter/interpret
 import { Interpreter } from "projects/karel/src/lib/interpreter/interpreter";
 import { ReadonlyCallStackFrame } from "projects/karel/src/lib/interpreter/readonly-call-stack-frame";
 import { StandardLibrary } from "projects/karel/src/lib/standard-library/standard-library";
-import { Checker, CodeFile, ExceptionInterpretResult, Instruction, InterpretResult, MutableTown, NormalInterpretResult, Project, StopInterpretResult } from "projects/karel/src/public-api";
+import { Checker, CodeFile, ExceptionInterpretResult, Instruction, InterpretResult, MutableTown, NormalInterpretResult, Project, StopInterpretResult, Town } from "projects/karel/src/public-api";
 import { BehaviorSubject, combineLatest, firstValueFrom, map } from "rxjs";
 import { DialogService } from "../../../shared/presentation/services/dialog.service";
 import { ProjectEditorService } from "./project-editor.service";
@@ -33,6 +33,7 @@ export class RunService {
     private willPause = false;
     private isDebuggerStep = false;
     private karelSpeed = 0;
+    private townBackup: Town | null = null;
 
     constructor(private readonly projectEditorService: ProjectEditorService, private readonly dialogService: DialogService) {
         this.projectEditorService.project$.subscribe(p => {
@@ -70,6 +71,9 @@ export class RunService {
             await this.dialogService.showMessage("Error", "Select a town.");
             return false;
         }
+
+        if (readonly)
+            this.townBackup = currentTown.toImmutable();
 
         const interpreter = this.createInterpreter(project, currentTown);
         this.interpreter.next(interpreter);
@@ -147,6 +151,12 @@ export class RunService {
     private async setReadyState() {
         this.interpreter.next(null);
         await this.setCallStack(null);
+        
+        if (this.townBackup !== null) {
+            const currentTown = await firstValueFrom(this.projectEditorService.currentTown$);
+            currentTown!.assign(this.townBackup);
+            this.townBackup = null;
+        }
     }
 
     private async setCallStack(callStack: readonly ReadonlyCallStackFrame[] | null) {
