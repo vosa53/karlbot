@@ -77,9 +77,11 @@ export class EditorService {
 
     async saveProject() {
         const currentUser = await this.signInService.currentUser;
-        if (currentUser === null)
-            throw new window.Error();
-            
+        if (currentUser === null) {
+            this.dialogService.showMessage("Sign in please", "You must be signed in to save projects. Or alternatively, you can export it to your device even without signing in.");
+            return;
+        }
+        
         let savedProject: SavedProject;
         if (this.savedProject.value === null) {
             const toAdd = {
