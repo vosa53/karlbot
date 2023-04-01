@@ -1,7 +1,7 @@
 <ng-template #header>
     <app-header 
         class="header"
-        [editorState]="(editorService.editorState$ | async)!"
+        [runState]="(editorService.runState$ | async)!"
         [projectName]="(editorService.project$ | async)!.name"
         [availableEntryPoints]="(editorService.availableEntryPoints$ | async)!"
         [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
@@ -32,8 +32,8 @@
         [files]="(editorService.project$ | async)!.files"
         [selectedCodeFile]="(editorService.selectedCodeFile$ | async)!"
         [selectedTownFile]="(editorService.selectedTownFile$ | async)!"
-        [disableTownFileSelect]="(editorService.editorState$ | async)! !== 'ready'"
-        [readonly]="(editorService.editorState$ | async)! !== 'ready'"
+        [disableTownFileSelect]="(editorService.runState$ | async)! !== 'ready'"
+        [readonly]="(editorService.runState$ | async)! !== 'ready'"
         (codeFileAdd)="editorService.addCodeFile($event)"
         (townFileAdd)="editorService.addTownFile($event)"
         (fileRemove)="editorService.removeFile($event)"
@@ -46,7 +46,7 @@
     <app-code-editor
         class="code-editor" 
         [code]="(editorService.currentCode$ | async)!"
-        [readonly]="(editorService.editorState$ | async)! !== 'ready'"
+        [readonly]="(editorService.runState$ | async)! !== 'ready'"
         [errors]="(editorService.errorsInCurrentCodeFile$ | async)!"
         [currentRange]="(editorService.currentRange$ | async)!"
         [breakpoints]="(editorService.selectedCodeFile$ | async)?.breakpoints ?? []"
@@ -61,8 +61,8 @@
     <app-town-editor 
         class="town-editor" 
         [town]="(editorService.currentTown$ | async)!" 
-        [camera]="(editorService.townCamera$ | async)!"
-        (cameraChange)="editorService.changeTownCamera($event)"
+        [camera]="(editorService.currentTownCamera$ | async)!"
+        (cameraChange)="editorService.changeCurrentTownCamera($event)"
         (focusin)="onTownEditorFocusIn()">
     </app-town-editor>
 </ng-template>
@@ -77,13 +77,13 @@
 
 <ng-template #errorList>
     <app-error-list
-        *ngIf="(editorService.editorState$ | async)! !== 'paused'"
+        *ngIf="(editorService.runState$ | async)! !== 'paused'"
         class="error-list" 
         [errors]="(editorService.errors$ | async)!">
     </app-error-list>
 
     <app-call-stack 
-        *ngIf="(editorService.editorState$ | async)! === 'paused'"
+        *ngIf="(editorService.runState$ | async)! === 'paused'"
         class="error-list" 
         [callStack]="(editorService.callStack$ | async)!">
     </app-call-stack>

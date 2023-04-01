@@ -31,11 +31,11 @@
 
     <button mat-button [matMenuTriggerFor]="editMenu">Edit</button>
     <mat-menu #editMenu="matMenu">
-        <button mat-menu-item (click)="undoClick.emit()" [disabled]="!canUndo">
+        <button mat-menu-item (click)="undoClick.emit()" [disabled]="!canUndo || runState !== 'ready'">
             <mat-icon>undo</mat-icon>
             Undo
         </button>
-        <button mat-menu-item (click)="redoClick.emit()" [disabled]="!canRedo">
+        <button mat-menu-item (click)="redoClick.emit()" [disabled]="!canRedo || runState !== 'ready'">
             <mat-icon>redo</mat-icon>
             Redo
         </button>
@@ -43,38 +43,38 @@
 
     <button mat-button [matMenuTriggerFor]="programMenu">Program</button>
     <mat-menu #programMenu="matMenu">
-        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runClick.emit()">
+        <button mat-menu-item *ngIf="runState === 'ready'" (click)="runClick.emit()">
             <mat-icon>play_arrow</mat-icon>
             Run
         </button>
-        <button mat-menu-item *ngIf="editorState === 'ready'" (click)="runReadonlyClick.emit()">
+        <button mat-menu-item *ngIf="runState === 'ready'" (click)="runReadonlyClick.emit()">
             <mat-icon>play_arrow</mat-icon>
             Run read-only
         </button>
 
-        <button mat-menu-item *ngIf="editorState === 'running' || editorState === 'paused'" (click)="stopClick.emit()">
+        <button mat-menu-item *ngIf="runState === 'running' || runState === 'paused'" (click)="stopClick.emit()">
             <mat-icon>stop</mat-icon>
             Stop
         </button>
-        <button mat-menu-item *ngIf="editorState === 'running'" (click)="pauseClick.emit()">
+        <button mat-menu-item *ngIf="runState === 'running'" (click)="pauseClick.emit()">
             <mat-icon>pause</mat-icon>
             Pause
         </button>
 
-        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="continueClick.emit()">
+        <button mat-menu-item *ngIf="runState === 'paused'" (click)="continueClick.emit()">
             <mat-icon>play_arrow</mat-icon>
             Continue
         </button>
-        <mat-divider *ngIf="editorState === 'paused'" style="margin: 6px 20px;"></mat-divider>
-        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="stepIntoClick.emit()">
+        <mat-divider *ngIf="runState === 'paused'" style="margin: 6px 20px;"></mat-divider>
+        <button mat-menu-item *ngIf="runState === 'paused'" (click)="stepIntoClick.emit()">
             <mat-icon>step_into</mat-icon>
             Step into
         </button>
-        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="stepOverClick.emit()">
+        <button mat-menu-item *ngIf="runState === 'paused'" (click)="stepOverClick.emit()">
             <mat-icon>step_over</mat-icon>
             Step over
         </button>
-        <button mat-menu-item *ngIf="editorState === 'paused'" (click)="stepOutClick.emit()">
+        <button mat-menu-item *ngIf="runState === 'paused'" (click)="stepOutClick.emit()">
             <mat-icon>step_out</mat-icon>
             Step out
         </button>
@@ -86,18 +86,18 @@
 </mat-toolbar>
 
 <mat-toolbar class="toolbar">
-    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="saveClick.emit()">
+    <button mat-icon-button *ngIf="runState === 'ready'" (click)="saveClick.emit()">
         <mat-icon>save</mat-icon>
     </button>
 
-    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="undoClick.emit()" [disabled]="!canUndo">
+    <button mat-icon-button *ngIf="runState === 'ready'" (click)="undoClick.emit()" [disabled]="!canUndo">
         <mat-icon>undo</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="redoClick.emit()" [disabled]="!canRedo">
+    <button mat-icon-button *ngIf="runState === 'ready'" (click)="redoClick.emit()" [disabled]="!canRedo">
         <mat-icon>redo</mat-icon>
     </button>
 
-    <mat-form-field *ngIf="editorState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="disable-form-underline transparent-form-background">
+    <mat-form-field *ngIf="runState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="disable-form-underline transparent-form-background">
         <mat-label>Entry point</mat-label>
         <mat-select [value]="entryPoint" (selectionChange)="entryPointChange.emit($event.value)">
             <mat-option *ngFor="let availableEntryPoint of availableEntryPoints" [value]="availableEntryPoint">
@@ -106,44 +106,44 @@
         </mat-select>
     </mat-form-field>
 
-    <button mat-button *ngIf="editorState === 'ready'" (click)="runClick.emit()">
+    <button mat-button *ngIf="runState === 'ready'" (click)="runClick.emit()">
         <mat-icon>play_arrow</mat-icon>
         Run
     </button>
-    <button mat-button *ngIf="editorState === 'ready'" (click)="runReadonlyClick.emit()">
+    <button mat-button *ngIf="runState === 'ready'" (click)="runReadonlyClick.emit()">
         <mat-icon>play_arrow</mat-icon>
         Run read-only
     </button>
 
-    <button mat-button *ngIf="editorState === 'running' || editorState === 'paused'" (click)="stopClick.emit()">
+    <button mat-button *ngIf="runState === 'running' || runState === 'paused'" (click)="stopClick.emit()">
         <mat-icon>stop</mat-icon>
         Stop
     </button>
-    <button mat-button *ngIf="editorState === 'running'" (click)="pauseClick.emit()">
+    <button mat-button *ngIf="runState === 'running'" (click)="pauseClick.emit()">
         <mat-icon>pause</mat-icon>
         Pause
     </button>
 
-    <button mat-button *ngIf="editorState === 'paused'" (click)="continueClick.emit()">
+    <button mat-button *ngIf="runState === 'paused'" (click)="continueClick.emit()">
         <mat-icon>play_arrow</mat-icon>
         Continue
     </button>
-    <button mat-button *ngIf="editorState === 'paused'" (click)="stepIntoClick.emit()">
+    <button mat-button *ngIf="runState === 'paused'" (click)="stepIntoClick.emit()">
         <mat-icon>step_into</mat-icon>
         Step into
     </button>
-    <button mat-button *ngIf="editorState === 'paused'" (click)="stepOverClick.emit()">
+    <button mat-button *ngIf="runState === 'paused'" (click)="stepOverClick.emit()">
         <mat-icon>step_over</mat-icon>
         Step over
     </button>
-    <button mat-button *ngIf="editorState === 'paused'" (click)="stepOutClick.emit()">
+    <button mat-button *ngIf="runState === 'paused'" (click)="stepOutClick.emit()">
         <mat-icon>step_out</mat-icon>
         Step out
     </button>
 
     <div style="flex-grow: 1;"></div>
 
-    <button mat-icon-button *ngIf="editorState === 'ready'" (click)="shareClick.emit()">
+    <button mat-icon-button *ngIf="runState === 'ready'" (click)="shareClick.emit()">
         <mat-icon>share</mat-icon>
     </button>
 </mat-toolbar>

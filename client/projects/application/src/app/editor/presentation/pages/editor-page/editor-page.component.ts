@@ -12,6 +12,8 @@ import { CallStackComponent } from "./call-stack/call-stack.component";
 import { CodeEditorComponent } from "projects/application/src/app/shared/presentation/components/code-editor/code-editor.component";
 import { TownEditorComponent } from "projects/application/src/app/shared/presentation/components/town-editor/town-editor.component";
 import { map } from "rxjs";
+import { ProjectEditorService } from "../../../application/services/project-editor.service";
+import { RunService } from "../../../application/services/run.service";
 
 @Component({
     standalone: true,
@@ -19,7 +21,7 @@ import { map } from "rxjs";
     imports: [CommonModule, FileExplorerComponent, CodeEditorComponent, TownEditorComponent, ErrorListComponent, SettingsComponent, HeaderComponent, MatTabsModule, CallStackComponent],
     templateUrl: "./editor-page.component.html",
     styleUrls: ["./editor-page.component.css"],
-    providers: [EditorService, { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 100 }}]
+    providers: [EditorService, ProjectEditorService, RunService, { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 100 }}]
 })
 export class EditorPageComponent {
     @ViewChild(CodeEditorComponent)
@@ -42,9 +44,16 @@ export class EditorPageComponent {
     constructor(readonly editorService: EditorService, readonly breakpointObserver: BreakpointObserver, readonly activatedRoute: ActivatedRoute) {
         breakpointObserver.observe(["(max-width: 1000px)"]).subscribe(b => this.isSmallScreen = b.matches);
         
-        const projectId = activatedRoute.snapshot.paramMap.get("id");
-        if (projectId !== null)
-            editorService.openProject(parseInt(projectId, 10));
+        this.activatedRoute.paramMap.subscribe(async p => {
+            const idText = p.get("id")!;
+
+            if (idText !== null) {
+                const id = parseInt(idText, 10);
+                editorService.openProject(id);
+            }
+            else
+                editorService.openProject(null);
+        });
     }
 
     onSelectedTabIndexChange(newValue: number) {

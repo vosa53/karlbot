@@ -46,7 +46,6 @@ export class ChallengePageComponent {
 
     async ngOnInit() {
         this.activatedRoute.paramMap.subscribe(async p => {
-            const currentUserId = (await this.signInService.currentUser)!.id;
             const idText = p.get("id")!;
             const id = parseInt(idText, 10);
 

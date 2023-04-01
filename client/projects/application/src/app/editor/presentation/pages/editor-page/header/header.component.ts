@@ -5,10 +5,10 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatButtonModule } from '@angular/material/button';
-import { EditorState } from "../../../../application/services/editor.service";
 import { MatDividerModule } from "@angular/material/divider";
 import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
 import { ValidatedInputValidator } from "projects/application/src/app/shared/presentation/directives/validated-input.directive";
+import { RunState } from "../../../../application/services/run.service";
 
 @Component({
     standalone: true,
@@ -19,7 +19,7 @@ import { ValidatedInputValidator } from "projects/application/src/app/shared/pre
 })
 export class HeaderComponent {
     @Input()
-    editorState = EditorState.ready;
+    runState = RunState.ready;
 
     @Input()
     projectName: string = "";
