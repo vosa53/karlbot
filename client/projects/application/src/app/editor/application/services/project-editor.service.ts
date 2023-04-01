@@ -103,6 +103,13 @@ export class ProjectEditorService {
     removeFile(file: File) {
         const newProject = this.project.value.removeFile(file);
         this.project.next(newProject);
+        
+        if (file === this.selectedCodeFile.value)
+            this.selectedCodeFile.next(null);
+        if (file === this.selectedTownFile.value) {
+            this.selectedTownFile.next(null);
+            this.loadCurrentTown();
+        }
     }
 
     renameFile(file: File, newName: string) {
@@ -122,6 +129,9 @@ export class ProjectEditorService {
     }
 
     selectTownFile(file: TownFile | null) {
+        if (file === this.selectedTownFile.value)
+            return;
+        
         this.saveCurrentTown();
         this.selectedTownFile.next(file);
         this.loadCurrentTown();
@@ -194,8 +204,7 @@ export class ProjectEditorService {
         if (this.selectedTownFile.value !== null) {
             const newTown = this.currentTown.value!.toImmutable();
             const newTownFile = this.selectedTownFile.value.withTown(newTown);
-            const newProject = this.project.value.replaceFile(this.selectedTownFile.value, newTownFile);
-            this.project.next(newProject);
+            this.replaceFile(this.selectedTownFile.value, newTownFile);
         }
     }
 
