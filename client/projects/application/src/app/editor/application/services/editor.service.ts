@@ -237,11 +237,12 @@ export class EditorService {
         if (newIsProjectPublic === null)
             return;
 
-        const newSavedProject = {
+        const toUpdate = {
             ...savedProject,
             isPublic: newIsProjectPublic
         };
-        this.savedProject.next(newSavedProject);
+        await this.projectService.update(toUpdate);
+        this.savedProject.next(toUpdate);
     }
 
     provideCompletionItems(line: number, column: number): CompletionItem[] {
