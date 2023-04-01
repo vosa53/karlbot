@@ -32,8 +32,14 @@ export class RunService {
     private assembly: Assembly | null = null;
     private willPause = false;
     private isDebuggerStep = false;
+    private karelSpeed = 0;
 
     constructor(private readonly projectEditorService: ProjectEditorService, private readonly dialogService: DialogService) {
+        this.projectEditorService.project$.subscribe(p => {
+            this.karelSpeed = p.settings.karelSpeed;
+            if (this.interpreter.value !== null)
+                this.interpreter.value.maxCallStackSize = p.settings.maxRecursionDepth;
+        });
     }
 
     readonly currentRange$ = combineLatest([this.currentRange, this.projectEditorService.selectedCodeFile$]).pipe(map(([currentRange, selectedCodeFile]) => {
@@ -180,7 +186,7 @@ export class RunService {
     private createInterpreter(project: Project, town: MutableTown): Interpreter {
         this.assembly = Emitter.emit(project.compilation);
         const entryPoint = this.assembly.programs.find(p => p.name === project.settings.entryPoint)!;
-        const externalPrograms = StandardLibrary.getPrograms(town, () => this.isDebuggerStep ? 0 : project.settings.karelSpeed);
+        const externalPrograms = StandardLibrary.getPrograms(town, () => this.isDebuggerStep ? 0 : this.karelSpeed);
 
         const interpreter = new Interpreter(this.assembly, entryPoint, externalPrograms);
         interpreter.maxCallStackSize = project.settings.maxRecursionDepth;
