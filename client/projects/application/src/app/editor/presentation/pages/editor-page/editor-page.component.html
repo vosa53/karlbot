@@ -45,8 +45,8 @@
 <ng-template #codeEditor>
     <app-code-editor
         class="code-editor" 
-        [code]="(editorService.currentCode$ | async)!"
-        [readonly]="(editorService.runState$ | async)! !== 'ready'"
+        [code]="(editorService.currentCode$ | async) ?? ''"
+        [readonly]="(editorService.runState$ | async)! !== 'ready' || (editorService.currentCode$ | async) === null"
         [errors]="(editorService.errorsInCurrentCodeFile$ | async)!"
         [currentRange]="(editorService.currentRange$ | async)!"
         [breakpoints]="(editorService.selectedCodeFile$ | async)?.breakpoints ?? []"

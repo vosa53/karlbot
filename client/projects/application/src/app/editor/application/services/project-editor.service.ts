@@ -29,7 +29,7 @@ export class ProjectEditorService {
     readonly currentTownCamera$ = this.currentTownCamera.asObservable();
 
     readonly currentCode$ = this.selectedCodeFile.pipe(map(cf => {
-        return cf?.compilationUnit?.buildText() ?? "";
+        return cf?.compilationUnit?.buildText() ?? null;
     }));
 
     readonly availableEntryPoints$ = this.project.pipe(map(p => {
