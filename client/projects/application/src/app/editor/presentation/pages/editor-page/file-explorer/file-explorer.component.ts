@@ -99,9 +99,9 @@ export class FileExplorerComponent implements OnChanges {
 
     getFileIconURL(file: File): string {
         if (file instanceof CodeFile)
-            return "http://karlbot.cz/assets/files/code-file.png";
+            return "assets/editor/presentation/pages/editor/file-explorer/code-file.png";
         else if (file instanceof TownFile)
-            return "http://karlbot.cz/assets/files/town-file.png";
+            return "assets/editor/presentation/pages/editor/file-explorer/town-file.png";
         else
             throw new Error("");
     }
