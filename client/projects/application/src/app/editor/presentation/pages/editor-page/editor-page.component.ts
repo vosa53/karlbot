@@ -52,7 +52,7 @@ export class EditorPageComponent {
                 editorService.openProject(id);
             }
             else
-                editorService.openProject(null);
+                editorService.newProject();
         });
     }
 

@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { CompletionItem } from 'projects/karel/src/lib/compiler/language-service/completion-item';
 import { CodeFile } from 'projects/karel/src/lib/project/code-file';
 import { File } from 'projects/karel/src/lib/project/file';
@@ -48,6 +49,7 @@ export class EditorService {
         private readonly projectService: ProjectService, 
         private readonly signInService: SignInService, 
         private readonly location: Location, 
+        private readonly router: Router,
         private readonly notificationService: NotificationService
     ) {
         this.projectEditorService.setProject(this.createNewProject());
@@ -61,18 +63,21 @@ export class EditorService {
         this.activeArea.next(area);
     }
 
-    async openProject(projectId: number | null) {
-        if (projectId !== null) {
-            const savedProject = await this.projectService.getById(projectId);
-            const project = savedProject.project.withExternalPrograms(StandardLibrary.getProgramReferences());
+    newProject() {
+        this.location.go("editor");
+
+        this.projectEditorService.setProject(this.createNewProject());
+        this.savedProject.next(null);
+    }
+
+    async openProject(projectId: number) {
+        this.location.go(`editor/${projectId}`);
+        
+        const savedProject = await this.projectService.getById(projectId);
+        const project = savedProject.project.withExternalPrograms(StandardLibrary.getProgramReferences());
             
-            this.projectEditorService.setProject(project);
-            this.savedProject.next(savedProject);
-        }
-        else {
-            this.projectEditorService.setProject(this.createNewProject());
-            this.savedProject.next(null);
-        }
+        this.projectEditorService.setProject(project);
+        this.savedProject.next(savedProject);
     }
 
     async saveProject() {

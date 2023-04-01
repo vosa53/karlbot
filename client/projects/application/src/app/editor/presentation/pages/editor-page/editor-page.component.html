@@ -9,6 +9,7 @@
         [canRedo]="(editorService.activeArea$ | async) === 'code'"
         (projectNameChange)="editorService.changeProjectName($event)"
         (entryPointChange)="editorService.changeEntryPoint($event)"
+        (newClick)="editorService.newProject()"
         (saveClick)="editorService.saveProject()"
         (shareClick)="editorService.share()"
         (importClick)="editorService.importProject()"
