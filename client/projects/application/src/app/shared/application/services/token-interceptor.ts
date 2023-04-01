@@ -1,6 +1,6 @@
 import { HttpHandlerFn, HttpRequest } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { from, of, switchMap, take } from "rxjs";
+import { from, mergeMap, of, switchMap, take } from "rxjs";
 import { IS_ANONYMOUS_ENDPOINT } from "../is-anonymous-endpoint";
 import { SignInService } from "./sign-in.service";
 
@@ -10,7 +10,8 @@ export function TokenInterceptor(request: HttpRequest<unknown>, next: HttpHandle
 
     const signInService = inject(SignInService);
     
-    return from(signInService.currentUserToken).pipe(
+    return signInService.currentUserToken$.pipe(
+        take(1),
         switchMap(t => {
             if (t === null)
                 return next(request);

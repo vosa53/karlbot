@@ -55,15 +55,15 @@
                 <ng-container *ngTemplateOutlet="darkModeSwitch"></ng-container>
             </div>
             <div style="width: 48px;"></div>
-            <a mat-button *ngIf="(authenticationService.currentUser | async) === null" routerLink="/user/sign-in">Sign
+            <a mat-button *ngIf="(authenticationService.currentUser$ | async) === null" routerLink="/user/sign-in">Sign
                 in</a>
-            <button *ngIf="(authenticationService.currentUser | async) !== null" mat-icon-button [matMenuTriggerFor]="menu">
+            <button *ngIf="(authenticationService.currentUser$ | async) !== null" mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>account_circle</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
                 <button mat-menu-item routerLink="/projects">
                     <mat-icon>person</mat-icon>
-                    <span>{{(authenticationService.currentUser | async)?.email}}</span>
+                    <span>{{(authenticationService.currentUser$ | async)?.email}}</span>
                 </button>
                 <button mat-menu-item (click)="onSignOutClick()">
                     <mat-icon>logout</mat-icon>

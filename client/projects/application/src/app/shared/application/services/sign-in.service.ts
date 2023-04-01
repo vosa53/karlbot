@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { FirebaseError } from '@angular/fire/app';
-import { Auth, authState, signOut, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
-import { firstValueFrom, skip, Subscription } from 'rxjs';
+import { Auth, authState, signOut, GoogleAuthProvider, signInWithPopup, User as FirebaseUser } from '@angular/fire/auth';
+import { distinctUntilChanged, firstValueFrom, from, mergeMap, of, shareReplay, skip, Subscription } from 'rxjs';
 import { User } from '../models/user';
 import { AuthenticationService } from './authentication.service';
 import { UserService } from './user.service';
@@ -9,29 +9,29 @@ import { UserService } from './user.service';
 @Injectable({
     providedIn: 'root'
 })
-export class SignInService implements OnDestroy {
-    get currentUser(): Promise<User | null> {
-        return this._currentUser;
-    }
+export class SignInService {
+    readonly currentUserToken$ = authState(this.firebaseAuthentication).pipe(
+        mergeMap(u => {
+            if (u === null)
+                return of(null);
+            else
+                return from(this.getUserToken(u));
+        }),
+        shareReplay(1)
+    );
+    
+    readonly currentUser$ = this.currentUserToken$.pipe(
+        mergeMap(t => {
+            if (t === null)
+                return of(null);
+            else
+                return from(this.userService.getCurrent());
+        }),
+        shareReplay(1)
+    );
 
-    get currentUserToken(): Promise<string | null> {
-        return this._currentUserToken;
-    }
-
-    private _currentUser: Promise<User | null>;
-    private _currentUserToken: Promise<string | null>;
-    private authStateSubscription: Subscription | null = null;
-
-    constructor(private readonly firebaseAuthentication: Auth, private readonly authenticationService: AuthenticationService, 
+    constructor(private readonly firebaseAuthentication: Auth, private readonly authenticationService: AuthenticationService,
         private readonly userService: UserService) {
-
-        this._currentUserToken = this.getCurrentUserToken();
-        this._currentUser = this.getCurrentUser();
-
-        this.authStateSubscription = authState(firebaseAuthentication).pipe(skip(1)).subscribe(u => {
-            this._currentUserToken = this.getCurrentUserToken();
-            this._currentUser = this.getCurrentUser();
-        });
     }
 
     async signInWithGoogle(): Promise<boolean> {
@@ -43,34 +43,22 @@ export class SignInService implements OnDestroy {
             else
                 throw error;
         }
-        await firstValueFrom(authState(this.firebaseAuthentication));
+        await this.waitForUserChange();
         return true;
     }
 
     async signOut(): Promise<void> {
         await signOut(this.firebaseAuthentication);
-        await firstValueFrom(authState(this.firebaseAuthentication));
+        await this.waitForUserChange();
     }
 
-    ngOnDestroy() {
-        this.authStateSubscription?.unsubscribe();
-    }
-
-    private async getCurrentUserToken() {
-        const user = await firstValueFrom(authState(this.firebaseAuthentication));
-        if (user === null)
-            return null;
-
+    private async getUserToken(user: FirebaseUser): Promise<string> {
         const firebaseIdToken = await user.getIdToken();
         const firebaseAuthenticationResult = await this.authenticationService.firebase(firebaseIdToken);
         return firebaseAuthenticationResult.token;
     }
 
-    private async getCurrentUser() {
-        const currentUserToken = await this.currentUserToken;
-        if (currentUserToken === null)
-            return null;
-
-        return this.userService.getCurrent();
+    private async waitForUserChange(): Promise<void> {
+        await firstValueFrom(this.currentUser$.pipe(distinctUntilChanged(), skip(1)));
     }
 }

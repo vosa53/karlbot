@@ -12,14 +12,14 @@
 
         <mat-divider style="margin: 6px 20px;"></mat-divider>
 
-        <button mat-menu-item (click)="shareClick.emit()">
+        <button mat-menu-item (click)="shareClick.emit()" [disabled]="!isProjectOwn">
             <mat-icon>share</mat-icon>
             Share
         </button>
 
         <mat-divider style="margin: 6px 20px;"></mat-divider>
 
-        <button mat-menu-item (click)="importClick.emit()">
+        <button mat-menu-item (click)="importClick.emit()" [disabled]="!isProjectOwn">
             <mat-icon>upload</mat-icon>
             Import
         </button>
@@ -143,7 +143,7 @@
 
     <div style="flex-grow: 1;"></div>
 
-    <button mat-icon-button *ngIf="runState === 'ready'" (click)="shareClick.emit()">
+    <button mat-icon-button *ngIf="runState === 'ready'" (click)="shareClick.emit()" [disabled]="!isProjectOwn">
         <mat-icon>share</mat-icon>
     </button>
 </mat-toolbar>

@@ -11,6 +11,7 @@ import { DialogService } from 'projects/application/src/app/shared/presentation/
 import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
 import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
 import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-challenges-page',
@@ -28,7 +29,7 @@ export class ChallengesPageComponent implements OnInit {
     }
 
     async ngOnInit() {
-        const currentUser = await this.signInService.currentUser;
+        const currentUser = await firstValueFrom(this.signInService.currentUser$);
         if (currentUser!.isAdmin)
             this.displayedColumns.push("actions");
 

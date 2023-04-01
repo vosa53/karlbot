@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
 import { Project, ProjectDeserializer, ProjectSerializer, Vector } from 'projects/karel/src/public-api';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { SavedProject } from 'projects/application/src/app/shared/application/models/saved-project';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 import { ChallengeSubmissionComponent } from './challenge-submission/challenge-submission.component';
@@ -56,7 +56,7 @@ export class ChallengePageComponent {
     }
 
     async onSubmitProject() {
-        const currentUser = await this.signInService.currentUser;
+        const currentUser = await firstValueFrom(this.signInService.currentUser$);
         const project = await this.selectProject(currentUser!);
         if (project === null)
             return;
@@ -89,8 +89,8 @@ export class ChallengePageComponent {
     }
 
     private async loadSubmissions() {
-        const currentUserId = (await this.signInService.currentUser)!.id;
-        this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUserId);
+        const currentUser = await firstValueFrom(this.signInService.currentUser$);
+        this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUser!.id);
         this.challengeSubmissions.sort((a, b) => b.created.getTime() - a.created.getTime());
     }
 

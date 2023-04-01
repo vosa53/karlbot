@@ -25,6 +25,9 @@ export class HeaderComponent {
     projectName: string = "";
 
     @Input()
+    isProjectOwn: boolean = false;
+
+    @Input()
     availableEntryPoints: string[] = [];
 
     @Input()

@@ -9,7 +9,7 @@ import { Settings } from 'projects/karel/src/lib/project/settings';
 import { TownFile } from 'projects/karel/src/lib/project/town-file';
 import { StandardLibrary } from 'projects/karel/src/lib/standard-library/standard-library';
 import { ProjectDeserializer } from 'projects/karel/src/public-api';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest, firstValueFrom, map } from 'rxjs';
 import { SavedProject } from '../../../shared/application/models/saved-project';
 import { ProjectService } from '../../../shared/application/services/project.service';
 import { SignInService } from '../../../shared/application/services/sign-in.service';
@@ -40,6 +40,15 @@ export class EditorService {
     readonly runState$ = this.runService.state$;
     readonly callStack$ = this.runService.callStack$;
     readonly currentRange$ = this.runService.currentRange$;
+
+    readonly isProjectOwn$ = combineLatest([this.savedProject, this.signInService.currentUser$]).pipe(
+        map(([savedProject, currentUser]) => {
+            if (savedProject === null)
+                return true;
+            
+            return savedProject.authorId === currentUser?.id;
+        })
+    );
 
     constructor(
         private readonly projectEditorService: ProjectEditorService, 
@@ -72,7 +81,7 @@ export class EditorService {
 
     async openProject(projectId: number) {
         this.location.go(`editor/${projectId}`);
-        
+
         const savedProject = await this.projectService.getById(projectId);
         const project = savedProject.project.withExternalPrograms(StandardLibrary.getProgramReferences());
             
@@ -81,14 +90,21 @@ export class EditorService {
     }
 
     async saveProject() {
-        const currentUser = await this.signInService.currentUser;
+        const currentUser = await firstValueFrom(this.signInService.currentUser$);
         if (currentUser === null) {
-            this.dialogService.showMessage("Sign in please", "You must be signed in to save projects. Or alternatively, you can export it to your device even without signing in.");
+            await this.dialogService.showMessage("Sign in please", "You must be signed in to save projects. Or alternatively, you can export it to your device even without signing in.");
             return;
+        }
+
+        const isProjectOwn = await firstValueFrom(this.isProjectOwn$);
+        if (!isProjectOwn) {
+            const confirmed = await this.dialogService.showConfirmation("Create a copy?", "This project is not yours, do you want to fork it?");
+            if (!confirmed)
+                return;
         }
         
         let savedProject: SavedProject;
-        if (this.savedProject.value === null) {
+        if (this.savedProject.value === null || !isProjectOwn) {
             const toAdd = {
                 id: 0,
                 created: new Date(),
@@ -115,7 +131,7 @@ export class EditorService {
 
     async importProject() {
         if (this.savedProject.value !== null) {
-            const confirmed = this.dialogService.showConfirmation("Are you sure?", "The imported project will replace the current project, do you want to continue?");
+            const confirmed = await this.dialogService.showConfirmation("Are you sure?", "The imported project will replace the current saved project, do you want to continue?");
             if (!confirmed)
                 return;
         }

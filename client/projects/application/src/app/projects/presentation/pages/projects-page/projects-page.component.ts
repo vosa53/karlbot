@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
 import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
 import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-projects-page',
@@ -39,7 +40,7 @@ export class ProjectsPageComponent implements OnInit {
     }
 
     private async loadProjects() {
-        const currentUser = await this.signInService.currentUser;
+        const currentUser = await firstValueFrom(this.signInService.currentUser$);
         this.projects = await this.projectService.get(currentUser!.id);
         this.projects.sort((a, b) => b.modified.getTime() - a.modified.getTime());
     }

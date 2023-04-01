@@ -3,6 +3,7 @@
         class="header"
         [runState]="(editorService.runState$ | async)!"
         [projectName]="(editorService.project$ | async)!.name"
+        [isProjectOwn]="(editorService.isProjectOwn$ | async) ?? false"
         [availableEntryPoints]="(editorService.availableEntryPoints$ | async)!"
         [entryPoint]="(editorService.project$ | async)!.settings.entryPoint"
         [canUndo]="(editorService.activeArea$ | async) === 'code'"
