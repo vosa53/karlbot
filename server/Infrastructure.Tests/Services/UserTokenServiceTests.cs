@@ -47,7 +47,7 @@ namespace Infrastructure.Tests.Services
             var validator = new JwtSecurityTokenHandler();
             var principal = validator.ValidateToken(token, validationParameters, out var validatedToken);
 
-            Assert.That(principal.FindFirstValue(ClaimTypes.NameIdentifier), Is.EqualTo("userId"));
+            Assert.That(principal.FindFirstValue(ClaimTypes.NameIdentifier), Is.EqualTo(user.Id.ToString()));
             Assert.That(principal.FindAll(ClaimTypes.Role).Select(c => c.Value), Is.EquivalentTo(new[] { "FirstRole", "SecondRole" }));
         }
     }
