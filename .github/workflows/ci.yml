@@ -119,10 +119,15 @@ jobs:
         cd server/dist
         echo "$SERVER_APP_SETTINGS" > appsettings.json
         echo "$SERVER_FIREBASE_CREDENTIAL" > firebase.json
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+    - name: Upload to FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        name: bundle
-        path: server/dist
+        server: ${{ secrets.HOSTING_FTP_SERVER }}
+        username: ${{ secrets.HOSTING_FTP_USERNAME }}
+        password: ${{ secrets.HOSTING_FTP_PASSWORD }}
+        protocol: ftps
+        local-dir: server/dist
+        server-dir: www
+        security: strict
         
         
