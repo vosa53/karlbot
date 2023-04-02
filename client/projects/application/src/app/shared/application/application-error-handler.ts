@@ -14,7 +14,7 @@ export class ApplicationErrorHandler extends ErrorHandler {
         super.handleError(error);
 
         let displayMessage = "Something went wrong!";
-        if (error?.rejection instanceof HttpErrorResponse && error?.rejection.status === 0)
+        if (this.isNetworkError(error))
             displayMessage = "Network error! Please check if the internet connection is available.";
 
         this.zone.run(() => {
@@ -22,5 +22,10 @@ export class ApplicationErrorHandler extends ErrorHandler {
             if (isDevMode())
                 this.dialogService.showMessage("JavaScript error occured", error);
         });
+    }
+
+    private isNetworkError(error: any) {
+        return error instanceof HttpErrorResponse && error.status === 0 ||
+            error?.rejection instanceof HttpErrorResponse && error?.rejection.status === 0
     }
 }
