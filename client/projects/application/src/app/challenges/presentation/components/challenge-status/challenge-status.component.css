@@ -1,0 +1,12 @@
+:host {
+    display: inline-block;
+    height: 24px;
+}
+
+.icon-attempted {
+    color: var(--color-neutral);
+}
+
+.icon-done {
+    color: var(--color-positive);
+}

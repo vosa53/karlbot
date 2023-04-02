@@ -1,4 +1,5 @@
-<app-page *ngIf="challenges !== null" title="Challenges">
+<app-page *ngIf="challenges !== null">
+    <span page-title>Challenges</span>
     <button *ngIf="(signInService.currentUser$ | async)?.isAdmin ?? false" mat-flat-button color="primary" class="create-project-button" routerLink="/challenges/editor">
         <mat-icon>add</mat-icon>
         Create new
@@ -6,6 +7,13 @@
 
     <div class="table-scroll-wrapper">
         <table class="table" mat-table [dataSource]="challenges">
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef class="table-status-column"></th>
+                <td mat-cell *matCellDef="let challenge" class="table-status-column">
+                    <app-challenge-status class="status" [submissionsInfo]="challenge.submissionsInfo"></app-challenge-status>
+                </td>
+            </ng-container>
+
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef class="table-name-column">Name</th>
                 <td mat-cell *matCellDef="let challenge" class="table-name-column">
@@ -17,6 +25,13 @@
                 <th mat-header-cell *matHeaderCellDef>Difficulty</th>
                 <td mat-cell *matCellDef="let challenge">
                     <app-challenge-difficulty [difficulty]="challenge.difficulty"></app-challenge-difficulty>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="solved">
+                <th mat-header-cell *matHeaderCellDef>Solved</th>
+                <td mat-cell *matCellDef="let challenge">
+                    {{challenge.submissionsInfo.usersSuccessfullySubmittedCount}}
                 </td>
             </ng-container>
     

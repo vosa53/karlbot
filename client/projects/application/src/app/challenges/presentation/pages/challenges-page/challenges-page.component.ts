@@ -12,17 +12,18 @@ import { ChallengeDifficultyComponent } from '../../components/challenge-difficu
 import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
 import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
 import { firstValueFrom } from 'rxjs';
+import { ChallengeStatusComponent } from '../../components/challenge-status/challenge-status.component';
 
 @Component({
     selector: 'app-challenges-page',
     standalone: true,
-    imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatTableModule, PageComponent, ChallengeDifficultyComponent],
+    imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatTableModule, PageComponent, ChallengeDifficultyComponent, ChallengeStatusComponent],
     templateUrl: './challenges-page.component.html',
     styleUrls: ['./challenges-page.component.css']
 })
 export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] | null = null;
-    displayedColumns: string[] = ["name", "difficulty"];
+    displayedColumns: string[] = ["status", "name", "difficulty", "solved"];
 
     constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService, readonly signInService: SignInService) {
         

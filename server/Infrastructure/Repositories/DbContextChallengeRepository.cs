@@ -21,17 +21,46 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
+        public async Task<IList<ChallengeWithSubmissionsInfo>> GetWithSubmissionsInfoAsync(string userId)
+        {
+            return await CreateQuery(false)
+                .Join(DbContext.ChallengeSubmissions, c => c.Id, s => s.ChallengeId, (c, s) => new
+                {
+                    Challenge = c,
+                    Submission = s
+                })
+                .GroupBy(cs => cs.Challenge)
+                .Select(c => new ChallengeWithSubmissionsInfo
+                {
+                    Challenge = c.Key,
+                    OwnSubmissionCount = c.Count(s => s.Submission.UserId == userId),
+                    OwnSuccessfulSubmissionCount = c.Count(s => s.Submission.UserId == userId && s.Submission.EvaluationSuccessRate == 1),
+                    UsersSubmittedCount = c.Select(s => s.Submission.UserId).Distinct().Count(),
+                    UsersSuccessfullySubmittedCount = c.Where(s => s.Submission.EvaluationSuccessRate == 1).Select(s => s.Submission.UserId).Distinct().Count()
+                })
+                .ToListAsync();
+        }
+
+        /// <inheritdoc/>
+        public async Task<ChallengeWithSubmissionsInfo?> GetByIdWithSubmissionsInfoAsync(int id, string userId)
+        {
+            return await CreateQuery(true)
+                .Select(c => new ChallengeWithSubmissionsInfo
+                {
+                    Challenge = c,
+                    OwnSubmissionCount = c.Submissions.Count(s => s.UserId == userId),
+                    OwnSuccessfulSubmissionCount = c.Submissions.Count(s => s.UserId == userId && s.EvaluationSuccessRate == 1),
+                    UsersSubmittedCount = c.Submissions.Select(s => s.UserId).Distinct().Count(),
+                    UsersSuccessfullySubmittedCount = c.Submissions.Where(s => s.EvaluationSuccessRate == 1).Select(s => s.UserId).Distinct().Count()
+                })
+                .SingleOrDefaultAsync(c => c.Challenge.Id == id);
+        }
+
+        /// <inheritdoc/>
         public override async Task<Challenge?> GetByIdAsync(int id)
         {
-            var challenge = await DbSet
-                .Where(c => c.Id == id)
-                .Include(c => c.TestCases)
-                .SingleOrDefaultAsync();
-            if (challenge == null)
-                return null;
-
-            challenge.TestCases = challenge.TestCases.OrderBy(tc => tc.Order).ToList();
-            return challenge;
+            return await CreateQuery(true)
+                .SingleOrDefaultAsync(c => c.Id == id);
         }
 
         /// <inheritdoc/>
@@ -54,6 +83,14 @@ namespace Infrastructure.Repositories
         {
             for (var i = 0; i < testCases.Count; i++)
                 testCases[i].Order = i;
+        }
+
+        private IQueryable<Challenge> CreateQuery(bool includeTestCases)
+        {
+            if (includeTestCases)
+                return DbSet.Include(c => c.TestCases.OrderBy(tc => tc.Order));
+            else
+                return DbSet;
         }
     }
 }

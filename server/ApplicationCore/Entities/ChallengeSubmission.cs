@@ -44,20 +44,29 @@ namespace ApplicationCore.Entities
         public string ProjectFile { get; set; }
 
         /// <summary>
-        /// Evaluation result or `null` if it has not been evaluated yet.
+        /// Evaluation success ratio. Must be between 0 and 1.
         /// </summary>
-        public ChallengeSubmissionEvaluationResult? EvaluationResult { get; set; }
+        public double EvaluationSuccessRate { get; set; }
+
+        /// <summary>
+        /// Message further descripting the evaluation result.
+        /// </summary>
+        public string EvaluationMessage { get; set; }
 
         /// <param name="challengeId">Id of the challenge.</param>
         /// <param name="userId">Id of the user who submitted it.</param>
         /// <param name="created">Date and time of submission.</param>
         /// <param name="projectFile">Submitted project file.</param>
-        public ChallengeSubmission(int challengeId, string userId, DateTime created, string projectFile)
+        /// <param name="evaluationSuccessRate">Evaluation success ratio. Must be between 0 and 1.</param>
+        /// <param name="evaluationMessage">Message further descripting the evaluation result.</param>
+        public ChallengeSubmission(int challengeId, string userId, DateTime created, string projectFile, double evaluationSuccessRate, string evaluationMessage)
         {
             ChallengeId = challengeId;
             UserId = userId;
             Created = created;
             ProjectFile = projectFile;
+            EvaluationSuccessRate = evaluationSuccessRate;
+            EvaluationMessage = evaluationMessage;
         }
     }
 }

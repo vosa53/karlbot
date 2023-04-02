@@ -10,8 +10,5 @@ import { CommonModule } from '@angular/common';
 })
 export class PageComponent {
     @Input()
-    title: string = "";
-
-    @Input()
     fullWidth: boolean = false;
 }

@@ -114,6 +114,7 @@ export class ChallengeEditorPageComponent {
             name: this.form.value.name!,
             description: this.form.value.description!,
             difficulty: this.form.value.difficulty!,
+            submissionsInfo: null,
             testCases: this.testCases.map(tc => ({
                 inputTown: tc.inputTown.toImmutable(),
                 outputTown: tc.outputTown.toImmutable(),

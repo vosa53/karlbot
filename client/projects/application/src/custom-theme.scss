@@ -83,9 +83,9 @@ $application-dark-theme: mat.define-dark-theme((
     --color-primary: #{mat.get-color-from-palette($primary-palette, 500)};
     --color-accent: #{mat.get-color-from-palette($accent-palette, 500)};
     --color-warn: #{mat.get-color-from-palette($warn-palette, 500)};
-    --color-easy: #8BC34A;
-    --color-medium: #FFB300;
-    --color-hard: #D32F2F;
+    --color-positive: #8BC34A;
+    --color-neutral: #FFB300;
+    --color-negative: #D32F2F;
     --background-primary: #{mat.get-color-from-palette($background-palette, 'background')};
     --background-secondary: #{mat.get-color-from-palette($background-palette, 'app-bar')};
     --background-tertiary: #eaeaea;
@@ -108,9 +108,9 @@ $application-dark-theme: mat.define-dark-theme((
     --color-primary: #{mat.get-color-from-palette($primary-palette, 500)};
     --color-accent: #{mat.get-color-from-palette($accent-palette, 500)};
     --color-warn: #{mat.get-color-from-palette($warn-palette, 500)};
-    --color-easy: #AED581;
-    --color-medium: #FFD54F;
-    --color-hard: #EF5350;
+    --color-positive: #AED581;
+    --color-neutral: #FFD54F;
+    --color-negative: #EF5350;
     --background-primary: #{mat.get-color-from-palette($background-palette, 'background')};
     --background-secondary: #{mat.get-color-from-palette($background-palette, 'app-bar')};
     --background-tertiary: #333333;

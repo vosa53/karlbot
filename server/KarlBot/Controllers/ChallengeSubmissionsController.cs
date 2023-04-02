@@ -70,12 +70,11 @@ namespace KarlBot.Controllers
             if (challenge == null)
                 return NotFound();
 
+            var evaluationResult = await _challengeEvaluationService.EvaluateAsync(dataModel.ProjectFile, challenge.TestCases!);
+
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            var submission = new ChallengeSubmission(challengeId, userId, DateTime.UtcNow, dataModel.ProjectFile);
-
-            var evaluationResult = await _challengeEvaluationService.EvaluateAsync(submission.ProjectFile, challenge.TestCases!);
-
-            submission.EvaluationResult = new ChallengeSubmissionEvaluationResult(evaluationResult.SuccessRate, evaluationResult.Message);
+            var submission = new ChallengeSubmission(challengeId, userId, DateTime.UtcNow, dataModel.ProjectFile,
+                evaluationResult.SuccessRate, evaluationResult.Message);
 
             await _challengeSubmissionRepository.AddAsync(submission);
 
@@ -84,24 +83,17 @@ namespace KarlBot.Controllers
 
         private ChallengeSubmissionDataModel ToDataModel(ChallengeSubmission submission)
         {
-            var isAdmin = User.IsInRole("Admin");
-
             return new ChallengeSubmissionDataModel
             {
                 Id = submission.Id,
                 UserId = submission.UserId,
                 Created = submission.Created,
                 ProjectFile = submission.ProjectFile,
-                EvaluationResult = submission.EvaluationResult != null ? ToDataModel(submission.EvaluationResult) : null
-            };
-        }
-
-        private ChallengeSubmissionEvaluationResultDataModel ToDataModel(ChallengeSubmissionEvaluationResult submissionEvaluationResult)
-        {
-            return new ChallengeSubmissionEvaluationResultDataModel
-            {
-                SuccessRate = submissionEvaluationResult.SuccessRate,
-                Message = submissionEvaluationResult.Message
+                EvaluationResult = new ChallengeSubmissionEvaluationResultDataModel
+                {
+                    SuccessRate = submission.EvaluationSuccessRate,
+                    Message = submission.EvaluationMessage
+                }
             };
         }
     }

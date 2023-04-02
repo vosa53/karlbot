@@ -48,7 +48,8 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ChallengeSubmission>().OwnsOne(cs => cs.EvaluationResult);
+            //modelBuilder.Entity<ChallengeSubmission>().OwnsOne(cs => cs.EvaluationResult);
+            modelBuilder.Entity<Challenge>().Navigation(c => c.TestCases).AutoInclude();
         }
 
         /// <inheritdoc/>

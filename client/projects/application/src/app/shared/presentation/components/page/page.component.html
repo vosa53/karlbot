@@ -1,5 +1,7 @@
 <div class="wrapper" [class.full-width]="fullWidth">
-    <h1 class="title mat-headline-4">{{title}}</h1>
+    <h1 class="title mat-headline-4">
+        <ng-content select="[page-title]"></ng-content>
+    </h1>
     <div class="content">
         <ng-content></ng-content>
     </div>

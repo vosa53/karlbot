@@ -33,6 +33,11 @@ namespace ApplicationCore.Entities
         /// </summary>
         public IList<ChallengeTestCase>? TestCases { get; set; }
 
+        /// <summary>
+        /// Submissions.
+        /// </summary>
+        public IList<ChallengeSubmission>? Submissions { get; set; }
+
         /// <param name="name">Name.</param>
         /// <param name="description">Description.</param>
         /// <param name="difficulty">Difficulty.</param>

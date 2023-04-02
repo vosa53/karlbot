@@ -15,6 +15,15 @@
     text-align: left;
 }
 
+.table-status-column {
+    padding-right: 0;
+    width: 24px;
+}
+
+.table-status-column > * {
+    vertical-align: middle;
+}
+
 .table-name-column {
     min-width: 175px;
 }

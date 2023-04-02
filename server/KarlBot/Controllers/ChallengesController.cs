@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Repositories;
 using Google.Apis.Util;
+using KarlBot.Authorization;
 using KarlBot.DataModels.Challenges;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,7 +23,7 @@ namespace KarlBot.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChallengeDataModel>>> GetAsync()
         {
-            var challenges = await _challengeRepository.GetAsync();
+            var challenges = await _challengeRepository.GetWithSubmissionsInfoAsync(User.GetId());
 
             return challenges.Select(c => ToDataModel(c)).ToList();
         }
@@ -30,7 +31,7 @@ namespace KarlBot.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ChallengeDataModel>> GetByIdAsync(int id)
         {
-            var challenge = await _challengeRepository.GetByIdAsync(id);
+            var challenge = await _challengeRepository.GetByIdWithSubmissionsInfoAsync(id, User.GetId());
             if (challenge == null)
                 return NotFound();
 
@@ -48,7 +49,15 @@ namespace KarlBot.Controllers
             var challenge = new Challenge(dataModel.Name, dataModel.Description, dataModel.Difficulty, challengeTestCases);
             await _challengeRepository.AddAsync(challenge);
 
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = challenge.Id }, ToDataModel(challenge));
+            var challengeWithSubmissionsInfo = new ChallengeWithSubmissionsInfo
+            {
+                Challenge = challenge,
+                OwnSubmissionCount = 0,
+                OwnSuccessfulSubmissionCount = 0,
+                UsersSubmittedCount = 0,
+                UsersSuccessfullySubmittedCount = 0
+            };
+            return CreatedAtAction(nameof(GetByIdAsync), new { id = challenge.Id }, ToDataModel(challengeWithSubmissionsInfo));
         }
 
         [Authorize(Roles = "Admin")]
@@ -87,17 +96,27 @@ namespace KarlBot.Controllers
             return NoContent();
         }
 
-        private ChallengeDataModel ToDataModel(Challenge challenge)
+        private ChallengeDataModel ToDataModel(ChallengeWithSubmissionsInfo challengeWthSubmissionsInfo)
         {
             var isAdmin = User.IsInRole("Admin");
 
             return new ChallengeDataModel
             {
-                Id = challenge.Id,
-                Name = challenge.Name,
-                Description = challenge.Description,
-                Difficulty = challenge.Difficulty,
-                TestCases = challenge.TestCases?.Where(tc => tc.IsPublic || isAdmin)?.Select(tc => ToDataModel(tc)).ToList()
+                Id = challengeWthSubmissionsInfo.Challenge.Id,
+                Name = challengeWthSubmissionsInfo.Challenge.Name,
+                Description = challengeWthSubmissionsInfo.Challenge.Description,
+                Difficulty = challengeWthSubmissionsInfo.Challenge.Difficulty,
+                SubmissionsInfo = new ChallengeSubmissionsInfoDataModel
+                {
+                    OwnSubmissionCount = challengeWthSubmissionsInfo.OwnSubmissionCount,
+                    OwnSuccessfulSubmissionCount = challengeWthSubmissionsInfo.OwnSuccessfulSubmissionCount,
+                    UsersSubmittedCount = challengeWthSubmissionsInfo.UsersSubmittedCount,
+                    UsersSuccessfullySubmittedCount = challengeWthSubmissionsInfo.UsersSuccessfullySubmittedCount
+                },
+                TestCases = challengeWthSubmissionsInfo.Challenge.TestCases
+                    ?.Where(tc => tc.IsPublic || isAdmin)
+                    ?.Select(tc => ToDataModel(tc))
+                    ?.ToList()
             };
         }
 
@@ -122,7 +141,8 @@ namespace KarlBot.Controllers
                 dataModel.CheckKarelPosition,
                 dataModel.CheckKarelDirection,
                 dataModel.CheckSigns,
-                dataModel.IsPublic);
+                dataModel.IsPublic
+            );
         }
     }
 }

@@ -16,6 +16,8 @@ namespace KarlBot.DataModels.Challenges
 
         public required ChallengeDifficulty Difficulty { get; init; }
 
+        public ChallengeSubmissionsInfoDataModel? SubmissionsInfo { get; init; }
+
         public required IList<ChallengeTestCaseDataModel>? TestCases { get; init; }
     }
 }

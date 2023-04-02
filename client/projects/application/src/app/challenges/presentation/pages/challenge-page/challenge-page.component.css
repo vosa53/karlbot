@@ -1,3 +1,9 @@
+.status {
+    transform: scale(1.3);
+    transform-origin: bottom;
+    margin-left: 4px;
+}
+
 .content {
     display: flex;
     gap: 48px;

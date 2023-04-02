@@ -1,4 +1,8 @@
-<app-page *ngIf="challenge !== null" [title]="challenge.name" [fullWidth]="true">
+<app-page *ngIf="challenge !== null" [fullWidth]="true">
+    <span page-title>
+        {{challenge.name}}
+        <app-challenge-status class="status" [submissionsInfo]="challenge.submissionsInfo"></app-challenge-status>
+    </span>
     <div class="content">
         <div class="assignment">
             <div class="difficulty mat-subtitle-1">

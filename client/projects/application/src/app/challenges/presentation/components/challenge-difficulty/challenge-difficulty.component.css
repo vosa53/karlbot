@@ -3,13 +3,13 @@
 }
 
 .text-easy {
-    color: var(--color-easy);
+    color: var(--color-positive);
 }
 
 .text-medium {
-    color: var(--color-medium);
+    color: var(--color-neutral);
 }
 
 .text-hard {
-    color: var(--color-hard);
+    color: var(--color-negative);
 }

@@ -25,11 +25,12 @@ import { NotificationService } from 'projects/application/src/app/shared/present
 import { User } from 'projects/application/src/app/shared/application/models/user';
 import { TownViewFitContainDirective } from 'projects/application/src/app/shared/presentation/directives/town-view-fit-contain.directive';
 import party from "party-js";
+import { ChallengeStatusComponent } from '../../components/challenge-status/challenge-status.component';
 
 @Component({
     selector: 'app-challenge-page',
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownDirective, ChallengeDifficultyComponent, TownViewFitContainDirective],
+    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownDirective, ChallengeDifficultyComponent, TownViewFitContainDirective, ChallengeStatusComponent],
     templateUrl: './challenge-page.component.html',
     styleUrls: ['./challenge-page.component.css']
 })
@@ -46,12 +47,7 @@ export class ChallengePageComponent {
 
     async ngOnInit() {
         this.activatedRoute.paramMap.subscribe(async p => {
-            const idText = p.get("id")!;
-            const id = parseInt(idText, 10);
-
-            this.challenge = await this.challengeService.getById(id);
-            this.challengeTestCases = this.challenge.testCases!.filter(tc => tc.isPublic);
-            await this.loadSubmissions();
+            await this.loadChallenge();
         });
     }
 
@@ -85,11 +81,16 @@ export class ChallengePageComponent {
             this.notificationService.show(message);
         }
         
-        await this.loadSubmissions();
+        await this.loadChallenge();
     }
 
-    private async loadSubmissions() {
+    private async loadChallenge() {
+        const idText = this.activatedRoute.snapshot.paramMap.get("id")!;
+        const id = parseInt(idText, 10);
         const currentUser = await firstValueFrom(this.signInService.currentUser$);
+
+        this.challenge = await this.challengeService.getById(id);
+        this.challengeTestCases = this.challenge.testCases!.filter(tc => tc.isPublic);
         this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUser!.id);
         this.challengeSubmissions.sort((a, b) => b.created.getTime() - a.created.getTime());
     }

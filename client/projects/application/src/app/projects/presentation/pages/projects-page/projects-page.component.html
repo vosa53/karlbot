@@ -1,4 +1,5 @@
-<app-page *ngIf="projects !== null" title="Projects" [fullWidth]="true">
+<app-page *ngIf="projects !== null" [fullWidth]="true">
+    <span page-title>Projects</span>
     <button mat-flat-button color="primary" class="create-project-button" routerLink="/editor">
         <mat-icon>add</mat-icon>
         Create new
