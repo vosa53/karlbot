@@ -126,8 +126,8 @@ jobs:
         username: ${{ secrets.HOSTING_FTP_USERNAME }}
         password: ${{ secrets.HOSTING_FTP_PASSWORD }}
         protocol: ftps
-        local-dir: server/dist
-        server-dir: www
+        local-dir: server/dist/
+        server-dir: www/
         security: strict
         
         
