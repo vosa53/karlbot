@@ -44,9 +44,8 @@ export class ChallengeEditorPageComponent {
 
     async ngOnInit() {
         this.activatedRoute.paramMap.subscribe(async p => {
-            const idText = p.get("id");
-            if (idText !== null) {
-                const id = parseInt(idText, 10);
+            const id = p.get("id");
+            if (id !== null) {
                 const challenge = await this.challengeService.getById(id);
                 this.setChallenge(challenge);
             }
@@ -110,7 +109,7 @@ export class ChallengeEditorPageComponent {
 
     private getChallenge(): Challenge {
         return {
-            id: this.challenge?.id ?? 0,
+            id: this.challenge?.id ?? null,
             name: this.form.value.name!,
             description: this.form.value.description!,
             difficulty: this.form.value.difficulty!,

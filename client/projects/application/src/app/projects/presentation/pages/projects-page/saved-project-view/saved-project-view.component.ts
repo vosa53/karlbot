@@ -49,7 +49,7 @@ export class SavedProjectViewComponent {
 
     private createSavedProject(): SavedProject {
         return {
-            id: 0,
+            id: null,
             authorId: "",
             created: new Date(),
             modified: new Date(),

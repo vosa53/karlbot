@@ -5,18 +5,22 @@ namespace KarlBot.Authorization
 {
     public static class ClaimsPrincipalExtensions
     {
-        public static string GetId(this ClaimsPrincipal claimsPrincipal)
+        public static Guid GetId(this ClaimsPrincipal claimsPrincipal)
         {
             var id = GetIdOrNull(claimsPrincipal);
-            if (id == null)
+            if (!id.HasValue)
                 throw new Exception();
 
-            return id;
+            return id.Value;
         }
 
-        public static string? GetIdOrNull(this ClaimsPrincipal claimsPrincipal)
+        public static Guid? GetIdOrNull(this ClaimsPrincipal claimsPrincipal)
         {
-            return claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            var nameIdentifier = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (nameIdentifier == null)
+                return null;
+
+            return Guid.Parse(nameIdentifier);
         }
     }
 }

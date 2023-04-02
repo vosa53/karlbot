@@ -28,7 +28,7 @@ export class ChallengeSubmissionComponent {
 
     private createChallengeSubmission(): ChallengeSubmission {
         return {
-            id: 0,
+            id: null,
             userId: "",
             created: new Date(),
             project: Project.create("", [], [], new Settings("", 0, 0)),

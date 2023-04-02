@@ -11,12 +11,12 @@ namespace ApplicationCore.Entities
     /// </summary>
     public class ChallengeSubmission
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Id of the challenge.
         /// </summary>
-        public int ChallengeId { get; set; }
+        public Guid ChallengeId { get; set; }
 
         /// <summary>
         /// Challenge.
@@ -26,7 +26,7 @@ namespace ApplicationCore.Entities
         /// <summary>
         /// Id of the user who submitted it.
         /// </summary>
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// User who submitted it.
@@ -59,7 +59,7 @@ namespace ApplicationCore.Entities
         /// <param name="projectFile">Submitted project file.</param>
         /// <param name="evaluationSuccessRate">Evaluation success ratio. Must be between 0 and 1.</param>
         /// <param name="evaluationMessage">Message further descripting the evaluation result.</param>
-        public ChallengeSubmission(int challengeId, string userId, DateTime created, string projectFile, double evaluationSuccessRate, string evaluationMessage)
+        public ChallengeSubmission(Guid challengeId, Guid userId, DateTime created, string projectFile, double evaluationSuccessRate, string evaluationMessage)
         {
             ChallengeId = challengeId;
             UserId = userId;

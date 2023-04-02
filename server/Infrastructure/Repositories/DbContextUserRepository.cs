@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories
     /// <summary>
     /// User repository using the Application Entity Framework DbContext.
     /// </summary>
-    public class DbContextUserRepository : DbContextRepository<User, string>, IUserRepository
+    public class DbContextUserRepository : DbContextRepository<User, Guid>, IUserRepository
     {
         private readonly UserManager<User> _userManager;
 
@@ -23,7 +23,7 @@ namespace Infrastructure.Repositories
             _userManager = userManager;
         }
 
-        public async Task<IList<string>?> GetRolesAsync(string userId)
+        public async Task<IList<string>?> GetRolesAsync(Guid userId)
         {
             var user = await DbSet.FindAsync(userId);
             if (user == null)

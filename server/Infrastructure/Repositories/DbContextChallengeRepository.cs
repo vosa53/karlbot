@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories
     /// <summary>
     /// Challenge repository using the Application Entity Framework DbContext.
     /// </summary>
-    public class DbContextChallengeRepository : DbContextRepository<Challenge, int>, IChallengeRepository
+    public class DbContextChallengeRepository : DbContextRepository<Challenge, Guid>, IChallengeRepository
     {
         /// <param name="dbContext">Application DbContext.</param>
         public DbContextChallengeRepository(ApplicationDbContext dbContext) : base(dbContext)
@@ -21,28 +21,24 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<IList<ChallengeWithSubmissionsInfo>> GetWithSubmissionsInfoAsync(string userId)
+        public async Task<IList<ChallengeWithSubmissionsInfo>> GetWithSubmissionsInfoAsync(Guid userId)
         {
-            return await CreateQuery(false)
-                .Join(DbContext.ChallengeSubmissions, c => c.Id, s => s.ChallengeId, (c, s) => new
-                {
-                    Challenge = c,
-                    Submission = s
-                })
-                .GroupBy(cs => cs.Challenge)
-                .Select(c => new ChallengeWithSubmissionsInfo
-                {
-                    Challenge = c.Key,
-                    OwnSubmissionCount = c.Count(s => s.Submission.UserId == userId),
-                    OwnSuccessfulSubmissionCount = c.Count(s => s.Submission.UserId == userId && s.Submission.EvaluationSuccessRate == 1),
-                    UsersSubmittedCount = c.Select(s => s.Submission.UserId).Distinct().Count(),
-                    UsersSuccessfullySubmittedCount = c.Where(s => s.Submission.EvaluationSuccessRate == 1).Select(s => s.Submission.UserId).Distinct().Count()
-                })
-                .ToListAsync();
+            return await (from c in DbSet
+                          join s in DbContext.ChallengeSubmissions on c.Id equals s.ChallengeId into j
+                          from jl in j.DefaultIfEmpty()
+                          group jl by c into grouped
+                          select new ChallengeWithSubmissionsInfo
+                          {
+                              Challenge = grouped.Key,
+                              OwnSubmissionCount = grouped.Count(s => s.UserId == userId),
+                              OwnSuccessfulSubmissionCount = grouped.Count(s => s.UserId == userId && s.EvaluationSuccessRate == 1),
+                              UsersSubmittedCount = grouped.Select(s => s.UserId).Distinct().Count(),
+                              UsersSuccessfullySubmittedCount = grouped.Where(s => s.EvaluationSuccessRate == 1).Select(s => s.UserId).Distinct().Count()
+                          }).ToListAsync();
         }
 
         /// <inheritdoc/>
-        public async Task<ChallengeWithSubmissionsInfo?> GetByIdWithSubmissionsInfoAsync(int id, string userId)
+        public async Task<ChallengeWithSubmissionsInfo?> GetByIdWithSubmissionsInfoAsync(Guid id, Guid userId)
         {
             return await CreateQuery(true)
                 .Select(c => new ChallengeWithSubmissionsInfo
@@ -57,7 +53,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public override async Task<Challenge?> GetByIdAsync(int id)
+        public override async Task<Challenge?> GetByIdAsync(Guid id)
         {
             return await CreateQuery(true)
                 .SingleOrDefaultAsync(c => c.Id == id);

@@ -11,12 +11,12 @@ namespace ApplicationCore.Entities
     /// </summary>
     public class Project
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Id of the author.
         /// </summary>
-        public string AuthorId { get; set; }
+        public Guid AuthorId { get; set; }
 
         /// <summary>
         /// Author.
@@ -46,7 +46,7 @@ namespace ApplicationCore.Entities
         /// <param name="authorId">Id of the author.</param>
         /// <param name="created">Date and time when the project was created.</param>
         /// <param name="projectFile">Project file.</param>
-        public Project(string authorId, DateTime created, string projectFile)
+        public Project(Guid authorId, DateTime created, string projectFile)
         {
             AuthorId = authorId;
             Created = created;

@@ -79,7 +79,7 @@ export class EditorService {
         this.savedProject.next(null);
     }
 
-    async openProject(projectId: number) {
+    async openProject(projectId: string) {
         this.location.go(`editor/${projectId}`);
 
         const savedProject = await this.projectService.getById(projectId);
@@ -106,7 +106,7 @@ export class EditorService {
         let savedProject: SavedProject;
         if (this.savedProject.value === null || !isProjectOwn) {
             const toAdd = {
-                id: 0,
+                id: null,
                 created: new Date(),
                 modified: new Date(),
                 isPublic: true,
@@ -123,7 +123,7 @@ export class EditorService {
                 project: this.projectEditorService.getProject()
             };
             await this.projectService.update(toUpdate);
-            savedProject = await this.projectService.getById(toUpdate.id);
+            savedProject = await this.projectService.getById(toUpdate.id!);
         }
         this.savedProject.next(savedProject);
         this.notificationService.show("Project was successfully saved.");

@@ -19,7 +19,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAsync(string? authorId)
+        public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAsync(Guid? authorId)
         {
             if (!User.IsInRole("Admin") && authorId != User.GetId())
                 return Forbid();
@@ -31,7 +31,7 @@ namespace KarlBot.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProjectDataModel>> GetByIdAsync(int id)
+        public async Task<ActionResult<ProjectDataModel>> GetByIdAsync(Guid id)
         {
             var project = await _projectRepository.GetByIdAsync(id);
             if (project == null)
@@ -53,7 +53,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAsync(int id, ProjectDataModel dataModel)
+        public async Task<ActionResult> UpdateAsync(Guid id, ProjectDataModel dataModel)
         {
             if (id != dataModel.Id)
                 return BadRequest();
@@ -75,7 +75,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             var project = await _projectRepository.GetByIdAsync(id);
             if (project == null)

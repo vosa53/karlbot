@@ -29,7 +29,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ChallengeSubmissionDataModel>>> GetAsync(int challengeId, string? userId)
+        public async Task<ActionResult<IEnumerable<ChallengeSubmissionDataModel>>> GetAsync(Guid challengeId, Guid? userId)
         {
             var existsChallenge = await _challengeRepository.ExistsByIdAsync(challengeId);
             if (!existsChallenge)
@@ -38,9 +38,9 @@ namespace KarlBot.Controllers
             if (!User.IsInRole("Admin") && userId != User.GetId())
                 return Forbid();
 
-            if (userId != null)
+            if (userId.HasValue)
             {
-                var existsUser = await _userRepository.ExistsByIdAsync(userId);
+                var existsUser = await _userRepository.ExistsByIdAsync(userId.Value);
                 if (!existsUser)
                     return NotFound();
             }
@@ -51,7 +51,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ChallengeSubmissionDataModel>> GetByIdAsync(int id)
+        public async Task<ActionResult<ChallengeSubmissionDataModel>> GetByIdAsync(Guid id)
         {
             var submission = await _challengeSubmissionRepository.GetByIdAsync(id);
             if (submission == null)
@@ -64,7 +64,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddAsync(int challengeId, [FromBody] ChallengeSubmissionDataModel dataModel)
+        public async Task<ActionResult> AddAsync(Guid challengeId, [FromBody] ChallengeSubmissionDataModel dataModel)
         {
             var challenge = await _challengeRepository.GetByIdAsync(challengeId);
             if (challenge == null)
@@ -72,8 +72,7 @@ namespace KarlBot.Controllers
 
             var evaluationResult = await _challengeEvaluationService.EvaluateAsync(dataModel.ProjectFile, challenge.TestCases!);
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            var submission = new ChallengeSubmission(challengeId, userId, DateTime.UtcNow, dataModel.ProjectFile,
+            var submission = new ChallengeSubmission(challengeId, User.GetId(), DateTime.UtcNow, dataModel.ProjectFile,
                 evaluationResult.SuccessRate, evaluationResult.Message);
 
             await _challengeSubmissionRepository.AddAsync(submission);

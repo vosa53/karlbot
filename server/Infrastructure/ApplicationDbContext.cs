@@ -16,7 +16,7 @@ namespace Infrastructure
     /// <summary>
     /// Main application Entity Framework Core DbContext.
     /// </summary>
-    public class ApplicationDbContext : IdentityDbContext<User>
+    public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         /// <summary>
         /// Challenges.

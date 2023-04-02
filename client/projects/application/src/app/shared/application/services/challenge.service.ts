@@ -22,7 +22,7 @@ export class ChallengeService {
         return dto.map(d => this.fromDTO(d));
     }
 
-    async getById(id: number): Promise<Challenge> {
+    async getById(id: string): Promise<Challenge> {
         const url = `${this.projectsBaseUrl}/${id}`;
         const dto = await this.apiService.get<ChallengeDTO>(url);
         return this.fromDTO(dto);
@@ -83,7 +83,7 @@ export class ChallengeService {
 }
 
 interface ChallengeDTO {
-    readonly id: number;
+    readonly id: string | null;
     readonly name: string;
     readonly description: string;
     readonly difficulty: ChallengeDifficulty;

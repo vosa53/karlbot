@@ -45,12 +45,10 @@ export class EditorPageComponent {
         breakpointObserver.observe(["(max-width: 1000px)"]).subscribe(b => this.isSmallScreen = b.matches);
         
         this.activatedRoute.paramMap.subscribe(async p => {
-            const idText = p.get("id")!;
+            const id = p.get("id");
 
-            if (idText !== null) {
-                const id = parseInt(idText, 10);
+            if (id !== null)
                 editorService.openProject(id);
-            }
             else
                 editorService.newProject();
         });

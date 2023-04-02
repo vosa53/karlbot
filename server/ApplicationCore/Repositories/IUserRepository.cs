@@ -10,8 +10,8 @@ namespace ApplicationCore.Repositories
     /// <summary>
     /// Repository of users.
     /// </summary>
-    public interface IUserRepository : IRepository<User, string>
+    public interface IUserRepository : IRepository<User, Guid>
     {
-        Task<IList<string>?> GetRolesAsync(string userId);
+        Task<IList<string>?> GetRolesAsync(Guid userId);
     }
 }

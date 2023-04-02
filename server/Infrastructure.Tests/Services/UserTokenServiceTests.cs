@@ -27,12 +27,12 @@ namespace Infrastructure.Tests.Services
                 Key = "xxxxxxxxxxxxxxxx",
                 LifetimeMinutes = 20
             });
-            var user = new User("aaa@bbb.ccc") { Id = "userId" };
+            var user = new User("aaa@bbb.ccc") { Id = Guid.NewGuid() };
             var userRepositoryMock = new Mock<IUserRepository>();
-            userRepositoryMock.Setup(um => um.GetRolesAsync("userId")).Returns(Task.FromResult<IList<string>?>(new[] { "FirstRole", "SecondRole" }));
+            userRepositoryMock.Setup(um => um.GetRolesAsync(user.Id)).Returns(Task.FromResult<IList<string>?>(new[] { "FirstRole", "SecondRole" }));
             var service = new UserTokenService(serviceOptions, userRepositoryMock.Object);
 
-            var token = await service.CreateTokenAsync(new User("aaa@bbb.ccc") { Id = "userId" });
+            var token = await service.CreateTokenAsync(new User("aaa@bbb.ccc") { Id = user.Id });
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("xxxxxxxxxxxxxxxx"));
             var validationParameters = new TokenValidationParameters

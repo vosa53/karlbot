@@ -58,13 +58,13 @@ export class ChallengePageComponent {
             return;
 
         const submission: ChallengeSubmission = {
-            id: 0,
+            id: null,
             userId: currentUser!.id,
             created: new Date(),
             project: project,
             evaluationResult: null
         }
-        const result = await this.challengeSubmissionService.add(this.challenge!.id, submission);
+        const result = await this.challengeSubmissionService.add(this.challenge!.id!, submission);
         
         if (result.evaluationResult !== null) {
             const isSuccess = result.evaluationResult.successRate === 1;
@@ -85,13 +85,12 @@ export class ChallengePageComponent {
     }
 
     private async loadChallenge() {
-        const idText = this.activatedRoute.snapshot.paramMap.get("id")!;
-        const id = parseInt(idText, 10);
+        const id = this.activatedRoute.snapshot.paramMap.get("id")!;
         const currentUser = await firstValueFrom(this.signInService.currentUser$);
 
         this.challenge = await this.challengeService.getById(id);
         this.challengeTestCases = this.challenge.testCases!.filter(tc => tc.isPublic);
-        this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id, currentUser!.id);
+        this.challengeSubmissions = await this.challengeSubmissionService.get(this.challenge!.id!, currentUser!.id);
         this.challengeSubmissions.sort((a, b) => b.created.getTime() - a.created.getTime());
     }
 

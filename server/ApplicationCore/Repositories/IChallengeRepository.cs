@@ -10,11 +10,11 @@ namespace ApplicationCore.Repositories
     /// <summary>
     /// Repository of challenges.
     /// </summary>
-    public interface IChallengeRepository : IRepository<Challenge, int>
+    public interface IChallengeRepository : IRepository<Challenge, Guid>
     {
-        Task<IList<ChallengeWithSubmissionsInfo>> GetWithSubmissionsInfoAsync(string userId);
+        Task<IList<ChallengeWithSubmissionsInfo>> GetWithSubmissionsInfoAsync(Guid userId);
 
-        Task<ChallengeWithSubmissionsInfo?> GetByIdWithSubmissionsInfoAsync(int id, string userId);
+        Task<ChallengeWithSubmissionsInfo?> GetByIdWithSubmissionsInfoAsync(Guid id, Guid userId);
     }
 
     /// <summary>

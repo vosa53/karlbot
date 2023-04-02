@@ -5,11 +5,9 @@ namespace KarlBot.DataModels.Challenges
 {
     public class ChallengeSubmissionDataModel
     {
-        [Range(0, int.MaxValue)]
-        public required int Id { get; init; }
+        public required Guid? Id { get; init; }
 
-        [StringLength(36, MinimumLength = 36)]
-        public required string UserId { get; init; }
+        public required Guid UserId { get; init; }
         public required DateTime Created { get; init; }
 
         [StringLength(50_000)]

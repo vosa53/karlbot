@@ -29,7 +29,7 @@ namespace KarlBot.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ChallengeDataModel>> GetByIdAsync(int id)
+        public async Task<ActionResult<ChallengeDataModel>> GetByIdAsync(Guid id)
         {
             var challenge = await _challengeRepository.GetByIdWithSubmissionsInfoAsync(id, User.GetId());
             if (challenge == null)
@@ -62,7 +62,7 @@ namespace KarlBot.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAsync(int id, ChallengeDataModel dataModel)
+        public async Task<ActionResult> UpdateAsync(Guid id, ChallengeDataModel dataModel)
         {
             if (id != dataModel.Id)
                 return BadRequest();
@@ -85,7 +85,7 @@ namespace KarlBot.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             var challenge = await _challengeRepository.GetByIdAsync(id);
             if (challenge == null)

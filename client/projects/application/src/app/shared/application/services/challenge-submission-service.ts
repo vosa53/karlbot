@@ -15,7 +15,7 @@ export class ChallengeSubmissionService {
         this.projectsBaseUrl = `${apiBaseUrl}/challengeSubmissions`;
     }
 
-    async get(challengeId: number, userId?: string): Promise<ChallengeSubmission[]> {
+    async get(challengeId: string, userId?: string): Promise<ChallengeSubmission[]> {
         const params: any = { challengeId };
         if (userId !== undefined)
             params.userId = userId;
@@ -24,13 +24,13 @@ export class ChallengeSubmissionService {
         return dto.map(d => this.fromDTO(d));
     }
 
-    async getById(id: number): Promise<ChallengeSubmission> {
+    async getById(id: string): Promise<ChallengeSubmission> {
         const url = `${this.projectsBaseUrl}/${id}`;
         const dto = await this.apiService.get<ChallengeSubmissionDTO>(url);
         return this.fromDTO(dto);
     }
 
-    async add(challengeId: number, challengeSubmission: ChallengeSubmission): Promise<ChallengeSubmission> {
+    async add(challengeId: string, challengeSubmission: ChallengeSubmission): Promise<ChallengeSubmission> {
         const dto = this.toDTO(challengeSubmission);
         const dtoResult = await this.apiService.post<ChallengeSubmissionDTO>(this.projectsBaseUrl, dto, {
             params: { challengeId }
@@ -60,7 +60,7 @@ export class ChallengeSubmissionService {
 }
 
 interface ChallengeSubmissionDTO {
-    readonly id: number;
+    readonly id: string | null;
     readonly userId: string;
     readonly created: string;
     readonly projectFile: string;

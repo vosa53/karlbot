@@ -3,7 +3,7 @@ import { ChallengeSubmissionsInfo } from "./challenge-submissions.info";
 import { ChallengeTestCase } from "./challenge-test-case";
 
 export interface Challenge {
-    readonly id: number;
+    readonly id: string | null;
     readonly name: string;
     readonly description: string;
     readonly difficulty: ChallengeDifficulty;

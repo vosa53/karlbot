@@ -11,12 +11,12 @@ namespace ApplicationCore.Entities
     /// </summary>
     public class ChallengeTestCase
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Id of the challenge.
         /// </summary>
-        public int ChallengeId { get; set; }
+        public Guid ChallengeId { get; set; }
 
         /// <summary>
         /// Challenge.

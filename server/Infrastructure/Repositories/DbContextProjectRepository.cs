@@ -12,7 +12,7 @@ namespace Infrastructure.Repositories
     /// <summary>
     /// Project repository using the Application Entity Framework DbContext.
     /// </summary>
-    public class DbContextProjectRepository : DbContextRepository<Project, int>, IProjectRepository
+    public class DbContextProjectRepository : DbContextRepository<Project, Guid>, IProjectRepository
     {
         /// <param name="dbContext">Application DbContext.</param>
         public DbContextProjectRepository(ApplicationDbContext dbContext) : base(dbContext)
@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<List<Project>> GetAsync(string? authorId)
+        public async Task<List<Project>> GetAsync(Guid? authorId)
         {
             IQueryable<Project> query = DbSet;
 
