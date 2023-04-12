@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KarlBot.Controllers
 {
+    /// <summary>
+    /// REST API controller with endpoints related to projects.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class ProjectsController : ControllerBase
@@ -18,6 +21,10 @@ namespace KarlBot.Controllers
             _projectRepository = projectRepository;
         }
 
+        /// <summary>
+        /// Returns all projects.
+        /// </summary>
+        /// <param name="authorId">User ID, when only projects of a specific user are requested.</param>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAsync(Guid? authorId)
         {
@@ -29,6 +36,11 @@ namespace KarlBot.Controllers
             return projects.Select(p => ToDataModel(p)).ToList();
         }
 
+        /// <summary>
+        /// Returns a project by its ID.
+        /// </summary>
+        /// <param name="id">Project ID.</param>
+        /// <response code="404">Project with the given ID does not exist.</response>
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<ProjectDataModel>> GetByIdAsync(Guid id)
@@ -43,6 +55,10 @@ namespace KarlBot.Controllers
             return ToDataModel(project);
         }
 
+        /// <summary>
+        /// Creates a new project.
+        /// </summary>
+        /// <param name="dataModel">Project data.</param>
         [HttpPost]
         public async Task<ActionResult> AddAsync(ProjectDataModel dataModel)
         {
@@ -52,6 +68,11 @@ namespace KarlBot.Controllers
             return CreatedAtAction(nameof(GetByIdAsync), new { id = project.Id }, ToDataModel(project));
         }
 
+        /// <summary>
+        /// Updates a project by its ID.
+        /// </summary>
+        /// <param name="id">Project ID.</param>
+        /// <param name="dataModel">New project data.</param>
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAsync(Guid id, ProjectDataModel dataModel)
         {
@@ -74,6 +95,11 @@ namespace KarlBot.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a project by its ID.
+        /// </summary>
+        /// <param name="id">Project ID.</param>
+        /// <response code="404">Project with the given ID does not exist.</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {

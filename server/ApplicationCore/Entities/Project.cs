@@ -11,6 +11,9 @@ namespace ApplicationCore.Entities
     /// </summary>
     public class Project
     {
+        /// <summary>
+        /// ID.
+        /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>

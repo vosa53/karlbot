@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KarlBot.Controllers
 {
+    /// <summary>
+    /// REST API controller with endpoints related to users.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -18,6 +21,9 @@ namespace KarlBot.Controllers
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// Returns the currently authenticated user.
+        /// </summary>
         [HttpGet("current")]
         public async Task<ActionResult<UserDataModel>> GetCurrentAsync()
         {

@@ -21,7 +21,7 @@ namespace ApplicationCore.Repositories
         /// <summary>
         /// Returns the entity with the given id or `null` if no entity with the given id exists.
         /// </summary>
-        /// <param name="id">Id of the required entity.</param>
+        /// <param name="id">Id of the requested entity.</param>
         Task<TEntity?> GetByIdAsync(TKey id);
 
         /// <summary>

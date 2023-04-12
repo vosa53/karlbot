@@ -10,6 +10,9 @@ using System.Security.Claims;
 
 namespace KarlBot.Controllers
 {
+    /// <summary>
+    /// REST API controller with endpoints related to challenge submissions.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class ChallengeSubmissionsController : ControllerBase
@@ -28,6 +31,12 @@ namespace KarlBot.Controllers
             _challengeEvaluationService = challengeEvaluationService;
         }
 
+        /// <summary>
+        /// Returns all submissions of the given challenge.
+        /// </summary>
+        /// <param name="challengeId">Challenge ID.</param>
+        /// <param name="userId">User ID, when only submissions of a specific user are requested.</param>
+        /// <response code="404">Challenge or user with the given ID does not exist.</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChallengeSubmissionDataModel>>> GetAsync(Guid challengeId, Guid? userId)
         {
@@ -50,6 +59,11 @@ namespace KarlBot.Controllers
             return submissions.Select(c => ToDataModel(c)).ToList();
         }
 
+        /// <summary>
+        /// Returns challenge submission by its ID.
+        /// </summary>
+        /// <param name="id">Challenge submission ID.</param>
+        /// <response code="404">Challenge submission with the given ID does not exist.</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<ChallengeSubmissionDataModel>> GetByIdAsync(Guid id)
         {
@@ -63,6 +77,12 @@ namespace KarlBot.Controllers
             return ToDataModel(submission);
         }
 
+        /// <summary>
+        /// Creates a new submission for the given challenge.
+        /// </summary>
+        /// <param name="challengeId">Challenge id.</param>
+        /// <param name="dataModel">Submission.</param>
+        /// <response code="404">Challenge with the given ID does not exist.</response>
         [HttpPost]
         public async Task<ActionResult> AddAsync(Guid challengeId, [FromBody] ChallengeSubmissionDataModel dataModel)
         {

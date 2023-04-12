@@ -11,6 +11,9 @@ namespace ApplicationCore.Entities
     /// </summary>
     public class ChallengeTestCase
     {
+        /// <summary>
+        /// ID.
+        /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace ApplicationCore.Entities
         public bool IsPublic { get; set; }
 
         /// <param name="inputTown">Input town.</param>
-        /// <param name="outputTown">Expected output town for <see cref="inputTown"/>.</param>
+        /// <param name="outputTown">Expected output town for the given input town.</param>
         /// <param name="checkKarelPosition">Whether Karel position in actual and expected output town has to match.</param>
         /// <param name="checkKarelDirection">Whether Karel direction in actual and expected output town has to match.</param>
         /// <param name="checkSigns">Whether sign counts in actual and expected output town has to match.</param>
