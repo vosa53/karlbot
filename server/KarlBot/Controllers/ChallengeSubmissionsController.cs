@@ -22,6 +22,9 @@ namespace KarlBot.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IChallengeEvaluationService _challengeEvaluationService;
 
+        /// <summary>
+        /// Initializes a new controller instance.
+        /// </summary>
         public ChallengeSubmissionsController(IChallengeRepository challengeRepository, IChallengeSubmissionRepository challengeSubmissionRepository, 
             IUserRepository userRepository, IChallengeEvaluationService challengeEvaluationService)
         {

@@ -27,11 +27,8 @@ namespace KarlBot.Controllers
         private readonly IUserTokenService _userTokenService;
 
         /// <summary>
-        /// 
+        /// Initializes a new controller instance.
         /// </summary>
-        /// <param name="firebaseAuthenticationService"></param>
-        /// <param name="userManager"></param>
-        /// <param name="userTokenService"></param>
         public AuthenticationController(IFirebaseAuthenticationService firebaseAuthenticationService, UserManager<User> userManager, IUserTokenService userTokenService)
         {
             _firebaseAuthenticationService = firebaseAuthenticationService;

@@ -16,6 +16,9 @@ namespace KarlBot.Controllers
     {
         private readonly UserManager<User> _userManager;
 
+        /// <summary>
+        /// Initializes a new controller instance.
+        /// </summary>
         public UsersController(UserManager<User> userManager)
         {
             _userManager = userManager;

@@ -16,6 +16,9 @@ namespace KarlBot.Controllers
     {
         private readonly IProjectRepository _projectRepository;
 
+        /// <summary>
+        /// Initializes a new controller instance.
+        /// </summary>
         public ProjectsController(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
