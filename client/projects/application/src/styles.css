@@ -1,3 +1,7 @@
+/**
+ * Global application styles.
+ */
+
 html, body { 
     height: 100%; 
 }
@@ -15,19 +19,22 @@ body {
     color-scheme: dark;
 }
 
-.disable-form-underline .mdc-line-ripple::before {
+/* Disables underline for specified Angular Material form field with appearance="fill". */
+.disable-form-field-underline .mdc-line-ripple::before {
     border-bottom: none !important;
 }
 
-.transparent-form-background .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+/* Makes background transparent for specified Angular Material form field with appearance="fill". */
+.transparent-form-field-background .mdc-text-field--filled:not(.mdc-text-field--disabled) {
     background: transparent;
 }
 
+/* Makes specified Angular Material tab group take full height. */
 .tab-full-height .mat-mdc-tab-body-wrapper {
     flex-grow: 1;
 }
 
-/* Fixes Angular Material bug. */
+/* Fixes Angular Material opacity bug in dark theme. */
 .dark-theme .mdc-list-item--disabled.mdc-list-item--with-leading-icon .mdc-list-item__start {
     opacity: var(--mdc-list-list-item-disabled-leading-icon-opacity);
 }

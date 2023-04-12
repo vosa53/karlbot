@@ -1,3 +1,6 @@
+/**
+ * Configuration used in production.
+ */
 export const environment = {
     apiBaseURL: "",
     firebaseAuthenticationEmulatorURL: null,

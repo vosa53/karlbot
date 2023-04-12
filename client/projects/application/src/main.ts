@@ -16,6 +16,11 @@ import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
 import { ApplicationErrorHandler } from './app/shared/application/application-error-handler';
 import { LoadingInterceptor } from './app/shared/application/services/loading-interceptor';
 
+/**
+ * Application entry point.
+ * 
+ * Here is configured a dependency injection and bootstrapped the main application component.
+ */
 bootstrapApplication(AppComponent, {
     providers: [
         provideRouter(appRoutes),
@@ -43,4 +48,3 @@ bootstrapApplication(AppComponent, {
         ...(isDevMode() ? [{ provide: ErrorHandler, useClass: ApplicationErrorHandler }] : [])
     ]
 });
-
