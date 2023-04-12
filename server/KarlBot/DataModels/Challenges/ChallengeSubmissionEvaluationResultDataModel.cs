@@ -8,13 +8,13 @@ namespace KarlBot.DataModels.Challenges
     public class ChallengeSubmissionEvaluationResultDataModel
     {
         /// <summary>
-        /// Evaluation success ratio.
+        /// Success ratio.
         /// </summary>
         [Range(0, 1)]
         public required double SuccessRate { get; init; }
 
         /// <summary>
-        /// Message further descripting the evaluation result.
+        /// Message further descripting the result.
         /// </summary>
         [Required]
         public required string Message { get; init; }

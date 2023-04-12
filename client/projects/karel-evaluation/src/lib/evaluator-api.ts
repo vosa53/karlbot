@@ -3,6 +3,13 @@ import { EvaluationResult } from "./evaluation/evaluation-result";
 import { Evaluator } from "./evaluation/evaluator";
 import { TestCase } from "./evaluation/test-case";
 
+/**
+ * Evaluates the given test cases on the given project.
+ * 
+ * **This is the evaluation entry point to be called from external code.**
+ * @param projectJSON Project file.
+ * @param testCasesJSON Array of test cases serialized to JSON. Test case format is described by the interface {@link TestCaseDTO}.
+ */
 export async function evaluate(projectJSON: string, testCasesJSON: string): Promise<EvaluationResult> {
     const project = deserializeProject(projectJSON);
     if (project === null)
@@ -43,10 +50,24 @@ function deserializeTown(town: string): Town | null {
     }
 }
 
+/**
+ * Format of test case passed from external code.
+ * 
+ * For members documentation see {@link TestCase}.
+ */
 export interface TestCaseDTO {
+    /** For documentation see {@link TestCase}. */
     readonly inputTown: string;
+
+    /** For documentation see {@link TestCase}. */
     readonly outputTown: string;
+
+    /** For documentation see {@link TestCase}. */
     readonly checkKarelPosition: boolean;
+
+    /** For documentation see {@link TestCase}. */
     readonly checkKarelDirection: boolean;
+
+    /** For documentation see {@link TestCase}. */
     readonly checkSigns: boolean;
 }
