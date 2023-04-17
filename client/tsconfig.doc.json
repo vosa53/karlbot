@@ -1,0 +1,1 @@
+{"include":["projects/application/**/*.ts"],"exclude":["projects/application/**/*.spec.ts"]}
