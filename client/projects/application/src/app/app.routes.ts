@@ -31,4 +31,3 @@ export const appRoutes: Routes = [
         component: NotFoundPageComponent
     }
 ];
-

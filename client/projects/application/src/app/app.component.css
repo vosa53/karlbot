@@ -1,22 +1,3 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.app-bar {
-    height: 50px;
-    flex: 0 0 auto;
-}
-
-.app-bar-drawer-trigger {
-    display: none;
-}
-
-.page {
-    flex-grow: 1;
-}
-
 .title {
     display: flex;
     align-items: center;
@@ -31,6 +12,18 @@
     font-weight: 500;
     margin-left: 10px;
     margin-right: 20px;
+}
+
+.dark-mode-switch-text {
+    margin-left: 4px;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.drawer-and-content-wrapper {
+    height: 100%;
 }
 
 .drawer {
@@ -81,6 +74,29 @@
 .drawer-dark-mode-switch {
     margin-left: 24px;
     margin-bottom: 32px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.app-bar {
+    height: 50px;
+    flex: 0 0 auto;
+}
+
+.app-bar-drawer-trigger {
+    display: none;
+}
+
+.app-bar-dark-mode-switch {
+    margin-right: 48px;
+}
+
+.page {
+    flex-grow: 1;
 }
 
 @media (max-width: 1000px) {
