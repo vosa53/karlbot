@@ -99,6 +99,7 @@ export class TownRenderer {
 
     private static loadImage(filePath: string): HTMLImageElement {
         const ASSETS_ROOT = "/assets/shared/presentation/components/town-view/";
+
         const image = new Image();
         const imageLoadPromise = new Promise<void>(resolve => image.addEventListener("load", () => resolve()));
         image.src = ASSETS_ROOT + filePath;

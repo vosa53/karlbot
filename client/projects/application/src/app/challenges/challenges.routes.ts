@@ -1,5 +1,5 @@
 import { Routes } from "@angular/router";
-import { authenticatedCanActivate } from "../shared/application/authenticated-can-activate";
+import { authenticatedCanActivate } from "../shared/application/route-guards/authenticated-can-activate";
 import { ChallengeEditorPageComponent } from "./presentation/pages/challenge-editor-page/challenge-editor-page.component";
 import { ChallengePageComponent } from "./presentation/pages/challenge-page/challenge-page.component";
 import { ChallengesPageComponent } from "./presentation/pages/challenges-page/challenges-page.component";

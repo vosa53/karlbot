@@ -8,13 +8,13 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { AppComponent } from './app/app.component';
 import { appRoutes } from './app/app.routes';
-import { API_BASE_URL } from './app/shared/application/api-base-url';
-import { TokenInterceptor } from './app/shared/application/services/token-interceptor';
 import { environment } from './environments/environment';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, connectAuthEmulator, getAuth } from '@angular/fire/auth';
-import { ApplicationErrorHandler } from './app/shared/application/application-error-handler';
-import { LoadingInterceptor } from './app/shared/application/services/loading-interceptor';
+import { ApplicationErrorHandler } from './app/shared/application/error-handling/application-error-handler';
+import { LoadingInterceptor } from './app/shared/application/http-interceptors/loading-interceptor';
+import { TokenInterceptor } from './app/shared/application/http-interceptors/token-interceptor';
+import { API_BASE_URL } from './app/shared/application/services/api/api-service';
 
 /**
  * Application entry point.

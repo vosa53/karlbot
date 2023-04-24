@@ -1,38 +1,36 @@
 import { Inject, Injectable } from '@angular/core';
 import { ProjectDeserializer, ProjectSerializer } from "karel";
-import { API_BASE_URL } from '../api-base-url';
-import { ChallengeSubmission } from '../models/challenge-submission';
-import { ChallengeSubmissionEvaluationResult } from '../models/challenge-submission-evaluation-result';
-import { ApiService } from './api-service';
+import { API_BASE_URL } from "./api-service";
+import { ChallengeSubmission } from '../../models/challenge-submission';
+import { ChallengeSubmissionEvaluationResult } from '../../models/challenge-submission-evaluation-result';
+import { APIService } from './api-service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChallengeSubmissionService {
-    private readonly projectsBaseUrl: string;
+    private readonly BASE_URL = "/ChallengeSubmissions";
 
-    constructor(private readonly apiService: ApiService, @Inject(API_BASE_URL) apiBaseUrl: string) {
-        this.projectsBaseUrl = `${apiBaseUrl}/challengeSubmissions`;
-    }
+    constructor(private readonly apiService: APIService) { }
 
     async get(challengeId: string, userId?: string): Promise<ChallengeSubmission[]> {
         const params: any = { challengeId };
         if (userId !== undefined)
             params.userId = userId;
 
-        const dto = await this.apiService.get<ChallengeSubmissionDTO[]>(this.projectsBaseUrl, { params });
+        const dto = await this.apiService.get<ChallengeSubmissionDTO[]>(this.BASE_URL, { params });
         return dto.map(d => this.fromDTO(d));
     }
 
     async getById(id: string): Promise<ChallengeSubmission> {
-        const url = `${this.projectsBaseUrl}/${id}`;
+        const url = `${this.BASE_URL}/${id}`;
         const dto = await this.apiService.get<ChallengeSubmissionDTO>(url);
         return this.fromDTO(dto);
     }
 
     async add(challengeId: string, challengeSubmission: ChallengeSubmission): Promise<ChallengeSubmission> {
         const dto = this.toDTO(challengeSubmission);
-        const dtoResult = await this.apiService.post<ChallengeSubmissionDTO>(this.projectsBaseUrl, dto, {
+        const dtoResult = await this.apiService.post<ChallengeSubmissionDTO>(this.BASE_URL, dto, {
             params: { challengeId }
         });
         return this.fromDTO(dtoResult);

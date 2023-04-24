@@ -1,8 +1,8 @@
 import { HttpHandlerFn, HttpRequest } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { from, mergeMap, of, switchMap, take } from "rxjs";
-import { IS_ANONYMOUS_ENDPOINT } from "../is-anonymous-endpoint";
-import { SignInService } from "./sign-in.service";
+import { inject } from "@angular/core";
+import { switchMap, take } from "rxjs";
+import { IS_ANONYMOUS_ENDPOINT } from "../http-context-tokens/is-anonymous-endpoint";
+import { SignInService } from "./../services/sign-in.service";
 
 export function TokenInterceptor(request: HttpRequest<unknown>, next: HttpHandlerFn) {
     if (request.context.get(IS_ANONYMOUS_ENDPOINT))

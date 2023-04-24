@@ -1,7 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
-import { API_BASE_URL } from '../api-base-url';
-import { User } from '../models/user';
-import { ApiService } from './api-service';
+import { Injectable } from '@angular/core';
 import * as MarkdownIt from 'markdown-it';
 
 @Injectable({

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Challenge } from 'projects/application/src/app/shared/application/models/challenge';
-import { ChallengeService } from 'projects/application/src/app/shared/application/services/challenge.service';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +12,7 @@ import { SignInService } from 'projects/application/src/app/shared/application/s
 import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
 import { firstValueFrom } from 'rxjs';
 import { ChallengeStatusComponent } from '../../components/challenge-status/challenge-status.component';
+import { ChallengeService } from 'projects/application/src/app/shared/application/services/api/challenge.service';
 
 @Component({
     selector: 'app-challenges-page',
@@ -53,7 +53,7 @@ export class ChallengesPageComponent implements OnInit {
         this.challenges.sort((a, b) => {
             const byDifficulty = this.getDifficultySortOrder(a.difficulty) - this.getDifficultySortOrder(b.difficulty);
             if (byDifficulty !== 0) return byDifficulty;
-            
+
             return a.name.localeCompare(b.name, "en");
         });
     }

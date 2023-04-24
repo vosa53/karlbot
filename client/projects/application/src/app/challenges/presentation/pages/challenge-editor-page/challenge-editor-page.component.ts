@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Challenge } from 'projects/application/src/app/shared/application/models/challenge';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChallengeService } from 'projects/application/src/app/shared/application/services/challenge.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
@@ -18,6 +17,7 @@ import { DialogService } from 'projects/application/src/app/shared/presentation/
 import { MatSelectModule } from '@angular/material/select';
 import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
 import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
+import { ChallengeService } from 'projects/application/src/app/shared/application/services/api/challenge.service';
 
 @Component({
     selector: 'app-challenge-editor-page',

@@ -5,10 +5,10 @@ import { BehaviorSubject } from 'rxjs';
     providedIn: 'root'
 })
 export class ColorThemeService {
-    private static readonly COLOR_THEME_LOCAL_STORAGE_KEY = "color-theme";
-
     private readonly colorTheme = new BehaviorSubject(ColorThemeService.loadColorTheme());
     readonly colorTheme$ = this.colorTheme.asObservable();
+
+    private static readonly COLOR_THEME_LOCAL_STORAGE_KEY = "color-theme";
 
     setColorTheme(colorTheme: ColorTheme) {
         ColorThemeService.saveColorTheme(colorTheme);
@@ -17,7 +17,6 @@ export class ColorThemeService {
 
     private static loadColorTheme(): ColorTheme {
         const fromLocalStorage = localStorage.getItem(this.COLOR_THEME_LOCAL_STORAGE_KEY);
-
         if (fromLocalStorage !== null && (fromLocalStorage === ColorTheme.light || fromLocalStorage === ColorTheme.dark))
             return fromLocalStorage;
 

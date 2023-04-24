@@ -16,7 +16,7 @@ export class MarkdownDirective {
         this.elementRef.nativeElement.innerHTML = this.markdownService.render(value);
     }
 
-    private _markdownSource: string = "";
+    private _markdownSource = "";
 
-    constructor(private elementRef: ElementRef, private readonly markdownService: MarkdownService) { }
+    constructor(private readonly elementRef: ElementRef, private readonly markdownService: MarkdownService) { }
 }

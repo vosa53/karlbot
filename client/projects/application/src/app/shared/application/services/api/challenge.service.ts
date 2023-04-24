@@ -1,47 +1,45 @@
 import { Inject, Injectable } from '@angular/core';
 import { TownDeserializer } from "karel";
 import { TownSerializer } from "karel";
-import { API_BASE_URL } from '../api-base-url';
-import { Challenge } from '../models/challenge';
-import { ChallengeDifficulty } from '../models/challenge-difficulty';
-import { ChallengeSubmissionsInfo } from '../models/challenge-submissions.info';
-import { ApiService } from './api-service';
+import { API_BASE_URL } from "./api-service";
+import { Challenge } from '../../models/challenge';
+import { ChallengeDifficulty } from '../../models/challenge-difficulty';
+import { ChallengeSubmissionsInfo } from '../../models/challenge-submissions.info';
+import { APIService } from './api-service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ChallengeService {
-    private readonly projectsBaseUrl: string;
+    private readonly BASE_URL = "/Challenges";
 
-    constructor(private readonly apiService: ApiService, @Inject(API_BASE_URL) apiBaseUrl: string) {
-        this.projectsBaseUrl = `${apiBaseUrl}/challenges`;
-    }
+    constructor(private readonly apiService: APIService) { }
 
     async get(): Promise<Challenge[]> {
-        const dto = await this.apiService.get<ChallengeDTO[]>(this.projectsBaseUrl);
+        const dto = await this.apiService.get<ChallengeDTO[]>(this.BASE_URL);
         return dto.map(d => this.fromDTO(d));
     }
 
     async getById(id: string): Promise<Challenge> {
-        const url = `${this.projectsBaseUrl}/${id}`;
+        const url = `${this.BASE_URL}/${id}`;
         const dto = await this.apiService.get<ChallengeDTO>(url);
         return this.fromDTO(dto);
     }
 
     async add(challenge: Challenge): Promise<Challenge> {
         const dto = this.toDTO(challenge);
-        const dtoResult = await this.apiService.post<ChallengeDTO>(this.projectsBaseUrl, dto);
+        const dtoResult = await this.apiService.post<ChallengeDTO>(this.BASE_URL, dto);
         return this.fromDTO(dtoResult);
     }
 
     async update(challenge: Challenge): Promise<any> {
         const dto = this.toDTO(challenge);
-        const url = `${this.projectsBaseUrl}/${challenge.id}`;
+        const url = `${this.BASE_URL}/${challenge.id}`;
         await this.apiService.put(url, dto);
     }
 
     async delete(challenge: Challenge): Promise<any> {
-        const url = `${this.projectsBaseUrl}/${challenge.id}`;
+        const url = `${this.BASE_URL}/${challenge.id}`;
         return this.apiService.delete(url);
     }
 

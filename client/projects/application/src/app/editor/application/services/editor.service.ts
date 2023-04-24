@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { CompletionItem } from "karel";
 import { CodeFile } from "karel";
 import { File } from "karel";
@@ -11,7 +10,7 @@ import { StandardLibrary } from "karel";
 import { ProjectDeserializer } from "karel";
 import { BehaviorSubject, combineLatest, firstValueFrom, map } from 'rxjs';
 import { SavedProject } from '../../../shared/application/models/saved-project';
-import { ProjectService } from '../../../shared/application/services/project.service';
+import { ProjectService } from '../../../shared/application/services/api/project.service';
 import { SignInService } from '../../../shared/application/services/sign-in.service';
 import { DialogService } from '../../../shared/presentation/services/dialog.service';
 import { NotificationService } from '../../../shared/presentation/services/notification.service';

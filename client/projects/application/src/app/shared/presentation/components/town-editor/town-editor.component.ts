@@ -20,7 +20,7 @@ import { TownViewComponent } from "projects/application/src/app/shared/presentat
 import { MatMenuModule } from "@angular/material/menu";
 import { CommonModule } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatBadgeModule } from '@angular/material/badge';
 
 /**
  * Town editor.
@@ -79,7 +79,7 @@ export class TownEditorComponent {
     /**
      * Town size (width or height) validator.
      */
-    readonly sizeValidator = ValidatedInputValidatorFactory.integer(s => s > 0 && s <= 100);
+    readonly SIZE_VALIDATOR = ValidatedInputValidatorFactory.integer(s => s > 0 && s <= 100);
 
     /**
      * Value of `tabindex` attribute of the component host element.
@@ -148,10 +148,10 @@ export class TownEditorComponent {
 }
 
 interface TownEditorToolButton {
-    iconSrc?: string;
-    iconName?: string;
-    action?: TownEditorToolButtonAction;
-    tool: TownEditorTool
+    readonly iconSrc?: string;
+    readonly iconName?: string;
+    readonly action?: TownEditorToolButtonAction;
+    readonly tool: TownEditorTool
 }
 
 enum TownEditorToolButtonAction {

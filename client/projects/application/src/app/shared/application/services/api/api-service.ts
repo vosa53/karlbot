@@ -1,35 +1,39 @@
-import { HttpClient, HttpContext } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { HttpClient, HttpContext, HttpParams, HttpRequest } from "@angular/common/http";
+import { Inject, Injectable } from "@angular/core";
 import { lastValueFrom } from "rxjs";
-import { IS_ANONYMOUS_ENDPOINT } from "../is-anonymous-endpoint";
+import { InjectionToken } from "@angular/core";
+import { IS_ANONYMOUS_ENDPOINT } from "../../http-context-tokens/is-anonymous-endpoint";
 
 @Injectable({
     providedIn: 'root'
 })
-export class ApiService {
-    constructor(private readonly httpClient: HttpClient) { }
+export class APIService {
+    constructor(
+        private readonly httpClient: HttpClient, 
+        @Inject(API_BASE_URL) private readonly apiBaseURL: string
+    ) { }
 
     get<T>(url: string, options: ApiEndpointOptions = {}): Promise<T> {
         const httpClientOptions = this.createHttpClientOptions(options);
-        const observable = this.httpClient.get<T>(url, httpClientOptions);
+        const observable = this.httpClient.get<T>(this.apiBaseURL + url, httpClientOptions);
         return lastValueFrom(observable);
     }
 
     post<T>(url: string, body: any, options: ApiEndpointOptions = {}): Promise<T> {
         const httpClientOptions = this.createHttpClientOptions(options);
-        const observable = this.httpClient.post<T>(url, body, httpClientOptions);
+        const observable = this.httpClient.post<T>(this.apiBaseURL + url, body, httpClientOptions);
         return lastValueFrom(observable);
     }
 
     put<T>(url: string, body: any, options: ApiEndpointOptions = {}): Promise<T> {
         const httpClientOptions = this.createHttpClientOptions(options);
-        const observable = this.httpClient.put<T>(url, body, httpClientOptions);
+        const observable = this.httpClient.put<T>(this.apiBaseURL + url, body, httpClientOptions);
         return lastValueFrom(observable);
     }
 
     delete<T>(url: string, options: ApiEndpointOptions = {}): Promise<T> {
         const httpClientOptions = this.createHttpClientOptions(options);
-        const observable = this.httpClient.delete<T>(url, httpClientOptions);
+        const observable = this.httpClient.delete<T>(this.apiBaseURL + url, httpClientOptions);
         return lastValueFrom(observable);
     }
 
@@ -40,6 +44,8 @@ export class ApiService {
         };
     }
 }
+
+export const API_BASE_URL = new InjectionToken<string>("API base URL.");
 
 export interface ApiEndpointOptions {
     params?: { [param: string]: string | number },

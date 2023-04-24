@@ -143,7 +143,7 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
         canvasElement.height = canvasElement.offsetHeight;
         this._renderingEnvironment = new TownRenderingEnvironment(this.camera, new TownViewport(canvasElement.width, canvasElement.height), 32);
         
-        // Setting `width` and `height` clears the canvas.
+        // Setting `width` and `height` clears the canvas, so we have to render it again.
         if (this.canvasRenderingContext !== null)
             this.render(this.canvasRenderingContext);
     }

@@ -1,5 +1,5 @@
 <app-town-view class="town-view" [town]="town" [camera]="camera" (cameraChange)="onTownViewCameraChange($event)" 
-    appTownViewMove  [touchMoveDisabled]="!selectionDisabled"
+    appTownViewMove [touchMoveDisabled]="!selectionDisabled"
     appTownViewSelect [selectionDisabled]="selectionDisabled" [selectionMode]="selectionMode" (select)="onSelect($event)"
 ></app-town-view>
 
@@ -15,13 +15,13 @@
 
     <mat-form-field class="toolbar-width" appearance="outline" subscriptSizing="dynamic">
         <mat-label>Width</mat-label>
-        <input type="number" matInput appValidatedInput [validator]="sizeValidator"
+        <input type="number" matInput appValidatedInput [validator]="SIZE_VALIDATOR"
             [validatedValue]="town !== null ? town.width.toString() : '0'" (validatedValueChange)="onSizeChange($event, undefined)">
     </mat-form-field>
 
     <mat-form-field class="toolbar-height" appearance="outline" subscriptSizing="dynamic">
         <mat-label>Height</mat-label>
-        <input type="number" matInput appValidatedInput [validator]="sizeValidator"
+        <input type="number" matInput appValidatedInput [validator]="SIZE_VALIDATOR"
             [validatedValue]="town !== null ? town.height.toString() : '0'" (validatedValueChange)="onSizeChange(undefined, $event)">
     </mat-form-field>
 </mat-toolbar>

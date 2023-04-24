@@ -1,10 +1,9 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { FirebaseError } from '@angular/fire/app';
 import { Auth, authState, signOut, GoogleAuthProvider, signInWithPopup, User as FirebaseUser } from '@angular/fire/auth';
-import { distinctUntilChanged, firstValueFrom, from, mergeMap, of, shareReplay, skip, Subscription } from 'rxjs';
-import { User } from '../models/user';
-import { AuthenticationService } from './authentication.service';
-import { UserService } from './user.service';
+import { distinctUntilChanged, firstValueFrom, from, mergeMap, of, shareReplay, skip } from 'rxjs';
+import { AuthenticationService } from './api/authentication.service';
+import { UserService } from './api/user.service';
 
 @Injectable({
     providedIn: 'root'
@@ -30,9 +29,11 @@ export class SignInService {
         shareReplay(1)
     );
 
-    constructor(private readonly firebaseAuthentication: Auth, private readonly authenticationService: AuthenticationService,
-        private readonly userService: UserService) {
-    }
+    constructor(
+        private readonly firebaseAuthentication: Auth, 
+        private readonly authenticationService: AuthenticationService,
+        private readonly userService: UserService
+    ) { }
 
     async signInWithGoogle(): Promise<boolean> {
         try {
@@ -54,7 +55,7 @@ export class SignInService {
 
     private async getUserToken(user: FirebaseUser): Promise<string> {
         const firebaseIdToken = await user.getIdToken();
-        const firebaseAuthenticationResult = await this.authenticationService.firebase(firebaseIdToken);
+        const firebaseAuthenticationResult = await this.authenticationService.authenticateWithFirebase(firebaseIdToken);
         return firebaseAuthenticationResult.token;
     }
 

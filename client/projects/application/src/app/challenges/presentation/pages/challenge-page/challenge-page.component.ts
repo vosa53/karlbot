@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { ChallengeService } from 'projects/application/src/app/shared/application/services/challenge.service';
-import { ChallengeSubmissionService } from 'projects/application/src/app/shared/application/services/challenge-submission-service';
-import { ProjectService } from 'projects/application/src/app/shared/application/services/project.service';
 import { Challenge } from 'projects/application/src/app/shared/application/models/challenge';
 import { ChallengeSubmission } from 'projects/application/src/app/shared/application/models/challenge-submission';
 import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
@@ -26,6 +23,9 @@ import { TownViewFitContainDirective } from 'projects/application/src/app/shared
 import party from "party-js";
 import { ChallengeStatusComponent } from '../../components/challenge-status/challenge-status.component';
 import { ChallengeSubmissionEvaluationResult } from 'projects/application/src/app/shared/application/models/challenge-submission-evaluation-result';
+import { ChallengeService } from 'projects/application/src/app/shared/application/services/api/challenge.service';
+import { ChallengeSubmissionService } from 'projects/application/src/app/shared/application/services/api/challenge-submission-service';
+import { ProjectService } from 'projects/application/src/app/shared/application/services/api/project.service';
 
 @Component({
     selector: 'app-challenge-page',

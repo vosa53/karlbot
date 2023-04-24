@@ -32,6 +32,7 @@ export class TownViewFitContainDirective implements AfterViewInit, OnDestroy {
             this.townView.renderingEnvironment.viewport.pixelHeight,
             this.townView.town.width,
             this.townView.town.height,
-            this.townView.renderingEnvironment.originalTilePixelSize);
+            this.townView.renderingEnvironment.originalTilePixelSize
+        );
     }
 }
