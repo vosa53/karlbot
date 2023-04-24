@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<List<Project>> GetAsync(Guid? authorId)
+        public async Task<IList<Project>> GetAsync(Guid? authorId)
         {
             IQueryable<Project> query = DbSet;
 

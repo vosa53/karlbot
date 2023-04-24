@@ -16,7 +16,7 @@ namespace ApplicationCore.Repositories
         /// <summary>
         /// Returns all entites.
         /// </summary>
-        Task<List<TEntity>> GetAsync();
+        Task<IList<TEntity>> GetAsync();
 
         /// <summary>
         /// Returns the entity with the given id or `null` if no entity with the given id exists.
