@@ -11,7 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
-import { Project, ProjectDeserializer, ProjectSerializer, Vector } from 'projects/karel/src/public-api';
+import { Project, ProjectDeserializer, ProjectSerializer, Vector } from "karel";
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { SavedProject } from 'projects/application/src/app/shared/application/models/saved-project';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';

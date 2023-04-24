@@ -1,7 +1,7 @@
 import { Directive, EventEmitter, HostListener, Input, Output, ElementRef } from "@angular/core";
-import { Rectangle } from "projects/karel/src/lib/math/rectangle";
-import { Vector } from "projects/karel/src/lib/math/vector";
-import { ReadonlyTown } from "projects/karel/src/public-api";
+import { Rectangle } from "karel";
+import { Vector } from "karel";
+import { ReadonlyTown } from "karel";
 import { TownViewComponent, TownViewRenderer } from "../components/town-view/town-view.component";
 import { TownRegionHighlightRenderer } from "../town/town-region-highlight-renderer";
 

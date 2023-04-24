@@ -4,7 +4,7 @@ import { EditorChallengeTestCase } from '../editor-challenge-test-case';
 import { TownCamera } from 'projects/application/src/app/shared/presentation/town/town-camera';
 import { TownEditorComponent } from 'projects/application/src/app/shared/presentation/components/town-editor/town-editor.component';
 import { MatChipsModule } from '@angular/material/chips';
-import { MutableTown, Vector } from 'projects/karel/src/public-api';
+import { MutableTown, Vector } from "karel";
 
 @Component({
     selector: 'app-challenge-test-case-editor',

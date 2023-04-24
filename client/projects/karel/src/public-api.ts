@@ -6,6 +6,7 @@ export * from './lib/event';
 
 export * from './lib/assembly/assembly';
 export * from './lib/assembly/program';
+export * from './lib/assembly/source-map';
 
 export * from './lib/assembly/instructions/add-instruction';
 export * from './lib/assembly/instructions/call-external-instruction';
@@ -16,6 +17,7 @@ export * from './lib/assembly/instructions/jump-if-false-instruction';
 export * from './lib/assembly/instructions/jump-if-true-instruction';
 export * from './lib/assembly/instructions/jump-instruction';
 export * from './lib/assembly/instructions/load-instruction';
+export * from './lib/assembly/instructions/no-operation-instruction';
 export * from './lib/assembly/instructions/pop-instruction';
 export * from './lib/assembly/instructions/push-instruction';
 export * from './lib/assembly/instructions/store-instruction';
@@ -83,10 +85,13 @@ export * from './lib/compiler/syntax-tree/trivia/whitespace-trivia';
 
 export * from './lib/interpreter/call-stack-frame';
 export * from './lib/interpreter/exception';
+export * from './lib/interpreter/external-program-exception';
 export * from './lib/interpreter/external-program';
 export * from './lib/interpreter/interpret-stop-token';
 export * from './lib/interpreter/interpreter';
+export * from './lib/interpreter/readonly-call-stack-frame';
 
+export * from './lib/interpreter/results/breakpoint-interpret-result';
 export * from './lib/interpreter/results/exception-interpret-result';
 export * from './lib/interpreter/results/interpret-result';
 export * from './lib/interpreter/results/normal-interpret-result';

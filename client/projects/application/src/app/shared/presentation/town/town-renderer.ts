@@ -1,6 +1,6 @@
-import { TownDirectionUtils } from "projects/karel/src/lib/town/town-direction-utils";
-import { TownTile } from "projects/karel/src/lib/town/town-tile";
-import { ReadonlyTown } from "projects/karel/src/public-api";
+import { TownDirectionUtils } from "karel";
+import { TownTile } from "karel";
+import { ReadonlyTown } from "karel";
 import { TownRenderingEnvironment } from "./town-rendering-environment";
 
 /**

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { TownDeserializer } from 'projects/karel/src/lib/town/town-deserializer';
-import { TownSerializer } from 'projects/karel/src/lib/town/town-serializer';
+import { TownDeserializer } from "karel";
+import { TownSerializer } from "karel";
 import { API_BASE_URL } from '../api-base-url';
 import { Challenge } from '../models/challenge';
 import { ChallengeDifficulty } from '../models/challenge-difficulty';

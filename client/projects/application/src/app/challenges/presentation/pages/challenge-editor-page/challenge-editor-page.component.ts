@@ -7,7 +7,7 @@ import { ChallengeService } from 'projects/application/src/app/shared/applicatio
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
-import { MutableTown } from 'projects/karel/src/public-api';
+import { MutableTown } from "karel";
 import { EditorChallengeTestCase } from './editor-challenge-test-case';
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeTestCaseEditorComponent } from './challenge-test-case-editor/challenge-test-case-editor.component';

@@ -1,5 +1,5 @@
 import { TownRenderingEnvironment } from "./town-rendering-environment";
-import { Rectangle } from "../../../../../../karel/src/lib/math/rectangle";
+import { Rectangle } from "karel";
 
 /**
  * Renders a highlight of a town region on canvas.

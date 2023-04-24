@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import { TownViewComponent } from 'projects/application/src/app/shared/presentation/components/town-view/town-view.component';
-import { Project, Settings, Town, TownFile } from 'projects/karel/src/public-api';
+import { Project, Settings, Town, TownFile } from "karel";
 import { StopClickPropagationDirective } from 'projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive';
 import { DateAgoPipe } from 'projects/application/src/app/shared/presentation/pipes/date-ago.pipe';
 import { TownViewFitContainDirective } from 'projects/application/src/app/shared/presentation/directives/town-view-fit-contain.directive';

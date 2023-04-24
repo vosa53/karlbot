@@ -35,8 +35,7 @@ namespace KarlBot.DataModels.Challenges
         /// <summary>
         /// Info about count of submissions.
         /// </summary>
-        [Required]
-        public required ChallengeSubmissionsInfoDataModel? SubmissionsInfo { get; init; }
+        public ChallengeSubmissionsInfoDataModel? SubmissionsInfo { get; init; }
 
         /// <summary>
         /// Test cases.

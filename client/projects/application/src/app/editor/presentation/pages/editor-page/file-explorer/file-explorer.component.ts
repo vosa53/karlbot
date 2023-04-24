@@ -6,9 +6,9 @@ import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
 import { StopClickPropagationDirective } from "projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive";
 import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
-import { CodeFile } from "projects/karel/src/lib/project/code-file";
-import { File } from "projects/karel/src/lib/project/file";
-import { TownFile } from "projects/karel/src/lib/project/town-file";
+import { CodeFile } from "karel";
+import { File } from "karel";
+import { TownFile } from "karel";
 import { PanelComponent } from "../../../components/panel/panel.component";
 
 @Component({

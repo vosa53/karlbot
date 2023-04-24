@@ -3,7 +3,7 @@ import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { PanelComponent } from "../../../components/panel/panel.component";
-import { ReadonlyCallStackFrame } from 'dist/karel/lib/interpreter/readonly-call-stack-frame';
+import { ReadonlyCallStackFrame } from "karel";
 
 @Component({
     selector: 'app-call-stack',

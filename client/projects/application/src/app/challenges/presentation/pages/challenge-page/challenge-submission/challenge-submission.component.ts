@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChallengeSubmission } from 'projects/application/src/app/shared/application/models/challenge-submission';
-import { Project, Settings } from 'projects/karel/src/public-api';
+import { Project, Settings } from "karel";
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DateAgoPipe } from 'projects/application/src/app/shared/presentation/pipes/date-ago.pipe';

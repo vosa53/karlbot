@@ -1,5 +1,5 @@
 import { Directive, HostListener, ElementRef, Input } from "@angular/core";
-import { Vector } from "projects/karel/src/lib/math/vector";
+import { Vector } from "karel";
 import { TownViewComponent } from "../components/town-view/town-view.component";
 import { TownCamera } from "../town/town-camera";
 

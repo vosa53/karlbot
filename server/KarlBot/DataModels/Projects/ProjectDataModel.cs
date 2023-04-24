@@ -26,12 +26,12 @@ namespace KarlBot.DataModels.Projects
         /// <summary>
         /// Date and time when the project was created.
         /// </summary>
-        public required DateTime Created { get; init; }
+        public DateTime Created { get; init; }
 
         /// <summary>
         /// Date and time of the last project modification.
         /// </summary>
-        public required DateTime Modified { get; init; }
+        public DateTime Modified { get; init; }
 
         /// <summary>
         /// Project file.

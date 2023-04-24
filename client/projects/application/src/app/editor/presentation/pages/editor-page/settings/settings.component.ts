@@ -4,7 +4,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { ValidatedInputDirective, ValidatedInputValidatorFactory } from "projects/application/src/app/shared/presentation/directives/validated-input.directive";
-import { Settings } from "projects/karel/src/lib/project/settings";
+import { Settings } from "karel";
 import { PanelComponent } from "../../../components/panel/panel.component";
 
 @Component({

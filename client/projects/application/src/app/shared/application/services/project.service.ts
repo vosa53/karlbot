@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { ProjectDeserializer, ProjectSerializer } from 'projects/karel/src/public-api';
+import { ProjectDeserializer, ProjectSerializer } from "karel";
 import { API_BASE_URL } from '../api-base-url';
 import { SavedProject } from '../models/saved-project';
 import { ApiService } from './api-service';

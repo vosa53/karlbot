@@ -1,5 +1,5 @@
 import { TownCamera } from "./town-camera";
-import { Rectangle } from "../../../../../../karel/src/lib/math/rectangle";
+import { Rectangle } from "karel";
 import { TownViewport } from "./town-viewport";
 
 /**

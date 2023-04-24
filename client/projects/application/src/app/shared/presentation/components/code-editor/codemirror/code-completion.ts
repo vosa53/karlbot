@@ -1,6 +1,6 @@
 import { autocompletion, Completion, CompletionContext } from "@codemirror/autocomplete";
-import { CompletionItem } from "projects/karel/src/lib/compiler/language-service/completion-item";
-import { CompletionItemType } from "projects/karel/src/public-api";
+import { CompletionItem } from "karel";
+import { CompletionItemType } from "karel";
 
 type CompletionItemsProvider = (line: number, column: number) => CompletionItem[];
 

@@ -21,7 +21,7 @@ namespace KarlBot.DataModels.Challenges
         /// <summary>
         /// Date and time of submission.
         /// </summary>
-        public required DateTime Created { get; init; }
+        public DateTime Created { get; init; }
 
         /// <summary>
         /// Submitted project file.
@@ -33,6 +33,6 @@ namespace KarlBot.DataModels.Challenges
         /// <summary>
         /// Result of evaluation.
         /// </summary>
-        public required ChallengeSubmissionEvaluationResultDataModel? EvaluationResult { get; init; }
+        public ChallengeSubmissionEvaluationResultDataModel? EvaluationResult { get; init; }
     }
 }
