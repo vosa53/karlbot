@@ -35,7 +35,10 @@ export class RunService {
     private karelSpeed = 0;
     private townBackup: Town | null = null;
 
-    constructor(private readonly projectEditorService: ProjectEditorService, private readonly dialogService: DialogService) {
+    constructor(
+        private readonly projectEditorService: ProjectEditorService, 
+        private readonly dialogService: DialogService
+    ) {
         this.projectEditorService.project$.subscribe(p => {
             this.karelSpeed = p.settings.karelSpeed;
             if (this.interpreter.value !== null)

@@ -21,13 +21,14 @@ import { firstValueFrom } from 'rxjs';
 export class ProjectsPageComponent implements OnInit {
     projects: SavedProject[] | null = null;
 
-    constructor(private readonly projectService: ProjectService, private readonly dialogService: DialogService, 
-        private readonly signInService: SignInService) {
-
-    }
+    constructor(
+        private readonly projectService: ProjectService, 
+        private readonly dialogService: DialogService, 
+        private readonly signInService: SignInService
+    ) { }
 
     async ngOnInit() {
-        this.loadProjects();
+        await this.loadProjects();
     }
 
     async onRemoveClick(project: SavedProject) {
@@ -36,7 +37,7 @@ export class ProjectsPageComponent implements OnInit {
             return;
 
         await this.projectService.delete(project);
-        this.loadProjects();
+        await this.loadProjects();
     }
 
     private async loadProjects() {

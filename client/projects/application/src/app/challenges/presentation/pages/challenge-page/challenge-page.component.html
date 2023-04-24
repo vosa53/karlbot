@@ -3,6 +3,7 @@
         {{challenge.name}}
         <app-challenge-status class="status" [submissionsInfo]="challenge.submissionsInfo"></app-challenge-status>
     </span>
+
     <div class="content">
         <div class="assignment">
             <div class="difficulty mat-subtitle-1">
@@ -31,11 +32,12 @@
                 </div>
             </div>
         </div>
+
         <div class="submissions">
             <h2>Submissions</h2>
             <button mat-flat-button color="primary" (click)="onSubmitProject()">
                 <mat-icon>add</mat-icon>
-                Submit project
+                Submit Project
             </button>
             <div class="submission-items">
                 <app-challenge-submission *ngFor="let challengeSubmission of challengeSubmissions" [challengeSubmission]="challengeSubmission"></app-challenge-submission>

@@ -20,17 +20,17 @@ body {
 }
 
 /* Disables underline for specified Angular Material form field with appearance="fill". */
-.disable-form-field-underline .mdc-line-ripple::before {
+.form-field-without-underline .mdc-line-ripple::before {
     border-bottom: none !important;
 }
 
 /* Makes background transparent for specified Angular Material form field with appearance="fill". */
-.transparent-form-field-background .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+.form-field-transparent-background .mdc-text-field--filled:not(.mdc-text-field--disabled) {
     background: transparent;
 }
 
 /* Makes specified Angular Material tab group take full height. */
-.tab-full-height .mat-mdc-tab-body-wrapper {
+.tab-group-full-height .mat-mdc-tab-body-wrapper {
     flex-grow: 1;
 }
 

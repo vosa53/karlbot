@@ -17,25 +17,28 @@ import { NotificationService } from 'projects/application/src/app/shared/present
 })
 export class ShareDialogComponent {
     isProjectPublic = false;
-    projectUrl = "https://";
+    projectURL = "https://";
 
-    constructor(readonly dialogRef: MatDialogRef<ShareDialogComponent>, @Inject(MAT_DIALOG_DATA) readonly data: ShareDialogData, 
-        private readonly notificationService: NotificationService) {
+    constructor(
+        readonly dialogRef: MatDialogRef<ShareDialogComponent>, 
+        @Inject(MAT_DIALOG_DATA) readonly data: ShareDialogData, 
+        private readonly notificationService: NotificationService
+    ) {
         this.isProjectPublic = data.isProjectPublic;
-        this.projectUrl = data.projectUrl;
+        this.projectURL = data.projectURL;
     }
 
     onSaveClick() {
         this.dialogRef.close(this.isProjectPublic);
     }
 
-    onCopyProjectUrlClick() {
-        navigator.clipboard.writeText(this.projectUrl);
+    onCopyProjectURLClick() {
+        navigator.clipboard.writeText(this.projectURL);
         this.notificationService.show("Copied to the clipboard.");
     }
 }
 
 export interface ShareDialogData {
     readonly isProjectPublic: boolean;
-    readonly projectUrl: string;
+    readonly projectURL: string;
 }

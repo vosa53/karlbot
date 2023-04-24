@@ -17,7 +17,6 @@ import { StopClickPropagationDirective } from 'projects/application/src/app/shar
 import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
 import { MatSelectModule } from '@angular/material/select';
 import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
-import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
 import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
 
 @Component({
@@ -37,10 +36,13 @@ export class ChallengeEditorPageComponent {
     challenge: Challenge | null = null;
     testCases: EditorChallengeTestCase[] = [];
 
-    constructor(private readonly challengeService: ChallengeService, private readonly activatedRoute: ActivatedRoute, 
-        private readonly router: Router, private readonly dialogService: DialogService, private readonly notificationService: NotificationService) {
-
-    }
+    constructor(
+        private readonly challengeService: ChallengeService, 
+        private readonly activatedRoute: ActivatedRoute, 
+        private readonly router: Router, 
+        private readonly dialogService: DialogService, 
+        private readonly notificationService: NotificationService
+    ) { }
 
     async ngOnInit() {
         this.activatedRoute.paramMap.subscribe(async p => {
@@ -94,7 +96,7 @@ export class ChallengeEditorPageComponent {
         this.testCases[index] = newValue;
     }
 
-    onChangeIsPublic(testCase: EditorChallengeTestCase, isPublic: boolean) {
+    onTestCaseChangeIsPublic(testCase: EditorChallengeTestCase, isPublic: boolean) {
         const newTestCase = { ...testCase, isPublic };
         this.onTestCaseChange(testCase, newTestCase);
     }

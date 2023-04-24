@@ -21,7 +21,7 @@ export class SettingsComponent {
     @Output()
     settingsChange = new EventEmitter<Settings>();
 
-    readonly maxRecursionDepthValidator = ValidatedInputValidatorFactory.integer(i => i > 0 && i <= 100_000);
+    readonly MAX_RECURSION_DEPTH_VALIDATOR = ValidatedInputValidatorFactory.integer(i => i > 0 && i <= 100_000);
 
     onKarelSpeedChange(karelSpeedText: string) {
         const karelSpeed = window.parseInt(karelSpeedText, 10);

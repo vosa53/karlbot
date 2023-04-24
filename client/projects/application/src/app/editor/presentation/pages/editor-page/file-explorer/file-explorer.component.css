@@ -4,11 +4,8 @@
     position: relative;
 }
 
-.add {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    margin: 16px;
+.files {
+    margin-bottom: 75px;
 }
 
 .file-icon {
@@ -18,16 +15,19 @@
     margin-right: 12px;
 }
 
-.menu-icon {
-    width: 24px; 
-    height: 24px;
-    margin-right: 12px;
-}
-
-.selected {
+.file-selected {
     background: var(--background-tertiary);
 }
 
-.list {
-    margin-bottom: 75px;
+.add-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 16px;
+}
+
+.add-menu-icon {
+    width: 24px; 
+    height: 24px;
+    margin-right: 12px;
 }

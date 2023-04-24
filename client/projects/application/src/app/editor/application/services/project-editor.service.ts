@@ -46,7 +46,10 @@ export class ProjectEditorService {
         return errors.filter(e => e.compilationUnit === selectedCodeFile?.compilationUnit);
     }));
 
-    constructor(private readonly fileService: FileService, private readonly dialogService: DialogService) { }
+    constructor(
+        private readonly fileService: FileService, 
+        private readonly dialogService: DialogService
+    ) { }
 
     setProject(project: Project) {
         this.saveCurrentTown();

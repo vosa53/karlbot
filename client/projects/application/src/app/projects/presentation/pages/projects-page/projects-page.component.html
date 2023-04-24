@@ -1,11 +1,12 @@
 <app-page *ngIf="projects !== null" [fullWidth]="true">
     <span page-title>Projects</span>
+    
     <button mat-flat-button color="primary" class="create-project-button" routerLink="/editor">
         <mat-icon>add</mat-icon>
-        Create new
+        Create New
     </button>
     
     <div class="projects">
-        <app-saved-project-view class="project" routerLink="/editor/{{savedProject.id}}" *ngFor="let savedProject of projects" [savedProject]="savedProject" (removeClick)="onRemoveClick(savedProject)"></app-saved-project-view>
+        <app-saved-project-view routerLink="/editor/{{savedProject.id}}" *ngFor="let savedProject of projects" [savedProject]="savedProject" (removeClick)="onRemoveClick(savedProject)"></app-saved-project-view>
     </div>
 </app-page>

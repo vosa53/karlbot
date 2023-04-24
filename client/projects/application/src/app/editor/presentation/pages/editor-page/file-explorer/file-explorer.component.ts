@@ -127,10 +127,9 @@ export class FileExplorerComponent implements OnChanges {
     private sortFiles(files: readonly File[]): readonly File[] {
         const sortedFiles = [...files];
         sortedFiles.sort((a, b) => {
-            const aTypeSortOrder = this.getFileTypeSortOrder(a);
-            const bTypeSortOrder = this.getFileTypeSortOrder(b);
-            if (aTypeSortOrder < bTypeSortOrder) return -1;
-            if (aTypeSortOrder > bTypeSortOrder) return 1;
+            const byType = this.getFileTypeSortOrder(a) - this.getFileTypeSortOrder(b);
+            if (byType !== 0) return byType;
+
             return a.name.localeCompare(b.name, "en");
         });
         return sortedFiles;

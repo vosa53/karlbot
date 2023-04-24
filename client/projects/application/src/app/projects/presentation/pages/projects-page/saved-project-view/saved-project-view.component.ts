@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { SavedProject } from 'projects/application/src/app/shared/application/models/saved-project';
 import { MatCardModule } from '@angular/material/card';
@@ -21,16 +21,7 @@ import { TownViewFitContainDirective } from 'projects/application/src/app/shared
 })
 export class SavedProjectViewComponent {
     @Input()
-    get savedProject(): SavedProject {
-        return this._savedProject;
-    }
-
-    set savedProject(value: SavedProject) {
-        if (value === this._savedProject)
-            return;
-
-        this._savedProject = value;
-    }
+    savedProject: SavedProject = this.createSavedProject();
 
     @Output()
     removeClick = new EventEmitter<void>();
@@ -40,12 +31,9 @@ export class SavedProjectViewComponent {
     }
 
     get town(): Town | null {
-        const townFile = this.project.files.filter(f => f instanceof TownFile)[0] as TownFile | undefined;
+        const townFile = this.project.files.find(f => f instanceof TownFile) as TownFile | undefined;
         return townFile?.town ?? null;
     }
-
-    private _savedProject: SavedProject = this.createSavedProject();
-
 
     private createSavedProject(): SavedProject {
         return {

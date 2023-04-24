@@ -92,9 +92,7 @@ export class HeaderComponent {
 
     private static readonly PROJECT_NAME_VALIDATOR: ValidatedInputValidator = t => t !== "";
 
-    constructor(private readonly dialogService: DialogService) {
-
-    }
+    constructor(private readonly dialogService: DialogService) { }
 
     async onChangeProjectNameClick() {
         const newProjectName = await this.dialogService.showPrompt("Change project name", "Please enter a new project name.", 

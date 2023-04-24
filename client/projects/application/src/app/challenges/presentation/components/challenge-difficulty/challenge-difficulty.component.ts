@@ -12,26 +12,4 @@ import { ChallengeDifficulty } from 'projects/application/src/app/shared/applica
 export class ChallengeDifficultyComponent {
     @Input()
     difficulty = ChallengeDifficulty.easy;
-
-    getText(): string {
-        if (this.difficulty === ChallengeDifficulty.easy)
-            return "Easy";
-        if (this.difficulty === ChallengeDifficulty.medium)
-            return "Medium";
-        if (this.difficulty === ChallengeDifficulty.hard)
-            return "Hard";
-        else
-            throw new Error();
-    }
-
-    getColor(): string {
-        if (this.difficulty === ChallengeDifficulty.easy)
-            return "#8BC34A";
-        if (this.difficulty === ChallengeDifficulty.medium)
-            return "#FFB300";
-        if (this.difficulty === ChallengeDifficulty.hard)
-            return "#D32F2F";
-        else
-            throw new Error();
-    }
 }

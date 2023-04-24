@@ -102,7 +102,7 @@
 
 <div class="small-screen" *ngIf="isSmallScreen">
     <ng-container *ngTemplateOutlet="header"></ng-container>
-    <mat-tab-group preserveContent class="content tab-full-height" [selectedIndex]="selectedTabIndex$ | async" (selectedIndexChange)="onSelectedTabIndexChange($event)">
+    <mat-tab-group preserveContent class="tabs tab-group-full-height" [selectedIndex]="selectedTabIndex$ | async" (selectedIndexChange)="onSelectedTabIndexChange($event)">
         <mat-tab label="Project">
             <div class="project">
                 <ng-container *ngTemplateOutlet="fileExplorer"></ng-container>

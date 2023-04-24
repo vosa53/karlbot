@@ -14,9 +14,9 @@ import { DateAgoPipe } from 'projects/application/src/app/shared/presentation/pi
     styleUrls: ['./project-selector.component.css']
 })
 export class ProjectSelectorComponent {
-    constructor(@Inject(MAT_BOTTOM_SHEET_DATA) readonly savedProjects: SavedProject[], private ref: MatBottomSheetRef<ProjectSelectorComponent>) { }
+    constructor(@Inject(MAT_BOTTOM_SHEET_DATA) readonly savedProjects: readonly SavedProject[], private ref: MatBottomSheetRef<ProjectSelectorComponent>) { }
 
-    onClick(savedProject: SavedProject) {
+    onSelect(savedProject: SavedProject) {
         this.ref.dismiss(savedProject);
     }
 }

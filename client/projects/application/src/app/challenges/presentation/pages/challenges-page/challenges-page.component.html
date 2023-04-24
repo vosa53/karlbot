@@ -1,8 +1,9 @@
 <app-page *ngIf="challenges !== null">
     <span page-title>Challenges</span>
-    <button *ngIf="(signInService.currentUser$ | async)?.isAdmin ?? false" mat-flat-button color="primary" class="create-project-button" routerLink="/challenges/editor">
+
+    <button *ngIf="(signInService.currentUser$ | async)?.isAdmin ?? false" mat-flat-button color="primary" routerLink="/challenges/editor">
         <mat-icon>add</mat-icon>
-        Create new
+        Create New
     </button>
 
     <div class="table-scroll-wrapper">

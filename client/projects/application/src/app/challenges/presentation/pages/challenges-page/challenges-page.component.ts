@@ -25,16 +25,18 @@ export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] | null = null;
     displayedColumns: string[] = ["status", "name", "difficulty", "solved"];
 
-    constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService, readonly signInService: SignInService) {
-        
-    }
+    constructor(
+        private readonly challengeService: ChallengeService, 
+        private readonly dialogService: DialogService, 
+        readonly signInService: SignInService
+    ) { }
 
     async ngOnInit() {
         const currentUser = await firstValueFrom(this.signInService.currentUser$);
         if (currentUser!.isAdmin)
             this.displayedColumns.push("actions");
 
-        this.loadChallenges();
+        await this.loadChallenges();
     }
 
     async onRemoveClick(challenge: Challenge) {
@@ -43,16 +45,15 @@ export class ChallengesPageComponent implements OnInit {
             return;
 
         await this.challengeService.delete(challenge);
-        this.loadChallenges();
+        await this.loadChallenges();
     }
 
     private async loadChallenges() {
         this.challenges = await this.challengeService.get();
         this.challenges.sort((a, b) => {
-            const aTypeSortOrder = this.getDifficultySortOrder(a.difficulty);
-            const bTypeSortOrder = this.getDifficultySortOrder(b.difficulty);
-            if (aTypeSortOrder < bTypeSortOrder) return -1;
-            if (aTypeSortOrder > bTypeSortOrder) return 1;
+            const byDifficulty = this.getDifficultySortOrder(a.difficulty) - this.getDifficultySortOrder(b.difficulty);
+            if (byDifficulty !== 0) return byDifficulty;
+            
             return a.name.localeCompare(b.name, "en");
         });
     }

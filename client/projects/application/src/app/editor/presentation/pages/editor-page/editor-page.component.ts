@@ -41,12 +41,15 @@ export class EditorPageComponent {
             throw new Error();
     }));
 
-    constructor(readonly editorService: EditorService, readonly breakpointObserver: BreakpointObserver, readonly activatedRoute: ActivatedRoute) {
+    constructor(
+        readonly editorService: EditorService, 
+        private readonly breakpointObserver: BreakpointObserver, 
+        private readonly activatedRoute: ActivatedRoute
+    ) {
         breakpointObserver.observe(["(max-width: 1000px)"]).subscribe(b => this.isSmallScreen = b.matches);
         
         this.activatedRoute.paramMap.subscribe(async p => {
             const id = p.get("id");
-
             if (id !== null)
                 editorService.openProject(id);
             else

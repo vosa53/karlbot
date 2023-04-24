@@ -1,9 +1,9 @@
-<app-panel header="File explorer" class="panel">
-    <mat-nav-list class="list">
-        <mat-list-item *ngFor="let file of sortedFiles" (click)="onFileSelect(file)" [class.selected]="file === selectedCodeFile || file === selectedTownFile" [disabled]="isDisabled(file)">
-            <img matListItemIcon [src]="getFileIconURL(file)" class="file-icon">
+<app-panel header="File Explorer" class="panel">
+    <mat-nav-list class="files">
+        <mat-list-item *ngFor="let file of sortedFiles" (click)="onFileSelect(file)" [class.file-selected]="file === selectedCodeFile || file === selectedTownFile" [disabled]="isDisabled(file)">
+            <img matListItemIcon [src]="getFileIconURL(file)" alt="File icon" class="file-icon">
             <div matListItemTitle>{{file.name}}</div>
-            <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" appStopClickPropagation>
+            <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" appStopClickPropagation>
                 <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
@@ -19,16 +19,16 @@
         </mat-list-item>
     </mat-nav-list>
 
-    <button mat-fab color="secondary" class="add" [matMenuTriggerFor]="addMenu">
+    <button mat-fab color="secondary" class="add-button" [matMenuTriggerFor]="addMenu">
         <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addMenu="matMenu" xPosition="before" yPosition="above">
         <button mat-menu-item (click)="onFileAdd('code')" [disabled]="readonly">
-            <img src="assets/editor/presentation/pages/editor/file-explorer/code-file.png" class="menu-icon">
+            <img src="assets/editor/presentation/pages/editor/file-explorer/code-file.png" class="add-menu-icon">
             <span>Code</span>
         </button>
         <button mat-menu-item (click)="onFileAdd('town')" [disabled]="readonly">
-            <img src="assets/editor/presentation/pages/editor/file-explorer/town-file.png" class="menu-icon">
+            <img src="assets/editor/presentation/pages/editor/file-explorer/town-file.png" class="add-menu-icon">
             <span>Town</span>
         </button>
     </mat-menu>

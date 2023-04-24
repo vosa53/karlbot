@@ -1,13 +1,13 @@
 <app-page>
-    <span page-title>Challenge editor</span>
-    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <span page-title>Challenge Editor</span>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="fields">
-            <mat-form-field appearance="fill" class="field-half">
+            <mat-form-field appearance="fill" class="field-half-width">
                 <mat-label>Name</mat-label>
                 <input matInput formControlName="name">
             </mat-form-field>
 
-            <mat-form-field appearance="fill" class="field-half">
+            <mat-form-field appearance="fill" class="field-half-width">
                 <mat-label>Difficulty</mat-label>
                 <mat-select formControlName="difficulty">
                     <mat-option value="easy">Easy</mat-option>
@@ -16,21 +16,21 @@
                 </mat-select>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" class="field-full">
+            <mat-form-field appearance="fill" class="field-full-width field-multiline">
                 <mat-label>Description (supports Markdown)</mat-label>
-                <textarea matInput formControlName="description" style="height: 300px;"></textarea>
+                <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
         </div>
 
         <h2>Test cases</h2>
 
-        <mat-accordion class="example-headers-align" multi>
+        <mat-accordion multi>
             <mat-expansion-panel *ngFor="let testCase of testCases; let i = index; trackBy: trackTestCase">
                 <mat-expansion-panel-header>
                     <mat-panel-title>{{getTestCaseName(i)}}</mat-panel-title>
                     <mat-panel-description class="test-case-description">
                         <div class="test-case-description-actions">
-                            <mat-checkbox [checked]="testCase.isPublic" (change)="onChangeIsPublic(testCase, $event.checked)" appStopClickPropagation>
+                            <mat-checkbox [checked]="testCase.isPublic" (change)="onTestCaseChangeIsPublic(testCase, $event.checked)" appStopClickPropagation>
                                 Public
                             </mat-checkbox>
                             <button type="button" mat-icon-button (click)="onRemoveTestCase(testCase)" appStopClickPropagation>
@@ -40,19 +40,21 @@
                     </mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <app-challenge-test-case-editor [testCase]="testCase"
-                    (testCaseChange)="onTestCaseChange(testCase, $event)"></app-challenge-test-case-editor>
+                <app-challenge-test-case-editor 
+                    [testCase]="testCase"
+                    (testCaseChange)="onTestCaseChange(testCase, $event)">
+                </app-challenge-test-case-editor>
             </mat-expansion-panel>
         </mat-accordion>
 
-        <button type="button" mat-button class="add-button" (click)="onAddTestCase()">
+        <button type="button" mat-button class="add-test-case-button" (click)="onAddTestCase()">
             <mat-icon>add</mat-icon>
-            Add test case
+            Add Test Case
         </button>
 
         <button class="save-button" mat-flat-button color="primary" type="submit" [disabled]="!form.valid">
             <mat-icon>save</mat-icon>
-            Save challenge
+            Save Challenge
         </button>
     </form>
 </app-page>
