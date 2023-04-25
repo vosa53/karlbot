@@ -45,6 +45,6 @@ bootstrapApplication(AppComponent, {
             MatSnackBarModule
         ),
         { provide: API_BASE_URL, useValue: environment.apiBaseURL },
-        ...(isDevMode() ? [{ provide: ErrorHandler, useClass: ApplicationErrorHandler }] : [])
+        { provide: ErrorHandler, useClass: ApplicationErrorHandler }
     ]
 });
