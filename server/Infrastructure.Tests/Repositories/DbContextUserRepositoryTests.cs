@@ -15,7 +15,29 @@ namespace Infrastructure.Tests.Repositories
 {
     public class DbContextUserRepositoryTests : DbContextRepositoryTests<User, Guid>
     {
-        protected override DbContextRepository<User, Guid> CreateRepository(ApplicationDbContext dbContext) =>
+        [Test]
+        public async Task GetRoles_ReturnsRolesWhenUserExists()
+        {
+            using var dbContext = CreateDbContext();
+            var repository = CreateRepository(dbContext);
+
+            var actual = await repository.GetRolesAsync(User2.Id);
+
+            CollectionAssert.AreEquivalent(new[] { "Role2", "Role3" }, actual);
+        }
+
+        [Test]
+        public async Task GetRoles_ReturnsNullWhenUserDoesNotExist()
+        {
+            using var dbContext = CreateDbContext();
+            var repository = CreateRepository(dbContext);
+
+            var actual = await repository.GetRolesAsync(NotUsedGuid);
+
+            Assert.Null(actual);
+        }
+
+        protected override DbContextUserRepository CreateRepository(ApplicationDbContext dbContext) =>
             new DbContextUserRepository(dbContext, CreateUserManager(dbContext));
 
         protected override void AssertEquals(User expected, User actual)

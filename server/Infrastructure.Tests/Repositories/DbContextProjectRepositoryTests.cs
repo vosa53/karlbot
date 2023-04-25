@@ -10,7 +10,19 @@ namespace Infrastructure.Tests.Repositories
 {
     public class DbContextProjectRepositoryTests : DbContextRepositoryTests<Project, Guid>
     {
-        protected override DbContextRepository<Project, Guid> CreateRepository(ApplicationDbContext dbContext) => 
+        [Test]
+        public async Task Get_ReturnsProjectsByAuthorId()
+        {
+            using var dbContext = CreateDbContext();
+            var repository = CreateRepository(dbContext);
+
+            var actual = await repository.GetAsync(Guid2);
+
+            Assert.That(actual.Count, Is.EqualTo(1));
+            AssertEquals(Project2, actual[0]);
+        }
+
+        protected override DbContextProjectRepository CreateRepository(ApplicationDbContext dbContext) => 
             new DbContextProjectRepository(dbContext);
 
         protected override void AssertEquals(Project expected, Project actual)

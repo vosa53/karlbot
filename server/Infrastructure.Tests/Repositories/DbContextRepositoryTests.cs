@@ -12,7 +12,7 @@ namespace Infrastructure.Tests.Repositories
     public abstract class DbContextRepositoryTests<TEntity, TKey> : DatabaseTest where TEntity : class
     {
         [Test]
-        public async Task GetAll()
+        public async Task Get_ReturnsAllEntities()
         {
             using var dbContext = CreateDbContext();
             var repository = CreateRepository(dbContext);
@@ -26,7 +26,7 @@ namespace Infrastructure.Tests.Repositories
         }
 
         [Test]
-        public async Task GetById()
+        public async Task GetById_ReturnsEntityByIdWhenExists()
         {
             using var dbContext = CreateDbContext();
             var repository = CreateRepository(dbContext);
@@ -75,7 +75,7 @@ namespace Infrastructure.Tests.Repositories
         }
 
         [Test]
-        public async Task Add()
+        public async Task Add_AddsSingleEntity()
         {
             using var dbContext = CreateDbContext();
             dbContext.Database.BeginTransaction();
@@ -91,7 +91,7 @@ namespace Infrastructure.Tests.Repositories
         }
 
         [Test]
-        public async Task Update()
+        public async Task Update_UpdatesSingleEntity()
         {
             using var dbContext = CreateDbContext();
             dbContext.Database.BeginTransaction();
@@ -108,7 +108,7 @@ namespace Infrastructure.Tests.Repositories
         }
 
         [Test]
-        public async Task Remove()
+        public async Task Remove_RemovesSingleEntity()
         {
             using var dbContext = CreateDbContext();
             dbContext.Database.BeginTransaction();

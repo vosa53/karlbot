@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using Infrastructure.Repositories;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,34 @@ namespace Infrastructure.Tests.Repositories
 {
     public class DbContextChallengeSubmissionRepositoryTests : DbContextRepositoryTests<ChallengeSubmission, Guid>
     {
-        protected override DbContextRepository<ChallengeSubmission, Guid> CreateRepository(ApplicationDbContext dbContext) =>
+        [Test]
+        public async Task Get_ReturnsChallengeSubmissionsByChallengeId()
+        {
+            using var dbContext = CreateDbContext();
+            var repository = CreateRepository(dbContext);
+
+            var actual = await repository.GetAsync(Guid1, null);
+
+            Assert.That(actual.Count, Is.EqualTo(3));
+            AssertEquals(ChallengeSubmission1, actual[0]);
+            AssertEquals(ChallengeSubmission2, actual[1]);
+            AssertEquals(ChallengeSubmission3, actual[2]);
+        }
+
+        [Test]
+        public async Task Get_ReturnsChallengeSubmissionsByChallengeIdAndUserId()
+        {
+            using var dbContext = CreateDbContext();
+            var repository = CreateRepository(dbContext);
+
+            var actual = await repository.GetAsync(Guid1, Guid1);
+
+            Assert.That(actual.Count, Is.EqualTo(2));
+            AssertEquals(ChallengeSubmission1, actual[0]);
+            AssertEquals(ChallengeSubmission2, actual[1]);
+        }
+
+        protected override DbContextChallengeSubmissionRepository CreateRepository(ApplicationDbContext dbContext) =>
             new DbContextChallengeSubmissionRepository(dbContext);
 
         protected override void AssertEquals(ChallengeSubmission expected, ChallengeSubmission actual)
