@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import * as MarkdownIt from 'markdown-it';
+import { Injectable } from "@angular/core";
+import * as MarkdownIt from "markdown-it";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class MarkdownService {
     private readonly markdownIt: MarkdownIt;

@@ -1,8 +1,8 @@
-import { DataType } from '../compiler/data-type';
-import { ExternalProgramReference } from '../compiler/external-program-reference';
-import { ExternalProgram } from '../interpreter/external-program';
-import { MutableTown } from '../town/town';
-import * as standardLibraryProgramHandlers from './standard-library-program-handlers';
+import { DataType } from "../compiler/data-type";
+import { ExternalProgramReference } from "../compiler/external-program-reference";
+import { ExternalProgram } from "../interpreter/external-program";
+import { MutableTown } from "../town/town";
+import * as standardLibraryProgramHandlers from "./standard-library-program-handlers";
 
 /**
  * Karel standard library.

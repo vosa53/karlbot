@@ -1,11 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { ProjectDeserializer, ProjectSerializer } from "karel";
-import { API_BASE_URL } from "./api-service";
-import { SavedProject } from '../../models/saved-project';
-import { APIService } from './api-service';
+import { SavedProject } from "../../models/saved-project";
+import { APIService } from "./api-service";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class ProjectService {
     private readonly BASE_URL = "/Projects";

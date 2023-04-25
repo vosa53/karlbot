@@ -1,9 +1,9 @@
-import { Directive, ElementRef, Input } from '@angular/core';
-import { MarkdownService } from '../../application/services/markdown-service';
+import { Directive, ElementRef, Input } from "@angular/core";
+import { MarkdownService } from "../../application/services/markdown-service";
 
 @Directive({
     standalone: true,
-    selector: '[appMarkdown]'
+    selector: "[appMarkdown]"
 })
 export class MarkdownDirective {
     @Input("appMarkdown")

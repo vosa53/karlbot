@@ -1,11 +1,11 @@
-import { HttpClient, HttpContext, HttpParams, HttpRequest } from "@angular/common/http";
+import { HttpClient, HttpContext } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { lastValueFrom } from "rxjs";
 import { InjectionToken } from "@angular/core";
 import { IS_ANONYMOUS_ENDPOINT } from "../../http-context-tokens/is-anonymous-endpoint";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class APIService {
     constructor(

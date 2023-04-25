@@ -29,7 +29,7 @@ export class Parser {
      * @returns Created syntax tree.
      */
     static parseCompilationUnit(context: ParserContext, filePath: string): CompilationUnitPrimitiveNode {
-        let programs: ProgramPrimitiveNode[] = [];
+        const programs: ProgramPrimitiveNode[] = [];
         let endOfFileToken: EndOfFilePrimitiveToken | null = null;
     
         while (!(context.current instanceof EndOfFilePrimitiveToken)) {
@@ -66,7 +66,7 @@ export class Parser {
     }
     
     private static parseBlock(context: ParserContext): BlockPrimitiveNode {
-        let statements = [];
+        const statements = [];
         let endToken = null;
     
         while (!(context.current instanceof EndOfFilePrimitiveToken) && !(context.current instanceof EndPrimitiveToken)) {

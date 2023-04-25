@@ -1,11 +1,10 @@
-import { Inject, Injectable } from "@angular/core";
-import { API_BASE_URL } from "./api-service";
+import { Injectable } from "@angular/core";
 import { FirebaseRequest } from "../../models/firebase-request";
 import { FirebaseReponse } from "../../models/firebase-response";
 import { APIService } from "./api-service";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class AuthenticationService {
     private readonly BASE_URL = "/authentication";

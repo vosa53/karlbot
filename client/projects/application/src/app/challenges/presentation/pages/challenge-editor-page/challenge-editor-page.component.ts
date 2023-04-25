@@ -1,30 +1,30 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Challenge } from 'projects/application/src/app/shared/application/models/challenge';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Challenge } from "projects/application/src/app/shared/application/models/challenge";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatInputModule } from "@angular/material/input";
+import { PageComponent } from "projects/application/src/app/shared/presentation/components/page/page.component";
 import { MutableTown } from "karel";
-import { EditorChallengeTestCase } from './editor-challenge-test-case';
-import { MatIconModule } from '@angular/material/icon';
-import { ChallengeTestCaseEditorComponent } from './challenge-test-case-editor/challenge-test-case-editor.component';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { StopClickPropagationDirective } from 'projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive';
-import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
-import { MatSelectModule } from '@angular/material/select';
-import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
-import { NotificationService } from 'projects/application/src/app/shared/presentation/services/notification.service';
-import { ChallengeService } from 'projects/application/src/app/shared/application/services/api/challenge.service';
+import { EditorChallengeTestCase } from "./editor-challenge-test-case";
+import { MatIconModule } from "@angular/material/icon";
+import { ChallengeTestCaseEditorComponent } from "./challenge-test-case-editor/challenge-test-case-editor.component";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { StopClickPropagationDirective } from "projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive";
+import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
+import { MatSelectModule } from "@angular/material/select";
+import { ChallengeDifficulty } from "projects/application/src/app/shared/application/models/challenge-difficulty";
+import { NotificationService } from "projects/application/src/app/shared/presentation/services/notification.service";
+import { ChallengeService } from "projects/application/src/app/shared/application/services/api/challenge.service";
 
 @Component({
-    selector: 'app-challenge-editor-page',
+    selector: "app-challenge-editor-page",
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatInputModule, PageComponent, MatIconModule, ChallengeTestCaseEditorComponent, MatExpansionModule, MatCheckboxModule, StopClickPropagationDirective, MatSelectModule],
-    templateUrl: './challenge-editor-page.component.html',
-    styleUrls: ['./challenge-editor-page.component.css']
+    templateUrl: "./challenge-editor-page.component.html",
+    styleUrls: ["./challenge-editor-page.component.css"]
 })
 export class ChallengeEditorPageComponent {
     form = new FormGroup({

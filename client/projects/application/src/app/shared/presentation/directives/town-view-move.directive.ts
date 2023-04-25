@@ -80,12 +80,12 @@ export class TownViewMoveDirective {
 
         const zoom = Math.pow(1.2, event.deltaY / -120);
         this.zoom(event.offsetX, event.offsetY, zoom);
-    };
+    }
 
     @HostListener("contextmenu", ["$event"])
     onContextMenu(event: MouseEvent) {
         event.preventDefault();
-    };
+    }
 
     private move(deltaX: number, deltaY: number) {
         const newCenterTileX = this.townView.camera.centerTile.x - deltaX / this.townView.renderingEnvironment.tilePixelSize;

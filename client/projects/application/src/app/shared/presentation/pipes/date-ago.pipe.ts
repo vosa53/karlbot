@@ -1,8 +1,8 @@
-import { DatePipe } from '@angular/common';
-import { Inject, LOCALE_ID, Pipe, PipeTransform } from '@angular/core';
+import { DatePipe } from "@angular/common";
+import { Inject, LOCALE_ID, Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: 'appDateAgo',
+    name: "appDateAgo",
     standalone: true
 })
 export class DateAgoPipe implements PipeTransform {
@@ -32,7 +32,7 @@ export class DateAgoPipe implements PipeTransform {
         if (secondsFromNow < SECONDS_IN_DAY)
             return `${Math.floor(secondsFromNow / SECONDS_IN_HOUR)} hours ago`;
         if (secondsFromNow < 2 * SECONDS_IN_DAY)
-            return `1 day ago`;
+            return "1 day ago";
         if (secondsFromNow < SECONDS_IN_WEEK)
             return `${Math.floor(secondsFromNow / SECONDS_IN_DAY)} days ago`;
 

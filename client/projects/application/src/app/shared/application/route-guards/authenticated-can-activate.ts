@@ -17,4 +17,4 @@ export function authenticatedCanActivate(requiresAdmin = false): CanActivateFn {
         
         return true;
     }
-};
+}

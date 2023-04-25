@@ -20,7 +20,7 @@ import { TownViewComponent } from "projects/application/src/app/shared/presentat
 import { MatMenuModule } from "@angular/material/menu";
 import { CommonModule } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
-import { MatBadgeModule } from '@angular/material/badge';
+import { MatBadgeModule } from "@angular/material/badge";
 
 /**
  * Town editor.

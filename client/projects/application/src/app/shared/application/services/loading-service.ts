@@ -1,9 +1,9 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { BehaviorSubject, map, Subscription } from 'rxjs';
+import { Injectable, OnDestroy } from "@angular/core";
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from "@angular/router";
+import { BehaviorSubject, map, Subscription } from "rxjs";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class LoadingService implements OnDestroy {
     private readonly loadingCount = new BehaviorSubject(0);

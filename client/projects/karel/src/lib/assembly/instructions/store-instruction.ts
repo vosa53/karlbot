@@ -1,4 +1,4 @@
-import { Instruction } from './instruction';
+import { Instruction } from "./instruction";
 
 /**
  * Instruction to store the value from the top of the evaluation stack to the variable.

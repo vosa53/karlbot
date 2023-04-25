@@ -4,7 +4,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSelectModule } from "@angular/material/select";
 import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from "@angular/material/button";
 import { MatDividerModule } from "@angular/material/divider";
 import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
 import { ValidatedInputValidator } from "projects/application/src/app/shared/presentation/directives/validated-input.directive";
@@ -22,16 +22,16 @@ export class HeaderComponent {
     runState = RunState.ready;
 
     @Input()
-    projectName: string = "";
+    projectName = "";
 
     @Input()
-    isProjectOwn: boolean = false;
+    isProjectOwn = false;
 
     @Input()
     availableEntryPoints: string[] = [];
 
     @Input()
-    entryPoint: string = "";
+    entryPoint = "";
 
     @Input()
     canUndo = false;

@@ -1,14 +1,13 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 import { TownDeserializer } from "karel";
 import { TownSerializer } from "karel";
-import { API_BASE_URL } from "./api-service";
-import { Challenge } from '../../models/challenge';
-import { ChallengeDifficulty } from '../../models/challenge-difficulty';
-import { ChallengeSubmissionsInfo } from '../../models/challenge-submissions.info';
-import { APIService } from './api-service';
+import { Challenge } from "../../models/challenge";
+import { ChallengeDifficulty } from "../../models/challenge-difficulty";
+import { ChallengeSubmissionsInfo } from "../../models/challenge-submissions.info";
+import { APIService } from "./api-service";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class ChallengeService {
     private readonly BASE_URL = "/Challenges";

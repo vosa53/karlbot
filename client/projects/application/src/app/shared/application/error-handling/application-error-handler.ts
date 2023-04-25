@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from "@angular/common/http";
-import { ErrorHandler, inject, Injectable, isDevMode, NgZone } from "@angular/core";
+import { ErrorHandler, Injectable, isDevMode, NgZone } from "@angular/core";
 import { DialogService } from "../../presentation/services/dialog.service";
 import { NotificationService } from "../../presentation/services/notification.service";
 

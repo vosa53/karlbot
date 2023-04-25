@@ -1,7 +1,7 @@
-import { Event } from '../event';
-import { Vector } from '../math/vector';
-import { TownDirection } from './town-direction';
-import { TownTile } from './town-tile';
+import { Event } from "../event";
+import { Vector } from "../math/vector";
+import { TownDirection } from "./town-direction";
+import { TownTile } from "./town-tile";
 
 /**
  * Karel town.

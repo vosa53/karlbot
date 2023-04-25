@@ -1,4 +1,3 @@
-import { Town } from "../town/town";
 import { TownSerializer } from "../town/town-serializer";
 import { CodeFile } from "./code-file";
 import { File } from "./file";

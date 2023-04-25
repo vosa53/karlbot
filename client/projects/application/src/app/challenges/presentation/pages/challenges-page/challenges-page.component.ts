@@ -1,25 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Challenge } from 'projects/application/src/app/shared/application/models/challenge';
-import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
-import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
-import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
-import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
-import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
-import { firstValueFrom } from 'rxjs';
-import { ChallengeStatusComponent } from '../../components/challenge-status/challenge-status.component';
-import { ChallengeService } from 'projects/application/src/app/shared/application/services/api/challenge.service';
+import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Challenge } from "projects/application/src/app/shared/application/models/challenge";
+import { RouterModule } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTableModule } from "@angular/material/table";
+import { PageComponent } from "projects/application/src/app/shared/presentation/components/page/page.component";
+import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
+import { ChallengeDifficultyComponent } from "../../components/challenge-difficulty/challenge-difficulty.component";
+import { SignInService } from "projects/application/src/app/shared/application/services/sign-in.service";
+import { ChallengeDifficulty } from "projects/application/src/app/shared/application/models/challenge-difficulty";
+import { firstValueFrom } from "rxjs";
+import { ChallengeStatusComponent } from "../../components/challenge-status/challenge-status.component";
+import { ChallengeService } from "projects/application/src/app/shared/application/services/api/challenge.service";
 
 @Component({
-    selector: 'app-challenges-page',
+    selector: "app-challenges-page",
     standalone: true,
     imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatTableModule, PageComponent, ChallengeDifficultyComponent, ChallengeStatusComponent],
-    templateUrl: './challenges-page.component.html',
-    styleUrls: ['./challenges-page.component.css']
+    templateUrl: "./challenges-page.component.html",
+    styleUrls: ["./challenges-page.component.css"]
 })
 export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] | null = null;

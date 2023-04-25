@@ -3,7 +3,7 @@ import { DialogService } from "../../../shared/presentation/services/dialog.serv
 import { ShareDialogComponent } from "../pages/editor-page/share-dialog/share-dialog.component";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class EditorDialogService {
     constructor(private readonly dialogService: DialogService) { }

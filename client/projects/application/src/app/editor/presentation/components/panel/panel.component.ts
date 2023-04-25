@@ -11,5 +11,5 @@ import { MatDividerModule } from "@angular/material/divider";
 })
 export class PanelComponent {
     @Input()
-    header: string = "";
+    header = "";
 }

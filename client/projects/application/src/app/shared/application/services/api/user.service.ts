@@ -1,10 +1,9 @@
-import { Inject, Injectable } from '@angular/core';
-import { API_BASE_URL } from "./api-service";
-import { User } from '../../models/user';
-import { APIService } from './api-service';
+import { Injectable } from "@angular/core";
+import { User } from "../../models/user";
+import { APIService } from "./api-service";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class UserService {
     private readonly BASE_URL = "/Users";

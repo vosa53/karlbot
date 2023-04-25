@@ -1,4 +1,3 @@
-import { EndOfFilePrimitiveToken } from "../syntax-tree/tokens/end-of-file-token";
 import { PrimitiveToken } from "../syntax-tree/tokens/token";
 
 /**

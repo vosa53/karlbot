@@ -14,4 +14,4 @@ export function anonymousCanActivate(): CanActivateFn {
         else
             return router.parseUrl("/projects");
     }
-};
+}

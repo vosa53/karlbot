@@ -6,7 +6,7 @@ import { MessageDialogComponent } from "../components/message-dialog/message-dia
 import { PromptDialogComponent, PromptDialogValidator } from "../components/prompt-dialog/prompt-dialog.component";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class DialogService {
     constructor(private readonly dialog: MatDialog) { }

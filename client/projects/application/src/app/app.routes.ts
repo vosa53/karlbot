@@ -1,6 +1,6 @@
-import { Routes } from '@angular/router';
-import { authenticatedCanActivate } from './shared/application/route-guards/authenticated-can-activate';
-import { NotFoundPageComponent } from './shared/presentation/pages/not-found-page/not-found-page.component';
+import { Routes } from "@angular/router";
+import { authenticatedCanActivate } from "./shared/application/route-guards/authenticated-can-activate";
+import { NotFoundPageComponent } from "./shared/presentation/pages/not-found-page/not-found-page.component";
 
 export const appRoutes: Routes = [
     {

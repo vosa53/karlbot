@@ -1,4 +1,4 @@
-import { Checker, Compilation, CompilationUnitParser, Emitter, Interpreter, InterpretStopToken, MutableTown, StandardLibrary, TownDirection, TownSerializer, TownTile, Vector, NormalInterpretResult } from "../public-api";
+import { Checker, Compilation, CompilationUnitParser, Emitter, Interpreter, InterpretStopToken, MutableTown, StandardLibrary, TownDirection, TownTile, Vector, NormalInterpretResult } from "../public-api";
 
 describe("End to end tests", () => {
     it("One step", async () => {
@@ -212,14 +212,14 @@ function createTown(text: string): MutableTown {
     for (let y = 0; y < town.height; y++) {
         for (let x = 0; x < town.width; x++) {
             const character = lines[y][x];
-            if (character === 'x') town.setTileAt(x, y, TownTile.wall);
-            if (character === 'U' || character === 'R' || character === 'D' || character === 'L') town.karelPosition = new Vector(x, y);
-            if (character === 'U') town.karelDirection = TownDirection.up;
-            if (character === 'R') town.karelDirection = TownDirection.right;
-            if (character === 'D') town.karelDirection = TownDirection.down;
-            if (character === 'L') town.karelDirection = TownDirection.left;
-            if (character === 'H') town.homePosition = new Vector(x, y);
-            if (character >= '0' && character <= '9') town.setSignCountAt(x, y, parseInt(character, 10));
+            if (character === "x") town.setTileAt(x, y, TownTile.wall);
+            if (character === "U" || character === "R" || character === "D" || character === "L") town.karelPosition = new Vector(x, y);
+            if (character === "U") town.karelDirection = TownDirection.up;
+            if (character === "R") town.karelDirection = TownDirection.right;
+            if (character === "D") town.karelDirection = TownDirection.down;
+            if (character === "L") town.karelDirection = TownDirection.left;
+            if (character === "H") town.homePosition = new Vector(x, y);
+            if (character >= "0" && character <= "9") town.setSignCountAt(x, y, parseInt(character, 10));
         }
     }
     return town;
@@ -229,6 +229,6 @@ function dedent(text: string) {
     const lines = text.split("\n");
     lines.splice(0, 1);
     lines.pop();
-    const indentationLength = lines[0].match(/^[ ]*/)?.[0].length!;
+    const indentationLength = lines[0].match(/^[ ]*/)?.[0].length ?? 0;
     return lines.map(l => l.substring(indentationLength)).join("\n");
 }

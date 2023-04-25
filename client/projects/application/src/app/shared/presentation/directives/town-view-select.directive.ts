@@ -133,7 +133,7 @@ export class TownViewSelectDirective {
     @HostListener("contextmenu", ["$event"])
     onContextMenu(event: MouseEvent) {
         event.preventDefault();
-    };
+    }
 
     private render(context: CanvasRenderingContext2D) {
         const town = this.townView.town;

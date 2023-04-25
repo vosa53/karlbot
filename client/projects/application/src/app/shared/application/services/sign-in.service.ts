@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { FirebaseError } from '@angular/fire/app';
-import { Auth, authState, signOut, GoogleAuthProvider, signInWithPopup, User as FirebaseUser } from '@angular/fire/auth';
-import { distinctUntilChanged, firstValueFrom, from, mergeMap, of, shareReplay, skip } from 'rxjs';
-import { AuthenticationService } from './api/authentication.service';
-import { UserService } from './api/user.service';
+import { Injectable } from "@angular/core";
+import { FirebaseError } from "@angular/fire/app";
+import { Auth, authState, signOut, GoogleAuthProvider, signInWithPopup, User as FirebaseUser } from "@angular/fire/auth";
+import { distinctUntilChanged, firstValueFrom, from, mergeMap, of, shareReplay, skip } from "rxjs";
+import { AuthenticationService } from "./api/authentication.service";
+import { UserService } from "./api/user.service";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class SignInService {
     readonly currentUserToken$ = authState(this.firebaseAuthentication).pipe(

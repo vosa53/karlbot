@@ -123,15 +123,11 @@ namespace Infrastructure.Tests.Repositories
         }
 
         protected abstract DbContextRepository<TEntity, TKey> CreateRepository(ApplicationDbContext dbContext);
-
         protected abstract void AssertEquals(TEntity expected, TEntity actual);
-
         protected abstract TEntity CreateEntity();
-
         protected abstract void UpdateEntity(TEntity entity);
         protected abstract IList<TEntity> GetAllEntities();
         protected abstract TKey GetEntityId(TEntity entity);
-
         protected abstract TKey GetNotUsedEntityId();
     }
 }

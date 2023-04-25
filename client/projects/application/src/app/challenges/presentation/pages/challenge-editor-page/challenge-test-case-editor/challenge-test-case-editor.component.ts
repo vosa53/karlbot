@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { EditorChallengeTestCase } from '../editor-challenge-test-case';
-import { TownCamera } from 'projects/application/src/app/shared/presentation/town/town-camera';
-import { TownEditorComponent } from 'projects/application/src/app/shared/presentation/components/town-editor/town-editor.component';
-import { MatChipsModule } from '@angular/material/chips';
+import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { EditorChallengeTestCase } from "../editor-challenge-test-case";
+import { TownCamera } from "projects/application/src/app/shared/presentation/town/town-camera";
+import { TownEditorComponent } from "projects/application/src/app/shared/presentation/components/town-editor/town-editor.component";
+import { MatChipsModule } from "@angular/material/chips";
 import { MutableTown, Vector } from "karel";
 
 @Component({
-    selector: 'app-challenge-test-case-editor',
+    selector: "app-challenge-test-case-editor",
     standalone: true,
     imports: [CommonModule, TownEditorComponent, MatChipsModule],
-    templateUrl: './challenge-test-case-editor.component.html',
-    styleUrls: ['./challenge-test-case-editor.component.css']
+    templateUrl: "./challenge-test-case-editor.component.html",
+    styleUrls: ["./challenge-test-case-editor.component.css"]
 })
 export class ChallengeTestCaseEditorComponent {
     @Input()

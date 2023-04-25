@@ -5,8 +5,8 @@ import { ErrorListComponent } from "./error-list/error-list.component";
 import { FileExplorerComponent } from "./file-explorer/file-explorer.component";
 import { HeaderComponent } from "./header/header.component";
 import { SettingsComponent } from "./settings/settings.component";
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatTabsModule, MAT_TABS_CONFIG } from '@angular/material/tabs';
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { MatTabsModule, MAT_TABS_CONFIG } from "@angular/material/tabs";
 import { ActivatedRoute } from "@angular/router";
 import { CallStackComponent } from "./call-stack/call-stack.component";
 import { CodeEditorComponent } from "projects/application/src/app/shared/presentation/components/code-editor/code-editor.component";
@@ -28,7 +28,7 @@ export class EditorPageComponent {
     codeEditor: CodeEditorComponent | null = null;
 
     readonly completionItemsProvider = (line: number, column: number) => this.editorService.provideCompletionItems(line, column);
-    isSmallScreen: boolean = false;
+    isSmallScreen = false;
 
     readonly selectedTabIndex$ = this.editorService.activeArea$.pipe(map(a => {
         if (a === EditorArea.files || a === EditorArea.settings)

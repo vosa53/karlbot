@@ -1,4 +1,4 @@
-import { Instruction } from './instructions/instruction';
+import { Instruction } from "./instructions/instruction";
 
 /**
  * Program.

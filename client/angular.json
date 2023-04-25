@@ -182,6 +182,15 @@
               "zone.js/testing"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/karel-evaluation/**/*.ts",
+              "projects/karel-evaluation/**/*.html"
+            ]
+          }
         }
       }
     }

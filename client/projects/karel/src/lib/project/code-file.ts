@@ -1,5 +1,5 @@
-import { CompilationUnitNode } from '../compiler/syntax-tree/nodes/compilation-unit-node';
-import { File } from './file';
+import { CompilationUnitNode } from "../compiler/syntax-tree/nodes/compilation-unit-node";
+import { File } from "./file";
 
 /**
  * Code file.

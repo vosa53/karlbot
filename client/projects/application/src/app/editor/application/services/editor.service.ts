@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { Location } from "@angular/common";
+import { Injectable } from "@angular/core";
 import { CompletionItem } from "karel";
 import { CodeFile } from "karel";
 import { File } from "karel";
@@ -8,16 +8,16 @@ import { Settings } from "karel";
 import { TownFile } from "karel";
 import { StandardLibrary } from "karel";
 import { ProjectDeserializer } from "karel";
-import { BehaviorSubject, combineLatest, firstValueFrom, map } from 'rxjs';
-import { SavedProject } from '../../../shared/application/models/saved-project';
-import { ProjectService } from '../../../shared/application/services/api/project.service';
-import { SignInService } from '../../../shared/application/services/sign-in.service';
-import { DialogService } from '../../../shared/presentation/services/dialog.service';
-import { NotificationService } from '../../../shared/presentation/services/notification.service';
-import { TownCamera } from '../../../shared/presentation/town/town-camera';
-import { EditorDialogService } from '../../presentation/services/editor-dialog.service';
-import { ProjectEditorService } from './project-editor.service';
-import { RunService, RunState } from './run.service';
+import { BehaviorSubject, combineLatest, firstValueFrom, map } from "rxjs";
+import { SavedProject } from "../../../shared/application/models/saved-project";
+import { ProjectService } from "../../../shared/application/services/api/project.service";
+import { SignInService } from "../../../shared/application/services/sign-in.service";
+import { DialogService } from "../../../shared/presentation/services/dialog.service";
+import { NotificationService } from "../../../shared/presentation/services/notification.service";
+import { TownCamera } from "../../../shared/presentation/town/town-camera";
+import { EditorDialogService } from "../../presentation/services/editor-dialog.service";
+import { ProjectEditorService } from "./project-editor.service";
+import { RunService, RunState } from "./run.service";
 
 @Injectable()
 export class EditorService {

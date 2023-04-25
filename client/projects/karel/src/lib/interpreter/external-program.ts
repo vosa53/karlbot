@@ -1,5 +1,5 @@
-import { ExternalProgramException } from './external-program-exception';
-import { InterpretStopToken } from './interpret-stop-token'
+import { ExternalProgramException } from "./external-program-exception";
+import { InterpretStopToken } from "./interpret-stop-token"
 
 /**
  * External program.
