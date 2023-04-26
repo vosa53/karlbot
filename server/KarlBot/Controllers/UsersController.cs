@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace KarlBot.Controllers
 {
@@ -33,13 +34,13 @@ namespace KarlBot.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
-                throw new Exception();
+                throw new UnreachableException();
 
             return new UserDataModel
             {
                 Id = user.Id,
                 Email = user.Email!,
-                IsAdmin = User.IsInRole("Admin")
+                IsAdmin = User.IsInRole(RoleNames.Admin)
             };
         }
     }
