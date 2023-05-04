@@ -9,7 +9,7 @@
             <div class="difficulty mat-subtitle-1">
                 <app-challenge-difficulty [difficulty]="challenge.difficulty"></app-challenge-difficulty>
             </div>
-            <div [appMarkdown]="challenge.description"></div>
+            <app-markdown-view [source]="challenge.description"></app-markdown-view>
 
             <h2 *ngIf="challengeTestCases.length !== 0">Examples</h2>
             <div class="test-cases">

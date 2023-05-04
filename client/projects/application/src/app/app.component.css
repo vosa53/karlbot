@@ -71,9 +71,10 @@
     margin-right: 32px;
 }
 
-.drawer-dark-mode-switch {
-    margin-left: 24px;
-    margin-bottom: 32px;
+.drawer-footer {
+    display: flex;
+    align-items: center;
+    margin: 0 12px 18px 24px;
 }
 
 .content {
@@ -109,6 +110,10 @@
     }
 
     .app-bar-dark-mode-switch {
+        display: none;
+    }
+
+    .app-bar-dark-user-guide-button {
         display: none;
     }
 }

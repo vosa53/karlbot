@@ -15,7 +15,6 @@ import { PageComponent } from "projects/application/src/app/shared/presentation/
 import { ChallengeSubmissionComponent } from "./challenge-submission/challenge-submission.component";
 import { ChallengeTestCase } from "projects/application/src/app/shared/application/models/challenge-test-case";
 import { TownViewComponent } from "projects/application/src/app/shared/presentation/components/town-view/town-view.component";
-import { MarkdownDirective } from "projects/application/src/app/shared/presentation/directives/markdown-directive";
 import { ChallengeDifficultyComponent } from "../../components/challenge-difficulty/challenge-difficulty.component";
 import { NotificationService } from "projects/application/src/app/shared/presentation/services/notification.service";
 import { User } from "projects/application/src/app/shared/application/models/user";
@@ -26,11 +25,12 @@ import { ChallengeSubmissionEvaluationResult } from "projects/application/src/ap
 import { ChallengeService } from "projects/application/src/app/shared/application/services/api/challenge.service";
 import { ChallengeSubmissionService } from "projects/application/src/app/shared/application/services/api/challenge-submission-service";
 import { ProjectService } from "projects/application/src/app/shared/application/services/api/project.service";
+import { MarkdownViewComponent } from "projects/application/src/app/shared/presentation/components/markdown-view/markdown-view.component";
 
 @Component({
     selector: "app-challenge-page",
     standalone: true,
-    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownDirective, ChallengeDifficultyComponent, TownViewFitContainDirective, ChallengeStatusComponent],
+    imports: [CommonModule, MatButtonModule, MatIconModule, PageComponent, ChallengeSubmissionComponent, TownViewComponent, MarkdownViewComponent, ChallengeDifficultyComponent, TownViewFitContainDirective, ChallengeStatusComponent],
     templateUrl: "./challenge-page.component.html",
     styleUrls: ["./challenge-page.component.css"]
 })
