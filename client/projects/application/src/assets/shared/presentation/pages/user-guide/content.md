@@ -1,14 +1,19 @@
-KarlBot is a development environment for educational programming language [Karel](/assets/shared/presentation/pages/user-guide/town.png). It has following features:
+KarlBot is a development environment for educational programming language [Karel](https://compedu.stanford.edu/karel-reader/docs/python/en/chapter1.html). Karel's original author is Professor Richard Pattis, but since then many more or less similar variants have been created and this is one of them. It has the following features:
 
 - Syntax highlighting (not in this guide yet 🙁)
 - Code completion
 - Automatic indentation
 - Error checking
 - Advanced town editor
-- Saving and sharing projects on server
-- Debugger
+- Running Karel's program
+- Saving projects on the server
+- Saving projects locally
+- Sharing projects via URL
+- Debugger with stepping, breakpoints and call stack view 
 - Automatically evaluated challenges
 - Mobile phones support
+
+This guide is divided into three parts, first describes the programming language, second the application from user's point of view and third for interest from administrator's point of view. 
 
 ## Karel's world
 
@@ -28,11 +33,11 @@ Karel is a simple robot. He has only two commands for movement.
 He can also mark the tile where he stands with a sign. A maximum of 8 signs can fit on a tile.
 
 - `put`: Puts one sign on the tile where Karel stands.
-- `pick`: Picks one sign from tile where Karel stands.
+- `pick`: Picks one sign from the tile where Karel stands.
 
 ### Programs
 
-Yes, karel commands are simple, however you can create your own, more complex. Also every Karel's command has to be in some program.
+Yes, Karel commands are simple, however, you can create your own, more complex. Also, every Karel's command has to be in some program.
 
 ```
 program myProgram
@@ -44,7 +49,7 @@ end
 
 ### If statements
 
-If statements allows Karel to execute different commands based on some condition. Basic if statement can look like this:
+If statements allow Karel to execute different commands based on some condition. Basic if statement can look like this:
 
 ```
 if is sign
@@ -60,7 +65,7 @@ if not sign
 end
 ```
 
-Sometimes it's useful to execute something in both cases, positive and negative one. You can write two opposite conditions, but Karel provides an easier way:
+Sometimes it's useful to execute something in both cases, positive and negative. You can write two opposite conditions, but Karel provides an easier way:
 
 ```
 if not wall
@@ -74,9 +79,9 @@ end
 
 ### Commands for testing
 
-As conditions you can use various commands.
+As conditions, you can use various commands.
 
-Firstly, Karel is able to recognize world direction he is facing:
+Firstly, Karel is able to recognize the world direction he is facing:
 
 - `norht`: Checks if he faces north. 
 - `east`: Checks if he faces east.
@@ -86,12 +91,12 @@ Firstly, Karel is able to recognize world direction he is facing:
 He can also make decisions based on his surroundings.
 
 - `sign`: Checks if on the tile before Karel is a sign.
-- `wall`: Checks if before Karel is wall.
+- `wall`: Checks if before Karel is a wall.
 - `home`: Checks if Karel is home.
 
 ### Loops
 
-Copying commands every time you need to execute them more times would not be much fun. That is the reason Karel has `repeat` loop:
+Copying commands every time you need to execute them more times wouldn't be much fun. That is the reason Karel has `repeat` loop:
 
 ```
 repeat 8 times
@@ -99,7 +104,7 @@ repeat 8 times
 end
 ```
 
-Repeat loop looks good, but what if you doesn't know beforehand how many times you want to execute it? `while` loop comes as a solution:
+Repeat loop looks good, but what if you don't know beforehand how many times you want to execute it? `while` loop comes as a solution:
 
 ```
 while not wall
@@ -109,11 +114,11 @@ end
 
 ### Exceptions
 
-Karel is not much careful and can easily damage himself. He does everything you tell him, and so for example when you instruct him to go to wall he does it. In that time Karel program stops and *exception* is thrown. Another exceptions occurs when Karel tries to pick sign from a tile where is not any and when Karel tries to put on a tile more signs than 8.
+Karel is not much careful and can easily damage himself. He does everything you tell him, and so for example when you instruct him to go to the wall he does it. At that time Karel program stops and *an exception* is thrown. Other exceptions occur when Karel tries to pick sign from a tile where are not any and when Karel tries to put on a tile more signs than 8.
 
 ### Recursion
 
-Karel does not have variables like common programming languages. Hovewer this does not prevent from implementing sligthly more advanced algorithms. Tool that used in many cases instead is *recursion*. Recursion is ability of program to call itself. On first thought it can look useless but if you combine it with conditions some advanced algorithms can be created. Most basic example of recursion can look like this:
+Karel does not have variables like common programming languages. However, this does not prevent from implementing slightly more advanced algorithms. A tool that can be used in many cases instead is *recursion*. Recursion is the ability of a program to call itself. At first thought it can look useless but if you combine it with conditions some advanced algorithms can be created. The most basic example of recursion can look like this:
 
 ```
 program toWall
@@ -124,4 +129,53 @@ program toWall
 end
 ```
 
-This is a recursive version of *iterative* program shown on the previous code example.
+This is a recursive version of the *iterative* program shown in the previous code example.
+
+## Using the application
+
+KarlBot uses the concept of *projects*. The project is a container that consists of settings and files. Files can be of two types: 
+
+- *Code file*: Contains Karel's program.
+- *Town file*: Contains Karel's town.
+
+![](/assets/shared/presentation/pages/user-guide/editor.png)
+
+Projects can be edited on a page called *Editor*. This page is composed of several panels:
+
+- *File Explorer*: Here you can manage files in your project and open them. You can only have open one of each type at the same time.
+- *Code Editor*: Allows to edit code in current code file. You can take advantage of syntax highlighting, code completion, automatic indentation and error checking.
+- *Town Editor*: Allows to edit town in current town file. In addition to common editing features it has some more advanced too, like rectangular selection, pan and zoom.
+- *Settings*: At this panel, you can specify run settings.
+- *Error List*: Shows syntax errors while you are typing.
+- *Call Stack View*: Shown instead of the error list when the program is paused. Displays the state of the call stack.
+- *Header*: Contains buttons for frequently used actions and menus that contain them all.
+
+To run the code you must select one of the defined programs as an entry point and press either the *Run* or *Run Read-only* button. The only difference is that the read-only version reverts the town back when the program ends.
+
+When the program is running you can pause or stop it. In paused state, you can use the debugger. Another way to pause the program is to put a breakpoint on some of its lines. Debugger provides multiple options for stepping:
+
+- *Step Into*: 
+- *Step Over*:  
+- *Step Out*:  
+
+Don't forget to save the project. The project can be saved either locally into your computer (*Export* button) or online on the application server (*Save* button). For the second option, you have to be signed in.
+
+Also for all remaining features, you have to sign in on *Sign in* page. At this time, the only option is via Google account.
+
+![](/assets/shared/presentation/pages/user-guide/sign-in.png)
+
+After you save the project on the server you can see it on *Projects* page. Here you can also create new or delete some existing ones. If you really like some of your projects you can share it with somebody via URL. That can be done on the editor page with *share* button.
+
+![](/assets/shared/presentation/pages/user-guide/projects.png)
+
+If you think you grasped the basics you can test your knowledge and compete with others in challenges. A list of all challenges is available on the *Challenges* page. Each challenge has difficulty, which can help you to choose. You can also see how many people have the challenge completed and your status of completion represented by icon next to the challenge name.
+
+![](/assets/shared/presentation/pages/user-guide/challenges.png)
+
+On the page *Challenge* you can see challenge assignment and example test cases. Here you can also send one of your **previously** created projects as a solution. The application then immediately evaluates it and shows you the result.
+
+![](/assets/shared/presentation/pages/user-guide/challenge.png)
+
+Only administrator are allowed to create challenges, but just for curiosity you can look how they do it. 
+
+![](/assets/shared/presentation/pages/user-guide/challenge-editor.png)
