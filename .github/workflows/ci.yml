@@ -63,7 +63,7 @@ jobs:
     - name: Test server
       run: |
         cd server
-        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1401;Initial Catalog=KarlBotTest;User Id=sa;Password=TestDatabasePassword;TrustServerCertificate=True"
+        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Data Source=localhost,1401;Initial Catalog=KarlBotTest;User Id=sa;Password=TestDatabasePassword;TrustServerCertificate=True"
         
         
         
