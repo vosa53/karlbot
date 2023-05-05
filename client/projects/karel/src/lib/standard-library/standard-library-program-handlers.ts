@@ -1,11 +1,10 @@
-import { InterpretStopToken } from '../interpreter/interpret-stop-token';
-import { Exception } from '../interpreter/exception';
-import { MutableTown } from '../town/town';
-import { TownTile } from '../town/town-tile';
-import { Vector } from '../math/vector';
-import { TownDirectionUtils } from '../town/town-direction-utils';
-import { TownDirection } from '../town/town-direction';
-import { ExternalProgramException } from '../interpreter/external-program-exception';
+import { InterpretStopToken } from "../interpreter/interpret-stop-token";
+import { MutableTown } from "../town/town";
+import { TownTile } from "../town/town-tile";
+import { Vector } from "../math/vector";
+import { TownDirectionUtils } from "../town/town-direction-utils";
+import { TownDirection } from "../town/town-direction";
+import { ExternalProgramException } from "../interpreter/external-program-exception";
 
 /**
  * Karel 'step' program.

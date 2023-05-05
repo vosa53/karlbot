@@ -1,12 +1,5 @@
 import { ExternalProgramReference } from "./external-program-reference";
-import { CallNode } from "./syntax-tree/nodes/call-node";
 import { CompilationUnitNode } from "./syntax-tree/nodes/compilation-unit-node";
-import { Node } from "./syntax-tree/nodes/node";
-import { ProgramNode } from "./syntax-tree/nodes/program-node";
-import { AmbiguousSymbol } from "./symbols/ambiguous-symbol";
-import { ExternalProgramSymbol } from "./symbols/external-program-symbol";
-import { ProgramSymbol } from "./symbols/program-symbol";
-import { Symbol_ } from "./symbols/symbol";
 import { SymbolTable } from "./semantic-analysis/symbol-table";
 
 /**

@@ -1,12 +1,12 @@
 import { ComponentType } from "@angular/cdk/portal";
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
-import { ConfirmationDialogComponent } from "../components/confirm-dialog/confirmation-dialog.component";
+import { ConfirmationDialogComponent } from "../components/confirmation-dialog/confirmation-dialog.component";
 import { MessageDialogComponent } from "../components/message-dialog/message-dialog.component";
 import { PromptDialogComponent, PromptDialogValidator } from "../components/prompt-dialog/prompt-dialog.component";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class DialogService {
     constructor(private readonly dialog: MatDialog) { }

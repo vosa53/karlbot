@@ -1,5 +1,5 @@
-import { TownViewSelectionEvent, TownViewSelectionMode } from "projects/application/src/app/shared/presentation/directives/town-view-select.directive";
-import { MutableTown } from "projects/karel/src/lib/town/town";
+import { TownViewSelectionEvent } from "projects/application/src/app/shared/presentation/directives/town-view-select.directive";
+import { MutableTown } from "karel";
 import { TownEditorTool } from "./town-editor-tool";
 
 /**

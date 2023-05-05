@@ -1,6 +1,6 @@
 <mat-toolbar class="menu">
-    <button mat-button [matMenuTriggerFor]="fileMenu">Project</button>
-    <mat-menu #fileMenu="matMenu">
+    <button mat-button [matMenuTriggerFor]="projectMenu">Project</button>
+    <mat-menu #projectMenu="matMenu">
         <button mat-menu-item (click)="newClick.emit()">
             <mat-icon>add</mat-icon>
             New
@@ -10,14 +10,14 @@
             Save
         </button>
 
-        <mat-divider style="margin: 6px 20px;"></mat-divider>
+        <mat-divider class="menu-divider"></mat-divider>
 
         <button mat-menu-item (click)="shareClick.emit()" [disabled]="!isProjectOwn">
             <mat-icon>share</mat-icon>
             Share
         </button>
 
-        <mat-divider style="margin: 6px 20px;"></mat-divider>
+        <mat-divider class="menu-divider"></mat-divider>
 
         <button mat-menu-item (click)="importClick.emit()" [disabled]="!isProjectOwn">
             <mat-icon>upload</mat-icon>
@@ -49,7 +49,7 @@
         </button>
         <button mat-menu-item *ngIf="runState === 'ready'" (click)="runReadonlyClick.emit()">
             <mat-icon>play_arrow</mat-icon>
-            Run read-only
+            Run Read-only
         </button>
 
         <button mat-menu-item *ngIf="runState === 'running' || runState === 'paused'" (click)="stopClick.emit()">
@@ -65,23 +65,23 @@
             <mat-icon>play_arrow</mat-icon>
             Continue
         </button>
-        <mat-divider *ngIf="runState === 'paused'" style="margin: 6px 20px;"></mat-divider>
+        <mat-divider *ngIf="runState === 'paused'" class="menu-divider"></mat-divider>
         <button mat-menu-item *ngIf="runState === 'paused'" (click)="stepIntoClick.emit()">
             <mat-icon>step_into</mat-icon>
-            Step into
+            Step Into
         </button>
         <button mat-menu-item *ngIf="runState === 'paused'" (click)="stepOverClick.emit()">
             <mat-icon>step_over</mat-icon>
-            Step over
+            Step Over
         </button>
         <button mat-menu-item *ngIf="runState === 'paused'" (click)="stepOutClick.emit()">
             <mat-icon>step_out</mat-icon>
-            Step out
+            Step Out
         </button>
     </mat-menu>
 
-    <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center;">
-        <span class="mat-subtitle-1" style="margin: 0; opacity: 0.4;" (click)="onChangeProjectNameClick()">{{projectName}}</span>
+    <div class="project-name">
+        <span class="project-name-text mat-subtitle-1" (click)="onChangeProjectNameClick()">{{projectName}}</span>
     </div>
 </mat-toolbar>
 
@@ -97,8 +97,8 @@
         <mat-icon>redo</mat-icon>
     </button>
 
-    <mat-form-field *ngIf="runState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="disable-form-underline transparent-form-background">
-        <mat-label>Entry point</mat-label>
+    <mat-form-field *ngIf="runState === 'ready'" appearance="fill" subscriptSizing="dynamic" class="form-field-without-underline form-field-transparent-background">
+        <mat-label>Entry Point</mat-label>
         <mat-select [value]="entryPoint" (selectionChange)="entryPointChange.emit($event.value)">
             <mat-option *ngFor="let availableEntryPoint of availableEntryPoints" [value]="availableEntryPoint">
                 {{availableEntryPoint}}
@@ -112,7 +112,7 @@
     </button>
     <button mat-button *ngIf="runState === 'ready'" (click)="runReadonlyClick.emit()">
         <mat-icon>play_arrow</mat-icon>
-        Run read-only
+        Run Read-only
     </button>
 
     <button mat-button *ngIf="runState === 'running' || runState === 'paused'" (click)="stopClick.emit()">
@@ -130,18 +130,18 @@
     </button>
     <button mat-button *ngIf="runState === 'paused'" (click)="stepIntoClick.emit()">
         <mat-icon>step_into</mat-icon>
-        Step into
+        Step Into
     </button>
     <button mat-button *ngIf="runState === 'paused'" (click)="stepOverClick.emit()">
         <mat-icon>step_over</mat-icon>
-        Step over
+        Step Over
     </button>
     <button mat-button *ngIf="runState === 'paused'" (click)="stepOutClick.emit()">
         <mat-icon>step_out</mat-icon>
-        Step out
+        Step Out
     </button>
 
-    <div style="flex-grow: 1;"></div>
+    <div class="toolbar-spacer"></div>
 
     <button mat-icon-button *ngIf="runState === 'ready'" (click)="shareClick.emit()" [disabled]="!isProjectOwn">
         <mat-icon>share</mat-icon>

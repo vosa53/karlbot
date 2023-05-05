@@ -1,18 +1,23 @@
 <ng-template #title>
     <div class="title">
-        <img class="title-icon" src="assets/logo.png" alt="">
+        <img class="title-icon" src="assets/logo.png" alt="KarlBot application logo">
         <span class="title-text">KarlBot</span>
     </div>
 </ng-template>
 
 <ng-template #darkModeSwitch>
-    <mat-slide-toggle [checked]="(colorThemeService.colorTheme$ | async) === 'dark'"
-        (change)="onColorThemeChange($event.checked)">
-        <span style="margin-left: 4px;">Dark mode</span>
+    <mat-slide-toggle [checked]="(colorThemeService.colorTheme$ | async) === 'dark'" (change)="onColorThemeChange($event.checked)">
+        <span class="dark-mode-switch-text">Dark Mode</span>
     </mat-slide-toggle>
 </ng-template>
 
-<mat-sidenav-container style="height: 100%;">
+<ng-template #userGuideButton>
+    <a mat-icon-button routerLink="/user-guide" (click)="drawer.close()">
+        <mat-icon>help</mat-icon>
+    </a>
+</ng-template>
+
+<mat-sidenav-container class="drawer-and-content-wrapper">
     <mat-sidenav #drawer mode="over">
         <div class="drawer">
             <div class="drawer-header">
@@ -33,13 +38,15 @@
                     Challenges
                 </a>
             </div>
-            <div style="flex-grow: 1;"></div>
-            <div class="drawer-dark-mode-switch">
+            <div class="spacer"></div>
+            <div class="drawer-footer">
                 <ng-container *ngTemplateOutlet="darkModeSwitch"></ng-container>
+                <div class="spacer"></div>
+                <ng-container *ngTemplateOutlet="userGuideButton"></ng-container>
             </div>
         </div>
     </mat-sidenav>
-    <mat-sidenav-content class="container">
+    <mat-sidenav-content class="content">
         <mat-toolbar color="primary" class="app-bar">
             <button mat-icon-button class="app-bar-drawer-trigger" (click)="drawer.toggle()">
                 <mat-icon>menu</mat-icon>
@@ -50,13 +57,14 @@
                 <a mat-button routerLink="/projects">Projects</a>
                 <a mat-button routerLink="/challenges">Challenges</a>
             </div>
-            <div style="flex-grow: 1;"></div>
+            <div class="spacer"></div>
             <div class="app-bar-dark-mode-switch">
                 <ng-container *ngTemplateOutlet="darkModeSwitch"></ng-container>
             </div>
-            <div style="width: 48px;"></div>
-            <a mat-button *ngIf="(authenticationService.currentUser$ | async) === null" routerLink="/user/sign-in">Sign
-                in</a>
+            <div class="app-bar-dark-user-guide-button">
+                <ng-container *ngTemplateOutlet="userGuideButton"></ng-container>
+            </div>
+            <a mat-button *ngIf="(authenticationService.currentUser$ | async) === null" routerLink="/user/sign-in">Sign in</a>
             <button *ngIf="(authenticationService.currentUser$ | async) !== null" mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>account_circle</mat-icon>
             </button>
@@ -75,6 +83,7 @@
         <div class="page">
             <router-outlet></router-outlet>
         </div>
+
         <app-global-loader></app-global-loader>
     </mat-sidenav-content>
 </mat-sidenav-container>

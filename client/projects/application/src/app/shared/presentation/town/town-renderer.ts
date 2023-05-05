@@ -1,6 +1,6 @@
-import { TownDirectionUtils } from "projects/karel/src/lib/town/town-direction-utils";
-import { TownTile } from "projects/karel/src/lib/town/town-tile";
-import { ReadonlyTown } from "projects/karel/src/public-api";
+import { TownDirectionUtils } from "karel";
+import { TownTile } from "karel";
+import { ReadonlyTown } from "karel";
 import { TownRenderingEnvironment } from "./town-rendering-environment";
 
 /**
@@ -99,6 +99,7 @@ export class TownRenderer {
 
     private static loadImage(filePath: string): HTMLImageElement {
         const ASSETS_ROOT = "/assets/shared/presentation/components/town-view/";
+
         const image = new Image();
         const imageLoadPromise = new Promise<void>(resolve => image.addEventListener("load", () => resolve()));
         image.src = ASSETS_ROOT + filePath;

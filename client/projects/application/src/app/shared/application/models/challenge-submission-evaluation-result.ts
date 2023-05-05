@@ -1,4 +1,4 @@
 export interface ChallengeSubmissionEvaluationResult {
-    successRate: number;
-    message: string;
+    readonly successRate: number;
+    readonly message: string;
 }

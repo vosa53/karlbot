@@ -1,4 +1,4 @@
-import { Project } from "projects/karel/src/public-api";
+import { Project } from "karel";
 
 export interface SavedProject {
     readonly id: string | null;

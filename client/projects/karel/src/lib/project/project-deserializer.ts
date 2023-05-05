@@ -1,7 +1,5 @@
 import { ExternalProgramReference } from "../compiler/external-program-reference";
 import { CompilationUnitParser } from "../compiler/syntax-analysis/compilation-unit-parser";
-import { Vector } from "../math/vector";
-import { Town } from "../town/town";
 import { TownDeserializer } from "../town/town-deserializer";
 import { CodeFile } from "./code-file";
 import { File } from "./file";

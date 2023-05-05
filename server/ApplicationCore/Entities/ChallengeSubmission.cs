@@ -11,6 +11,9 @@ namespace ApplicationCore.Entities
     /// </summary>
     public class ChallengeSubmission
     {
+        /// <summary>
+        /// ID.
+        /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>

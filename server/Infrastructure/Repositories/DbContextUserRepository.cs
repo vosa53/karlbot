@@ -23,6 +23,7 @@ namespace Infrastructure.Repositories
             _userManager = userManager;
         }
 
+        /// <inheritdoc/>
         public async Task<IList<string>?> GetRolesAsync(Guid userId)
         {
             var user = await DbSet.FindAsync(userId);

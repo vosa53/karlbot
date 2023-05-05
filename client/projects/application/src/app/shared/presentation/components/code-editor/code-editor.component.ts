@@ -4,10 +4,10 @@ import { defaultKeymap, undo, redo } from "@codemirror/commands";
 import { basicSetup } from "codemirror";
 import { karel } from "./codemirror/karel-language";
 import { applicationStyleLight } from "./codemirror/application-theme-light";
-import { Error } from "projects/karel/src/lib/compiler/errors/error";
-import { CompletionItem } from "projects/karel/src/lib/compiler/language-service/completion-item";
+import { Error } from "karel";
+import { CompletionItem } from "karel";
 import { CommonModule } from "@angular/common";
-import { LineTextRange } from "projects/karel/src/public-api";
+import { LineTextRange } from "karel";
 import { Compartment, TransactionSpec, EditorState } from "@codemirror/state"
 import { codeCompletion } from "./codemirror/code-completion";
 import { setErrors } from "./codemirror/error-highlighting";

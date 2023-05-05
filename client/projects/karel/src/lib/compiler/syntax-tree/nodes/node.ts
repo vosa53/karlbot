@@ -4,7 +4,6 @@ import { LineTextRange } from "../../../text/line-text-range";
 import { TextRange } from "../../../text/text-range";
 import { PrimitiveSyntaxElement } from "../syntax-element";
 import { SyntaxElement } from "../syntax-element";
-import { Token } from "@angular/compiler";
 import { PrimitiveToken } from "../tokens/token";
 
 export abstract class Node extends SyntaxElement {

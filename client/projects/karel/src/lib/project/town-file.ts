@@ -1,5 +1,5 @@
-import { File } from './file';
-import { Town } from '../town/town';
+import { File } from "./file";
+import { Town } from "../town/town";
 
 /**
  * Town file.

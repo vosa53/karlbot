@@ -1,16 +1,13 @@
+///
+/// Custom Angular Material theme of the application.
+///
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @use 'sass:map';
-// Plus imports for other components in your app.
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
 
-$my-palette: (
+$application-palette: (
     50: #e8eaf6,
     100: #c5cae9,
     200: #9fa8da,
@@ -33,19 +30,11 @@ $my-palette: (
     )
 );
 
-$my-typography: mat.define-typography-config();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$application-primary: mat.define-palette($my-palette);
+$application-typography: mat.define-typography-config();
+$application-primary: mat.define-palette($application-palette);
 $application-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
 $application-warn: mat.define-palette(mat.$red-palette);
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
 $application-light-theme: mat.define-light-theme((
     color: (
         primary: $application-primary,
@@ -53,7 +42,7 @@ $application-light-theme: mat.define-light-theme((
         warn: $application-warn
     ),
     density: 0,
-    typography: $my-typography
+    typography: $application-typography
 ));
 
 $application-dark-theme: mat.define-dark-theme((
@@ -63,32 +52,29 @@ $application-dark-theme: mat.define-dark-theme((
         warn: $application-warn,
     ),
     density: 0,
-    typography: $my-typography
+    typography: $application-typography
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.typography-hierarchy($my-typography);
-
-
+@include mat.typography-hierarchy($application-typography);
 @include mat.all-component-themes($application-light-theme);
 
 .light-theme {
     $color-config: mat.get-color-config($application-light-theme);
-    $primary-palette: map.get($color-config, 'primary');
-    $accent-palette:  map.get($color-config, 'accent');
-    $warn-palette:    map.get($color-config, 'warn');
-    $background-palette:   map.get($color-config, 'background');
+    $primary-palette: map.get($color-config, "primary");
+    $accent-palette:  map.get($color-config, "accent");
+    $warn-palette:    map.get($color-config, "warn");
+    $background-palette:   map.get($color-config, "background");
+
     --color-primary: #{mat.get-color-from-palette($primary-palette, 500)};
     --color-accent: #{mat.get-color-from-palette($accent-palette, 500)};
     --color-warn: #{mat.get-color-from-palette($warn-palette, 500)};
     --color-positive: #8BC34A;
     --color-neutral: #FFB300;
     --color-negative: #D32F2F;
-    --background-primary: #{mat.get-color-from-palette($background-palette, 'background')};
-    --background-secondary: #{mat.get-color-from-palette($background-palette, 'app-bar')};
+    --background-primary: #{mat.get-color-from-palette($background-palette, "background")};
+    --background-secondary: #{mat.get-color-from-palette($background-palette, "app-bar")};
     --background-tertiary: #eaeaea;
+    --background-quaternary: #ededed;
     --background-designer: url("/assets/designer-background-light.png");
     --google-sign-in-button-normal: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_light_normal_web.png");
     --google-sign-in-button-focus: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_light_focus_web.png");
@@ -100,10 +86,10 @@ $application-dark-theme: mat.define-dark-theme((
     @include mat.all-component-colors($application-dark-theme);
 
     $color-config: mat.get-color-config($application-dark-theme);
-    $primary-palette: map.get($color-config, 'primary');
-    $accent-palette:  map.get($color-config, 'accent');
-    $warn-palette:    map.get($color-config, 'warn');
-    $background-palette:   map.get($color-config, 'background');
+    $primary-palette: map.get($color-config, "primary");
+    $accent-palette:  map.get($color-config, "accent");
+    $warn-palette:    map.get($color-config, "warn");
+    $background-palette:   map.get($color-config, "background");
 
     --color-primary: #{mat.get-color-from-palette($primary-palette, 500)};
     --color-accent: #{mat.get-color-from-palette($accent-palette, 500)};
@@ -111,9 +97,10 @@ $application-dark-theme: mat.define-dark-theme((
     --color-positive: #AED581;
     --color-neutral: #FFD54F;
     --color-negative: #EF5350;
-    --background-primary: #{mat.get-color-from-palette($background-palette, 'background')};
-    --background-secondary: #{mat.get-color-from-palette($background-palette, 'app-bar')};
+    --background-primary: #{mat.get-color-from-palette($background-palette, "background")};
+    --background-secondary: #{mat.get-color-from-palette($background-palette, "app-bar")};
     --background-tertiary: #333333;
+    --background-quaternary: #424242;
     --background-designer: url("/assets/designer-background-dark.png");
     --google-sign-in-button-normal: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_dark_normal_web.png");
     --google-sign-in-button-focus: url("/assets/user/presentation/components/google-sign-in-button/btn_google_signin_dark_focus_web.png");

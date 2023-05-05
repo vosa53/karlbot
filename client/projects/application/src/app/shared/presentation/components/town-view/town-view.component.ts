@@ -1,21 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Vector } from 'projects/karel/src/lib/math/vector';
-import { ReadonlyTown } from 'projects/karel/src/public-api';
-import { TownCamera } from '../../town/town-camera';
-import { TownRenderer } from '../../town/town-renderer';
-import { TownRenderingEnvironment } from '../../town/town-rendering-environment';
-import { TownViewport } from '../../town/town-viewport';
+import { CommonModule } from "@angular/common";
+import { Component, ElementRef, Input, ViewChild, AfterViewInit, OnDestroy, Output, EventEmitter } from "@angular/core";
+import { Vector } from "karel";
+import { ReadonlyTown } from "karel";
+import { TownCamera } from "../../town/town-camera";
+import { TownRenderer } from "../../town/town-renderer";
+import { TownRenderingEnvironment } from "../../town/town-rendering-environment";
+import { TownViewport } from "../../town/town-viewport";
 
 /**
  * Displays a town.
  */
 @Component({
     standalone: true,
-    selector: 'app-town-view',
+    selector: "app-town-view",
     imports: [CommonModule],
-    templateUrl: './town-view.component.html',
-    styleUrls: ['./town-view.component.css']
+    templateUrl: "./town-view.component.html",
+    styleUrls: ["./town-view.component.css"]
 })
 export class TownViewComponent implements AfterViewInit, OnDestroy {
     /**
@@ -143,7 +143,7 @@ export class TownViewComponent implements AfterViewInit, OnDestroy {
         canvasElement.height = canvasElement.offsetHeight;
         this._renderingEnvironment = new TownRenderingEnvironment(this.camera, new TownViewport(canvasElement.width, canvasElement.height), 32);
         
-        // Setting `width` and `height` clears the canvas.
+        // Setting `width` and `height` clears the canvas, so we have to render it again.
         if (this.canvasRenderingContext !== null)
             this.render(this.canvasRenderingContext);
     }

@@ -1,24 +1,23 @@
-import { Location } from '@angular/common';
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { CompletionItem } from 'projects/karel/src/lib/compiler/language-service/completion-item';
-import { CodeFile } from 'projects/karel/src/lib/project/code-file';
-import { File } from 'projects/karel/src/lib/project/file';
-import { Project } from 'projects/karel/src/lib/project/project';
-import { Settings } from 'projects/karel/src/lib/project/settings';
-import { TownFile } from 'projects/karel/src/lib/project/town-file';
-import { StandardLibrary } from 'projects/karel/src/lib/standard-library/standard-library';
-import { ProjectDeserializer } from 'projects/karel/src/public-api';
-import { BehaviorSubject, combineLatest, firstValueFrom, map } from 'rxjs';
-import { SavedProject } from '../../../shared/application/models/saved-project';
-import { ProjectService } from '../../../shared/application/services/project.service';
-import { SignInService } from '../../../shared/application/services/sign-in.service';
-import { DialogService } from '../../../shared/presentation/services/dialog.service';
-import { NotificationService } from '../../../shared/presentation/services/notification.service';
-import { TownCamera } from '../../../shared/presentation/town/town-camera';
-import { EditorDialogService } from '../../presentation/services/editor-dialog.service';
-import { ProjectEditorService } from './project-editor.service';
-import { RunService, RunState } from './run.service';
+import { Location } from "@angular/common";
+import { Injectable } from "@angular/core";
+import { CompletionItem } from "karel";
+import { CodeFile } from "karel";
+import { File } from "karel";
+import { Project } from "karel";
+import { Settings } from "karel";
+import { TownFile } from "karel";
+import { StandardLibrary } from "karel";
+import { ProjectDeserializer } from "karel";
+import { BehaviorSubject, combineLatest, firstValueFrom, map } from "rxjs";
+import { SavedProject } from "../../../shared/application/models/saved-project";
+import { ProjectService } from "../../../shared/application/services/api/project.service";
+import { SignInService } from "../../../shared/application/services/sign-in.service";
+import { DialogService } from "../../../shared/presentation/services/dialog.service";
+import { NotificationService } from "../../../shared/presentation/services/notification.service";
+import { TownCamera } from "../../../shared/presentation/town/town-camera";
+import { EditorDialogService } from "../../presentation/services/editor-dialog.service";
+import { ProjectEditorService } from "./project-editor.service";
+import { RunService, RunState } from "./run.service";
 
 @Injectable()
 export class EditorService {
@@ -58,7 +57,6 @@ export class EditorService {
         private readonly projectService: ProjectService, 
         private readonly signInService: SignInService, 
         private readonly location: Location, 
-        private readonly router: Router,
         private readonly notificationService: NotificationService
     ) {
         this.projectEditorService.setProject(this.createNewProject());
@@ -232,7 +230,7 @@ export class EditorService {
             return;
         }
 
-        const projectUrl = window.location.host + "/editor/" + savedProject.id;
+        const projectUrl = window.location.origin + "/editor/" + savedProject.id;
         const newIsProjectPublic = await this.editorDialogService.showShare(savedProject.isPublic, projectUrl);
         if (newIsProjectPublic === null)
             return;
@@ -250,7 +248,7 @@ export class EditorService {
     }
 
     private createNewProject(): Project {
-        return ProjectDeserializer.deserialize("{\"name\":\"Project\",\"settings\":{\"entryPoint\":\"main\",\"karelSpeed\":200,\"maxRecursionDepth\":1000},\"files\":[{\"type\":\"code\",\"name\":\"Main\",\"code\":\"program main\\n    step\\n    step\\n    turnLeft\\n    step\\n    \/\/ Write code here\\nend\\n\",\"breakpoints\":[]},{\"type\":\"code\",\"name\":\"Syntax guide\",\"code\":\"\/**\\n * Block comment\\n *\/\\n\\n\/\/ Line comment\\n\\n\/**\\n * User defined program\\n *\/\\nprogram emptyProgram\\n    \\nend\\n\\n\/**\\n * Built-in programs\\n *\/\\nprogram builtInPrograms\\n    \/\/ Movement\\n    step\\n    turnLeft\\n\\n    \/\/ Signs\\n    put\\n    pick\\n\\n    \/\/ Testing orientation\\n    north\\n    east\\n    west\\n    south\\n\\n    \/\/ Testing surroundings\\n    sign\\n    wall\\n    home\\nend\\n\\n\/**\\n * Control structures\\n *\/\\nprogram controlStructures\\n    \/\/ If statement\\n    if not wall\\n        \\n    end\\n\\n    \/\/ If else statement\\n    if is north\\n    \\n    end\\n    else\\n\\n    end\\n\\n    \/\/ While statement\\n    while is sign\\n\\n    end\\n\\n    \/\/ Repeat statement\\n    repeat 4 times\\n\\n    end\\nend\\n\\n\/**\\n * Recursion\\n *\/\\nprogram recursiveProgram\\n    if not wall\\n        step\\n\\n        \/\/ Recursive call\\n        recursiveProgram\\n    end\\nend\",\"breakpoints\":[]},{\"type\":\"town\",\"name\":\"Karel's village\",\"town\":{\"width\":10,\"height\":10,\"karelPosition\":{\"x\":1,\"y\":5},\"karelDirection\":1,\"homePosition\":{\"x\":8,\"y\":6},\"tiles\":[0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,0,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,1,0,1,1,0,0,1,0,1,0,0,0,0,1,1,0,0,0],\"signCounts\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}]}", StandardLibrary.getProgramReferences());
+        return ProjectDeserializer.deserialize("{\"name\":\"Project\",\"settings\":{\"entryPoint\":\"main\",\"karelSpeed\":200,\"maxRecursionDepth\":1000},\"files\":[{\"type\":\"code\",\"name\":\"Main\",\"code\":\"program main\\n    step\\n    step\\n    turnLeft\\n    step\\n    \/\/ Write code here\\nend\\n\",\"breakpoints\":[]},{\"type\":\"code\",\"name\":\"Syntax Guide\",\"code\":\"\/**\\n * Block comment\\n *\/\\n\\n\/\/ Line comment\\n\\n\/**\\n * User defined program\\n *\/\\nprogram emptyProgram\\n    \\nend\\n\\n\/**\\n * Built-in programs\\n *\/\\nprogram builtInPrograms\\n    \/\/ Movement\\n    step\\n    turnLeft\\n\\n    \/\/ Signs\\n    put\\n    pick\\n\\n    \/\/ Testing orientation\\n    north\\n    east\\n    west\\n    south\\n\\n    \/\/ Testing surroundings\\n    sign\\n    wall\\n    home\\nend\\n\\n\/**\\n * Control structures\\n *\/\\nprogram controlStructures\\n    \/\/ If statement\\n    if not wall\\n        \\n    end\\n\\n    \/\/ If else statement\\n    if is north\\n    \\n    end\\n    else\\n\\n    end\\n\\n    \/\/ While statement\\n    while is sign\\n\\n    end\\n\\n    \/\/ Repeat statement\\n    repeat 4 times\\n\\n    end\\nend\\n\\n\/**\\n * Recursion\\n *\/\\nprogram recursiveProgram\\n    if not wall\\n        step\\n\\n        \/\/ Recursive call\\n        recursiveProgram\\n    end\\nend\",\"breakpoints\":[]},{\"type\":\"town\",\"name\":\"Karel's Village\",\"town\":{\"width\":10,\"height\":10,\"karelPosition\":{\"x\":1,\"y\":5},\"karelDirection\":1,\"homePosition\":{\"x\":8,\"y\":6},\"tiles\":[0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,0,1,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,1,0,1,1,0,0,1,0,1,0,0,0,0,1,1,0,0,0],\"signCounts\":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}]}", StandardLibrary.getProgramReferences());
     }
 }
 

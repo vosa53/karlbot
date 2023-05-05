@@ -1,4 +1,4 @@
-import { Vector } from "projects/karel/src/public-api";
+import { Vector } from "karel";
 import { TownCamera } from "./town-camera";
 
 export class TownCameraFactory {

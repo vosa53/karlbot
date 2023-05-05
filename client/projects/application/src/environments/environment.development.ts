@@ -1,3 +1,6 @@
+/**
+ * Configuration used during development.
+ */
 export const environment = {
     apiBaseURL: "https://localhost:7105",
     firebaseAuthenticationEmulatorURL: "http://localhost:9099",

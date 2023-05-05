@@ -1,4 +1,4 @@
-import { Vector } from "projects/karel/src/lib/math/vector";
+import { Vector } from "karel";
 
 /**
  * Camera for rendering a town.

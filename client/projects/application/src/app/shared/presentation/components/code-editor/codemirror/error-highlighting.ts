@@ -1,5 +1,5 @@
 import { TransactionSpec, EditorState } from "@codemirror/state";
-import { Error } from "projects/karel/src/public-api";
+import { Error } from "karel";
 import { Diagnostic, setDiagnostics } from "@codemirror/lint"
 
 export function setErrors(state: EditorState, errors: readonly Error[]): TransactionSpec {

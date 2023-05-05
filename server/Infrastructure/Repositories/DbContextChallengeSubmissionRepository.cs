@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public async Task<List<ChallengeSubmission>> GetAsync(Guid challengeId, Guid? userId)
+        public async Task<IList<ChallengeSubmission>> GetAsync(Guid challengeId, Guid? userId)
         {
             IQueryable<ChallengeSubmission> query = DbSet.Where(cs => cs.ChallengeId == challengeId);
 

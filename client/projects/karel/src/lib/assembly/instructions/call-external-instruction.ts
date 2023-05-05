@@ -1,4 +1,4 @@
-import { Instruction } from './instruction';
+import { Instruction } from "./instruction";
 
 /**
  * Instruction to call an external program.

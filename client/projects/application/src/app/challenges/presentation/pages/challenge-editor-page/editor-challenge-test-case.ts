@@ -1,4 +1,4 @@
-import { MutableTown } from "projects/karel/src/public-api";
+import { MutableTown } from "karel";
 
 export interface EditorChallengeTestCase {
     readonly inputTown: MutableTown;

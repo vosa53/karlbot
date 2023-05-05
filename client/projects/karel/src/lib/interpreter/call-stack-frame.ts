@@ -1,5 +1,5 @@
-import { Program } from '../assembly/program';
-import { Instruction } from '../assembly/instructions/instruction';
+import { Program } from "../assembly/program";
+import { Instruction } from "../assembly/instructions/instruction";
 
 /**
  * Call stack frame.

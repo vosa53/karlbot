@@ -1,8 +1,8 @@
-import { Compilation } from '../compiler/compilation';
-import { ExternalProgramReference } from '../compiler/external-program-reference';
-import { CodeFile } from './code-file';
-import { File } from './file';
-import { Settings } from './settings';
+import { Compilation } from "../compiler/compilation";
+import { ExternalProgramReference } from "../compiler/external-program-reference";
+import { CodeFile } from "./code-file";
+import { File } from "./file";
+import { Settings } from "./settings";
 
 /**
  * Karel project.

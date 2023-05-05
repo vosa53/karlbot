@@ -5,10 +5,30 @@
     height: 36px;
 }
 
+.menu-divider {
+    margin: 6px 20px;
+}
+
+.project-name {
+    flex-grow: 1; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.project-name-text {
+    margin: 0; 
+    opacity: 0.4;
+}
+
 .toolbar {
     overflow-x: auto;
     overflow-y: hidden;
     height: 56px;
+}
+
+.toolbar-spacer {
+    flex-grow: 1;
 }
 
 .toolbar > *, .menu > * {

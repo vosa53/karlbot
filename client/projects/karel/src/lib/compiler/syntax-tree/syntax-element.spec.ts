@@ -1,6 +1,4 @@
-import { ChildrenBuilder } from "../children-builder";
 import { SyntaxError } from "../errors/syntax-error";
-import { LineTextRange } from "../../text/line-text-range";
 import { Node } from "./nodes/node";
 import { PrimitiveSyntaxElement } from "./syntax-element";
 import { SyntaxElement } from "./syntax-element";

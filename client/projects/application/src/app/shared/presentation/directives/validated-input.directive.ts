@@ -1,5 +1,5 @@
-import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
-import { MatInput } from '@angular/material/input';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from "@angular/core";
+import { MatInput } from "@angular/material/input";
 
 /**
  * Adds validation to an input. Can only be applied to {@link HTMLInputElement} with {@link MatInputDirective} directive.
@@ -9,7 +9,7 @@ import { MatInput } from '@angular/material/input';
  */
 @Directive({
     standalone: true,
-    selector: '[appValidatedInput]'
+    selector: "[appValidatedInput]"
 })
 export class ValidatedInputDirective {
     /**

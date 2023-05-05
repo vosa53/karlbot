@@ -9,17 +9,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KarlBot.Controllers
 {
+    /// <summary>
+    /// REST API controller with endpoints related to challenges.
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class ChallengesController : ControllerBase
     {
         private readonly IChallengeRepository _challengeRepository;
 
+        /// <summary>
+        /// Initializes a new controller instance.
+        /// </summary>
         public ChallengesController(IChallengeRepository challengeRepository)
         {
             _challengeRepository = challengeRepository;
         }
 
+        /// <summary>
+        /// Returns all challenges.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChallengeDataModel>>> GetAsync()
         {
@@ -28,6 +37,11 @@ namespace KarlBot.Controllers
             return challenges.Select(c => ToDataModel(c)).ToList();
         }
 
+        /// <summary>
+        /// Returns a challenge by its ID.
+        /// </summary>
+        /// <param name="id">Challenge ID.</param>
+        /// <response code="404">Challenge with the given ID does not exist.</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<ChallengeDataModel>> GetByIdAsync(Guid id)
         {
@@ -38,6 +52,10 @@ namespace KarlBot.Controllers
             return ToDataModel(challenge);
         }
 
+        /// <summary>
+        /// Creates a new challenge.
+        /// </summary>
+        /// <param name="dataModel">Challenge data.</param>
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult> AddAsync(ChallengeDataModel dataModel)
@@ -60,6 +78,11 @@ namespace KarlBot.Controllers
             return CreatedAtAction(nameof(GetByIdAsync), new { id = challenge.Id }, ToDataModel(challengeWithSubmissionsInfo));
         }
 
+        /// <summary>
+        /// Updates a challenge by its ID.
+        /// </summary>
+        /// <param name="id">Challenge ID.</param>
+        /// <param name="dataModel">New challenge data.</param>
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAsync(Guid id, ChallengeDataModel dataModel)
@@ -83,6 +106,11 @@ namespace KarlBot.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a challenge by its ID.
+        /// </summary>
+        /// <param name="id">Challenge ID.</param>
+        /// <response code="404">Challenge with the given ID does not exist.</response>
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)

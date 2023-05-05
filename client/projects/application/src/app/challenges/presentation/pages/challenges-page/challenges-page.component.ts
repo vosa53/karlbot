@@ -1,40 +1,42 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Challenge } from 'projects/application/src/app/shared/application/models/challenge';
-import { ChallengeService } from 'projects/application/src/app/shared/application/services/challenge.service';
-import { RouterModule } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
-import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
-import { ChallengeDifficultyComponent } from '../../components/challenge-difficulty/challenge-difficulty.component';
-import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
-import { ChallengeDifficulty } from 'projects/application/src/app/shared/application/models/challenge-difficulty';
-import { firstValueFrom } from 'rxjs';
-import { ChallengeStatusComponent } from '../../components/challenge-status/challenge-status.component';
+import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Challenge } from "projects/application/src/app/shared/application/models/challenge";
+import { RouterModule } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatTableModule } from "@angular/material/table";
+import { PageComponent } from "projects/application/src/app/shared/presentation/components/page/page.component";
+import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
+import { ChallengeDifficultyComponent } from "../../components/challenge-difficulty/challenge-difficulty.component";
+import { SignInService } from "projects/application/src/app/shared/application/services/sign-in.service";
+import { ChallengeDifficulty } from "projects/application/src/app/shared/application/models/challenge-difficulty";
+import { firstValueFrom } from "rxjs";
+import { ChallengeStatusComponent } from "../../components/challenge-status/challenge-status.component";
+import { ChallengeService } from "projects/application/src/app/shared/application/services/api/challenge.service";
 
 @Component({
-    selector: 'app-challenges-page',
+    selector: "app-challenges-page",
     standalone: true,
     imports: [CommonModule, RouterModule, MatButtonModule, MatIconModule, MatTableModule, PageComponent, ChallengeDifficultyComponent, ChallengeStatusComponent],
-    templateUrl: './challenges-page.component.html',
-    styleUrls: ['./challenges-page.component.css']
+    templateUrl: "./challenges-page.component.html",
+    styleUrls: ["./challenges-page.component.css"]
 })
 export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] | null = null;
     displayedColumns: string[] = ["status", "name", "difficulty", "solved"];
 
-    constructor(private readonly challengeService: ChallengeService, private readonly dialogService: DialogService, readonly signInService: SignInService) {
-        
-    }
+    constructor(
+        private readonly challengeService: ChallengeService, 
+        private readonly dialogService: DialogService, 
+        readonly signInService: SignInService
+    ) { }
 
     async ngOnInit() {
         const currentUser = await firstValueFrom(this.signInService.currentUser$);
         if (currentUser!.isAdmin)
             this.displayedColumns.push("actions");
 
-        this.loadChallenges();
+        await this.loadChallenges();
     }
 
     async onRemoveClick(challenge: Challenge) {
@@ -43,16 +45,15 @@ export class ChallengesPageComponent implements OnInit {
             return;
 
         await this.challengeService.delete(challenge);
-        this.loadChallenges();
+        await this.loadChallenges();
     }
 
     private async loadChallenges() {
         this.challenges = await this.challengeService.get();
         this.challenges.sort((a, b) => {
-            const aTypeSortOrder = this.getDifficultySortOrder(a.difficulty);
-            const bTypeSortOrder = this.getDifficultySortOrder(b.difficulty);
-            if (aTypeSortOrder < bTypeSortOrder) return -1;
-            if (aTypeSortOrder > bTypeSortOrder) return 1;
+            const byDifficulty = this.getDifficultySortOrder(a.difficulty) - this.getDifficultySortOrder(b.difficulty);
+            if (byDifficulty !== 0) return byDifficulty;
+
             return a.name.localeCompare(b.name, "en");
         });
     }

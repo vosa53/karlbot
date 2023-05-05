@@ -1,5 +1,6 @@
-<h1 mat-dialog-title>Share settings</h1>
-<div mat-dialog-content style="display: flex; flex-direction: column; gap: 16px;">
+<h1 mat-dialog-title>Share Settings</h1>
+
+<div mat-dialog-content class="fields">
     <mat-form-field appearance="fill" subscriptSizing="dynamic">
         <mat-label>Visibility</mat-label>
         <mat-select [value]="isProjectPublic" (selectionChange)="isProjectPublic = $event.value">
@@ -7,14 +8,16 @@
             <mat-option [value]="true">Anyone with URL</mat-option>
         </mat-select>
     </mat-form-field>
+
     <mat-form-field *ngIf="isProjectPublic" appearance="outline">
         <mat-label>Project URL</mat-label>
-        <input matInput [value]="projectUrl" readonly cdkFocusInitial>
-        <button matSuffix mat-icon-button (click)="onCopyProjectUrlClick()">
+        <input matInput [value]="projectURL" readonly cdkFocusInitial>
+        <button matSuffix mat-icon-button (click)="onCopyProjectURLClick()">
             <mat-icon>content_copy</mat-icon>
         </button>
     </mat-form-field>
 </div>
+
 <div mat-dialog-actions align="end">
     <button mat-button [mat-dialog-close]="undefined">Cancel</button>
     <button mat-button (click)="onSaveClick()">Save</button>

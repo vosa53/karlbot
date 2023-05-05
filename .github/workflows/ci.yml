@@ -8,7 +8,15 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          SA_PASSWORD: TestDatabasePassword123!
+          ACCEPT_EULA: 'Y'
+        ports:
+          - 1433:1433
+          
     steps:
     - uses: actions/checkout@v3
 
@@ -55,7 +63,7 @@ jobs:
     - name: Test server
       run: |
         cd server
-        dotnet test --no-build --verbosity normal
+        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1433;Initial Catalog=KarlBotTest;User Id=sa;Password=TestDatabasePassword123!;TrustServerCertificate=True"
         
         
         

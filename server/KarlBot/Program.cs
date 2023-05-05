@@ -16,11 +16,11 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using KarlBot.OptionsConfigurations;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
-
 
 builder.Services.AddControllers(o =>
 {
@@ -51,23 +51,25 @@ builder.Services.AddSwaggerGen(setup =>
     {
         BearerFormat = "JWT",
         Name = "JWT Authentication",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
         Description = "JWT Bearer token",
+        Type = SecuritySchemeType.Http,
+        In = ParameterLocation.Header,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
         Reference = new OpenApiReference
         {
             Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
+            Type = ReferenceType.SecurityScheme,
         }
     };
-
     setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-
     setup.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         { jwtSecurityScheme, Array.Empty<string>() }
     });
+
+    var xmlDocumentationFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+    var xmlDocumentationFilePath = Path.Combine(AppContext.BaseDirectory, xmlDocumentationFileName);
+    setup.IncludeXmlComments(xmlDocumentationFilePath);
 
 });
 
@@ -126,6 +128,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
 

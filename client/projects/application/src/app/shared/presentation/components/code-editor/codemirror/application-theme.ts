@@ -1,6 +1,4 @@
 import { EditorView } from "@codemirror/view";
-import { HighlightStyle, syntaxHighlighting } from "@codemirror/language";
-import { tags as t } from "@lezer/highlight";
 import { Extension } from "@codemirror/state";
 
 /**

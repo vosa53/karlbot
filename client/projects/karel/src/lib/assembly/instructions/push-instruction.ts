@@ -1,4 +1,4 @@
-import { Instruction } from './instruction';
+import { Instruction } from "./instruction";
 
 /**
  * Instruction to push the value on the top of the evaluation stack.

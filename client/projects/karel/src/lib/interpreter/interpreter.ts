@@ -1,29 +1,29 @@
-import { CallStackFrame } from './call-stack-frame';
-import { Instruction } from '../assembly/instructions/instruction';
-import { CallExternalInstruction } from '../assembly/instructions/call-external-instruction';
-import { CallInstruction } from '../assembly/instructions/call-instruction';
-import { JumpIfFalseInstruction } from '../assembly/instructions/jump-if-false-instruction';
-import { JumpIfTrueInstruction } from '../assembly/instructions/jump-if-true-instruction';
-import { JumpInstruction } from '../assembly/instructions/jump-instruction';
-import { LoadInstruction } from '../assembly/instructions/load-instruction';
-import { PopInstruction } from '../assembly/instructions/pop-instruction';
-import { PushInstruction } from '../assembly/instructions/push-instruction';
-import { StoreInstruction } from '../assembly/instructions/store-instruction';
-import { ExternalProgram } from './external-program';
-import { AddInstruction } from '../assembly/instructions/add-instruction';
-import { CompareGreaterInstruction } from '../assembly/instructions/compare-greater-instruction';
-import { Exception } from './exception';
-import { InterpretStopToken } from './interpret-stop-token';
-import { ExceptionInterpretResult } from './results/exception-interpret-result';
-import { StopInterpretResult } from './results/stop-interpret-result';
-import { NormalInterpretResult } from './results/normal-interpret-result';
-import { InterpretResult } from './results/interpret-result';
-import { ExternalProgramException } from './external-program-exception';
-import { NoOperationInstruction } from '../assembly/instructions/no-operation-instruction';
-import { BreakpointInterpretResult } from './results/breakpoint-interpret-result';
-import { ReadonlyCallStackFrame } from './readonly-call-stack-frame';
-import { Assembly } from '../assembly/assembly';
-import { Program } from '../assembly/program';
+import { CallStackFrame } from "./call-stack-frame";
+import { Instruction } from "../assembly/instructions/instruction";
+import { CallExternalInstruction } from "../assembly/instructions/call-external-instruction";
+import { CallInstruction } from "../assembly/instructions/call-instruction";
+import { JumpIfFalseInstruction } from "../assembly/instructions/jump-if-false-instruction";
+import { JumpIfTrueInstruction } from "../assembly/instructions/jump-if-true-instruction";
+import { JumpInstruction } from "../assembly/instructions/jump-instruction";
+import { LoadInstruction } from "../assembly/instructions/load-instruction";
+import { PopInstruction } from "../assembly/instructions/pop-instruction";
+import { PushInstruction } from "../assembly/instructions/push-instruction";
+import { StoreInstruction } from "../assembly/instructions/store-instruction";
+import { ExternalProgram } from "./external-program";
+import { AddInstruction } from "../assembly/instructions/add-instruction";
+import { CompareGreaterInstruction } from "../assembly/instructions/compare-greater-instruction";
+import { Exception } from "./exception";
+import { InterpretStopToken } from "./interpret-stop-token";
+import { ExceptionInterpretResult } from "./results/exception-interpret-result";
+import { StopInterpretResult } from "./results/stop-interpret-result";
+import { NormalInterpretResult } from "./results/normal-interpret-result";
+import { InterpretResult } from "./results/interpret-result";
+import { ExternalProgramException } from "./external-program-exception";
+import { NoOperationInstruction } from "../assembly/instructions/no-operation-instruction";
+import { BreakpointInterpretResult } from "./results/breakpoint-interpret-result";
+import { ReadonlyCallStackFrame } from "./readonly-call-stack-frame";
+import { Assembly } from "../assembly/assembly";
+import { Program } from "../assembly/program";
 
 /**
  * Karel interpreter.
@@ -53,7 +53,7 @@ export class Interpreter {
     /**
      * Whether the breakpoint on the first instruction should be skipped.
      */
-    skipBreakpointOnFirstInstruction: boolean = false;
+    skipBreakpointOnFirstInstruction = false;
 
     private readonly assembly: Assembly;
     private readonly nameToProgram: ReadonlyMap<string, Program>;
@@ -186,8 +186,7 @@ export class Interpreter {
         const instruction = this.callStackTop.currentInstruction;
         this.callStackTop.currentInstructionIndex++;
 
-        let result: void | Exception | Promise<void | Exception>;
-        result = this.interpret(instruction, stopToken);
+        const result = this.interpret(instruction, stopToken);
         while (this.callStackTop !== null && this.callStackTop.currentInstructionIndex >= this.callStackTop.program.instructions.length)
             this.callStack.pop();
 

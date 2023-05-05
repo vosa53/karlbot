@@ -2,7 +2,15 @@ import { Assembly, Checker, Emitter, ExceptionInterpretResult, Interpreter, Inte
 import { EvaluationResult } from "./evaluation-result";
 import { TestCase } from "./test-case";
 
+/**
+ * Evaluates project with a set of test cases.
+ */
 export class Evaluator {
+    /**
+     * Evaluates the given test cases on the given project.
+     * @param project Project.
+     * @param testCases Test cases.
+     */
     static async evaluate(project: Project, testCases: readonly TestCase[]): Promise<EvaluationResult> {
         const errors = Checker.check(project.compilation);
         if (errors.length !== 0)

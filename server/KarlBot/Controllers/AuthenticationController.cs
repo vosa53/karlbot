@@ -14,6 +14,9 @@ using System.Text;
 
 namespace KarlBot.Controllers
 {
+    /// <summary>
+    /// REST API controller with endpoints related to authentication.
+    /// </summary>
     [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
@@ -23,6 +26,9 @@ namespace KarlBot.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserTokenService _userTokenService;
 
+        /// <summary>
+        /// Initializes a new controller instance.
+        /// </summary>
         public AuthenticationController(IFirebaseAuthenticationService firebaseAuthenticationService, UserManager<User> userManager, IUserTokenService userTokenService)
         {
             _firebaseAuthenticationService = firebaseAuthenticationService;
@@ -30,6 +36,11 @@ namespace KarlBot.Controllers
             _userTokenService = userTokenService;
         }
 
+        /// <summary>
+        /// Authenticates user with Firebase and returns his token.
+        /// </summary>
+        /// <param name="request">Firebase authentication request.</param>
+        /// <response code="401">Invalid Firebase ID token.</response>
         [HttpPost("Firebase")]
         public async Task<ActionResult<FirebaseResponse>> FirebaseAsync(FirebaseRequest request)
         {

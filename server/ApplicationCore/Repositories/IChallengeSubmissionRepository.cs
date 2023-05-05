@@ -15,8 +15,8 @@ namespace ApplicationCore.Repositories
         /// <summary>
         /// Returrns all submissions of the given challenge that were submitted by the given user.
         /// </summary>
-        /// <param name="challlengeId">Id of the challenge.</param>
+        /// <param name="challlengeId">Id of the requested challenge.</param>
         /// <param name="userId">Id of the user.</param>
-        Task<List<ChallengeSubmission>> GetAsync(Guid challlengeId, Guid? userId);
+        Task<IList<ChallengeSubmission>> GetAsync(Guid challlengeId, Guid? userId);
     }
 }

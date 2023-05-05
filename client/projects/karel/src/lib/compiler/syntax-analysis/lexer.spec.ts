@@ -15,7 +15,6 @@ import { EndOfLineTrivia } from "../syntax-tree/trivia/end-of-line-trivia";
 import { InvalidCharactersTrivia } from "../syntax-tree/trivia/invalid-characters-trivia";
 import { MultilineCommentTrivia } from "../syntax-tree/trivia/multiline-comment-trivia";
 import { SinglelineCommentTrivia } from "../syntax-tree/trivia/singleline-comment-trivia";
-import { Trivia } from "../syntax-tree/trivia/trivia";
 import { WhitespaceTrivia } from "../syntax-tree/trivia/whitespace-trivia";
 import { FullLexerContext } from "./full-lexer-context";
 import { Lexer } from "./lexer";

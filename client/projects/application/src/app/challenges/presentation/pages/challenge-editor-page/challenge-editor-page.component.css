@@ -4,17 +4,12 @@
     grid-template-columns: 1fr 1fr;
 }
 
-.field-full {
+.field-full-width {
     grid-column: span 2;
 }
 
-.add-button {
-    display: block;
-    margin: 16px 0;
-}
-
-.save-button {
-    margin: 16px 0;
+.field-multiline textarea {
+    height: 300px;
 }
 
 .test-case-description {
@@ -29,8 +24,17 @@
     margin-right: 8px;
 }
 
+.add-test-case-button {
+    display: block;
+    margin: 16px 0;
+}
+
+.save-button {
+    margin: 16px 0;
+}
+
 @media (max-width: 700px) {
-    .field-half {
+    .field-half-width {
         grid-column: span 2;
     }
 }

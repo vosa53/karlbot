@@ -1,4 +1,4 @@
-import { Project } from "projects/karel/src/public-api";
+import { Project } from "karel";
 import { ChallengeSubmissionEvaluationResult } from "./challenge-submission-evaluation-result";
 
 export interface ChallengeSubmission {

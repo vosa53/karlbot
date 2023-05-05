@@ -6,9 +6,9 @@ import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
 import { StopClickPropagationDirective } from "projects/application/src/app/shared/presentation/directives/stop-click-propagation.directive";
 import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
-import { CodeFile } from "projects/karel/src/lib/project/code-file";
-import { File } from "projects/karel/src/lib/project/file";
-import { TownFile } from "projects/karel/src/lib/project/town-file";
+import { CodeFile } from "karel";
+import { File } from "karel";
+import { TownFile } from "karel";
 import { PanelComponent } from "../../../components/panel/panel.component";
 
 @Component({
@@ -127,10 +127,9 @@ export class FileExplorerComponent implements OnChanges {
     private sortFiles(files: readonly File[]): readonly File[] {
         const sortedFiles = [...files];
         sortedFiles.sort((a, b) => {
-            const aTypeSortOrder = this.getFileTypeSortOrder(a);
-            const bTypeSortOrder = this.getFileTypeSortOrder(b);
-            if (aTypeSortOrder < bTypeSortOrder) return -1;
-            if (aTypeSortOrder > bTypeSortOrder) return 1;
+            const byType = this.getFileTypeSortOrder(a) - this.getFileTypeSortOrder(b);
+            if (byType !== 0) return byType;
+
             return a.name.localeCompare(b.name, "en");
         });
         return sortedFiles;

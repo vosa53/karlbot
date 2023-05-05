@@ -1,4 +1,4 @@
-import { Town } from "projects/karel/src/public-api";
+import { Town } from "karel";
 
 export interface ChallengeTestCase {
     readonly inputTown: Town;

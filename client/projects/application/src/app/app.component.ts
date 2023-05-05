@@ -1,26 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { SignInService } from './shared/application/services/sign-in.service';
-import { ColorTheme, ColorThemeService } from './shared/application/services/color-theme.service';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatListModule } from '@angular/material/list';
-import { MatRippleModule } from '@angular/material/core';
-import { GlobalLoaderComponent } from './shared/presentation/components/global-loader/global-loader.component';
+import { CommonModule } from "@angular/common";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { MatButtonModule } from "@angular/material/button";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { Router, RouterModule } from "@angular/router";
+import { Subscription } from "rxjs";
+import { SignInService } from "./shared/application/services/sign-in.service";
+import { ColorTheme, ColorThemeService } from "./shared/application/services/color-theme.service";
+import { MatIconModule, MatIconRegistry } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatListModule } from "@angular/material/list";
+import { MatRippleModule } from "@angular/material/core";
+import { GlobalLoaderComponent } from "./shared/presentation/components/global-loader/global-loader.component";
 
 @Component({
     standalone: true,
     selector: "app-root",
     imports: [CommonModule, RouterModule, MatSlideToggleModule, MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatMenuModule, MatDividerModule, MatListModule, MatRippleModule, GlobalLoaderComponent],
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    templateUrl: "./app.component.html",
+    styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit, OnDestroy {
     private colorThemeSubscription: Subscription | null = null;

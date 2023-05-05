@@ -1,21 +1,21 @@
 <app-panel header="Settings">
     <div class="fields">
         <mat-form-field class="field" appearance="outline">
-            <mat-label>Karel speed</mat-label>
+            <mat-label>Karel Speed</mat-label>
             <mat-select [value]="settings.karelSpeed.toString()" (selectionChange)="onKarelSpeedChange($event.value)">
-                <mat-option value="0">Very high</mat-option>
+                <mat-option value="0">Very High</mat-option>
                 <mat-option value="100">High</mat-option>
                 <mat-option value="200">Medium</mat-option>
                 <mat-option value="300">Low</mat-option>
-                <mat-option value="400">Very low</mat-option>
+                <mat-option value="400">Very Low</mat-option>
             </mat-select>
         </mat-form-field>
 
         <mat-form-field class="field" appearance="outline">
-            <mat-label>Max recursion depth</mat-label>
+            <mat-label>Max Recursion Depth</mat-label>
             <input matInput appValidatedInput 
                 [validatedValue]="settings.maxRecursionDepth.toString()" (validatedValueChange)="onMaxRecursionDepthChange($event)"
-                [validator]="maxRecursionDepthValidator">
+                [validator]="MAX_RECURSION_DEPTH_VALIDATOR">
         </mat-form-field>
     </div>
 </app-panel>

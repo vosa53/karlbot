@@ -16,6 +16,6 @@ namespace ApplicationCore.Repositories
         /// Returns all projects of the given user.
         /// </summary>
         /// <param name="authorId">User id.</param>
-        Task<List<Project>> GetAsync(Guid? authorId);
+        Task<IList<Project>> GetAsync(Guid? authorId);
     }
 }

@@ -1,10 +1,7 @@
-import { Inject, Injectable } from '@angular/core';
-import { API_BASE_URL } from '../api-base-url';
-import { User } from '../models/user';
-import { ApiService } from './api-service';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root"
 })
 export class FileService {
     save(file: File): Promise<void> {

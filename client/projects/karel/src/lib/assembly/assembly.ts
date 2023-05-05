@@ -1,5 +1,5 @@
-import { Program } from './program';
-import { SourceMap } from './source-map';
+import { Program } from "./program";
+import { SourceMap } from "./source-map";
 
 /**
  * Assembly.

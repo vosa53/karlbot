@@ -33,7 +33,7 @@ namespace Infrastructure.Repositories
         }
 
         /// <inheritdoc/>
-        public virtual async Task<List<TEntity>> GetAsync()
+        public virtual async Task<IList<TEntity>> GetAsync()
         {
             return await DbSet.ToListAsync();
         }

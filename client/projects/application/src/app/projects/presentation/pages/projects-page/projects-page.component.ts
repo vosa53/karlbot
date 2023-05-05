@@ -1,33 +1,34 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ProjectService } from 'projects/application/src/app/shared/application/services/project.service';
-import { MatButtonModule } from '@angular/material/button';
-import { SavedProject } from 'projects/application/src/app/shared/application/models/saved-project';
-import { SavedProjectViewComponent } from './saved-project-view/saved-project-view.component';
-import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
-import { PageComponent } from 'projects/application/src/app/shared/presentation/components/page/page.component';
-import { DialogService } from 'projects/application/src/app/shared/presentation/services/dialog.service';
-import { SignInService } from 'projects/application/src/app/shared/application/services/sign-in.service';
-import { firstValueFrom } from 'rxjs';
+import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { SavedProject } from "projects/application/src/app/shared/application/models/saved-project";
+import { SavedProjectViewComponent } from "./saved-project-view/saved-project-view.component";
+import { MatIconModule } from "@angular/material/icon";
+import { RouterModule } from "@angular/router";
+import { PageComponent } from "projects/application/src/app/shared/presentation/components/page/page.component";
+import { DialogService } from "projects/application/src/app/shared/presentation/services/dialog.service";
+import { SignInService } from "projects/application/src/app/shared/application/services/sign-in.service";
+import { firstValueFrom } from "rxjs";
+import { ProjectService } from "projects/application/src/app/shared/application/services/api/project.service";
 
 @Component({
-    selector: 'app-projects-page',
+    selector: "app-projects-page",
     standalone: true,
     imports: [CommonModule, MatButtonModule, SavedProjectViewComponent, MatIconModule, RouterModule, PageComponent],
-    templateUrl: './projects-page.component.html',
-    styleUrls: ['./projects-page.component.css']
+    templateUrl: "./projects-page.component.html",
+    styleUrls: ["./projects-page.component.css"]
 })
 export class ProjectsPageComponent implements OnInit {
     projects: SavedProject[] | null = null;
 
-    constructor(private readonly projectService: ProjectService, private readonly dialogService: DialogService, 
-        private readonly signInService: SignInService) {
-
-    }
+    constructor(
+        private readonly projectService: ProjectService, 
+        private readonly dialogService: DialogService, 
+        private readonly signInService: SignInService
+    ) { }
 
     async ngOnInit() {
-        this.loadProjects();
+        await this.loadProjects();
     }
 
     async onRemoveClick(project: SavedProject) {
@@ -36,7 +37,7 @@ export class ProjectsPageComponent implements OnInit {
             return;
 
         await this.projectService.delete(project);
-        this.loadProjects();
+        await this.loadProjects();
     }
 
     private async loadProjects() {

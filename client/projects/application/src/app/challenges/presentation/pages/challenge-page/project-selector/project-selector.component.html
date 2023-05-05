@@ -1,5 +1,5 @@
 <mat-nav-list>
-    <mat-list-item *ngFor="let savedProject of savedProjects" (click)="onClick(savedProject)">
+    <mat-list-item *ngFor="let savedProject of savedProjects" (click)="onSelect(savedProject)">
         <div matListItemTitle>{{savedProject.project.name}}</div>
         <div matListItemLine>{{savedProject.modified | appDateAgo}}</div>
     </mat-list-item>

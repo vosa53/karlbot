@@ -1,6 +1,6 @@
 import { EditorView, Decoration, DecorationSet } from "@codemirror/view"
 import { StateField, StateEffect, TransactionSpec, EditorState } from "@codemirror/state"
-import { LineTextRange } from "projects/karel/src/public-api";
+import { LineTextRange } from "karel";
 
 const setCurrentRangeEffect = StateEffect.define<{ from: number, to: number } | null>({
     map: (value, change) => {
