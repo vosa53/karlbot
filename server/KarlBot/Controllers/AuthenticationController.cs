@@ -19,7 +19,7 @@ namespace KarlBot.Controllers
     /// </summary>
     [AllowAnonymous]
     [ApiController]
-    [Route("[controller]")]
+    [Route("Api/[controller]")]
     public class AuthenticationController : ControllerBase
     {
         private readonly IFirebaseAuthenticationService _firebaseAuthenticationService;

@@ -11,7 +11,7 @@ namespace KarlBot.Controllers
     /// <summary>
     /// REST API controller with endpoints related to users.
     /// </summary>
-    [Route("[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {

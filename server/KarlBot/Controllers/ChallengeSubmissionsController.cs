@@ -13,7 +13,7 @@ namespace KarlBot.Controllers
     /// <summary>
     /// REST API controller with endpoints related to challenge submissions.
     /// </summary>
-    [Route("[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class ChallengeSubmissionsController : ControllerBase
     {

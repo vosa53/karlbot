@@ -2,7 +2,7 @@
  * Configuration used during development.
  */
 export const environment = {
-    apiBaseURL: "https://localhost:7105",
+    apiBaseURL: "https://localhost:7105/Api",
     firebaseAuthenticationEmulatorURL: "http://localhost:9099",
     firebase: {
         projectId: "karlbot-app",

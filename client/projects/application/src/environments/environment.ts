@@ -2,7 +2,7 @@
  * Configuration used in production.
  */
 export const environment = {
-    apiBaseURL: "",
+    apiBaseURL: "/Api",
     firebaseAuthenticationEmulatorURL: null,
     firebase: {
         projectId: "karlbot-app",

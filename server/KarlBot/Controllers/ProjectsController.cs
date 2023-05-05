@@ -10,7 +10,7 @@ namespace KarlBot.Controllers
     /// <summary>
     /// REST API controller with endpoints related to projects.
     /// </summary>
-    [Route("[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class ProjectsController : ControllerBase
     {
