@@ -129,6 +129,8 @@ app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
 
+app.MapFallbackToFile("index.html");
+
 app.Run();
 
 void InitializeFirebase(FirebaseOptions options)
