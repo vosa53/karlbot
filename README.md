@@ -32,9 +32,9 @@ Application uses three tier architecture. It is divided into client, server and 
     - Running JavaScript (challenge evaluation): **ClearScript**
 - Database: **Microsoft SQL Server**
 
-For users authentication is used **Firebase Authentication**.
+For user authentication is used **Firebase Authentication**.
 
-And many others.
+...And many others.
 
 #### Directory structure
 
@@ -43,13 +43,20 @@ And many others.
 - `server`: Server implementation.
 - `firebase-emulator`: Emulator of Firebase platform.
 
+#### Development configuration files
+
+- Client: `/client/projects/application/src/environments/environment.development.ts`
+- Server: `/server/KarlBot/appsettings.Development.json`
+   - Integration tests: `/server/Infrastructure.Tests/appsettings.json`
+- Firebase: `/firebase-emulator/firebase.json`
+
 ### How to run
 
 Prerequisites:
-
+- Windows (or Linux, not tested, but with should work)
 - [Git](https://git-scm.com/downloads) installed
 - [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download) installed
-- [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16) installed and running
+- [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16) (or other SQL Server distribution) installed and running
 - [Node.js](https://nodejs.org/) installed
 - [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) installed (`npm install -g firebase-tools`)
 - [Angular CLI](https://angular.io/cli#installing-angular-cli) installed (`npm install -g @angular/cli`)
@@ -64,9 +71,11 @@ cd karlbot
 
 Start Firebase Authentication emulator:
 ```
-cd firebase/emulator
-start-firebase-emulator.bat
+cd firebase-emulator
+firebase emulators:start --import data --export-on-exit data --project demo-test
 ```
+
+*Or just use `firebase-emulator/start-firebase-emulator.bat` in the case of Windows operating system.*
 
 Build client:
 ```
@@ -85,10 +94,15 @@ npm run build
 ```
 
 Start server:
+
 ```
 cd server/KarlBot
 dotnet run --launch-profile "https"
 ```
+
+*For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
+
+It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is available at [https://localhost:7105/swagger](https://localhost:7105/swagger)
 
 Start client:
 ```
@@ -96,13 +110,21 @@ cd client
 ng serve --open
 ```
 
+This commands also opens browser with the GUI of the application.
+
 ### How to run tests
+
+Prerequisites:
+
+- Previous step
 
 Server:
 ```
 cd server
 dotnet test
 ```
+
+*For Linux users: Same thing with SQL Server as in run section. Please specify you connection string in the server integration tests configuration file.*
 
 Client:
 ```
@@ -114,6 +136,7 @@ npm run test
 
 Prerequisites:
 
+- Previous steps
 - [docfx](https://dotnet.github.io/docfx/) installed (`dotnet tool update -g docfx`)
 
 Server:
