@@ -95,3 +95,39 @@ Start client:
 cd client
 ng serve --open
 ```
+
+### How to run tests
+
+Server:
+```
+cd server
+dotnet test
+```
+
+Client:
+```
+cd client
+npm run test
+```
+
+### How to generate documentation
+
+Prerequisites:
+
+- [docfx](https://dotnet.github.io/docfx/) installed (`dotnet tool update -g docfx`)
+
+Server:
+```
+cd server
+docfx docfx_project/docfx.json
+```
+
+Documentation is generated in `/server/docfx_project/_site`. It has to be served by some (local) web server (opening `index.html` directly in the browser won't work). For example [this](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) web server can be used.
+
+Client:
+```
+cd client
+npm run documentation
+```
+
+Documentation is generated in `client/docs`. Every project has its own folder.
