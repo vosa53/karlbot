@@ -17,6 +17,7 @@ using System.Text.Json;
 using KarlBot.OptionsConfigurations;
 using Microsoft.Extensions.Options;
 using System.Reflection;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -122,7 +123,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseDefaultFiles();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = c => c.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache"
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
