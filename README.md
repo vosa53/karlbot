@@ -47,13 +47,51 @@ And many others.
 
 Prerequisites:
 
-- Git installed
-- Node.js installed
-- dotnet SDK installed
-- Java JDK installed (Firebase emulator dependency)
+- [Git](https://git-scm.com/downloads) installed
+- [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download) installed
+- [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16) installed and running
+- [Node.js](https://nodejs.org/) installed
+- [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) installed (`npm install -g firebase-tools`)
+- [Angular CLI](https://angular.io/cli#installing-angular-cli) installed (`npm install -g @angular/cli`)
 
-If you want to run project yourself, please follow these steps:
+If you want to run project yourself, please follow these instructions:
 
-- ``
+Clone repository:
+```
+git clone https://github.com/vosa53/karlbot.git
+cd karlbot
+```
 
+Start Firebase Authentication emulator:
+```
+cd firebase/emulator
+start-firebase-emulator.bat
+```
 
+Build client:
+```
+cd client
+npm install
+
+cd projects/karel
+npm install
+ng build karel
+npm run build
+
+cd ../karel-evalution
+npm install
+ng build karel-evaluation
+npm run build
+```
+
+Start server:
+```
+cd server/KarlBot
+dotnet run --launch-profile "https"
+```
+
+Start client:
+```
+cd client
+ng serve --open
+```
