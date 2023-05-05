@@ -102,9 +102,9 @@ dotnet run --launch-profile "https"
 
 *For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
 
-*Note: Or on Windows you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
+*Note: On Windows you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
 
-It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is available at [https://localhost:7105/swagger](https://localhost:7105/swagger)
+It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is available at [https://localhost:7105/swagger](https://localhost:7105/swagger).
 
 Start client:
 ```
@@ -153,4 +153,4 @@ cd client
 npm run documentation
 ```
 
-Documentation is generated in `client/docs`. Every project has its own folder.
+Documentation is generated in `/client/docs`. Every project has its own folder.
