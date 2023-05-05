@@ -12,7 +12,7 @@ jobs:
       mssql:
         image: mcr.microsoft.com/mssql/server:2022-latest
         env:
-          SA_PASSWORD: TestDatabasePassword
+          SA_PASSWORD: TestDatabasePassword123!
           ACCEPT_EULA: 'Y'
         ports:
           - 1433:1433
@@ -63,7 +63,7 @@ jobs:
     - name: Test server
       run: |
         cd server
-        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1433;Initial Catalog=KarlBotTest;User Id=sa;Password=TestDatabasePassword;TrustServerCertificate=True"
+        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1433;Initial Catalog=KarlBotTest;User Id=sa;Password=TestDatabasePassword123!;TrustServerCertificate=True"
         
         
         
