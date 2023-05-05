@@ -230,7 +230,7 @@ export class EditorService {
             return;
         }
 
-        const projectUrl = window.location.host + "/editor/" + savedProject.id;
+        const projectUrl = window.location.origin + "/editor/" + savedProject.id;
         const newIsProjectPublic = await this.editorDialogService.showShare(savedProject.isPublic, projectUrl);
         if (newIsProjectPublic === null)
             return;

@@ -176,6 +176,18 @@ On the page *Challenge* you can see challenge assignment and example test cases.
 
 ![](/assets/shared/presentation/pages/user-guide/challenge.png)
 
-Only administrator are allowed to create challenges, but just for curiosity you can look how they do it. 
+## How are challenges created
+
+Only administrators are allowed to create challenges, but just for curiosity you can look how they do it. 
+
+Challenges are evaluated with test cases. Every challenge has one or typically more test cases. Test case consists of input town and output town. Program is run on input town and the output is then compared with expected output town configured in test case. Not always is needed exact match, so in every test cases is possible to specify what has to be equal. Available options are:
+
+- Karel position
+- Karel direction
+- Count of signs on tiles
+
+For submission to be successful all test cases must pass.
+
+Challenge with its test cases can be edited on *Challenge editor* page.
 
 ![](/assets/shared/presentation/pages/user-guide/challenge-editor.png)
