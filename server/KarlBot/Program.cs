@@ -122,7 +122,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseDefaultFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = c => c.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache"

@@ -38,10 +38,10 @@ For user authentication is used **Firebase Authentication**.
 
 #### Directory structure
 
-- `.github/workflows`: CI/CD pipeline.
-- `client`: Client implementation.
-- `server`: Server implementation.
-- `firebase-emulator`: Emulator of Firebase platform.
+- `/.github/workflows`: CI/CD pipeline.
+- `/client`: Client implementation.
+- `/server`: Server implementation.
+- `/firebase-emulator`: Emulator of Firebase platform.
 
 #### Development configuration files
 
@@ -53,7 +53,7 @@ For user authentication is used **Firebase Authentication**.
 ### How to run
 
 Prerequisites:
-- Windows (or Linux, not tested, but with should work)
+- Windows (or Linux, not tested, but it should work)
 - [Git](https://git-scm.com/downloads) installed
 - [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download) installed
 - [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16) (or other SQL Server distribution) installed and running
@@ -75,7 +75,7 @@ cd firebase-emulator
 firebase emulators:start --import data --export-on-exit data --project demo-test
 ```
 
-*Or just use `firebase-emulator/start-firebase-emulator.bat` in the case of Windows operating system.*
+*Note: Or just use `/firebase-emulator/start-firebase-emulator.bat` in the case of Windows operating system.*
 
 Build client:
 ```
@@ -102,6 +102,8 @@ dotnet run --launch-profile "https"
 
 *For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
 
+*Note: Or on Windows you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
+
 It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is available at [https://localhost:7105/swagger](https://localhost:7105/swagger)
 
 Start client:
@@ -109,8 +111,6 @@ Start client:
 cd client
 ng serve --open
 ```
-
-This commands also opens browser with the GUI of the application.
 
 ### How to run tests
 
