@@ -112,11 +112,8 @@ cd client
 ng serve --open
 ```
 
-<<<<<<< HEAD
-=======
 It also opens the browser with application GUI.
 
->>>>>>> develop
 ### How to run tests
 
 Prerequisites:
