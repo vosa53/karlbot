@@ -122,16 +122,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(new StaticFileOptions
+var staticFilesOptions = new StaticFileOptions
 {
-    OnPrepareResponse = c => c.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache"
-});
+    OnPrepareResponse = c =>
+    {
+        c.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache";
+    }
+};
+app.UseStaticFiles(staticFilesOptions);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
-app.MapFallbackToFile("index.html");
+app.MapFallbackToFile("index.html", staticFilesOptions);
 
 app.Run();
 

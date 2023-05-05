@@ -1,6 +1,6 @@
 # KarlBot
 
-Application is available online at [karlbot.dev](https://karlbot.dev/).
+The application is available online at [karlbot.dev](https://karlbot.dev/).
 
 KarlBot is a development environment for educational programming language [Karel](https://compedu.stanford.edu/karel-reader/docs/python/en/chapter1.html). Karel's original author is Professor Richard Pattis, but since then many more or less similar variants have been created and this is one of them. It has the following features:
 
@@ -19,9 +19,9 @@ KarlBot is a development environment for educational programming language [Karel
 
 ## Developer Guide
 
-### Project overview
+### Project Overview
 
-Application uses three tier architecture. It is divided into client, server and database. Main used technologies are these:
+The application uses three-tier architecture. It is divided into client, server, and database. The main used technologies are these:
 
 - Client: **TypeScript**, **Angular**
     - User interface: **Angular Material**
@@ -61,7 +61,7 @@ Prerequisites:
 - [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) installed (`npm install -g firebase-tools`)
 - [Angular CLI](https://angular.io/cli#installing-angular-cli) installed (`npm install -g @angular/cli`)
 
-If you want to run project yourself, please follow these instructions:
+If you want to run the project yourself, please follow these instructions:
 
 Clone repository:
 ```
@@ -102,7 +102,7 @@ dotnet run --launch-profile "https"
 
 *For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
 
-*Note: On Windows you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
+*Note: On Windows, you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
 
 It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is available at [https://localhost:7105/swagger](https://localhost:7105/swagger).
 
@@ -112,6 +112,11 @@ cd client
 ng serve --open
 ```
 
+<<<<<<< HEAD
+=======
+It also opens the browser with application GUI.
+
+>>>>>>> develop
 ### How to run tests
 
 Prerequisites:
@@ -124,12 +129,13 @@ cd server
 dotnet test
 ```
 
-*For Linux users: Same thing with SQL Server as in run section. Please specify you connection string in the server integration tests configuration file.*
+*For Linux users: Same thing with SQL Server as in the run section. Please specify your connection string in the server integration tests configuration file.*
 
 Client:
 ```
 cd client
 npm run test
+npm run lint
 ```
 
 ### How to generate documentation
@@ -145,7 +151,7 @@ cd server
 docfx docfx_project/docfx.json
 ```
 
-Documentation is generated in `/server/docfx_project/_site`. It has to be served by some (local) web server (opening `index.html` directly in the browser won't work). For example [this](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) web server can be used.
+Documentation is generated in `/server/docfx_project/_site`. It has to be served by some (local) web server (opening `index.html` directly in the browser won't work). For example, [this](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) web server can be used.
 
 Client:
 ```
