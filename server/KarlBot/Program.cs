@@ -19,6 +19,9 @@ using Microsoft.Extensions.Options;
 using System.Reflection;
 using Microsoft.Net.Http.Headers;
 
+// Application entry poínt.
+// Here is configured a dependency injection and request pipeline.
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
@@ -104,7 +107,6 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// Migrate database
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -122,20 +124,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var staticFilesOptions = new StaticFileOptions
+var staticFileOptions = new StaticFileOptions
 {
     OnPrepareResponse = c =>
     {
         c.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache";
     }
 };
-app.UseStaticFiles(staticFilesOptions);
+app.UseStaticFiles(staticFileOptions);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
-app.MapFallbackToFile("index.html", staticFilesOptions);
+app.MapFallbackToFile("index.html", staticFileOptions);
 
 app.Run();
 

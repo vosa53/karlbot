@@ -15,6 +15,9 @@ import { MatListModule } from "@angular/material/list";
 import { MatRippleModule } from "@angular/material/core";
 import { GlobalLoaderComponent } from "./shared/presentation/components/global-loader/global-loader.component";
 
+/**
+ * Root application component. Provides layout for all pages of the application.
+ */
 @Component({
     standalone: true,
     selector: "app-root",

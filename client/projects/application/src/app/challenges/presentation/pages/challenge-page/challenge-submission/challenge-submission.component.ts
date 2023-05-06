@@ -6,6 +6,9 @@ import { MatCardModule } from "@angular/material/card";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { DateAgoPipe } from "projects/application/src/app/shared/presentation/pipes/date-ago.pipe";
 
+/**
+ * Shows challenge submission result and message.
+ */
 @Component({
     selector: "app-challenge-submission",
     standalone: true,
@@ -14,6 +17,9 @@ import { DateAgoPipe } from "projects/application/src/app/shared/presentation/pi
     styleUrls: ["./challenge-submission.component.css"]
 })
 export class ChallengeSubmissionComponent {
+    /**
+     * Challenge submission.
+     */
     @Input()
     challengeSubmission: ChallengeSubmission = this.createChallengeSubmission();
 

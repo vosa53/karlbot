@@ -6,6 +6,9 @@ import { TownEditorComponent } from "projects/application/src/app/shared/present
 import { MatChipsModule } from "@angular/material/chips";
 import { MutableTown, Vector } from "karel";
 
+/**
+ * Edited challenge test case.
+ */
 @Component({
     selector: "app-challenge-test-case-editor",
     standalone: true,
@@ -14,6 +17,9 @@ import { MutableTown, Vector } from "karel";
     styleUrls: ["./challenge-test-case-editor.component.css"]
 })
 export class ChallengeTestCaseEditorComponent {
+    /**
+     * Challenge test case.
+     */
     @Input()
     get testCase(): EditorChallengeTestCase | null {
         return this._testCase;
@@ -32,9 +38,15 @@ export class ChallengeTestCaseEditorComponent {
         }
     }
 
+    /**
+     * Called when the camera is moved.
+     */
     @Output()
     testCaseChange = new EventEmitter<EditorChallengeTestCase>();
 
+    /**
+     * Town camera.
+     */
     townCamera = new TownCamera(Vector.ZERO, 1);
 
     private _testCase: EditorChallengeTestCase | null = null;

@@ -31,7 +31,7 @@ namespace KarlBot.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProjectDataModel>>> GetAsync(Guid? authorId)
         {
-            if (!User.IsInRole("Admin") && authorId != User.GetId())
+            if (!User.IsInRole(RoleNames.Admin) && authorId != User.GetId())
                 return Forbid();
 
             var projects = await _projectRepository.GetAsync(authorId);
@@ -52,7 +52,7 @@ namespace KarlBot.Controllers
             if (project == null)
                 return NotFound();
 
-            if (!project.IsPublic && project.AuthorId != User.GetIdOrNull() && !User.IsInRole("Admin"))
+            if (!project.IsPublic && project.AuthorId != User.GetIdOrNull() && !User.IsInRole(RoleNames.Admin))
                 return Forbid();
 
             return ToDataModel(project);
@@ -86,7 +86,7 @@ namespace KarlBot.Controllers
             if (project == null)
                 return NotFound();
 
-            if (project.AuthorId != User.GetId() && !User.IsInRole("Admin"))
+            if (project.AuthorId != User.GetId() && !User.IsInRole(RoleNames.Admin))
                 return Forbid();
 
             project.IsPublic = dataModel.IsPublic;
@@ -110,7 +110,7 @@ namespace KarlBot.Controllers
             if (project == null)
                 return NotFound();
 
-            if (project.AuthorId != User.GetId() && !User.IsInRole("Admin"))
+            if (project.AuthorId != User.GetId() && !User.IsInRole(RoleNames.Admin))
                 return Forbid();
 
             await _projectRepository.RemoveAsync(project);

@@ -19,6 +19,9 @@ import { ChallengeDifficulty } from "projects/application/src/app/shared/applica
 import { NotificationService } from "projects/application/src/app/shared/presentation/services/notification.service";
 import { ChallengeService } from "projects/application/src/app/shared/application/services/api/challenge.service";
 
+/**
+ * Allows to edit a challenge with its test cases.
+ */
 @Component({
     selector: "app-challenge-editor-page",
     standalone: true,
@@ -27,13 +30,23 @@ import { ChallengeService } from "projects/application/src/app/shared/applicatio
     styleUrls: ["./challenge-editor-page.component.css"]
 })
 export class ChallengeEditorPageComponent {
+    /**
+     * Editor form.
+     */
     form = new FormGroup({
         name: new FormControl("", [Validators.required, Validators.maxLength(100)]),
         description: new FormControl("", [Validators.required, Validators.maxLength(10_000)]),
         difficulty: new FormControl(ChallengeDifficulty.easy, Validators.required)
     });
 
+    /**
+     * Edited challenge.
+     */
     challenge: Challenge | null = null;
+
+    /**
+     * Test cases of the edited challenge.
+     */
     testCases: EditorChallengeTestCase[] = [];
 
     constructor(

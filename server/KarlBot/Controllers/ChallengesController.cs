@@ -56,7 +56,7 @@ namespace KarlBot.Controllers
         /// Creates a new challenge.
         /// </summary>
         /// <param name="dataModel">Challenge data.</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpPost]
         public async Task<ActionResult> AddAsync(ChallengeDataModel dataModel)
         {
@@ -83,7 +83,7 @@ namespace KarlBot.Controllers
         /// </summary>
         /// <param name="id">Challenge ID.</param>
         /// <param name="dataModel">New challenge data.</param>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateAsync(Guid id, ChallengeDataModel dataModel)
         {
@@ -111,7 +111,7 @@ namespace KarlBot.Controllers
         /// </summary>
         /// <param name="id">Challenge ID.</param>
         /// <response code="404">Challenge with the given ID does not exist.</response>
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = RoleNames.Admin)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(Guid id)
         {
@@ -126,7 +126,7 @@ namespace KarlBot.Controllers
 
         private ChallengeDataModel ToDataModel(ChallengeWithSubmissionsInfo challengeWthSubmissionsInfo)
         {
-            var isAdmin = User.IsInRole("Admin");
+            var isAdmin = User.IsInRole(RoleNames.Admin);
 
             return new ChallengeDataModel
             {

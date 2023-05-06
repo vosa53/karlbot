@@ -8,6 +8,9 @@ import { SignInService } from "projects/application/src/app/shared/application/s
 import { PageComponent } from "projects/application/src/app/shared/presentation/components/page/page.component";
 import { GoogleSignInButtonComponent } from "../../components/google-sign-in-button/google-sign-in-button.component";
 
+/**
+ * Page allowing the user to sign in.
+ */
 @Component({
     standalone: true,
     selector: "app-sign-in-page",

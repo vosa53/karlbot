@@ -4,6 +4,9 @@ import { ChallengeEditorPageComponent } from "./presentation/pages/challenge-edi
 import { ChallengePageComponent } from "./presentation/pages/challenge-page/challenge-page.component";
 import { ChallengesPageComponent } from "./presentation/pages/challenges-page/challenges-page.component";
 
+/**
+ * Routes concerning the challenges module.
+ */
 export const challengesRoutes: Routes = [
     {
         path: "",

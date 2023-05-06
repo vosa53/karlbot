@@ -47,7 +47,7 @@ namespace KarlBot.Controllers
             if (!existsChallenge)
                 return NotFound();
 
-            if (!User.IsInRole("Admin") && userId != User.GetId())
+            if (!User.IsInRole(RoleNames.Admin) && userId != User.GetId())
                 return Forbid();
 
             if (userId.HasValue)
@@ -74,7 +74,7 @@ namespace KarlBot.Controllers
             if (submission == null)
                 return NotFound();
 
-            if (submission.UserId != User.GetId() && !User.IsInRole("Admin"))
+            if (submission.UserId != User.GetId() && !User.IsInRole(RoleNames.Admin))
                 return Forbid();
 
             return ToDataModel(submission);

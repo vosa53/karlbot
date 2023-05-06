@@ -27,6 +27,9 @@ import { ChallengeSubmissionService } from "projects/application/src/app/shared/
 import { ProjectService } from "projects/application/src/app/shared/application/services/api/project.service";
 import { MarkdownViewComponent } from "projects/application/src/app/shared/presentation/components/markdown-view/markdown-view.component";
 
+/**
+ * Page showing challenge assignment and example test cases. It also allows to submit a project as a solution.
+ */
 @Component({
     selector: "app-challenge-page",
     standalone: true,
@@ -35,8 +38,19 @@ import { MarkdownViewComponent } from "projects/application/src/app/shared/prese
     styleUrls: ["./challenge-page.component.css"]
 })
 export class ChallengePageComponent {
+    /**
+     * Challenge.
+     */
     challenge: Challenge | null = null;
+
+    /**
+     * Public test cases of the challenge.
+     */
     challengeTestCases: ChallengeTestCase[] = [];
+
+    /**
+     * User's submissions of the challenge.
+     */
     challengeSubmissions: ChallengeSubmission[] = [];
 
     constructor(

@@ -14,6 +14,9 @@ import { firstValueFrom } from "rxjs";
 import { ChallengeStatusComponent } from "../../components/challenge-status/challenge-status.component";
 import { ChallengeService } from "projects/application/src/app/shared/application/services/api/challenge.service";
 
+/**
+ * Page showing all available challenges.
+ */
 @Component({
     selector: "app-challenges-page",
     standalone: true,
@@ -22,7 +25,14 @@ import { ChallengeService } from "projects/application/src/app/shared/applicatio
     styleUrls: ["./challenges-page.component.css"]
 })
 export class ChallengesPageComponent implements OnInit {
+    /**
+     * Available challenges.
+     */
     challenges: Challenge[] | null = null;
+
+    /**
+     * Columns displayed in the table.
+     */
     displayedColumns: string[] = ["status", "name", "difficulty", "solved"];
 
     constructor(

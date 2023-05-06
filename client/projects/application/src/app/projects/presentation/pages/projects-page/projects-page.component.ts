@@ -11,6 +11,9 @@ import { SignInService } from "projects/application/src/app/shared/application/s
 import { firstValueFrom } from "rxjs";
 import { ProjectService } from "projects/application/src/app/shared/application/services/api/project.service";
 
+/**
+ * Page showing user's saved projects.
+ */
 @Component({
     selector: "app-projects-page",
     standalone: true,

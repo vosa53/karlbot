@@ -12,6 +12,9 @@ import { StopClickPropagationDirective } from "projects/application/src/app/shar
 import { DateAgoPipe } from "projects/application/src/app/shared/presentation/pipes/date-ago.pipe";
 import { TownViewFitContainDirective } from "projects/application/src/app/shared/presentation/directives/town-view-fit-contain.directive";
 
+/**
+ * User's saved project.
+ */
 @Component({
     selector: "app-saved-project-view",
     standalone: true,

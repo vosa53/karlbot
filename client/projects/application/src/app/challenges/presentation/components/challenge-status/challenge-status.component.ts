@@ -3,6 +3,9 @@ import { CommonModule } from "@angular/common";
 import { ChallengeSubmissionsInfo } from "projects/application/src/app/shared/application/models/challenge-submissions.info";
 import { MatIconModule } from "@angular/material/icon";
 
+/**
+ * Status icon of a challenge.
+ */
 @Component({
     selector: "app-challenge-status",
     standalone: true,
@@ -11,6 +14,9 @@ import { MatIconModule } from "@angular/material/icon";
     styleUrls: ["./challenge-status.component.css"]
 })
 export class ChallengeStatusComponent {
+    /**
+     * Challenge submissions info.
+     */
     @Input()
     submissionsInfo: ChallengeSubmissionsInfo | null = null;
 

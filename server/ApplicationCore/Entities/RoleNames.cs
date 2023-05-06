@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace ApplicationCore.Entities
 {
+    /// <summary>
+    /// Role names.
+    /// </summary>
     public static class RoleNames
     {
-        public static readonly string Admin = "Admin";
+        /// <summary>
+        /// Application administrator.
+        /// </summary>
+        public const string Admin = "Admin";
     }
 }
