@@ -28,7 +28,7 @@
         /// <summary>
         /// User who submitted it.
         /// </summary>
-        public User User { get; set; }
+        public User? User { get; set; }
 
         /// <summary>
         /// Date and time of submission.

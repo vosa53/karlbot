@@ -1,8 +1,6 @@
-using ApplicationCore.Entities;
 using ApplicationCore.Services;
 using KarlBot.DataModels.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KarlBot.Controllers
@@ -16,16 +14,16 @@ namespace KarlBot.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IFirebaseAuthenticationService _firebaseAuthenticationService;
-        private readonly UserManager<User> _userManager;
+        private readonly IFirebaseSignInService _firebaseSignInService;
         private readonly IUserTokenService _userTokenService;
 
         /// <summary>
         /// Initializes a new controller instance.
         /// </summary>
-        public AuthenticationController(IFirebaseAuthenticationService firebaseAuthenticationService, UserManager<User> userManager, IUserTokenService userTokenService)
+        public AuthenticationController(IFirebaseAuthenticationService firebaseAuthenticationService, IFirebaseSignInService firebaseSignInService, IUserTokenService userTokenService)
         {
             _firebaseAuthenticationService = firebaseAuthenticationService;
-            _userManager = userManager;
+            _firebaseSignInService = firebaseSignInService;
             _userTokenService = userTokenService;
         }
 
@@ -41,21 +39,7 @@ namespace KarlBot.Controllers
             if (firebaseUser == null)
                 return Unauthorized();
 
-            var user = await _userManager.FindByLoginAsync("Firebase", firebaseUser.Uid);
-            if (user == null)
-            {
-                user = await _userManager.FindByEmailAsync(firebaseUser.Email);
-
-                if (user == null)
-                {
-                    user = new User(firebaseUser.Email);
-                    var result = await _userManager.CreateAsync(user);
-                    if (!result.Succeeded)
-                        throw new Exception();
-                    var userLoginInfo = new UserLoginInfo("Firebase", firebaseUser.Uid, null);
-                    await _userManager.AddLoginAsync(user, userLoginInfo);
-                }
-            }
+            var user = await _firebaseSignInService.SignInAsync(firebaseUser);
 
             var token = await _userTokenService.CreateTokenAsync(user);
             return new FirebaseResponse

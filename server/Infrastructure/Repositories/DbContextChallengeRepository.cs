@@ -38,10 +38,10 @@ namespace Infrastructure.Repositories
                 .Select(c => new ChallengeWithSubmissionsInfo
                 {
                     Challenge = c,
-                    OwnSubmissionCount = c.Submissions.Count(s => s.UserId == userId),
-                    OwnSuccessfulSubmissionCount = c.Submissions.Count(s => s.UserId == userId && s.EvaluationSuccessRate == 1),
-                    UsersSubmittedCount = c.Submissions.Select(s => s.UserId).Distinct().Count(),
-                    UsersSuccessfullySubmittedCount = c.Submissions.Where(s => s.EvaluationSuccessRate == 1).Select(s => s.UserId).Distinct().Count()
+                    OwnSubmissionCount = c.Submissions!.Count(s => s.UserId == userId),
+                    OwnSuccessfulSubmissionCount = c.Submissions!.Count(s => s.UserId == userId && s.EvaluationSuccessRate == 1),
+                    UsersSubmittedCount = c.Submissions!.Select(s => s.UserId).Distinct().Count(),
+                    UsersSuccessfullySubmittedCount = c.Submissions!.Where(s => s.EvaluationSuccessRate == 1).Select(s => s.UserId).Distinct().Count()
                 })
                 .SingleOrDefaultAsync(c => c.Challenge.Id == id);
         }
@@ -56,7 +56,8 @@ namespace Infrastructure.Repositories
         /// <inheritdoc/>
         public override async Task AddAsync(Challenge entity)
         {
-            SetOrders(entity.TestCases);
+            if (entity.TestCases != null)
+                SetOrders(entity.TestCases);
             DbSet.Add(entity);
             await DbContext.SaveChangesAsync();
         }
@@ -64,7 +65,8 @@ namespace Infrastructure.Repositories
         /// <inheritdoc/>
         public override async Task UpdateAsync(Challenge entity)
         {
-            SetOrders(entity.TestCases);
+            if (entity.TestCases != null)
+                SetOrders(entity.TestCases);
             DbSet.Update(entity);
             await DbContext.SaveChangesAsync();
         }
@@ -78,7 +80,7 @@ namespace Infrastructure.Repositories
         private IQueryable<Challenge> CreateQuery(bool includeTestCases)
         {
             if (includeTestCases)
-                return DbSet.Include(c => c.TestCases.OrderBy(tc => tc.Order));
+                return DbSet.Include(c => c.TestCases!.OrderBy(tc => tc.Order));
             else
                 return DbSet;
         }

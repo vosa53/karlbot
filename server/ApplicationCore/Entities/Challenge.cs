@@ -1,4 +1,6 @@
-﻿namespace ApplicationCore.Entities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ApplicationCore.Entities
 {
     /// <summary>
     /// Challenge.
@@ -47,7 +49,11 @@
             TestCases = testCases;
         }
 
-        private Challenge()
+        /// <param name="name">Name.</param>
+        /// <param name="description">Description.</param>
+        /// <param name="difficulty">Difficulty.</param>
+        public Challenge(string name, string description, ChallengeDifficulty difficulty)
+            : this(name, description, difficulty, null)
         {
         }
     }

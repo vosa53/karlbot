@@ -51,7 +51,7 @@ namespace Infrastructure.Tests.Repositories
         protected UserManager<User> CreateUserManager(ApplicationDbContext dbContext)
         {
             var userStore = new UserStore<User, IdentityRole<Guid>, ApplicationDbContext, Guid>(dbContext);
-            return new UserManager<User>(userStore, null, null, null, null, null, null, null, null);
+            return new UserManager<User>(userStore, null!, null!, null!, null!, null!, null!, null!, null!);
         }
     }
 }

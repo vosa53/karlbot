@@ -49,6 +49,7 @@ namespace Infrastructure.Tests.Repositories
         protected override ChallengeSubmission CreateEntity() => new ChallengeSubmission(Guid2, Guid1, DateTime1, "submission project", 0, "");
 
         protected override void UpdateEntity(ChallengeSubmission entity) => entity.EvaluationMessage = "Some updated message";
+        
         protected override IList<ChallengeSubmission> GetAllEntities() => new[] { ChallengeSubmission1, ChallengeSubmission2, ChallengeSubmission3, ChallengeSubmission4 };
 
         protected override Guid GetEntityId(ChallengeSubmission entity) => entity.Id;

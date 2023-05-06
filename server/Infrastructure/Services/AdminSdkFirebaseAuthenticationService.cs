@@ -27,7 +27,7 @@ namespace Infrastructure.Services
 
             var email = user.Email ?? user.ProviderData.FirstOrDefault(p => p.Email != null)?.Email;
             if (email == null)
-                throw new UnreachableException();
+                throw new UnreachableException(); // Assuming that every used sign in option provides an email.
 
             return new FirebaseUser(user.Uid, email);
         }

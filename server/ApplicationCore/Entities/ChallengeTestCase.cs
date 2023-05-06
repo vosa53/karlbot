@@ -18,7 +18,7 @@
         /// <summary>
         /// Challenge.
         /// </summary>
-        public Challenge Challenge { get; set; }
+        public Challenge? Challenge { get; set; }
 
         /// <summary>
         /// Sorting order.

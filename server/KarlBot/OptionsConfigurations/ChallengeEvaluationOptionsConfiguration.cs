@@ -25,7 +25,7 @@ namespace KarlBot.OptionsConfigurations
             var karelEvaluationLibraryPath = challengeEvaluationConfiguration.GetValue<string>("KarelEvaluationLibraryPath");
 
             if (karelLibraryPath == null || karelEvaluationLibraryPath == null)
-                throw new Exception();
+                throw new Exception("Path to Karel or Karel evaluation JavaScript library was not specified in the configuration.");
 
             options.KarelLibrarySource = File.ReadAllText(karelLibraryPath);
             options.KarelEvaluationLibrarySource = File.ReadAllText(karelEvaluationLibraryPath);

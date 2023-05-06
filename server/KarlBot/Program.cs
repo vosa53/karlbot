@@ -19,8 +19,8 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-// Application entry point.
-// Here is configured a dependency injection and request pipeline.
+// Server entry point. This is the place where the whole application is connected together.
+// Here is configured dependency injection and request pipeline.
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +40,7 @@ builder.Services.Configure<FirebaseOptions>(builder.Configuration.GetSection("Fi
 builder.Services.Configure<UserTokenOptions>(builder.Configuration.GetSection("UserToken"));
 
 builder.Services.AddTransient<IFirebaseAuthenticationService, AdminSdkFirebaseAuthenticationService>();
+builder.Services.AddTransient<IFirebaseSignInService, UserManagerFirebaseSignInService>();
 builder.Services.AddTransient<IChallengeEvaluationService, ClearScriptChallengeEvaluationService>();
 builder.Services.AddTransient<IUserTokenService, UserTokenService>();
 builder.Services.AddTransient<IChallengeRepository, DbContextChallengeRepository>();
@@ -92,7 +93,7 @@ builder.Services.AddAuthentication(o =>
         {
             ValidIssuer = builder.Configuration["UserToken:Issuer"],
             ValidAudience = builder.Configuration["UserToken:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["UserToken:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["UserToken:Key"]!)),
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
@@ -109,6 +110,8 @@ using (var serviceScope = app.Services.CreateScope())
 }
 
 InitializeFirebase(app.Services.GetService<IOptions<FirebaseOptions>>()!.Value);
+
+// Request pipeline configuration.
 
 if (app.Environment.IsDevelopment())
 {
