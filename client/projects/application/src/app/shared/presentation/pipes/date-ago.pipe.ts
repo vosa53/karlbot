@@ -1,6 +1,10 @@
 import { DatePipe } from "@angular/common";
 import { Inject, LOCALE_ID, Pipe, PipeTransform } from "@angular/core";
 
+/**
+ * Formats a date and time in a format showing how much time has passed since then.
+ * If the date is too far in the past it shows it in a standard way.
+ */
 @Pipe({
     name: "appDateAgo",
     standalone: true
@@ -8,6 +12,9 @@ import { Inject, LOCALE_ID, Pipe, PipeTransform } from "@angular/core";
 export class DateAgoPipe implements PipeTransform {
     private readonly datePipe: DatePipe;
 
+    /**
+     * @param locale Locale used to format the date.
+     */
     constructor(@Inject(LOCALE_ID) locale: string) {
         this.datePipe = new DatePipe(locale);
     }

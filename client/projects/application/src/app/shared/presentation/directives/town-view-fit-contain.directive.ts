@@ -3,7 +3,7 @@ import { TownViewComponent } from "../components/town-view/town-view.component";
 import { TownCameraFactory } from "../town/town-camera-factory";
 
 /**
- * Adjust the camera so that the town is whole contained in the viewport.
+ * Adjust a {@link TownViewComponent} camera so that the town is exactly and whole contained in the viewport.
  */
 @Directive({
     standalone: true,

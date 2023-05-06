@@ -3,6 +3,9 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } fr
 import { firstValueFrom } from "rxjs";
 import { SignInService } from "../services/sign-in.service";
 
+/**
+ * Permits access only to authenticated users. If {@link requiresAdmin} is `true` then the user must be also an administrator.
+ */
 export function authenticatedCanActivate(requiresAdmin = false): CanActivateFn {
     return async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
         const signInService = inject(SignInService);

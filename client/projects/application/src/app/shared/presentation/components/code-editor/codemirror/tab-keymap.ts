@@ -2,6 +2,9 @@ import { KeyBinding } from "@codemirror/view";
 import { indentMore, indentLess } from "@codemirror/commands";
 import { acceptCompletion } from "@codemirror/autocomplete";
 
+/**
+ * CodeMirror keymap allowing code completion and indenting with Tab key.
+ */
 export const tabKeymap: readonly KeyBinding[] = [
     {
         key: "Tab",

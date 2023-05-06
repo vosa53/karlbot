@@ -21,7 +21,10 @@ export class TownRenderer {
         this.imagesLoadPromise = Promise.all(this.imageLoadPromises);
     }
 
-    static async waitForImagesLoad() {
+    /**
+     * Returns a promise resolved when all images are loaded.
+     */
+    static async waitForImagesLoad(): Promise<void> {
         await this.imagesLoadPromise;
     }
 

@@ -2,9 +2,22 @@ import { autocompletion, Completion, CompletionContext } from "@codemirror/autoc
 import { CompletionItem } from "karel";
 import { CompletionItemType } from "karel";
 
-type CompletionItemsProvider = (line: number, column: number) => CompletionItem[];
+/**
+ * CodeMirror extension adding Karel codecompletion support.
+ * @param completionItemsProvider Function providing completion items at the given position.
+ */
+export function codeCompletion(completionItemsProvider: CompletionItemsProvider) {
+    return autocompletion({ 
+        override: [c => completionHandler(c, completionItemsProvider)] 
+    });
+}
 
-function handler(context: CompletionContext, completionItemsProvider: CompletionItemsProvider) {
+/**
+ * Provides completion items at the given code position. Line and column starts at 1.
+ */
+export type CompletionItemsProvider = (line: number, column: number) => CompletionItem[];
+
+function completionHandler(context: CompletionContext, completionItemsProvider: CompletionItemsProvider) {
     const identifier = context.matchBefore(/[a-zA-Z][a-zA-Z0-9]*/);
     if ((identifier === null || identifier.from == identifier.to) && !context.explicit)
         return null;
@@ -25,10 +38,4 @@ function handler(context: CompletionContext, completionItemsProvider: Completion
         from: identifier?.from ?? context.pos,
         options: codemirrorCompletionItems
     };
-}
-
-export function codeCompletion(completionItemsProvider: CompletionItemsProvider) {
-    return autocompletion({ 
-        override: [c => handler(c, completionItemsProvider)] 
-    });
 }

@@ -2,6 +2,27 @@ import { EditorView, Decoration, DecorationSet } from "@codemirror/view"
 import { StateField, StateEffect, TransactionSpec, EditorState } from "@codemirror/state"
 import { LineTextRange } from "karel";
 
+/**
+ * CodeMirror extension highlighting a specified code range. For example to highlight the currently executed instruction.
+ */
+export function currentRangeHighlighting() {
+    return [currentRangeField, currentRangeTheme];
+}
+
+/**
+ * Creates a transaction to highlight the given code range.
+ * @param state Editor state.
+ * @param currentRange Code range to be highlighted.
+ */
+export function setCurrentRange(state: EditorState, currentRange: LineTextRange | null): TransactionSpec {
+    if (currentRange === null)
+        return { effects: setCurrentRangeEffect.of(null) };
+    
+    const from = state.doc.line(currentRange.startLine).from + currentRange.startColumn - 1;
+    const to = state.doc.line(currentRange.endLine).from + currentRange.endColumn - 1;
+    return { effects: setCurrentRangeEffect.of({ from, to }) };
+}
+
 const setCurrentRangeEffect = StateEffect.define<{ from: number, to: number } | null>({
     map: (value, change) => {
         if (value === null)
@@ -38,16 +59,3 @@ const currentRangeTheme = EditorView.baseTheme({
     "&light .cm-current-range": { background: "#FDD83566", outline: "solid 1px #FDD83566" },
     "&dark .cm-current-range": { background: "#C0CA3366", outline: "solid 1px #C0CA3366" }
 });
-
-export function setCurrentRange(state: EditorState, currentRange: LineTextRange | null): TransactionSpec {
-    if (currentRange === null)
-        return { effects: setCurrentRangeEffect.of(null) };
-    
-    const from = state.doc.line(currentRange.startLine).from + currentRange.startColumn - 1;
-    const to = state.doc.line(currentRange.endLine).from + currentRange.endColumn - 1;
-    return { effects: setCurrentRangeEffect.of({ from, to }) };
-}
-
-export function currentRangeHighlighting() {
-    return [currentRangeField, currentRangeTheme];
-}

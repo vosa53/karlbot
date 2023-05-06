@@ -4,7 +4,7 @@ import { TownViewComponent } from "../components/town-view/town-view.component";
 import { TownCamera } from "../town/town-camera";
 
 /**
- * Adds an ability to move the camera to {@link TownViewComponent}.
+ * Adds an ability to move a camera to {@link TownViewComponent}.
  */
 @Directive({
     standalone: true,

@@ -4,6 +4,10 @@ import { Router } from "@angular/router";
 import { DialogService } from "../../presentation/services/dialog.service";
 import { NotificationService } from "../../presentation/services/notification.service";
 
+/**
+ * Global application error handler.
+ * Catches errors and informs the user about the problem. In development mode shows also the details.
+ */
 @Injectable()
 export class ApplicationErrorHandler extends ErrorHandler {
     constructor(

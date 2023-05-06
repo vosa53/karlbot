@@ -5,10 +5,16 @@ import { distinctUntilChanged, firstValueFrom, from, mergeMap, of, shareReplay, 
 import { AuthenticationService } from "./api/authentication.service";
 import { UserService } from "./api/user.service";
 
+/**
+ * Manages current user and his session.
+ */
 @Injectable({
     providedIn: "root"
 })
 export class SignInService {
+    /**
+     * Token of the currently signed in user. `null` when no user is signed in.
+     */
     readonly currentUserToken$ = authState(this.firebaseAuthentication).pipe(
         mergeMap(u => {
             if (u === null)
@@ -19,6 +25,9 @@ export class SignInService {
         shareReplay(1)
     );
     
+    /**
+     * Currently signed in user. `null` when no user is signed in.
+     */
     readonly currentUser$ = this.currentUserToken$.pipe(
         mergeMap(t => {
             if (t === null)
@@ -29,12 +38,21 @@ export class SignInService {
         shareReplay(1)
     );
 
+    /**
+     * @param firebaseAuthentication Firebase authentication library.
+     * @param authenticationService Authentication service.
+     * @param userService User service.
+     */
     constructor(
         private readonly firebaseAuthentication: Auth, 
         private readonly authenticationService: AuthenticationService,
         private readonly userService: UserService
     ) { }
 
+    /**
+     * Signs the user in via a Google sign in dialog.
+     * @returns 
+     */
     async signInWithGoogle(): Promise<boolean> {
         try {
             await signInWithPopup(this.firebaseAuthentication, new GoogleAuthProvider());
@@ -48,6 +66,9 @@ export class SignInService {
         return true;
     }
 
+    /**
+     * Signs the user out.
+     */
     async signOut(): Promise<void> {
         await signOut(this.firebaseAuthentication);
         await this.waitForUserChange();

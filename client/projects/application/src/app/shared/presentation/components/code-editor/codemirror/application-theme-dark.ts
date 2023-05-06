@@ -4,7 +4,7 @@ import { tags as t } from "@lezer/highlight";
 import { Extension } from "@codemirror/state";
 
 /**
- * Application Codemirror dark editor theme.
+ * Application CodeMirror dark editor theme.
  */
 export const applicationThemeDark = EditorView.theme({
     "&.cm-editor": { color: "#E0F2F1" },
@@ -24,7 +24,7 @@ export const applicationThemeDark = EditorView.theme({
 }, { dark: true });
 
 /**
- * Application Codemirror dark highlight style.
+ * Application CodeMirror dark highlight style.
  */
 export const applicationHighlightStyleDark = HighlightStyle.define([
     { tag: t.keyword, color: "#4FC3F7" },
@@ -34,6 +34,6 @@ export const applicationHighlightStyleDark = HighlightStyle.define([
 ]);
 
 /**
- * Application Codemirror dark style extension.
+ * Application CodeMirror dark style extension.
  */
 export const applicationStyleDark: Extension = [applicationThemeDark, syntaxHighlighting(applicationHighlightStyleDark)];

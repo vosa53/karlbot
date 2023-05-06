@@ -88,7 +88,7 @@ export class TownEditorComponent {
     readonly tabIndex = 0;
 
     constructor(private readonly hostElement: ElementRef) {
-        const assetsRoot = "/assets/editor/presentation/pages/editor/town-editor/";
+        const assetsRoot = "/assets/shared/presentation/components/town-editor/";
         this.tools = [
             { iconName: "open_with", tool: new MoveTownEditorTool() },
             { iconSrc: assetsRoot + "karel-tool.png", tool: new KarelTownEditorTool() },

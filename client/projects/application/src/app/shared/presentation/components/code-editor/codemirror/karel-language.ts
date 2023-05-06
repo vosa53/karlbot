@@ -3,7 +3,14 @@ import { styleTags, tags as t } from "@lezer/highlight";
 import { LRLanguage, LanguageSupport, continuedIndent, indentNodeProp } from "@codemirror/language";
 
 /**
- * Karel codemirror language.
+ * CodeMirror language support for Karel.
+ */
+export function karel(): LanguageSupport {
+    return new LanguageSupport(karelLanguage);
+}
+
+/**
+ * Karel CodeMirror language.
  */
 export const karelLanguage = LRLanguage.define({
     parser: parser.configure({
@@ -25,10 +32,3 @@ export const karelLanguage = LRLanguage.define({
         ]
     })
 });
-
-/**
- * Codemirror language support for Karel.
- */
-export function karel() {
-    return new LanguageSupport(karelLanguage);
-}

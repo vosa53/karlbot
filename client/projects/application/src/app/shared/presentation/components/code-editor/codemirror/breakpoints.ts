@@ -1,6 +1,49 @@
 import { EditorState, StateField, StateEffect, RangeSet, TransactionSpec } from "@codemirror/state"
 import { GutterMarker, EditorView, gutter, ViewUpdate } from "@codemirror/view"
 
+/**
+ * CodeMirror extension adding breakpoints support.
+ */
+export function breakpoints() {
+    return [breakpointsField, breakpointsGutter, breakpointsTheme];
+}
+
+/**
+ * Creates a transaction setting breakpoints on the given lines.
+ * @param state Editor state.
+ * @param breakpoints Line numbers where the breakpoints should be set. Line number starts at 1.
+ */
+export function setBreakpoints(state: EditorState, breakpoints: readonly number[]): TransactionSpec {
+    const breakpointPositions = breakpoints.map(b => state.doc.line(b).from);
+    return { effects: setBreakpointsEffect.of(breakpointPositions) };
+}
+
+/**
+ * Returns from the editor line numbers where the breakpoints are. Line number starts at 1.
+ * @param state Editor state.
+ */
+export function getBreakpoints(state: EditorState): readonly number[] {
+    const breakpointPositions = state.field(breakpointsField);
+    const breakpoints: number[] = [];
+
+    const iterator = breakpointPositions.iter();
+    while (iterator.value !== null) {
+        const line = state.doc.lineAt(iterator.from).number;
+        breakpoints.push(line);
+        iterator.next();
+    }
+
+    return breakpoints;
+}
+
+/**
+ * Returns whether the breakpoints changed.
+ * @param viewUpdate View update.
+ */
+export function breakpointsChanged(viewUpdate: ViewUpdate): boolean {
+    return viewUpdate.startState.field(breakpointsField) !== viewUpdate.state.field(breakpointsField);
+}
+
 const setBreakpointsEffect = StateEffect.define<number[]>({
     map: (val, mapping) => val.map(v => mapping.mapPos(v))
 });
@@ -64,30 +107,3 @@ const breakpointsTheme = EditorView.baseTheme({
         cursor: "default"
     }
 });
-
-export function setBreakpoints(state: EditorState, breakpoints: readonly number[]): TransactionSpec {
-    const breakpointPositions = breakpoints.map(b => state.doc.line(b).from);
-    return { effects: setBreakpointsEffect.of(breakpointPositions) };
-}
-
-export function getBreakpoints(state: EditorState): readonly number[] {
-    const breakpointPositions = state.field(breakpointsField);
-    const breakpoints: number[] = [];
-
-    const iterator = breakpointPositions.iter();
-    while (iterator.value !== null) {
-        const line = state.doc.lineAt(iterator.from).number;
-        breakpoints.push(line);
-        iterator.next();
-    }
-
-    return breakpoints;
-}
-
-export function breakpointsChanged(viewUpdate: ViewUpdate): boolean {
-    return viewUpdate.startState.field(breakpointsField) !== viewUpdate.state.field(breakpointsField);
-}
-
-export function breakpoints() {
-    return [breakpointsField, breakpointsGutter, breakpointsTheme];
-}

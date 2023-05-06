@@ -2,7 +2,7 @@ import { EditorView } from "@codemirror/view";
 import { Extension } from "@codemirror/state";
 
 /**
- * Application Codemirror editor theme.
+ * Application CodeMirror editor theme.
  */
 export const applicationTheme = EditorView.baseTheme({
     "&.cm-editor": { background: "transparent", height: "100%" },
@@ -24,6 +24,6 @@ export const applicationTheme = EditorView.baseTheme({
 });
 
 /**
- * Application Codemirror style extension.
+ * Application CodeMirror style extension.
  */
 export const applicationStyle: Extension = [applicationTheme];

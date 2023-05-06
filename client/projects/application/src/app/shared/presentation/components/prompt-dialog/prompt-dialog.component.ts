@@ -7,6 +7,9 @@ import { MatInputModule } from "@angular/material/input";
 import { ValidatedInputDirective } from "../../directives/validated-input.directive";
 import { AbstractControl, FormControl, ReactiveFormsModule, ValidationErrors, ValidatorFn } from "@angular/forms";
 
+/**
+ * Dialog allowing to enter a validated text.
+ */
 @Component({
     standalone: true,
     selector: "app-prompt-dialog",
@@ -15,6 +18,9 @@ import { AbstractControl, FormControl, ReactiveFormsModule, ValidationErrors, Va
     styleUrls: ["./prompt-dialog.component.css"]
 })
 export class PromptDialogComponent {
+    /**
+     * Edited text.
+     */
     readonly text: FormControl;
 
     constructor(readonly dialogRef: MatDialogRef<PromptDialogComponent>, @Inject(MAT_DIALOG_DATA) readonly data: PromptDialogData) {
@@ -35,11 +41,32 @@ export class PromptDialogComponent {
     }
 }
 
+/**
+ * Configuration of {@link PromptDialogComponent}.
+ */
 export interface PromptDialogData {
+    /**
+     * Title.
+     */
     readonly title: string;
+
+    /**
+     * Message.
+     */
     readonly message: string;
+
+    /**
+     * Prefilled text.
+     */
     readonly text: string;
+
+    /**
+     * Text validator.
+     */
     readonly validator: PromptDialogValidator;
 }
 
+/**
+ * Validator of prompt dialog text. Returns `true` when the given text is valid and `false` otherwise.
+ */
 export type PromptDialogValidator = (text: string) => boolean;

@@ -3,6 +3,9 @@ import { CommonModule } from "@angular/common";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { LoadingService } from "../../../application/services/loading-service";
 
+/**
+ * Displays a loading indicator over the screen according to information from {@link LoadingService}.
+ */
 @Component({
     selector: "app-global-loader",
     standalone: true,

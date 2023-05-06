@@ -1,15 +1,26 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
+/**
+ * Manages and persists application color theme.
+ */
 @Injectable({
     providedIn: "root"
 })
 export class ColorThemeService {
     private readonly colorTheme = new BehaviorSubject(ColorThemeService.loadColorTheme());
+
+    /**
+     * Current color theme.
+     */
     readonly colorTheme$ = this.colorTheme.asObservable();
 
     private static readonly COLOR_THEME_LOCAL_STORAGE_KEY = "color-theme";
 
+    /**
+     * Sets the current color theme.
+     * @param colorTheme Color theme.
+     */
     setColorTheme(colorTheme: ColorTheme) {
         ColorThemeService.saveColorTheme(colorTheme);
         this.colorTheme.next(colorTheme);
@@ -30,7 +41,17 @@ export class ColorThemeService {
     }
 }
 
+/**
+ * Color theme.
+ */
 export enum ColorTheme {
+    /**
+     * Light.
+     */
     light = "light",
+
+    /**
+     * Dark.
+     */
     dark = "dark"
 }

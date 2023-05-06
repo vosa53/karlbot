@@ -4,6 +4,9 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ValidatedInputDirective } from "../../directives/validated-input.directive";
 
+/**
+ * Dialog displaying a message.
+ */
 @Component({
     standalone: true,
     selector: "app-message-dialog",
@@ -15,6 +18,9 @@ export class MessageDialogComponent {
     constructor(@Inject(MAT_DIALOG_DATA) readonly data: MessageDialogData) { }
 }
 
+/**
+ * Configuration of {@link MessageDialogComponent}.
+ */
 export interface MessageDialogData {
     readonly title: string;
     readonly message: string;

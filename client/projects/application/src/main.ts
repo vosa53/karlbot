@@ -19,7 +19,7 @@ import { API_BASE_URL } from "./app/shared/application/services/api/api-service"
 /**
  * Application entry point.
  * 
- * Here is configured a dependency injection and bootstrapped the main application component.
+ * Here is configured dependency injection and bootstrapped the main application component.
  */
 bootstrapApplication(AppComponent, {
     providers: [

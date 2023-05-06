@@ -3,6 +3,9 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } fr
 import { firstValueFrom } from "rxjs";
 import { SignInService } from "../services/sign-in.service";
 
+/**
+ * Permits access only to unauthenticated users.
+ */
 export function anonymousCanActivate(): CanActivateFn {
     return async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
         const signInService = inject(SignInService);

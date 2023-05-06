@@ -2,6 +2,9 @@ import { CommonModule } from "@angular/common";
 import { Component, ElementRef, Input, ViewEncapsulation } from "@angular/core";
 import { MarkdownService } from "../../../application/services/markdown-service";
 
+/**
+ * Renders a Markdown code with appropriate styles.
+ */
 @Component({
     standalone: true,
     selector: "app-markdown-view",
@@ -11,6 +14,9 @@ import { MarkdownService } from "../../../application/services/markdown-service"
     encapsulation: ViewEncapsulation.None
 })
 export class MarkdownViewComponent {
+    /**
+     * Markdown source code to be rendered.
+     */
     @Input()
     get source(): string {
         return this._source;

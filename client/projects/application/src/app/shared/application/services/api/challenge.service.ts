@@ -6,37 +6,62 @@ import { ChallengeDifficulty } from "../../models/challenge-difficulty";
 import { ChallengeSubmissionsInfo } from "../../models/challenge-submissions.info";
 import { APIService } from "./api-service";
 
+/**
+ * Service for managing challenges.
+ */
 @Injectable({
     providedIn: "root"
 })
 export class ChallengeService {
     private readonly BASE_URL = "/Challenges";
 
+    /**
+     * @param apiService Service for server API communication.
+     */
     constructor(private readonly apiService: APIService) { }
 
+    /**
+     * Returns all challenges.
+     */
     async get(): Promise<Challenge[]> {
         const dto = await this.apiService.get<ChallengeDTO[]>(this.BASE_URL);
         return dto.map(d => this.fromDTO(d));
     }
 
+    /**
+     * Returns a challenge by its ID.
+     * @param id Challenge ID.
+     */
     async getById(id: string): Promise<Challenge> {
         const url = `${this.BASE_URL}/${id}`;
         const dto = await this.apiService.get<ChallengeDTO>(url);
         return this.fromDTO(dto);
     }
 
+    /**
+     * Creates a new challenge.
+     * @param challenge Challenge.
+     */
     async add(challenge: Challenge): Promise<Challenge> {
         const dto = this.toDTO(challenge);
         const dtoResult = await this.apiService.post<ChallengeDTO>(this.BASE_URL, dto);
         return this.fromDTO(dtoResult);
     }
 
+    /**
+     * Updates a challenge.
+     * @param challenge New challenge data.
+     */
     async update(challenge: Challenge): Promise<any> {
         const dto = this.toDTO(challenge);
         const url = `${this.BASE_URL}/${challenge.id}`;
         await this.apiService.put(url, dto);
     }
 
+    /**
+     * Deletes a challenge.
+     * @param challenge Challenge.
+     */
     async delete(challenge: Challenge): Promise<any> {
         const url = `${this.BASE_URL}/${challenge.id}`;
         return this.apiService.delete(url);

@@ -4,6 +4,9 @@ import { switchMap, take } from "rxjs";
 import { IS_ANONYMOUS_ENDPOINT } from "../http-context-tokens/is-anonymous-endpoint";
 import { SignInService } from "./../services/sign-in.service";
 
+/**
+ * Adds an authorization token from {@link SignInService.currentUserToken$} to a request. Can be disabled with {@link IS_ANONYMOUS_ENDPOINT} HTTP context token.
+ */
 export function TokenInterceptor(request: HttpRequest<unknown>, next: HttpHandlerFn) {
     if (request.context.get(IS_ANONYMOUS_ENDPOINT))
         return next(request);

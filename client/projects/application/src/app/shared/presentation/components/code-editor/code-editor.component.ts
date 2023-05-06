@@ -19,7 +19,9 @@ import { tabKeymap } from "./codemirror/tab-keymap";
 import { ColorTheme, ColorThemeService } from "../../../application/services/color-theme.service";
 import { indentUnit } from "@codemirror/language";
 
-
+/**
+ * Code editor of the Karel language.
+ */
 @Component({
     standalone: true,
     selector: "app-code-editor",
@@ -28,27 +30,51 @@ import { indentUnit } from "@codemirror/language";
     styleUrls: ["./code-editor.component.css"]
 })
 export class CodeEditorComponent implements AfterViewInit, OnChanges {
+    /**
+     * Edited code.
+     */
     @Input()
     code = "";
 
+    /**
+     * Whether the editor is in readonly mode.
+     */
     @Input()
     readonly = false;
 
+    /**
+     * Errors to be highlighted.
+     */
     @Input()
     errors: readonly Error[] = [];
 
+    /**
+     * Code range to be highlighted as currently executed.
+     */
     @Input()
     currentRange: LineTextRange | null = null;
-
+    
+    /**
+     * Line numbers with breakpoints. Line number starts at 1.
+     */
     @Input()
     breakpoints: readonly number[] = [];
 
+    /**
+     * Function providing completion items at the given position in the code.
+     */
     @Input()
-    completionItemsProvider: (line: number, column: number) => CompletionItem[] = (l, c) => [];
+    completionItemsProvider: (line: number, column: number) => CompletionItem[] = () => [];
 
+    /**
+     * Emitted when the code is changed.
+     */
     @Output()
     codeChange = new EventEmitter<string>();
 
+    /**
+     * Emitted when the breakpoints are changed.
+     */
     @Output()
     breakpointsChange = new EventEmitter<readonly number[]>();
 
@@ -121,7 +147,7 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
         if ((changes === null || "code" in changes) && this.codeInEditor !== this.code) {
             this.codeInEditor = this.code;
 
-            // Create a whole new state to clear undo redo history.
+            // Create a whole new state to clear undo & redo history.
             const state = this.createEditorState();
             view.setState(state);
         }
@@ -161,11 +187,17 @@ export class CodeEditorComponent implements AfterViewInit, OnChanges {
             return applicationStyleDark;
     }
 
+    /**
+     * Undoes the edit action.
+     */
     undo() {
         if (this.editorView !== null)
             undo(this.editorView);
     }
 
+    /**
+     * Redoes the edit action.
+     */
     redo() {
         if (this.editorView !== null)
             redo(this.editorView);

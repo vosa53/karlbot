@@ -1,4 +1,14 @@
+/**
+ * Challenge submission evaluation result.
+ */
 export interface ChallengeSubmissionEvaluationResult {
-    readonly successRate: number;
-    readonly message: string;
+    /**
+     * Success ratio.
+     */
+    successRate: number;
+
+    /**
+     * Message further descripting the result.
+     */
+    message: string;
 }
