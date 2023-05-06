@@ -1,10 +1,6 @@
 ﻿using ApplicationCore.Services;
 using FirebaseAdmin.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Infrastructure.Services
 {
@@ -31,7 +27,7 @@ namespace Infrastructure.Services
 
             var email = user.Email ?? user.ProviderData.FirstOrDefault(p => p.Email != null)?.Email;
             if (email == null)
-                throw new Exception();
+                throw new UnreachableException();
 
             return new FirebaseUser(user.Uid, email);
         }

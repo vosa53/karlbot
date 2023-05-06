@@ -1,12 +1,9 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Repositories;
 using ApplicationCore.Services;
-using Infrastructure;
 using KarlBot.Authorization;
 using KarlBot.DataModels.Challenges;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace KarlBot.Controllers
 {

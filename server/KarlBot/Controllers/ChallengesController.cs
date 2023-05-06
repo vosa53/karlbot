@@ -1,10 +1,8 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Repositories;
-using Google.Apis.Util;
 using KarlBot.Authorization;
 using KarlBot.DataModels.Challenges;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KarlBot.Controllers

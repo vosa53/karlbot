@@ -11,7 +11,7 @@ export class UserService {
     constructor(private readonly apiService: APIService) { }
 
     getCurrent(): Promise<User> {
-        const url = `${this.BASE_URL}/current`;
+        const url = `${this.BASE_URL}/Current`;
         return this.apiService.get<User>(url);
     }
 }

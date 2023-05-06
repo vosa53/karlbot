@@ -1,7 +1,5 @@
 ﻿using ApplicationCore.Entities;
 using KarlBot.DataModels.Users;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -28,7 +26,7 @@ namespace KarlBot.Controllers
         /// <summary>
         /// Returns the currently authenticated user.
         /// </summary>
-        [HttpGet("current")]
+        [HttpGet("Current")]
         public async Task<ActionResult<UserDataModel>> GetCurrentAsync()
         {
             var user = await _userManager.GetUserAsync(User);

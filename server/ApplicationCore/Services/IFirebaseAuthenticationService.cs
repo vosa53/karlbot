@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ApplicationCore.Services
+﻿namespace ApplicationCore.Services
 {
     /// <summary>
     /// Service to interact with <see href="https://firebase.google.com/docs/auth">Firebase Authentication</see>.

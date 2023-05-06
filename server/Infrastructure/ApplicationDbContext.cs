@@ -3,13 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure
 {
@@ -48,7 +41,6 @@ namespace Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<ChallengeSubmission>().OwnsOne(cs => cs.EvaluationResult);
             modelBuilder.Entity<Challenge>().Navigation(c => c.TestCases).AutoInclude();
         }
 

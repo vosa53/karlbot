@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure.Services
+﻿namespace Infrastructure.Services
 {
     /// <summary>
     /// Configuration of challenge evaluation.

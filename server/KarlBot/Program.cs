@@ -6,20 +6,20 @@ using Google.Apis.Auth.OAuth2;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using KarlBot.OptionsConfigurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Text.Json;
-using KarlBot.OptionsConfigurations;
 using Microsoft.Extensions.Options;
-using System.Reflection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-// Application entry poínt.
+// Application entry point.
 // Here is configured a dependency injection and request pipeline.
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,70 +47,65 @@ builder.Services.AddTransient<IChallengeSubmissionRepository, DbContextChallenge
 builder.Services.AddTransient<IProjectRepository, DbContextProjectRepository>();
 builder.Services.AddTransient<IUserRepository, DbContextUserRepository>();
 
-// Configuring Swagger/OpenAPI. More at: https://aka.ms/aspnetcore/swashbuckle.
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(setup =>
+builder.Services.AddSwaggerGen(o =>
 {
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
-        BearerFormat = "JWT",
-        Name = "JWT Authentication",
-        Description = "JWT Bearer token",
         Type = SecuritySchemeType.Http,
-        In = ParameterLocation.Header,
         Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "JWT token",
+        BearerFormat = "JWT",
         Reference = new OpenApiReference
         {
-            Id = JwtBearerDefaults.AuthenticationScheme,
             Type = ReferenceType.SecurityScheme,
+            Id = "JwtToken"
         }
     };
-    setup.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-    setup.AddSecurityRequirement(new OpenApiSecurityRequirement
+    o.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+    o.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         { jwtSecurityScheme, Array.Empty<string>() }
     });
 
+    // From https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle.
     var xmlDocumentationFileName = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
     var xmlDocumentationFilePath = Path.Combine(AppContext.BaseDirectory, xmlDocumentationFileName);
-    setup.IncludeXmlComments(xmlDocumentationFilePath);
-
+    o.IncludeXmlComments(xmlDocumentationFilePath);
 });
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ApplicationDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<User, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(o =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(o => 
+    .AddJwtBearer(o =>
     {
         o.TokenValidationParameters = new TokenValidationParameters
         {
             ValidIssuer = builder.Configuration["UserToken:Issuer"],
             ValidAudience = builder.Configuration["UserToken:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["UserToken:Key"])),
-            ValidateIssuerSigningKey = true,
             ValidateIssuer = true,
             ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
             ValidateLifetime = true
         };
     });
 
-
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+using (var serviceScope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
 }
 
 InitializeFirebase(app.Services.GetService<IOptions<FirebaseOptions>>()!.Value);
@@ -145,12 +140,12 @@ void InitializeFirebase(FirebaseOptions options)
 {
     if (app.Environment.IsDevelopment())
         Environment.SetEnvironmentVariable("FIREBASE_AUTH_EMULATOR_HOST", options.AuthenticationEmulatorUrl);
-    
+
     FirebaseApp.Create(new AppOptions
     {
         ProjectId = options.ProjectId,
-        Credential = app.Environment.IsDevelopment() 
-            ? GoogleCredential.FromAccessToken("test") 
+        Credential = app.Environment.IsDevelopment()
+            ? GoogleCredential.FromAccessToken("test")
             : GoogleCredential.FromFile(options.CredentialFilePath)
     });
 }

@@ -2,14 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.Intrinsics.X86;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Tests
 {
@@ -76,6 +68,7 @@ namespace Infrastructure.Tests
             var user2Role2 = new IdentityUserRole<Guid> { UserId = Guid2, RoleId = Guid2 };
             var user2Role3 = new IdentityUserRole<Guid> { UserId = Guid2, RoleId = Guid3 };
 
+            // From: https://learn.microsoft.com/en-us/ef/core/testing/testing-with-the-database.
             lock (_initializeLock)
             {
                 if (!_databaseInitialized)

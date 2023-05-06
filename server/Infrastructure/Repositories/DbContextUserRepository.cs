@@ -1,12 +1,6 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Repositories;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -18,6 +12,7 @@ namespace Infrastructure.Repositories
         private readonly UserManager<User> _userManager;
 
         /// <param name="dbContext">Application DbContext.</param>
+        /// <param name="userManager">User manager.</param>
         public DbContextUserRepository(ApplicationDbContext dbContext, UserManager<User> userManager) : base(dbContext)
         {
             _userManager = userManager;

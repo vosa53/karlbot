@@ -27,7 +27,6 @@ namespace KarlBot.OptionsConfigurations
             if (karelLibraryPath == null || karelEvaluationLibraryPath == null)
                 throw new Exception();
 
-
             options.KarelLibrarySource = File.ReadAllText(karelLibraryPath);
             options.KarelEvaluationLibrarySource = File.ReadAllText(karelEvaluationLibraryPath);
         }

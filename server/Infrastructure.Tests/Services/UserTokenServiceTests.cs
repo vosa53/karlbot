@@ -1,17 +1,12 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Repositories;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Tests.Services
 {
@@ -35,7 +30,7 @@ namespace Infrastructure.Tests.Services
             var token = await service.CreateTokenAsync(new User("aaa@bbb.ccc") { Id = user.Id });
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("xxxxxxxxxxxxxxxx"));
-            var validationParameters = new TokenValidationParameters
+            var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidIssuer = "issuer",
                 ValidAudience = "audience",
@@ -44,8 +39,8 @@ namespace Infrastructure.Tests.Services
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true
             };
-            var validator = new JwtSecurityTokenHandler();
-            var principal = validator.ValidateToken(token, validationParameters, out var validatedToken);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var validatedToken);
 
             Assert.That(principal.FindFirstValue(ClaimTypes.NameIdentifier), Is.EqualTo(user.Id.ToString()));
             Assert.That(principal.FindAll(ClaimTypes.Role).Select(c => c.Value), Is.EquivalentTo(new[] { "FirstRole", "SecondRole" }));

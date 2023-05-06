@@ -1,18 +1,10 @@
-﻿using Microsoft.ClearScript.JavaScript;
+﻿using ApplicationCore.Entities;
+using ApplicationCore.Services;
 using Microsoft.ClearScript;
 using Microsoft.ClearScript.V8;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FirebaseAdmin.Messaging;
-using ApplicationCore.Entities;
-using System.Text.Json;
-using ApplicationCore;
-using ApplicationCore.Services;
-using Microsoft.Extensions.Options;
 using Microsoft.CSharp.RuntimeBinder;
+using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace Infrastructure.Services
 {
