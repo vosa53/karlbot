@@ -1,7 +1,7 @@
 import { Instruction } from "./instructions/instruction";
 
 /**
- * Program.
+ * Assembly program.
  */
 export class Program {
     /**

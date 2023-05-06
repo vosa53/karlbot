@@ -1,7 +1,7 @@
 // Webpack is used only for bundling the Karel evaluation library for server challenge evaluation.
 
 const path = require("path");
-const CircularDependencyPlugin = require("circular-dependency-plugin")
+const CircularDependencyPlugin = require("circular-dependency-plugin");
 
 module.exports = {
     entry: "./src/public-api.ts",
@@ -22,15 +22,13 @@ module.exports = {
         karel: "karel"
     },
     output: {
+        library: "karelEvaluation",
         filename: "karel-evaluation.js",
-        path: path.resolve(__dirname, "dist"),
-        library: "karelEvaluation"
+        path: path.resolve(__dirname, "dist")
     },
     plugins: [
         new CircularDependencyPlugin({
-            onDetected({ module: webpackModuleRecord, paths, compilation }) {
-                compilation.errors.push(new Error(paths.join(" -> ")))
-            }
+            onDetected: ({ paths, compilation }) => compilation.errors.push(new Error(paths.join(" -> ")))
         })
     ]
 };

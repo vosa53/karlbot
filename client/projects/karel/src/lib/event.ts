@@ -2,7 +2,7 @@
  * Event.
  */
 export class Event {
-    private listeners: (() => void)[] = [];
+    private readonly listeners: (() => void)[] = [];
 
     /**
      * Emits the event.

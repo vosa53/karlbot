@@ -1,6 +1,9 @@
 import { Instruction } from "../../public-api";
 import { Program } from "../assembly/program";
 
+/**
+ * Readonly interface of call stack frame.
+ */
 export interface ReadonlyCallStackFrame {
     /**
      * Program.

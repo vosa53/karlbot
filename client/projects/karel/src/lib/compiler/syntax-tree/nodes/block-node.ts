@@ -6,13 +6,22 @@ import { EndPrimitiveToken } from "../tokens/end-token";
 import { EndToken } from "../tokens/end-token";
 import { Node, PrimitiveNode } from "./node";
 
+/**
+ * Sequence of statements. It is used as a body for other nodes.
+ */
 export class BlockNode extends Node {
+    /**
+     * Statements in the block.
+     */
     get statements(): readonly Node[] {
         if (this._statements === undefined)
             this.initialize();
         return this._statements!;
     }
 
+    /**
+     * Token indicating the block end.
+     */
     get endToken(): EndToken | null {
         if (this._endToken === undefined)
             this.initialize();
@@ -22,11 +31,18 @@ export class BlockNode extends Node {
     private _statements?: Node[] = undefined;
     private _endToken?: EndToken | null = undefined;
 
+    /**
+     * @param primitiveNode Wrapped primitive node.
+     * @param parent Parent node.
+     * @param position Position in the text. First is 0.
+     * @param startLine Line in the text where it starts. First is 1.
+     * @param startColumn Column in the text where it starts. First is 1.
+     */
     constructor(primitiveNode: BlockPrimitiveNode, parent: Node | null, position: number, startLine: number, startColumn: number) {
         super(primitiveNode, parent, position, startLine, startColumn);
     }
 
-    with(newProperties: { statements?: readonly Node[], endToken?: EndToken | null }): BlockNode {
+    override with(newProperties: { statements?: readonly Node[], endToken?: EndToken | null }): BlockNode {
         const blockPrimitiveNode = <BlockPrimitiveNode>this.primitive;
 
         return new BlockPrimitiveNode(
@@ -46,11 +62,24 @@ export class BlockNode extends Node {
     }
 }
 
-
+/**
+ * Sequence of statements. It is used as a body for other nodes.
+ */
 export class BlockPrimitiveNode extends PrimitiveNode {
+    /**
+     * Statements in the block.
+     */
     readonly statements: readonly PrimitiveNode[];
+
+    /**
+     * Token indicating the block end.
+     */
     readonly endToken: EndPrimitiveToken | null;
 
+    /**
+     * @param statements Statements in the block.
+     * @param endToken Token indicating the block end.
+     */
     constructor(statements: readonly PrimitiveNode[], endToken: EndPrimitiveToken | null) {
         super(BlockPrimitiveNode.createChildren(statements, endToken));
         this.statements = statements;
@@ -63,7 +92,7 @@ export class BlockPrimitiveNode extends PrimitiveNode {
             PrimitiveSyntaxElementUtils.equalsOrBothNull(this.endToken, other.endToken);
     }
 
-    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): BlockNode {
+    override createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): BlockNode {
         return new BlockNode(this, parent, position, startLine, startColumn);
     }
 

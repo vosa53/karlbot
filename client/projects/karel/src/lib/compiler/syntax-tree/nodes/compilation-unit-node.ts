@@ -7,19 +7,31 @@ import { EndOfFileToken } from "../tokens/end-of-file-token";
 import { Node, PrimitiveNode } from "./node";
 import { ProgramNode, ProgramPrimitiveNode } from "./program-node";
 
+/**
+ * Compilation unit (abstraction of a source code file).
+ */
 export class CompilationUnitNode extends Node {
+    /**
+     * Program declarations in the compilation unit.
+     */
     get programs(): readonly ProgramNode[] {
         if (this._programs === undefined)
             this.initialize();
         return this._programs!;
     }
 
+    /**
+     * End of file token.
+     */
     get endOfFileToken(): EndOfFileToken {
         if (this._endOfFileToken === undefined)
             this.initialize();
         return this._endOfFileToken!;
     }
 
+    /**
+     * Path to a file corresponding to the compilation unit.
+     */
     get filePath(): string {
         return (<CompilationUnitPrimitiveNode>this.primitive).filePath;
     }
@@ -27,11 +39,18 @@ export class CompilationUnitNode extends Node {
     private _programs?: ProgramNode[] = undefined;
     private _endOfFileToken?: EndOfFileToken = undefined;
 
+    /**
+     * @param primitiveNode Wrapped primitive node.
+     * @param parent Parent node.
+     * @param position Position in the text. First is 0.
+     * @param startLine Line in the text where it starts. First is 1.
+     * @param startColumn Column in the text where it starts. First is 1.
+     */
     constructor(primitiveNode: CompilationUnitPrimitiveNode, parent: Node | null, position: number, startLine: number, startColumn: number) {
         super(primitiveNode, parent, position, startLine, startColumn);
     }
 
-    with(newProperties: { programs?: readonly ProgramNode[], endOfFileToken?: EndOfFileToken, filePath?: string }): CompilationUnitNode {
+    override with(newProperties: { programs?: readonly ProgramNode[], endOfFileToken?: EndOfFileToken, filePath?: string }): CompilationUnitNode {
         const compilationUnitPrimitiveNode = <CompilationUnitPrimitiveNode>this.primitive;
 
         return new CompilationUnitPrimitiveNode(
@@ -52,12 +71,30 @@ export class CompilationUnitNode extends Node {
     }
 }
 
-
+/**
+ * Compilation unit (abstraction of a source code file).
+ */
 export class CompilationUnitPrimitiveNode extends PrimitiveNode {
+    /**
+     * Program declarations in the compilation unit.
+     */
     readonly programs: readonly ProgramPrimitiveNode[];
+
+    /**
+     * End of file token.
+     */
     readonly endOfFileToken: EndOfFilePrimitiveToken;
+
+    /**
+     * Path to a file corresponding to the compilation unit.
+     */
     readonly filePath: string;
 
+    /**
+     * @param programs Program declarations in the compilation unit.
+     * @param endOfFileToken End of file token.
+     * @param filePath Path to a file corresponding to the compilation unit.
+     */
     constructor(programs: readonly ProgramPrimitiveNode[], endOfFileToken: EndOfFilePrimitiveToken, filePath: string) {
         super(CompilationUnitPrimitiveNode.createChildren(programs, endOfFileToken));
         this.programs = programs;
@@ -72,7 +109,7 @@ export class CompilationUnitPrimitiveNode extends PrimitiveNode {
             this.filePath === other.filePath;
     }
 
-    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): CompilationUnitNode {
+    override createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): CompilationUnitNode {
         return new CompilationUnitNode(this, parent, position, startLine, startColumn);
     }
 

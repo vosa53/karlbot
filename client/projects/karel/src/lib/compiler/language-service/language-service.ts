@@ -34,10 +34,6 @@ export class LanguageService {
             .map(s => this.createCompletionItem(s));
     }
 
-    /*static getIndentationLevelAt(line: number, column: number): number {
-
-    }*/
-
     private createCompletionItem(symbol: Symbol_) {
         if (symbol instanceof ExternalProgramSymbol) {
             return new CompletionItem(

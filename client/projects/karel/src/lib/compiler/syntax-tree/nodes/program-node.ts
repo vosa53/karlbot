@@ -8,19 +8,31 @@ import { ProgramToken } from "../tokens/program-token";
 import { BlockNode, BlockPrimitiveNode } from "./block-node";
 import { Node, PrimitiveNode } from "./node";
 
+/**
+ * Program declaration.
+ */
 export class ProgramNode extends Node {
+    /**
+     * `program` keyword.
+     */
     get programToken(): ProgramToken | null {
         if (this._programToken === undefined)
             this.initialize();
         return this._programToken!;
     }
 
+    /**
+     * Name of the program.
+     */
     get nameToken(): IdentifierToken | null {
         if (this._nameToken === undefined)
             this.initialize();
         return this._nameToken!;
     }
 
+    /**
+     * Program body.
+     */
     get body(): BlockNode | null {
         if (this._body === undefined)
             this.initialize();
@@ -31,11 +43,18 @@ export class ProgramNode extends Node {
     private _nameToken?: IdentifierToken | null = undefined;
     private _body?: BlockNode | null = undefined;
 
+    /**
+     * @param primitiveNode Wrapped primitive node.
+     * @param parent Parent node.
+     * @param position Position in the text. First is 0.
+     * @param startLine Line in the text where it starts. First is 1.
+     * @param startColumn Column in the text where it starts. First is 1.
+     */
     constructor(primitiveNode: ProgramPrimitiveNode, parent: Node | null, position: number, startLine: number, startColumn: number) {
         super(primitiveNode, parent, position, startLine, startColumn);
     }
 
-    with(newProperties: { programToken?: ProgramToken | null, nameToken?: IdentifierToken | null, body?: BlockNode | null }): ProgramNode {
+    override with(newProperties: { programToken?: ProgramToken | null, nameToken?: IdentifierToken | null, body?: BlockNode | null }): ProgramNode {
         const programPrimitiveNode = <ProgramPrimitiveNode>this.primitive;
 
         return new ProgramPrimitiveNode(
@@ -59,12 +78,30 @@ export class ProgramNode extends Node {
     }
 }
 
-
+/**
+ * Program declaration.
+ */
 export class ProgramPrimitiveNode extends PrimitiveNode {
+    /**
+     * `program` keyword.
+     */
     readonly programToken: ProgramPrimitiveToken | null;
+
+    /**
+     * Name of the program.
+     */
     readonly nameToken: IdentifierPrimitiveToken | null;
+
+    /**
+     * Program body.
+     */
     readonly body: BlockPrimitiveNode | null;
 
+    /**
+     * @param programToken `program` keyword.
+     * @param nameToken Name of the program.
+     * @param body Program body.
+     */
     constructor(programToken: ProgramPrimitiveToken | null, nameToken: IdentifierPrimitiveToken | null, body: BlockPrimitiveNode | null) {
         super(ProgramPrimitiveNode.createChildren(programToken, nameToken, body));
         this.programToken = programToken;
@@ -79,7 +116,7 @@ export class ProgramPrimitiveNode extends PrimitiveNode {
             PrimitiveSyntaxElementUtils.equalsOrBothNull(this.body, other.body);
     }
 
-    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): ProgramNode {
+    override createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): ProgramNode {
         return new ProgramNode(this, parent, position, startLine, startColumn);
     }
 

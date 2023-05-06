@@ -2,7 +2,7 @@ import { ExternalProgramException } from "./external-program-exception";
 import { InterpretStopToken } from "./interpret-stop-token"
 
 /**
- * External program.
+ * External program implementation.
  */
 export class ExternalProgram {
     /**
@@ -14,7 +14,6 @@ export class ExternalProgram {
      * Handler.
      */
     readonly handler: ExternalProgramHandler;
-
 
     /**
      * @param name Name.

@@ -9,24 +9,45 @@ import { InvalidCharactersTrivia } from "../trivia/invalid-characters-trivia";
 import { SyntaxError } from "../../errors/syntax-error";
 import { ArrayUtils } from "../../../utils/array-utils";
 
+/**
+ * Represents terminal symbol of Karel grammar in a syntax tree.
+ * 
+ * Lazy-created wrapper for {@link PrimitiveToken}.
+ */
 export abstract class Token extends SyntaxElement {
+    /**
+     * Text of the token itself (without trivia).
+     */
     get text(): string {
         return (<PrimitiveToken>this.primitive).text;
     }
 
+    /**
+     * Trivia before the token.
+     */
     get leadingTrivia(): readonly Trivia[] {
         return (<PrimitiveToken>this.primitive).leadingTrivia;
     }
 
+    /**
+     * Trivia after the token.
+     */
     get trailingTrivia(): readonly Trivia[] {
         return (<PrimitiveToken>this.primitive).trailingTrivia;
     }
 
+    /**
+     * @param primitiveToken Wrapped primitive token.
+     * @param parent Parent node.
+     * @param position Position in the text. First is 0.
+     * @param startLine Line in the text where it starts. First is 1.
+     * @param startColumn Column in the text where it starts. First is 1.
+     */
     constructor(primitiveToken: PrimitiveToken, parent: Node, position: number, startLine: number, startColumn: number) {
         super(primitiveToken, parent, position, startLine, startColumn)
     }
 
-    getTextRangeWithoutTrivia(): TextRange {
+    override getTextRangeWithoutTrivia(): TextRange {
         const primitiveToken = (<PrimitiveToken>this.primitive);
 
         return new TextRange(
@@ -35,7 +56,7 @@ export abstract class Token extends SyntaxElement {
         );
     }
 
-    getLineTextRangeWithoutTrivia(): LineTextRange {
+    override getLineTextRangeWithoutTrivia(): LineTextRange {
         const primitiveToken = (<PrimitiveToken>this.primitive);
 
         return new LineTextRange(
@@ -48,7 +69,7 @@ export abstract class Token extends SyntaxElement {
 }
 
 /**
- * Represents a token.
+ * Represents terminal symbol of Karel grammar in a syntax tree.
  */
 export abstract class PrimitiveToken extends PrimitiveSyntaxElement {
     /**
@@ -97,82 +118,39 @@ export abstract class PrimitiveToken extends PrimitiveSyntaxElement {
      * @param trailingTrivia Trivia after the token.
      */
     constructor(text: string, leadingTrivia: readonly Trivia[] = [], trailingTrivia: readonly Trivia[] = []) {
-        const syntaxErrors = [];
-        let position = 0;
-        let line = 1;
-        let column = 1;
+        const syntaxErrors: SyntaxError[] = [];
+        const cursor = {
+            position: 0,
+            line: 1,
+            column: 1
+        };
 
-        for (const trivia of leadingTrivia) {
-            const startLine = line;
-            const startColumn = column; 
+        PrimitiveToken.processTrivia(leadingTrivia, cursor, syntaxErrors);
+        const textStartCursor = { ...cursor };
+        PrimitiveToken.processText(text, cursor);
+        const textEndCursor = { ...cursor };
+        PrimitiveToken.processTrivia(trailingTrivia, cursor, syntaxErrors);
 
-            for (let i = 0; i < trivia.text.length; i++) {
-                if (trivia.text[i] === "\r" && !(i + 1 < trivia.text.length && trivia.text[i + 1] === "\n") || trivia.text[i] === "\n") {
-                    line++;
-                    column = 1;
-                }
-                else
-                    column++;
-            }
-            position += trivia.text.length;
-
-            if (trivia instanceof SkippedTokenTrivia)
-                syntaxErrors.push(new SyntaxError("Skipped token", new LineTextRange(startLine, startColumn, line, column)));
-            if (trivia instanceof InvalidCharactersTrivia)
-                syntaxErrors.push(new SyntaxError("Invalid characters", new LineTextRange(startLine, startColumn, line, column)));
-        }
-
-        const textPosition = position;
-        const textStartLine = line;
-        const textStartColumn = column;
-
-        for (let i = 0; i < text.length; i++) {
-            if (text[i] === "\r" && !(i + 1 < text.length && text[i + 1] === "\n") || text[i] === "\n") {
-                line++;
-                column = 1;
-            }
-            else
-                column++;
-        }
-        position += text.length;
-
-        const textEndLine = line;
-        const textEndColumn = column;
-
-        for (const trivia of trailingTrivia) {
-            const startLine = line;
-            const startColumn = column; 
-
-            for (let i = 0; i < trivia.text.length; i++) {
-                if (trivia.text[i] === "\r" && !(i + 1 < trivia.text.length && trivia.text[i + 1] === "\n") || trivia.text[i] === "\n") {
-                    line++;
-                    column = 1;
-                }
-                else
-                    column++;
-            }
-            position += trivia.text.length;
-
-            if (trivia instanceof SkippedTokenTrivia)
-                syntaxErrors.push(new SyntaxError("Skipped token", new LineTextRange(startLine, startColumn, line, column)));
-            if (trivia instanceof InvalidCharactersTrivia)
-                syntaxErrors.push(new SyntaxError("Invalid characters", new LineTextRange(startLine, startColumn, line, column)));
-        }
-
-        super(position, line, column - 1, syntaxErrors);
+        super(cursor.position, cursor.line, cursor.column - 1, syntaxErrors);
         this.text = text;
         this.leadingTrivia = leadingTrivia;
         this.trailingTrivia = trailingTrivia;
         
-        this.textPosition = textPosition;
-        this.textStartLine = textStartLine;
-        this.textStartColumn = textStartColumn;
+        this.textPosition = textStartCursor.position;
+        this.textStartLine = textStartCursor.line;
+        this.textStartColumn = textStartCursor.column;
 
-        this.textEndLine = textEndLine;
-        this.textEndColumn = textEndColumn;
+        this.textEndLine = textEndCursor.line;
+        this.textEndColumn = textEndCursor.column;
     }
 
-    equals(other: PrimitiveSyntaxElement): boolean {
+    /**
+     * Copies the primitive token with the specified changed properties.
+     * @param newProperties New property values. Omitted will be copied from this primitive token.
+     */
+    abstract with(newProperties: { text?: string; leadingTrivia?: Trivia[]; trailingTrivia?: Trivia[]; }): PrimitiveToken;
+
+    override equals(other: PrimitiveSyntaxElement): boolean {
         return other instanceof PrimitiveToken && this.text === other.text &&
             ArrayUtils.equals(this.leadingTrivia, other.leadingTrivia, (t, o) => t.equals(o)) && 
             ArrayUtils.equals(this.trailingTrivia, other.trailingTrivia, (t, o) => t.equals(o));
@@ -180,9 +158,7 @@ export abstract class PrimitiveToken extends PrimitiveSyntaxElement {
 
     abstract override createWrapper(parent: Node, position: number, startLine: number, startColumn: number): Token;
 
-    abstract with(newProperties: { text?: string; leadingTrivia?: Trivia[]; trailingTrivia?: Trivia[]; }): PrimitiveToken;
-
-    pushText(texts: string[]) {
+    override pushText(texts: string[]) {
         for (const trivia of this.leadingTrivia)
             texts.push(trivia.text);
 
@@ -190,5 +166,39 @@ export abstract class PrimitiveToken extends PrimitiveSyntaxElement {
 
         for (const trivia of this.trailingTrivia)
             texts.push(trivia.text);
+    }
+
+    private static processTrivia(trivias: readonly Trivia[], cursor: { line: number, column: number, position: number }, syntaxErrors: SyntaxError[]) {
+        for (const trivia of trivias) {
+            const startLine = cursor.line;
+            const startColumn = cursor.column; 
+
+            for (let i = 0; i < trivia.text.length; i++) {
+                if (trivia.text[i] === "\r" && !(i + 1 < trivia.text.length && trivia.text[i + 1] === "\n") || trivia.text[i] === "\n") {
+                    cursor.line++;
+                    cursor.column = 1;
+                }
+                else
+                    cursor.column++;
+            }
+            cursor.position += trivia.text.length;
+
+            if (trivia instanceof SkippedTokenTrivia)
+                syntaxErrors.push(new SyntaxError("Skipped token", new LineTextRange(startLine, startColumn, cursor.line, cursor.column)));
+            if (trivia instanceof InvalidCharactersTrivia)
+                syntaxErrors.push(new SyntaxError("Invalid characters", new LineTextRange(startLine, startColumn, cursor.line, cursor.column)));
+        }
+    }
+
+    private static processText(text: string, cursor: { line: number, column: number, position: number }) {
+        for (let i = 0; i < text.length; i++) {
+            if (text[i] === "\r" && !(i + 1 < text.length && text[i + 1] === "\n") || text[i] === "\n") {
+                cursor.line++;
+                cursor.column = 1;
+            }
+            else
+            cursor.column++;
+        }
+        cursor.position += text.length;
     }
 }

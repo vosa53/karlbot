@@ -1,7 +1,7 @@
 import { Event } from "../event";
 
 /**
- * Token signaling stop of interpretation.
+ * Token that can be used to signal that an interpretation is to be stopped.
  */
 export class InterpretStopToken {
     /**

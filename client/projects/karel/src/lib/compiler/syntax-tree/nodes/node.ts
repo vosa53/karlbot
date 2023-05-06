@@ -6,7 +6,15 @@ import { PrimitiveSyntaxElement } from "../syntax-element";
 import { SyntaxElement } from "../syntax-element";
 import { PrimitiveToken } from "../tokens/token";
 
+/**
+ * Represents nonterminal symbol of Karel grammar in a syntax tree.
+ * 
+ * Lazy-created wrapper for {@link PrimitiveNode}.
+ */
 export abstract class Node extends SyntaxElement {
+    /**
+     * Child nodes and tokens.
+     */
     get children(): SyntaxElement[] {
         if (this._children === undefined)
             this.initializeChildren();
@@ -15,11 +23,24 @@ export abstract class Node extends SyntaxElement {
 
     private _children?: SyntaxElement[] = undefined;
 
+    /**
+     * @param primitiveNode Wrapped primitive node.
+     * @param parent Parent node.
+     * @param position Position in the text. First is 0.
+     * @param startLine Line in the text where it starts. First is 1.
+     * @param startColumn Column in the text where it starts. First is 1.
+     */
     constructor(primitiveNode: PrimitiveNode, parent: Node | null, position: number, startLine: number, startColumn: number) {
         super(primitiveNode, parent, position, startLine, startColumn);
     }
 
-    getTextRangeWithoutTrivia(): TextRange {
+    /**
+     * Copies the node with the specified changed properties.
+     * @param newProperties New property values. Omitted will be copied from this node.
+     */
+    abstract with(newProperties: { }): SyntaxElement;
+
+    override getTextRangeWithoutTrivia(): TextRange {
         const firstToken = this.getFirstDescendantPrimitiveToken();
         const lastToken = this.getLastDescendantPrimitiveToken();
 
@@ -29,7 +50,7 @@ export abstract class Node extends SyntaxElement {
         );
     }
 
-    getLineTextRangeWithoutTrivia(): LineTextRange {
+    override getLineTextRangeWithoutTrivia(): LineTextRange {
         const firstToken = this.getFirstDescendantPrimitiveToken();
         const lastToken = this.getLastDescendantPrimitiveToken();
 
@@ -80,9 +101,18 @@ export abstract class Node extends SyntaxElement {
 }
 
 
+/**
+ * Represents nonterminal symbol of Karel grammar in a syntax tree.
+ */
 export abstract class PrimitiveNode extends PrimitiveSyntaxElement {
+    /**
+     * Child nodes and tokens.
+     */
     readonly children: readonly PrimitiveSyntaxElement[];
     
+    /**
+     * @param childrenBuilder Children builder with node children.
+     */
     constructor(childrenBuilder: ChildrenBuilder) {
         if (childrenBuilder.children.length === 0)
             throw new Error("Node must have at least one child.");
@@ -91,7 +121,7 @@ export abstract class PrimitiveNode extends PrimitiveSyntaxElement {
         this.children = childrenBuilder.children;
     }
 
-    equals(other: PrimitiveSyntaxElement): boolean {
+    override equals(other: PrimitiveSyntaxElement): boolean {
         return other instanceof PrimitiveNode &&
             ArrayUtils.equals(this.children, other.children, (t, o) => t.equals(o));
     }

@@ -5,7 +5,13 @@ import { IdentifierPrimitiveToken } from "../tokens/identifier-token";
 import { IdentifierToken } from "../tokens/identifier-token";
 import { Node, PrimitiveNode } from "./node";
 
+/**
+ * Program call.
+ */
 export class CallNode extends Node {
+    /**
+     * Name of the called program.
+     */
     get nameToken(): IdentifierToken | null {
         if (this._nameToken === undefined)
             this.initialize();
@@ -14,11 +20,18 @@ export class CallNode extends Node {
 
     private _nameToken?: IdentifierToken | null = undefined;
 
+    /**
+     * @param primitiveNode Wrapped primitive node.
+     * @param parent Parent node.
+     * @param position Position in the text. First is 0.
+     * @param startLine Line in the text where it starts. First is 1.
+     * @param startColumn Column in the text where it starts. First is 1.
+     */
     constructor(primitiveNode: CallPrimitiveNode, parent: Node | null, position: number, startLine: number, startColumn: number) {
         super(primitiveNode, parent, position, startLine, startColumn);
     }
 
-    with(newProperties: { nameToken?: IdentifierToken | null }): CallNode {
+    override with(newProperties: { nameToken?: IdentifierToken | null }): CallNode {
         const callPrimitiveNode = <CallPrimitiveNode>this.primitive;
 
         return new CallPrimitiveNode(
@@ -33,10 +46,18 @@ export class CallNode extends Node {
     }
 }
 
-
+/**
+ * Program call.
+ */
 export class CallPrimitiveNode extends PrimitiveNode {
+    /**
+     * Name of the called program.
+     */
     readonly nameToken: IdentifierPrimitiveToken | null;
 
+    /**
+     * @param nameToken Name of the called program.
+     */
     constructor(nameToken: IdentifierPrimitiveToken | null) {
         super(CallPrimitiveNode.createChildren(nameToken));
         this.nameToken = nameToken;
@@ -47,7 +68,7 @@ export class CallPrimitiveNode extends PrimitiveNode {
             PrimitiveSyntaxElementUtils.equalsOrBothNull(this.nameToken, other.nameToken);
     }
 
-    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): CallNode {
+    override createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): CallNode {
         return new CallNode(this, parent, position, startLine, startColumn);
     }
 

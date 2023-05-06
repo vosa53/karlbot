@@ -19,15 +19,13 @@ module.exports = {
         extensions: [".tsx", ".ts", ".js"],
     },
     output: {
+        library: "karel",
         filename: "karel.js",
-        path: path.resolve(__dirname, "dist"),
-        library: "karel"
+        path: path.resolve(__dirname, "dist")
     },
     plugins: [
         new CircularDependencyPlugin({
-            onDetected({ module: webpackModuleRecord, paths, compilation }) {
-                compilation.errors.push(new Error(paths.join(" -> ")))
-            }
+            onDetected: ({ paths, compilation }) => compilation.errors.push(new Error(paths.join(" -> ")))
         })
     ]
 };

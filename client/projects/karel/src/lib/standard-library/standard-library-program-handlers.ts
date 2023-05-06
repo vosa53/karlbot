@@ -144,8 +144,8 @@ function delay(milliseconds: number, stopToken: InterpretStopToken): Promise<voi
     if (milliseconds === 0)
         return Promise.resolve();
 
-    // 'setTimeout' function is not a core Javascript feature,
-    // so it does not have to be in all Javascript environments where the Karel library has to run.
+    // 'setTimeout' function is not a core JavaScript feature,
+    // so it does not have to be in all JavaScript environments where the Karel library has to run.
     if (setTimeout === undefined && milliseconds !== 0)
         throw new Error("Can not set a non-zero delay when 'setTimeout' function is not defined.");
 

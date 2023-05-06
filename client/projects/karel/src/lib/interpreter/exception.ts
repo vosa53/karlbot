@@ -1,7 +1,7 @@
 import { ReadonlyCallStackFrame } from "./readonly-call-stack-frame";
 
 /**
- * Intepreter exception
+ * Intepreter exception.
  */
 export class Exception {
     /**

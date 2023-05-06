@@ -78,11 +78,10 @@ export class SymbolTable {
      * @param node Node.
      */
     getByNode(node: Node): Symbol_ | null {
-        // TODO: Can nameToken be null?
         if (node instanceof CallNode && node.nameToken !== null)
-            return this.nameToSymbol.get(node.nameToken.text) || null;
+            return this.nameToSymbol.get(node.nameToken.text) ?? null;
         if (node instanceof ProgramNode)
-            return this.programToSymbol.get(node) || null;
+            return this.programToSymbol.get(node) ?? null;
 
         return null;
     }
@@ -92,6 +91,6 @@ export class SymbolTable {
      * @param name Name.
      */
     getByName(name: string): Symbol_ | null {
-        return this.nameToSymbol.get(name) || null;
+        return this.nameToSymbol.get(name) ?? null;
     }
 }

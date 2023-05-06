@@ -1,5 +1,5 @@
 /**
- * External program exception
+ * Exception from an external program.
  */
 export class ExternalProgramException {
     /**

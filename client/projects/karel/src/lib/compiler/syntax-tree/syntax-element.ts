@@ -4,7 +4,9 @@ import { TextRange } from "../../text/text-range";
 import { SyntaxError } from "../errors/syntax-error";
 
 /**
- * Base for AST nodes and tokens.
+ * Base class for AST nodes and tokens.
+ * 
+ * Equvivalent of red tree node from Roslyn compiler: https://ericlippert.com/2012/06/08/red-green-trees/
  */
 export abstract class SyntaxElement {
     /**
@@ -84,16 +86,6 @@ export abstract class SyntaxElement {
     }
 
     /**
-     * Returns the text range that it spans without leading and trailing trivia.
-     */
-    abstract getTextRangeWithoutTrivia(): TextRange;
-
-    /**
-     * Returns the line text range that it spans without leading and trailing trivia.
-     */
-    abstract getLineTextRangeWithoutTrivia(): LineTextRange;
-
-    /**
      * Returns the text range that it spans.
      */
     getTextRange(): TextRange {
@@ -116,12 +108,23 @@ export abstract class SyntaxElement {
     }
 
     /**
+     * Returns the text range that it spans without leading and trailing trivia.
+     */
+    abstract getTextRangeWithoutTrivia(): TextRange;
+
+    /**
+     * Returns the line text range that it spans without leading and trailing trivia.
+     */
+    abstract getLineTextRangeWithoutTrivia(): LineTextRange;
+
+    /**
      * Builds and returns the whole text.
      */
     buildText(): string {
         return this.primitive.buildText();
     }
 
+    // This is not needed now, but can be useful later:
     /*findElementAtPosition(position: number): SyntaxElement | null {
         if (position < this.position)
             return null;
@@ -159,7 +162,9 @@ export abstract class SyntaxElement {
 
 
 /**
- * Base for primitive AST nodes and tokens.
+ * Base class for primitive AST nodes and tokens.
+ * 
+ * Equvivalent of green tree node from Roslyn compiler: https://ericlippert.com/2012/06/08/red-green-trees/
  */
 export abstract class PrimitiveSyntaxElement {
     /**
@@ -209,6 +214,11 @@ export abstract class PrimitiveSyntaxElement {
      * @param startColumn Column in the text where the wrapper should start.
      */
     abstract createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): SyntaxElement;
+
+    /**
+     * Pushes all text parts of the element to the array.
+     * @param texts Array where the text parts are to be pushed.
+     */
     abstract pushText(texts: string[]): void;
 
     /**

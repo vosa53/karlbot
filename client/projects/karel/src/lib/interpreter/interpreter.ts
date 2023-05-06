@@ -66,6 +66,11 @@ export class Interpreter {
         return this.callStack.length === 0 ? null : this.callStack[this.callStack.length - 1];
     }
 
+    /**
+     * @param assembly Assembly to be executed.
+     * @param entryPoint Program to be executed.
+     * @param externalPrograms Implementation of external programs.
+     */
     constructor(assembly: Assembly, entryPoint: Program, externalPrograms: ExternalProgram[]) {
         this.assembly = assembly;
 

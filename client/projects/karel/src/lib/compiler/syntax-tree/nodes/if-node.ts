@@ -13,37 +13,58 @@ import { BlockNode, BlockPrimitiveNode } from "./block-node";
 import { CallNode, CallPrimitiveNode } from "./call-node";
 import { Node, PrimitiveNode } from "./node";
 
+/**
+ * If statement (a condition).
+ */
 export class IfNode extends Node {
+    /**
+     * `if` keyword.
+     */
     get ifToken(): IfToken | null {
         if (this._ifToken === undefined)
             this.initialize();
         return this._ifToken!;
     }
 
+    /**
+     * Operation (allows to invert the condition).
+     */
     get operationToken(): IsToken | NotToken | null {
         if (this._operationToken === undefined)
             this.initialize();
         return this._operationToken!;
     }
 
+    /**
+     * Condition.
+     */
     get condition(): CallNode | null {
         if (this._condition === undefined)
             this.initialize();
         return this._condition!;
     }
 
+    /**
+     * Statements to execute when the condition is met.
+     */
     get body(): BlockNode | null {
         if (this._body === undefined)
             this.initialize();
         return this._body!;
     }
 
+    /**
+     * `else` keyword.
+     */
     get elseToken(): ElseToken | null {
         if (this._elseToken === undefined)
             this.initialize();
         return this._elseToken!;
     }
 
+    /**
+     * Statements to execute when the condition is not met.
+     */
     get elseBody(): BlockNode | null {
         if (this._elseBody === undefined)
             this.initialize();
@@ -57,11 +78,18 @@ export class IfNode extends Node {
     private _elseToken?: ElseToken | null = undefined;
     private _elseBody?: BlockNode | null = undefined;
 
+    /**
+     * @param primitiveNode Wrapped primitive node.
+     * @param parent Parent node.
+     * @param position Position in the text. First is 0.
+     * @param startLine Line in the text where it starts. First is 1.
+     * @param startColumn Column in the text where it starts. First is 1.
+     */
     constructor(primitiveNode: IfPrimitiveNode, parent: Node | null, position: number, startLine: number, startColumn: number) {
         super(primitiveNode, parent, position, startLine, startColumn);
     }
 
-    with(newProperties: { ifToken?: IfToken | null, operationToken?: IsToken | NotToken | null, condition?: CallNode | null, body?: BlockNode | null, elseToken?: ElseToken | null, elseBody?: BlockNode | null }): IfNode {
+    override with(newProperties: { ifToken?: IfToken | null, operationToken?: IsToken | NotToken | null, condition?: CallNode | null, body?: BlockNode | null, elseToken?: ElseToken | null, elseBody?: BlockNode | null }): IfNode {
         const ifPrimitiveNode = <IfPrimitiveNode>this.primitive;
 
         return new IfPrimitiveNode(
@@ -97,15 +125,48 @@ export class IfNode extends Node {
     }
 }
 
-
+/**
+ * If statement (a condition).
+ */
 export class IfPrimitiveNode extends PrimitiveNode {
+    /**
+     * `if` keyword.
+     */
     readonly ifToken: IfPrimitiveToken | null;
+
+    /**
+     * Operation (allows to invert the condition).
+     */
     readonly operationToken: IsPrimitiveToken | NotPrimitiveToken | null;
+
+    /**
+     * Condition.
+     */
     readonly condition: CallPrimitiveNode | null;
+
+    /**
+     * Statements to execute when the condition is met.
+     */
     readonly body: BlockPrimitiveNode | null;
+
+    /**
+     * `else` keyword.
+     */
     readonly elseToken: ElsePrimitiveToken | null;
+
+    /**
+     * Statements to execute when the condition is not met.
+     */
     readonly elseBody: BlockPrimitiveNode | null;
 
+    /**
+     * @param ifToken `if` keyword.
+     * @param operationToken Operation (allows to invert the condition).
+     * @param condition Condition.
+     * @param body Statements to execute when the condition is met.
+     * @param elseToken `else` keyword.
+     * @param elseBody Statements to execute when the condition is not met.
+     */
     constructor(ifToken: IfPrimitiveToken | null, operationToken: IsPrimitiveToken | NotPrimitiveToken | null, condition: CallPrimitiveNode | null, body: BlockPrimitiveNode | null, 
         elseToken: ElsePrimitiveToken | null, elseBody: BlockPrimitiveNode | null) {
         super(IfPrimitiveNode.createChildren(ifToken, operationToken, condition, body, elseToken, elseBody));
@@ -127,7 +188,7 @@ export class IfPrimitiveNode extends PrimitiveNode {
             PrimitiveSyntaxElementUtils.equalsOrBothNull(this.elseBody, other.elseBody);
     }
 
-    createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): IfNode {
+    override createWrapper(parent: Node | null, position: number, startLine: number, startColumn: number): IfNode {
         return new IfNode(this, parent, position, startLine, startColumn);
     }
 
