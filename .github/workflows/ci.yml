@@ -12,7 +12,7 @@ jobs:
       sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
         env:
-          SA_PASSWORD: 'TestDatabasePassword123!'
+          SA_PASSWORD: '29Z#O*P63g!5'
           ACCEPT_EULA: 'Y'
         ports:
           - 1433:1433
@@ -51,7 +51,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Restore server dependencies
       run: |
         cd server
@@ -63,10 +63,7 @@ jobs:
     - name: Test server
       run: |
         cd server
-        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1433;Initial Catalog=KarlBotTest;User Id=sa;Password=TestDatabasePassword123!;TrustServerCertificate=True"
-        
-        
-        
+        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1433;Database=KarlBotTest;User Id=sa;Password=29Z#O*P63g!5;TrustServerCertificate=True"
         
   deploy:
     runs-on: ubuntu-latest
@@ -103,7 +100,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Restore server dependencies
       run: |
         cd server
@@ -136,5 +133,3 @@ jobs:
         protocol: ftps
         local-dir: server/dist/
         server-dir: www/
-        
-        
