@@ -2,7 +2,7 @@
 
 The application is available online at [karlbot.dev](https://karlbot.dev/).
 
-KarlBot is a development environment for educational programming language [Karel](https://compedu.stanford.edu/karel-reader/docs/python/en/chapter1.html). Karel's original author is Professor Richard Pattis, but since then many more or less similar variants have been created and this is one of them. It has the following features:
+KarlBot is a development environment for an educational programming language [Karel](https://compedu.stanford.edu/karel-reader/docs/python/en/chapter1.html). Karel's original author is Professor Richard Pattis, but since then many more or less similar variants have been created and this is one of them. It has the following features:
 
 - Syntax highlighting
 - Code completion
@@ -23,7 +23,7 @@ KarlBot is a development environment for educational programming language [Karel
 
 ### Project Overview
 
-The application uses three-tier architecture. It is divided into client, server, and database. The main used technologies are these:
+The application uses a three-tier architecture. It is divided into client, server, and database. The main used technologies are these:
 
 - Client: [TypeScript](https://www.typescriptlang.org/), [Angular](https://angular.io/)
     - User interface: [Angular Material](https://material.angular.io/)
@@ -55,7 +55,7 @@ For user authentication is used [Firebase Authentication](https://firebase.googl
 #### Git branches
 
 - `develop`: The actual development is taking place here.
-- `master`: When a new version of the application is ready, a merge from `develop` to `master` is performed and the CI/CD pipeline automatically deploys it to [karlbot.dev](https://karlbot.dev/).
+- `master`: Contains the latest release version. When a new version of the application is ready, a merge from `develop` to `master` is performed and the CI/CD pipeline automatically deploys it to [karlbot.dev](https://karlbot.dev/).
 
 ### How to run it
 
@@ -64,27 +64,27 @@ Prerequisites:
 - [Git](https://git-scm.com/downloads) installed
 - [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download) installed
 - [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16) (or another SQL Server distribution) installed and running
-- [Node.js](https://nodejs.org/) installed
+- [Node.js 18](https://nodejs.org/) installed
 - [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) installed (`npm install -g firebase-tools`)
 - [Angular CLI](https://angular.io/cli#installing-angular-cli) installed (`npm install -g @angular/cli`)
 
-If you want to run the project yourself, please follow these instructions:
+If you want to run the project yourself, please follow these steps:
 
-Clone repository:
+Clone the repository:
 ```
 git clone https://github.com/vosa53/karlbot.git
 cd karlbot
 ```
 
-Start Firebase Authentication emulator:
+Start the Firebase Authentication emulator:
 ```
 cd firebase-emulator
 firebase emulators:start --import data --export-on-exit data --project demo-test
 ```
 
-*Alternative: Or just use `/firebase-emulator/start-firebase-emulator.bat` in the case of Windows operating system.*
+*Alternative: Or just use `/firebase-emulator/start-firebase-emulator.bat` in the case of the Windows operating system.*
 
-Build client:
+Build the client:
 ```
 cd client
 npm install
@@ -100,26 +100,38 @@ ng build karel-evaluation
 npm run build
 ```
 
-Start server:
+Start the server:
 
 ```
 cd server/KarlBot
 dotnet run --launch-profile "https"
 ```
 
-*For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
-
 *Alternative: On Windows, you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
+
+*For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
 
 It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is then available at [https://localhost:7105/swagger](https://localhost:7105/swagger).
 
-Start client:
+Start the client:
 ```
 cd client
 ng serve --open
 ```
 
-It also opens the browser with application GUI.
+It also opens a web browser with the application GUI.
+
+#### How to get administrator permissions
+
+Challenge editation is available only for administrators.
+
+1. Sign in to the application.
+2. Go to the database and find your user ID (`AspNetUsers` table).
+3. Run these SQL commands:
+```sql
+INSERT INTO AspNetRoles(Id, Name) VALUES('f21cd4b8-94b0-4516-9429-311da93b5a2d', 'Admin')
+INSERT INTO AspNetUserRoles(UserId, RoleId) VALUES('<Your ID>', 'f21cd4b8-94b0-4516-9429-311da93b5a2d')
+```
 
 ### How to run tests
 
@@ -133,7 +145,7 @@ cd server
 dotnet test
 ```
 
-*For Linux users: Same thing with SQL Server as in the run section. Please specify your connection string in the server integration tests configuration file.*
+*For Linux users: Same problem with SQL Server as in the run section. Please specify your connection string in the server integration tests configuration file.*
 
 Client:
 ```
