@@ -68,7 +68,7 @@ Prerequisites:
 - [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) installed (`npm install -g firebase-tools`)
 - [Angular CLI](https://angular.io/cli#installing-angular-cli) installed (`npm install -g @angular/cli`)
 
-If you want to run the project yourself, please follow these steps:
+If you want to run the project locally, please follow these steps:
 
 Clone the repository:
 ```
