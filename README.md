@@ -109,7 +109,7 @@ dotnet run --launch-profile "https"
 
 *Alternative: On Windows, you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
 
-*For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
+*For Linux users: SQL Server Express LocalDB does not support Linux, you have to use a different SQL Server distribution and specify its connection string in the server configuration file*.
 
 It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is then available at [https://localhost:7105/swagger](https://localhost:7105/swagger).
 
