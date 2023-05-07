@@ -85,7 +85,7 @@ firebase emulators:start --import data --export-on-exit data --project demo-test
 *Alternative: Or just use `/firebase-emulator/start-firebase-emulator.bat` in the case of the Windows operating system.*
 
 Build the client:
-```console
+```bash
 cd client
 npm install
 
