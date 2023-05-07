@@ -71,13 +71,13 @@ Prerequisites:
 If you want to run the project locally, please follow these steps:
 
 Clone the repository:
-```console
+```properties
 git clone https://github.com/vosa53/karlbot.git
 cd karlbot
 ```
 
 Start the Firebase Authentication emulator:
-```console
+```properties
 cd firebase-emulator
 firebase emulators:start --import data --export-on-exit data --project demo-test
 ```
@@ -85,7 +85,7 @@ firebase emulators:start --import data --export-on-exit data --project demo-test
 *Alternative: Or just use `/firebase-emulator/start-firebase-emulator.bat` in the case of the Windows operating system.*
 
 Build the client:
-```bash
+```properties
 cd client
 npm install
 
@@ -102,7 +102,7 @@ npm run build
 
 Start the server:
 
-```console
+```properties
 cd server/KarlBot
 dotnet run --launch-profile "https"
 ```
@@ -114,7 +114,7 @@ dotnet run --launch-profile "https"
 It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is then available at [https://localhost:7105/swagger](https://localhost:7105/swagger).
 
 Start the client:
-```console
+```properties
 cd client
 ng serve --open
 ```
@@ -140,7 +140,7 @@ Prerequisites:
 - Previous step
 
 Server:
-```console
+```properties
 cd server
 dotnet test
 ```
@@ -148,7 +148,7 @@ dotnet test
 *For Linux users: Same problem with SQL Server as in the run section. Please specify your connection string in the server integration tests configuration file.*
 
 Client:
-```console
+```properties
 cd client
 npm run test
 npm run lint
@@ -162,7 +162,7 @@ Prerequisites:
 - [docfx](https://dotnet.github.io/docfx/) installed (`dotnet tool update -g docfx`)
 
 Server:
-```console
+```properties
 cd server
 docfx docfx_project/docfx.json
 ```
@@ -170,7 +170,7 @@ docfx docfx_project/docfx.json
 Documentation is generated in `/server/docfx_project/_site`. It has to be served by some (local) web server (opening `index.html` directly in the browser won't work). For example, [this](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) web server can be used.
 
 Client:
-```console
+```properties
 cd client
 npm run documentation
 ```
