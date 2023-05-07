@@ -127,7 +127,7 @@ export class TownEditorComponent {
         else if (toolButton.action === TownEditorToolButtonAction.remove)
             return "-";
         else
-            throw new Error();
+            throw new Error("Unknown tool button action.");
     }
 
     getToolButtonActionColor(toolButton: TownEditorToolButton) {
@@ -138,7 +138,7 @@ export class TownEditorComponent {
         else if (toolButton.action === TownEditorToolButtonAction.remove)
             return "warn";
         else
-            throw new Error();
+            throw new Error("Unknown tool button action.");
     }
 
     @HostListener("pointerdown")

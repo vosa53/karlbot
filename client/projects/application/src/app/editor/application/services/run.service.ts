@@ -11,6 +11,9 @@ import { BehaviorSubject, combineLatest, firstValueFrom, map } from "rxjs";
 import { DialogService } from "../../../shared/presentation/services/dialog.service";
 import { ProjectEditorService } from "./project-editor.service";
 
+/**
+ * Runs the program and manages its runtime state.
+ */
 @Injectable()
 export class RunService {
     private readonly interpreter = new BehaviorSubject<Interpreter | null>(null);
@@ -18,8 +21,27 @@ export class RunService {
     private readonly callStack = new BehaviorSubject<readonly ReadonlyCallStackFrame[] | null>(null);
     private readonly currentRange = new BehaviorSubject<FileLineTextRange | null>(null);
 
+    /**
+     * Snapshot of the call stack.
+     */
     readonly callStack$ = this.callStack.asObservable();
 
+    /**
+     * Source code range of the next executed instruction.
+     */
+    readonly currentRange$ = combineLatest([this.currentRange, this.projectEditorService.selectedCodeFile$]).pipe(map(([currentRange, selectedCodeFile]) => {
+        if (currentRange === null || selectedCodeFile === null)
+            return null;
+
+        if (currentRange.filePath === selectedCodeFile.name)
+            return currentRange.textRange;
+        
+        return null;
+    }));
+
+    /**
+     * State of the program execution.
+     */
     readonly state$ = combineLatest([this.interpreter, this.interpretStopToken]).pipe(map(([interpreter, interpretStopToken]) => {
         if (interpreter === null)
             return RunState.ready;
@@ -46,16 +68,10 @@ export class RunService {
         });
     }
 
-    readonly currentRange$ = combineLatest([this.currentRange, this.projectEditorService.selectedCodeFile$]).pipe(map(([currentRange, selectedCodeFile]) => {
-        if (currentRange === null || selectedCodeFile === null)
-            return null;
-
-        if (currentRange.filePath === selectedCodeFile.name)
-            return currentRange.textRange;
-        
-        return null;
-    }));
-
+    /**
+     * Runs the program.
+     * @param readonly Whether the town should be reverted back after the program ends.
+     */
     async run(readonly: boolean): Promise<boolean> {
         const availableEntryPoints = await firstValueFrom(this.projectEditorService.availableEntryPoints$);
         const project = await firstValueFrom(this.projectEditorService.project$);
@@ -85,6 +101,9 @@ export class RunService {
         return true;
     }
 
+    /**
+     * Stops the running program.
+     */
     stop() {
         this.willPause = false;
         const stopToken = this.interpretStopToken.value;
@@ -94,28 +113,47 @@ export class RunService {
             this.setReadyState();
     }
 
+    /**
+     * Pauses the running program.
+     */
     pause() {
         this.willPause = true;
         this.interpretStopToken.value!.stop();
     }
 
+    /**
+     * Resumes the paused program.
+     */
     async continue() {
         this.interpreter.value!.skipBreakpointOnFirstInstruction = true;
         await this._run(st => this.interpreter.value!.interpretAll(st));
     }
 
+    /**
+     * Performs debugger "step into" action.
+     */
     async stepInto() {
         await this.step(st => this.interpreter.value!.interpretStepInto(st));
     }
 
+    /**
+     * Performs debugger "step over" action.
+     */
     async stepOver() {
         await this.step(st => this.interpreter.value!.interpretStepOver(st));
     }
 
+    /**
+     * Performs debugger "step out" action.
+     */
     async stepOut() {
         await this.step(st => this.interpreter.value!.interpretStepOut(st));
     }
 
+    /**
+     * Sets breakpoints on the given lines.
+     * @param breakpoints Line numbers where the breakpoints should be set. Line number starts at 1.
+     */
     async changeBreakpoints(breakpoints: readonly number[]) {
         const project = await firstValueFrom(this.projectEditorService.project$);
 
@@ -210,8 +248,22 @@ export class RunService {
     }
 }
 
+/**
+ * State of a program execution.
+ */
 export enum RunState {
+    /**
+     * Program is not running.
+     */
     ready = "ready",
+
+    /**
+     * Program is running.
+     */
     running = "running",
+
+    /**
+     * Program is paused.
+     */
     paused = "paused"
 }

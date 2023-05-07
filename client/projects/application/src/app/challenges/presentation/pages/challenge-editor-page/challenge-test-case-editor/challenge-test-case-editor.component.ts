@@ -7,7 +7,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MutableTown, Vector } from "karel";
 
 /**
- * Edited challenge test case.
+ * Editor of challenge test case.
  */
 @Component({
     selector: "app-challenge-test-case-editor",
@@ -18,7 +18,7 @@ import { MutableTown, Vector } from "karel";
 })
 export class ChallengeTestCaseEditorComponent {
     /**
-     * Challenge test case.
+     * Edited challenge test case.
      */
     @Input()
     get testCase(): EditorChallengeTestCase | null {
@@ -39,13 +39,13 @@ export class ChallengeTestCaseEditorComponent {
     }
 
     /**
-     * Called when the camera is moved.
+     * Emitted when the camera is changed.
      */
     @Output()
     testCaseChange = new EventEmitter<EditorChallengeTestCase>();
 
     /**
-     * Town camera.
+     * Town camera. It is synchronized between both towns of the test case.
      */
     townCamera = new TownCamera(Vector.ZERO, 1);
 

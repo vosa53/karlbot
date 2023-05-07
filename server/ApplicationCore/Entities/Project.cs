@@ -11,7 +11,7 @@
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Id of the author.
+        /// ID of the author.
         /// </summary>
         public Guid AuthorId { get; set; }
 

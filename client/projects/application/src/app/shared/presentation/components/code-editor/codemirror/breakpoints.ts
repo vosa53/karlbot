@@ -1,6 +1,8 @@
 import { EditorState, StateField, StateEffect, RangeSet, TransactionSpec } from "@codemirror/state"
 import { GutterMarker, EditorView, gutter, ViewUpdate } from "@codemirror/view"
 
+// Inspired from: https://codemirror.net/examples/gutter/.
+
 /**
  * CodeMirror extension adding breakpoints support.
  */

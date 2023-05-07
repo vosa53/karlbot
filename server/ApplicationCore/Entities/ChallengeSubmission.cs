@@ -11,7 +11,7 @@
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Id of the challenge.
+        /// ID of the challenge.
         /// </summary>
         public Guid ChallengeId { get; set; }
 
@@ -21,7 +21,7 @@
         public Challenge? Challenge { get; set; }
 
         /// <summary>
-        /// Id of the user who submitted it.
+        /// ID of the user who submitted it.
         /// </summary>
         public Guid UserId { get; set; }
 

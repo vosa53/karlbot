@@ -31,7 +31,7 @@ export class ChallengesPageComponent implements OnInit {
     challenges: Challenge[] | null = null;
 
     /**
-     * Columns displayed in the table.
+     * Columns displayed in the challenges table.
      */
     displayedColumns: string[] = ["status", "name", "difficulty", "solved"];
 
@@ -76,6 +76,6 @@ export class ChallengesPageComponent implements OnInit {
         else if (difficulty === ChallengeDifficulty.hard)
             return 2;
         else
-            throw new Error();
+            throw new Error("Unknown difficulty.");
     }
 }

@@ -5,7 +5,7 @@ import { ChallengePageComponent } from "./presentation/pages/challenge-page/chal
 import { ChallengesPageComponent } from "./presentation/pages/challenges-page/challenges-page.component";
 
 /**
- * Routes concerning the challenges module.
+ * Routes of the challenges module.
  */
 export const challengesRoutes: Routes = [
     {

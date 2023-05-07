@@ -2,7 +2,7 @@ import { Routes } from "@angular/router";
 import { EditorPageComponent } from "./presentation/pages/editor-page/editor-page.component";
 
 /**
- * Routes concerning the editor module.
+ * Routes of the editor module.
  */
 export const editorRoutes: Routes = [
     { 

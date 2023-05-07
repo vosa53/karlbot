@@ -12,7 +12,7 @@ import { firstValueFrom } from "rxjs";
 import { ProjectService } from "projects/application/src/app/shared/application/services/api/project.service";
 
 /**
- * Page showing user's saved projects.
+ * Page showing current user's projects saved on the server.
  */
 @Component({
     selector: "app-projects-page",
@@ -22,6 +22,9 @@ import { ProjectService } from "projects/application/src/app/shared/application/
     styleUrls: ["./projects-page.component.css"]
 })
 export class ProjectsPageComponent implements OnInit {
+    /**
+     * Saved projects.
+     */
     projects: SavedProject[] | null = null;
 
     constructor(

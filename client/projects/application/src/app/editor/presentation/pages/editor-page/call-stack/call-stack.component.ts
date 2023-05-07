@@ -5,6 +5,9 @@ import { MatListModule } from "@angular/material/list";
 import { PanelComponent } from "../../../components/panel/panel.component";
 import { ReadonlyCallStackFrame } from "karel";
 
+/**
+ * Shows call stack when the program is paused.
+ */
 @Component({
     selector: "app-call-stack",
     standalone: true,
@@ -13,9 +16,15 @@ import { ReadonlyCallStackFrame } from "karel";
     styleUrls: ["./call-stack.component.css"]
 })
 export class CallStackComponent implements OnChanges {
+    /**
+     * Call stack.
+     */
     @Input()
     callStack: readonly ReadonlyCallStackFrame[] = [];
 
+    /**
+     * Call stack sorted from top frame to bottom.
+     */
     callStackSorted: readonly ReadonlyCallStackFrame[] = [];
 
     ngOnChanges(changes: SimpleChanges): void {

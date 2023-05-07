@@ -15,6 +15,9 @@ import { map } from "rxjs";
 import { ProjectEditorService } from "../../../application/services/project-editor.service";
 import { RunService } from "../../../application/services/run.service";
 
+/**
+ * Main page of the application. Allows to edit a project and to run a program.
+ */
 @Component({
     standalone: true,
     selector: "app-editor-page",
@@ -24,12 +27,25 @@ import { RunService } from "../../../application/services/run.service";
     providers: [EditorService, ProjectEditorService, RunService, { provide: MAT_TABS_CONFIG, useValue: { animationDuration: 100 }}]
 })
 export class EditorPageComponent {
+    /**
+     * Code editor component.
+     */
     @ViewChild(CodeEditorComponent)
     codeEditor: CodeEditorComponent | null = null;
 
+    /**
+     * Function for the code editor providing completion items at the given position in the code.
+     */
     readonly completionItemsProvider = (line: number, column: number) => this.editorService.provideCompletionItems(line, column);
+
+    /**
+     * Whether to use a small screen layout.
+     */
     isSmallScreen = false;
 
+    /**
+     * Index of the currently selected tab. Used only in the small screen layout.
+     */
     readonly selectedTabIndex$ = this.editorService.activeArea$.pipe(map(a => {
         if (a === EditorArea.files || a === EditorArea.settings)
             return 0;
@@ -38,7 +54,7 @@ export class EditorPageComponent {
         else if (a === EditorArea.town)
             return 2;
         else
-            throw new Error();
+            throw new Error("Unknown tab index.");
     }));
 
     constructor(
@@ -65,7 +81,7 @@ export class EditorPageComponent {
         else if (newValue === 2)
             this.editorService.setActiveArea(EditorArea.town);
         else
-            throw new Error();
+            throw new Error("Unknown tab index.");
     }
 
     onCodeEditorFocusIn() {

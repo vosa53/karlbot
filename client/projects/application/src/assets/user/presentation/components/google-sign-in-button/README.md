@@ -1,0 +1,1 @@
+Images in this folder are from Google's official branding guidelines: https://developers.google.com/identity/branding-guidelines

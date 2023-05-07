@@ -168,7 +168,7 @@ Projects can be edited on a page called *Editor*. This page is composed of sever
 - *Settings*: At this panel, you can specify run settings.
 - *Error List*: Shows syntax errors while you are typing.
 - *Call Stack View*: Shown instead of the error list when the program is paused. Displays a state of the call stack.
-- *Header*: Contains buttons for frequently used actions and menus that contain them all.
+- *Header*: Contains buttons for frequently used actions and menus that contain them all. It also shows the project name. You can click on it to change it.
 
 To run the code you must select one of the defined programs as an *entry point* and press either the *Run* or *Run Read-only* button. The only difference is that the read-only version reverts the town back when the program ends.
 

@@ -5,6 +5,9 @@ import { MatListModule } from "@angular/material/list";
 import { Error } from "karel";
 import { PanelComponent } from "../../../components/panel/panel.component";
 
+/**
+ * Shows errors in the program.
+ */
 @Component({
     standalone: true,
     selector: "app-error-list",
@@ -13,6 +16,9 @@ import { PanelComponent } from "../../../components/panel/panel.component";
     styleUrls: ["./error-list.component.css"]
 })
 export class ErrorListComponent {
+    /**
+     * Errors to be shown.
+     */
     @Input()
     errors: readonly Error[] = [];
 }

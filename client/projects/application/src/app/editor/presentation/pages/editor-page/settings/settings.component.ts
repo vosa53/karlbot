@@ -7,6 +7,9 @@ import { ValidatedInputDirective, ValidatedInputValidatorFactory } from "project
 import { Settings } from "karel";
 import { PanelComponent } from "../../../components/panel/panel.component";
 
+/**
+ * Editor of the project run settings.
+ */
 @Component({
     standalone: true,
     selector: "app-settings",
@@ -15,9 +18,15 @@ import { PanelComponent } from "../../../components/panel/panel.component";
     styleUrls: ["./settings.component.css"]
 })
 export class SettingsComponent {
+    /**
+     * Settings.
+     */
     @Input()
     settings: Settings = new Settings("", 0, 0);
 
+    /**
+     * Emitted when the user wants to change the settings.
+     */
     @Output()
     settingsChange = new EventEmitter<Settings>();
 

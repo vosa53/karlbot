@@ -1,6 +1,7 @@
 /**
  * Karel language grammar.
  * Can be compiled with `lezer-generator karel-grammar.grammar -o karel-parser.js`.
+ * Inspired from: https://github.com/lezer-parser/javascript/blob/main/src/javascript.grammar
  */
 
 @top CompilationUnit { 

@@ -8,6 +8,9 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatIconModule } from "@angular/material/icon";
 import { NotificationService } from "projects/application/src/app/shared/presentation/services/notification.service";
 
+/**
+ * Dialog to share the open project.
+ */
 @Component({
     selector: "app-share-dialog",
     standalone: true,
@@ -16,7 +19,14 @@ import { NotificationService } from "projects/application/src/app/shared/present
     styleUrls: ["./share-dialog.component.css"]
 })
 export class ShareDialogComponent {
+    /**
+     * Whether the project should be public.
+     */
     isProjectPublic = false;
+
+    /**
+     * URL of the project to be shared.
+     */
     projectURL = "https://";
 
     constructor(
@@ -38,7 +48,17 @@ export class ShareDialogComponent {
     }
 }
 
+/**
+ * Configuration of {@link ShareDialogComponent}.
+ */
 export interface ShareDialogData {
+    /**
+     * Whether the project is currently public.
+     */
     readonly isProjectPublic: boolean;
+
+    /**
+     * URL of the project to be shared.
+     */
     readonly projectURL: string;
 }

@@ -51,7 +51,7 @@ export class SignInService {
 
     /**
      * Signs the user in via a Google sign in dialog.
-     * @returns 
+     * @returns `true` when successfully signed in. `false` otherwise, for example when the user closes the dialog.
      */
     async signInWithGoogle(): Promise<boolean> {
         try {

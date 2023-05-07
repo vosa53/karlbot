@@ -78,7 +78,7 @@ export class TownViewMoveDirective {
     onWheel(event: WheelEvent) {
         event.preventDefault();
 
-        const zoom = Math.pow(1.2, event.deltaY / -120);
+        const zoom = Math.pow(1.2, event.deltaY / -120); // Explained at: https://stackoverflow.com/questions/27356577/scale-at-pivot-point-in-an-already-scaled-node
         this.zoom(event.offsetX, event.offsetY, zoom);
     }
 

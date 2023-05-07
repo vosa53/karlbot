@@ -2,6 +2,8 @@ import { EditorView, Decoration, DecorationSet } from "@codemirror/view"
 import { StateField, StateEffect, TransactionSpec, EditorState } from "@codemirror/state"
 import { LineTextRange } from "karel";
 
+// Inspired from: https://codemirror.net/examples/decoration/.
+
 /**
  * CodeMirror extension highlighting a specified code range. For example to highlight the currently executed instruction.
  */

@@ -19,6 +19,9 @@ import { GoogleSignInButtonComponent } from "../../components/google-sign-in-but
     styleUrls: ["./sign-in-page.component.css"]
 })
 export class SignInPageComponent {
+    /**
+     * Whether signing in is in progress.
+     */
     inProgress = false;
 
     constructor(private readonly signInService: SignInService, private readonly router: Router, private readonly loadingService: LoadingService) { }

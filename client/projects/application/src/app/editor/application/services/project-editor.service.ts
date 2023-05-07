@@ -14,6 +14,9 @@ import { FileService } from "../../../shared/application/services/file-service";
 import { DialogService } from "../../../shared/presentation/services/dialog.service";
 import { TownCamera } from "../../../shared/presentation/town/town-camera";
 
+/**
+ * Edits the project, provides editation services and manages the project state.
+ */
 @Injectable()
 export class ProjectEditorService {
     private readonly project = new BehaviorSubject(Project.create("", [], [], new Settings("", 0, 0)));
@@ -22,26 +25,57 @@ export class ProjectEditorService {
     private readonly currentTown = new BehaviorSubject<MutableTown | null>(null);
     private readonly currentTownCamera = new BehaviorSubject(new TownCamera(Vector.ZERO, 1));
 
+    /**
+     * Edited project.
+     */
     readonly project$ = this.project.asObservable();
-    readonly selectedCodeFile$ = this.selectedCodeFile.asObservable();
-    readonly selectedTownFile$ = this.selectedTownFile.asObservable();
-    readonly currentTown$ = this.currentTown.asObservable();
-    readonly currentTownCamera$ = this.currentTownCamera.asObservable();
 
+    /**
+     * Selected code file.
+     */
+    readonly selectedCodeFile$ = this.selectedCodeFile.asObservable();
+
+    /**
+     * Selected town file.
+     */
+    readonly selectedTownFile$ = this.selectedTownFile.asObservable();
+
+    /**
+     * Code from the selected code file.
+     */
     readonly currentCode$ = this.selectedCodeFile.pipe(map(cf => {
         return cf?.compilationUnit?.buildText() ?? null;
     }));
 
+    /**
+     * Town from the selected town file.
+     */
+    readonly currentTown$ = this.currentTown.asObservable();
+
+    /**
+     * Town camera in the town editor.
+     */
+    readonly currentTownCamera$ = this.currentTownCamera.asObservable();
+
+    /**
+     * Names of programs that can be used as an entry point.
+     */
     readonly availableEntryPoints$ = this.project.pipe(map(p => {
         return p.compilation.symbolTable.getDefined()
             .filter(s => s instanceof ProgramSymbol && s.definition.nameToken !== null)
             .map(s => (<ProgramSymbol>s).definition.nameToken!.text);
     }));
 
+    /**
+     * Errors in the whole project.
+     */
     readonly errors$ = this.project.pipe(debounceTime(700), startWith(this.project.value), map(p => {
         return Checker.check(p.compilation);
     }));
 
+    /**
+     * Errors in the selected code file.
+     */
     readonly errorsInCurrentCodeFile$ = combineLatest([this.errors$, this.selectedCodeFile]).pipe(map(([errors, selectedCodeFile]) => {
         return errors.filter(e => e.compilationUnit === selectedCodeFile?.compilationUnit);
     }));
@@ -51,6 +85,10 @@ export class ProjectEditorService {
         private readonly dialogService: DialogService
     ) { }
 
+    /**
+     * Sets the edited project.
+     * @param project Project to set.
+     */
     setProject(project: Project) {
         this.saveCurrentTown();
         this.project.next(project);
@@ -64,11 +102,17 @@ export class ProjectEditorService {
         this.selectTownFile(firstTownFile as TownFile);
     }
 
+    /**
+     * Gets the edited project.
+     */
     getProject(): Project {
         this.saveCurrentTown();
         return this.project.value;
     }
 
+    /**
+     * Imports a project locally from the device.
+     */
     async importProject() {
         const projectFile = await this.fileService.open();
         if (projectFile === null)
@@ -86,6 +130,9 @@ export class ProjectEditorService {
         this.setProject(project);
     }
 
+    /**
+     * Exports the project locally to the device.
+     */
     async exportProject() {
         const project = this.getProject();
         const projectFileText = ProjectSerializer.serialize(project);
@@ -93,16 +140,28 @@ export class ProjectEditorService {
         await this.fileService.save(projectFile);
     }
 
+    /**
+     * Creates a new code file.
+     * @param name Name of the new file.
+     */
     addCodeFile(name: string) {
         const newFile = this.createNewCodeFile(name);
         this.addFile(newFile);
     }
 
+    /**
+     * Creates a new town file.
+     * @param name Name of the new file.
+     */
     addTownFile(name: string) {
         const newFile = this.createNewTownFile(name);
         this.addFile(newFile);
     }
 
+    /**
+     * Removes a file.
+     * @param file File to remove.
+     */
     removeFile(file: File) {
         const newProject = this.project.value.removeFile(file);
         this.project.next(newProject);
@@ -115,11 +174,20 @@ export class ProjectEditorService {
         }
     }
 
+    /**
+     * Renames a file.
+     * @param file File to rename.
+     * @param newName New name of the file.
+     */
     renameFile(file: File, newName: string) {
         const newFile = file.withName(newName);
         this.replaceFile(file, newFile);
     }
 
+    /**
+     * Selects a file.
+     * @param file File to select.
+     */
     selectFile(file: File) {
         if (file instanceof CodeFile)
             this.selectCodeFile(file);
@@ -127,10 +195,18 @@ export class ProjectEditorService {
             this.selectTownFile(file);
     }
 
+    /**
+     * Selects a code file.
+     * @param file Code file to select.
+     */
     selectCodeFile(file: CodeFile | null) {
         this.selectedCodeFile.next(file);
     }
 
+    /**
+     * Selectes a town file.
+     * @param file Town file to select.
+     */
     selectTownFile(file: TownFile | null) {
         if (file === this.selectedTownFile.value)
             return;
@@ -142,6 +218,10 @@ export class ProjectEditorService {
             this.currentTownCamera.next(this.createTownCamera(file.town));
     }
 
+    /**
+     * Changes the code in the open code file.
+     * @param code New code.
+     */
     changeCode(code: string) {
         if (this.selectedCodeFile.value === null)
             return;
@@ -151,6 +231,10 @@ export class ProjectEditorService {
         this.replaceFile(this.selectedCodeFile.value, newCodeFile);
     }
 
+    /**
+     * Sets breakpoints on the given lines.
+     * @param breakpoints Line numbers where the breakpoints should be set. Line number starts at 1.
+     */
     changeBreakpoints(breakpoints: readonly number[]) {
         if (this.selectedCodeFile.value === null)
             return;
@@ -159,25 +243,46 @@ export class ProjectEditorService {
         this.replaceFile(this.selectedCodeFile.value, newCodeFile);
     }
 
+    /**
+     * Changes the town camera in the town editor.
+     * @param townCamera New town camera.
+     */
     changeCurrentTownCamera(townCamera: TownCamera) {
         this.currentTownCamera.next(townCamera);
     }
 
+    /**
+     * Changes the project settings.
+     * @param settings New settings.
+     */
     changeSettings(settings: Settings) {
         const newProject = this.project.value.withSettings(settings);
         this.project.next(newProject);
     }
 
+    /**
+     * Changes the project name.
+     * @param projectName New project name.
+     */
     changeProjectName(projectName: string) {
         const newProject = this.project.value.withName(projectName);
         this.project.next(newProject);
     }
 
+    /**
+     * Changes the name of the project entry point.
+     * @param entryPoint New entry point name.
+     */
     changeEntryPoint(entryPoint: string) {
         const newSettings = this.project.value.settings.withEntryPoint(entryPoint);
         this.changeSettings(newSettings);
     }
 
+    /**
+     * Provides completion items at the given code position.
+     * @param line Line number. Starts at 1.
+     * @param column Column number. Starts at 1.
+     */
     provideCompletionItems(line: number, column: number): CompletionItem[] {
         const languageService = new LanguageService(this.project.value.compilation);
         return languageService.getCompletionItemsAt(this.selectedCodeFile.value!.compilationUnit, line, column);

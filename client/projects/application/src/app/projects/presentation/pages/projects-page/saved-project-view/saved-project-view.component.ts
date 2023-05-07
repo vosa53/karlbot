@@ -13,7 +13,7 @@ import { DateAgoPipe } from "projects/application/src/app/shared/presentation/pi
 import { TownViewFitContainDirective } from "projects/application/src/app/shared/presentation/directives/town-view-fit-contain.directive";
 
 /**
- * User's saved project.
+ * Displays a user's saved project with its preview.
  */
 @Component({
     selector: "app-saved-project-view",
@@ -23,16 +23,28 @@ import { TownViewFitContainDirective } from "projects/application/src/app/shared
     styleUrls: ["./saved-project-view.component.css"]
 })
 export class SavedProjectViewComponent {
+    /**
+     * Saved project to be displayed.
+     */
     @Input()
     savedProject: SavedProject = this.createSavedProject();
 
+    /**
+     * Emitted when the project is to be removed.
+     */
     @Output()
     removeClick = new EventEmitter<void>();
 
+    /**
+     * Displayed project.
+     */
     get project(): Project {
         return this.savedProject.project;
     }
 
+    /**
+     * First town from the displayed project.
+     */
     get town(): Town | null {
         const townFile = this.project.files.find(f => f instanceof TownFile) as TownFile | undefined;
         return townFile?.town ?? null;

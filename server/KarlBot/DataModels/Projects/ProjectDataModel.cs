@@ -13,7 +13,7 @@ namespace KarlBot.DataModels.Projects
         public required Guid? Id { get; init; }
 
         /// <summary>
-        /// Id of the author.
+        /// ID of the author.
         /// </summary>
         public required Guid AuthorId { get; init; }
 

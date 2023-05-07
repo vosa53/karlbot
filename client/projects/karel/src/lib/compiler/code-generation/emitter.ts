@@ -95,7 +95,7 @@ export class Emitter {
             else if (statement instanceof RepeatNode)
                 this.emitRepeat(statement, context);
             else
-                throw new Error();
+                throw new Error("Unknown statement.");
         }
 
         const endSourceRange = block.endToken.getLineTextRangeWithoutTrivia();

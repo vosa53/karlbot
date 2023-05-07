@@ -3,7 +3,7 @@ import { anonymousCanActivate } from "../shared/application/route-guards/anonymo
 import { SignInPageComponent } from "./presentation/pages/sign-in-page/sign-in-page.component";
 
 /**
- * Routes concerning the users module.
+ * Routes of the users module.
  */
 export const userRoutes: Routes = [
     {

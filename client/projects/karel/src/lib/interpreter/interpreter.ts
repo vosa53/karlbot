@@ -78,7 +78,7 @@ export class Interpreter {
         this.nameToExternalProgram = new Map(externalPrograms.map(ep => [ep.name, ep]));
 
         if (this.nameToProgram.get(entryPoint.name) !== entryPoint)
-            throw new Error();
+            throw new Error("The provided entry point is not a part of the provided assembly.");
 
         this.callStack.push(new CallStackFrame(entryPoint));
     }
@@ -186,7 +186,7 @@ export class Interpreter {
 
     private interpretCurrent(stopToken: InterpretStopToken): void | Exception | Promise<void | Exception> {
         if (this.callStackTop === null)
-            throw new Error();
+            throw new Error("Expected a stack frame.");
 
         const instruction = this.callStackTop.currentInstruction;
         this.callStackTop.currentInstructionIndex++;

@@ -19,27 +19,82 @@ import { EditorDialogService } from "../../presentation/services/editor-dialog.s
 import { ProjectEditorService } from "./project-editor.service";
 import { RunService, RunState } from "./run.service";
 
+/**
+ * Provides facade for an editor and communicates with the server API.
+ */
 @Injectable()
 export class EditorService {
     private readonly savedProject = new BehaviorSubject<SavedProject | null>(null);
     private readonly activeArea = new BehaviorSubject<EditorArea>(EditorArea.code);
 
+    /**
+     * Editor area where the user currently is.
+     */
     readonly activeArea$ = this.activeArea.asObservable();
 
+    /**
+     * Edited project.
+     */
     readonly project$ = this.projectEditorService.project$;
+
+    /**
+     * Selected code file.
+     */
     readonly selectedCodeFile$ = this.projectEditorService.selectedCodeFile$;
+
+    /**
+     * Selected town file.
+     */
     readonly selectedTownFile$ = this.projectEditorService.selectedTownFile$;
-    readonly currentTown$ = this.projectEditorService.currentTown$;
-    readonly currentTownCamera$ = this.projectEditorService.currentTownCamera$;
+
+    /**
+     * Code from the selected code file.
+     */
     readonly currentCode$ = this.projectEditorService.currentCode$;
+
+    /**
+     * Town from the selected town file.
+     */
+    readonly currentTown$ = this.projectEditorService.currentTown$;
+
+    /**
+     * Town camera in the town editor.
+     */
+    readonly currentTownCamera$ = this.projectEditorService.currentTownCamera$;
+
+    /**
+     * Names of programs that can be used as an entry point.
+     */
     readonly availableEntryPoints$ = this.projectEditorService.availableEntryPoints$;
+
+    /**
+     * Errors in the whole project.
+     */
     readonly errors$ = this.projectEditorService.errors$;
+
+    /**
+     * Errors in the selected code file.
+     */
     readonly errorsInCurrentCodeFile$ = this.projectEditorService.errorsInCurrentCodeFile$;
 
+    /**
+     * State of the program execution.
+     */
     readonly runState$ = this.runService.state$;
+
+    /**
+     * Snapshot of the call stack.
+     */
     readonly callStack$ = this.runService.callStack$;
+
+    /**
+     * Source code range of the next executed instruction.
+     */
     readonly currentRange$ = this.runService.currentRange$;
 
+    /**
+     * Whether the current user is an author of the opened project.
+     */
     readonly isProjectOwn$ = combineLatest([this.savedProject, this.signInService.currentUser$]).pipe(
         map(([savedProject, currentUser]) => {
             if (savedProject === null)
@@ -66,10 +121,17 @@ export class EditorService {
         });
     }
 
+    /**
+     * Sets an editor area where the user currently is.
+     * @param area Editor area.
+     */
     setActiveArea(area: EditorArea) {
         this.activeArea.next(area);
     }
 
+    /**
+     * Creates a new project.
+     */
     newProject() {
         this.location.go("editor");
 
@@ -77,6 +139,10 @@ export class EditorService {
         this.savedProject.next(null);
     }
 
+    /**
+     * Opens a project saved on the server with the given ID.
+     * @param projectId Project ID.
+     */
     async openProject(projectId: string) {
         this.location.go(`editor/${projectId}`);
 
@@ -87,6 +153,9 @@ export class EditorService {
         this.savedProject.next(savedProject);
     }
 
+    /**
+     * Saves the project to the server.
+     */
     async saveProject() {
         const currentUser = await firstValueFrom(this.signInService.currentUser$);
         if (currentUser === null) {
@@ -127,6 +196,9 @@ export class EditorService {
         this.notificationService.show("Project was successfully saved.");
     }
 
+    /**
+     * Imports a project locally from the device.
+     */
     async importProject() {
         if (this.savedProject.value !== null) {
             const confirmed = await this.dialogService.showConfirmation("Are you sure?", "The imported project will replace the current saved project, do you want to continue?");
@@ -137,28 +209,52 @@ export class EditorService {
         this.projectEditorService.importProject();
     }
 
+    /**
+     * Exports the project locally to the device.
+     */
     async exportProject() {
         this.projectEditorService.exportProject();
     }
 
+    /**
+     * Creates a new code file.
+     * @param name Name of the new file.
+     */
     addCodeFile(name: string) {
         this.projectEditorService.addCodeFile(name);
         this.activeArea.next(EditorArea.code);
     }
 
+    /**
+     * Creates a new town file.
+     * @param name Name of the new file.
+     */
     addTownFile(name: string) {
         this.projectEditorService.addTownFile(name);
         this.activeArea.next(EditorArea.town);
     }
 
+    /**
+     * Removes a file.
+     * @param file File to remove.
+     */
     removeFile(file: File) {
         this.projectEditorService.removeFile(file);
     }
 
+    /**
+     * Renames a file.
+     * @param file File to rename.
+     * @param newName New name of the file.
+     */
     renameFile(file: File, newName: string) {
         this.projectEditorService.renameFile(file, newName);
     }
 
+    /**
+     * Selects a file.
+     * @param file File to select.
+     */
     selectFile(file: File) {
         this.projectEditorService.selectFile(file);
 
@@ -168,61 +264,110 @@ export class EditorService {
             this.activeArea.next(EditorArea.town);
     }
 
+    /**
+     * Runs the program.
+     * @param readonly Whether the town should be reverted back after the program ends.
+     */
     async run(readonly: boolean) {
         const success = await this.runService.run(readonly);
         if (success)
             this.activeArea.next(EditorArea.town);
     }
 
+    /**
+     * Stops the running program.
+     */
     stop() {
         this.runService.stop();
     }
 
+    /**
+     * Pauses the running program.
+     */
     pause() {
         this.runService.pause();
     }
 
+    /**
+     * Resumes the paused program.
+     */
     continue() {
         this.runService.continue();
     }
 
+    /**
+     * Performs debugger "step into" action.
+     */
     stepInto() {
         this.runService.stepInto();
     }
 
+    /**
+     * Performs debugger "step over" action.
+     */
     stepOver() {
         this.runService.stepOver();
     }
 
+    /**
+     * Performs debugger "step out" action.
+     */
     stepOut() {
         this.runService.stepOut();
     }
 
+    /**
+     * Changes the code in the open code file.
+     * @param code New code.
+     */
     changeCode(code: string) {
         this.projectEditorService.changeCode(code);
     }
 
+    /**
+     * Sets breakpoints on the given lines.
+     * @param breakpoints Line numbers where the breakpoints should be set. Line number starts at 1.
+     */
     async changeBreakpoints(breakpoints: readonly number[]) {
         this.projectEditorService.changeBreakpoints(breakpoints);
         await this.runService.changeBreakpoints(breakpoints);
     }
 
+    /**
+     * Changes the town camera in the town editor.
+     * @param townCamera New town camera.
+     */
     changeCurrentTownCamera(townCamera: TownCamera) {
         this.projectEditorService.changeCurrentTownCamera(townCamera);
     }
 
+    /**
+     * Changes the project settings.
+     * @param settings New settings.
+     */
     changeSettings(settings: Settings) {
         this.projectEditorService.changeSettings(settings);
     }
 
+    /**
+     * Changes the project name.
+     * @param projectName New project name.
+     */
     changeProjectName(projectName: string) {
         this.projectEditorService.changeProjectName(projectName);
     }
 
+    /**
+     * Changes the name of the project entry point.
+     * @param entryPoint New entry point name.
+     */
     changeEntryPoint(entryPoint: string) {
         this.projectEditorService.changeEntryPoint(entryPoint);
     }
 
+    /**
+     * Shares the project.
+     */
     async share() {
         const savedProject = this.savedProject.value;
         if (savedProject === null) {
@@ -243,6 +388,11 @@ export class EditorService {
         this.savedProject.next(toUpdate);
     }
 
+    /**
+     * Provides completion items at the given code position.
+     * @param line Line number. Starts at 1.
+     * @param column Column number. Starts at 1.
+     */
     provideCompletionItems(line: number, column: number): CompletionItem[] {
         return this.projectEditorService.provideCompletionItems(line, column);
     }
@@ -252,11 +402,37 @@ export class EditorService {
     }
 }
 
+/**
+ * Area of an editor.
+ */
 export enum EditorArea {
+    /**
+     * Files.
+     */
     files = "files",
+
+    /**
+     * Settings.
+     */
     settings = "settings",
+
+    /**
+     * Code.
+     */
     code = "code",
+
+    /**
+     * Errors.
+     */
     errors = "errors",
+
+    /**
+     * Call stack.
+     */
     callStack = "callStack",
+
+    /**
+     * Town.
+     */
     town = "town"
 }

@@ -2,6 +2,9 @@ import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { MatDividerModule } from "@angular/material/divider";
 
+/**
+ * Panel of the editor.
+ */
 @Component({
     standalone: true,
     selector: "app-panel",
@@ -10,6 +13,9 @@ import { MatDividerModule } from "@angular/material/divider";
     styleUrls: ["./panel.component.css"]
 })
 export class PanelComponent {
+    /**
+     * Title of the panel.
+     */
     @Input()
     header = "";
 }

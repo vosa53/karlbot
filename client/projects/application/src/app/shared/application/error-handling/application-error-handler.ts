@@ -6,7 +6,7 @@ import { NotificationService } from "../../presentation/services/notification.se
 
 /**
  * Global application error handler.
- * Catches errors and informs the user about the problem. In development mode shows also the details.
+ * Catches errors and informs the user about the problem. In development mode it also shows the details.
  */
 @Injectable()
 export class ApplicationErrorHandler extends ErrorHandler {
@@ -26,8 +26,11 @@ export class ApplicationErrorHandler extends ErrorHandler {
         }
 
         super.handleError(error);
+        this.showErrorMessage(error);
+    }
 
-        const displayMessage = this.getDisplayMessage(error);
+    private showErrorMessage(error: any) {
+        const displayMessage = this.getErrorDisplayMessage(error);
         this.zone.run(() => {
             this.notificationService.show(displayMessage);
             if (isDevMode())
@@ -35,7 +38,7 @@ export class ApplicationErrorHandler extends ErrorHandler {
         });
     }
 
-    private getDisplayMessage(error: any): string {
+    private getErrorDisplayMessage(error: any): string {
         if (this.isHTTPError(error, 0))
             return "Network error! Please check if the internet connection is available.";
 

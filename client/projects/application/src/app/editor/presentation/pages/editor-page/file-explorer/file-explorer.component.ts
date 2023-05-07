@@ -11,6 +11,9 @@ import { File } from "karel";
 import { TownFile } from "karel";
 import { PanelComponent } from "../../../components/panel/panel.component";
 
+/**
+ * Allows to manage files in the open project.
+ */
 @Component({
     standalone: true,
     selector: "app-file-explorer",
@@ -19,39 +22,75 @@ import { PanelComponent } from "../../../components/panel/panel.component";
     styleUrls: ["./file-explorer.component.css"]
 })
 export class FileExplorerComponent implements OnChanges {
+    /**
+     * Files in the project.
+     */
     @Input()
     files: readonly File[] = [];
 
+    /**
+     * Selected code file.
+     */
     @Input()
     selectedCodeFile: CodeFile | null = null;
 
+    /**
+     * Selected town file.
+     */
     @Input()
     selectedTownFile: TownFile | null = null;
 
+    /**
+     * Whether code file selecting is enabled.
+     */
     @Input()
     disableCodeFileSelect = false;
-
+    
+    /**
+     * Whether town file selecting is enabled.
+     */
     @Input()
     disableTownFileSelect = false;
 
+    /**
+     * Whether the files can not be changed.
+     */
     @Input()
     readonly = false;
 
+    /**
+     * Emitted when the user wants to add a code file.
+     */
     @Output()
     codeFileAdd = new EventEmitter<string>();
 
+    /**
+     * Emitted when the user wants to add a town file.
+     */
     @Output()
     townFileAdd = new EventEmitter<string>();
 
+    /**
+     * Emitted when the user wants to remove a file.
+     */
     @Output()
     fileRemove = new EventEmitter<File>();
 
+    /**
+     * Emitted when the user wants to rename a file.
+     */
     @Output()
     fileRename = new EventEmitter<FileExplorerRenameEvent>();
 
+    /**
+     * Emitted when the user wants to select a file.
+     */
     @Output()
     fileSelect = new EventEmitter<File>();
 
+    /**
+     * The files sorted by type and name.
+     */
     sortedFiles: readonly File[] = [];
 
     constructor(private readonly dialogService: DialogService) { }
@@ -141,11 +180,21 @@ export class FileExplorerComponent implements OnChanges {
         else if (file instanceof TownFile)
             return 1;
         else
-            throw new Error();
+            throw new Error("Unknown file type.");
     }
 }
 
-interface FileExplorerRenameEvent {
+/** 
+ * Event emitted when the user wants to rename a file. 
+ */
+export interface FileExplorerRenameEvent {
+    /**
+     * File to be renamed.
+     */
     readonly file: File;
+
+    /**
+     * New name of the file.
+     */
     readonly newName: string;
 }

@@ -5,7 +5,7 @@ import { InjectionToken } from "@angular/core";
 import { IS_ANONYMOUS_ENDPOINT } from "../../http-context-tokens/is-anonymous-endpoint";
 
 /**
- * Service for server API communication.
+ * Service for communication with server API.
  */
 @Injectable({
     providedIn: "root"

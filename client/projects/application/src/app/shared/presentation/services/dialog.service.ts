@@ -1,6 +1,7 @@
 import { ComponentType } from "@angular/cdk/portal";
 import { Injectable } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { firstValueFrom } from "rxjs";
 import { ConfirmationDialogComponent } from "../components/confirmation-dialog/confirmation-dialog.component";
 import { MessageDialogComponent } from "../components/message-dialog/message-dialog.component";
 import { PromptDialogComponent, PromptDialogValidator } from "../components/prompt-dialog/prompt-dialog.component";
@@ -62,12 +63,7 @@ export class DialogService {
      * @returns Dialog result.
      */
     show<T, D, R>(component: ComponentType<T>, config: MatDialogConfig<D>): Promise<R> {
-        return new Promise(resolve => {
-            const dialog = this.dialog.open(component, config);
-            const subscription = dialog.afterClosed().subscribe(result => {
-                subscription.unsubscribe();
-                resolve(result);
-            });
-        });
+        const dialog = this.dialog.open(component, config);
+        return firstValueFrom(dialog.afterClosed());
     }
 }

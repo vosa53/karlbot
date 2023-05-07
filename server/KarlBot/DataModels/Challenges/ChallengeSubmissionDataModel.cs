@@ -13,7 +13,7 @@ namespace KarlBot.DataModels.Challenges
         public required Guid? Id { get; init; }
 
         /// <summary>
-        /// Id of the user who submitted it.
+        /// ID of the user who submitted it.
         /// </summary>
         public required Guid UserId { get; init; }
 
