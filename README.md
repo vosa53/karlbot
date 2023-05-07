@@ -25,40 +25,45 @@ KarlBot is a development environment for educational programming language [Karel
 
 The application uses three-tier architecture. It is divided into client, server, and database. The main used technologies are these:
 
-- Client: **TypeScript**, **Angular**
-    - User interface: **Angular Material**
-    - Code editor: **CodeMirror**
-    - Rendering Markdown: **markdown-it**
-- Server: **C#**, **ASP.NET Core**
-    - ORM: **Entity Framework Core**
-    - Running JavaScript (challenge evaluation): **ClearScript**
-- Database: **Microsoft SQL Server**
+- Client: [TypeScript](https://www.typescriptlang.org/), [Angular](https://angular.io/)
+    - User interface: [Angular Material](https://material.angular.io/)
+    - Code editor: [CodeMirror](https://codemirror.net/)
+    - Rendering Markdown: [markdown-it](https://github.com/markdown-it/markdown-it)
+- Server: [C#](https://learn.microsoft.com/en-us/dotnet/csharp/), [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core)
+    - ORM: [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
+    - Running JavaScript (challenge evaluation): [ClearScript](https://github.com/microsoft/ClearScript)
+- Database: [Microsoft SQL Server](https://www.microsoft.com/cs-cz/sql-server)
 
-For user authentication is used **Firebase Authentication**.
+For user authentication is used [Firebase Authentication](https://firebase.google.com/docs/auth).
 
 ...And many others.
 
 #### Directory structure
 
-- `/.github/workflows`: CI/CD pipeline.
+- `/.github`: CI/CD pipeline.
 - `/client`: Client implementation.
 - `/server`: Server implementation.
-- `/firebase-emulator`: Emulator of Firebase platform.
+- `/firebase-emulator`: Emulator of the Firebase platform.
 
 #### Development configuration files
 
 - Client: `/client/projects/application/src/environments/environment.development.ts`
 - Server: `/server/KarlBot/appsettings.Development.json`
-   - Integration tests: `/server/Infrastructure.Tests/appsettings.json`
+   - Database integration tests: `/server/Infrastructure.Tests/appsettings.json`
 - Firebase: `/firebase-emulator/firebase.json`
 
-### How to run
+#### Git branches
+
+- `develop`: The actual development is taking place here.
+- `master`: When a new version of the application is ready, a merge from `develop` to `master` is performed and the CI/CD pipeline automatically deploys it to [karlbot.dev](https://karlbot.dev/).
+
+### How to run it
 
 Prerequisites:
-- Windows (or Linux, not tested, but it should work)
+- Windows (or Linux &ndash; not tested, but it should work)
 - [Git](https://git-scm.com/downloads) installed
 - [.NET 7 SDK](https://dotnet.microsoft.com/en-us/download) installed
-- [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16) (or other SQL Server distribution) installed and running
+- [SQL Server Express LocalDB](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb?view=sql-server-ver16) (or another SQL Server distribution) installed and running
 - [Node.js](https://nodejs.org/) installed
 - [Firebase CLI](https://firebase.google.com/docs/cli#install_the_firebase_cli) installed (`npm install -g firebase-tools`)
 - [Angular CLI](https://angular.io/cli#installing-angular-cli) installed (`npm install -g @angular/cli`)
@@ -77,7 +82,7 @@ cd firebase-emulator
 firebase emulators:start --import data --export-on-exit data --project demo-test
 ```
 
-*Note: Or just use `/firebase-emulator/start-firebase-emulator.bat` in the case of Windows operating system.*
+*Alternative: Or just use `/firebase-emulator/start-firebase-emulator.bat` in the case of Windows operating system.*
 
 Build client:
 ```
@@ -104,9 +109,9 @@ dotnet run --launch-profile "https"
 
 *For Linux users: SQL Server Express LocalDB does not support Linux, you have to use different SQL Server distribution and specify its connection string in the server configuration file*.
 
-*Note: On Windows, you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
+*Alternative: On Windows, you can use [Visual Studio](https://visualstudio.microsoft.com/). Open `/server/KarlBot.sln` and run project `KarlBot` with `https` launch profile.*
 
-It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is available at [https://localhost:7105/swagger](https://localhost:7105/swagger).
+It should run at `https://localhost:7105`. Its REST API documentation in Swagger UI is then available at [https://localhost:7105/swagger](https://localhost:7105/swagger).
 
 Start client:
 ```
