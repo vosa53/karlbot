@@ -7,11 +7,12 @@
 
 @include mat.core();
 
-$application-palette: (
-    50: #e8eaf6,
-    100: #c5cae9,
-    200: #9fa8da,
-    300: #7986cb,
+$application-primary-palette: (
+    50: #f6fde6,
+    100: #e8f8c1,
+    200: #d9f498,
+    300: #caef6d,
+    400: #beea49,
     500: #b4e61d,
     600: #a9d312,
     700: #9bbd00,
@@ -31,7 +32,7 @@ $application-palette: (
 );
 
 $application-typography: mat.define-typography-config();
-$application-primary: mat.define-palette($application-palette);
+$application-primary: mat.define-palette($application-primary-palette);
 $application-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 $application-warn: mat.define-palette(mat.$red-palette);
 
