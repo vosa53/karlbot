@@ -17,6 +17,8 @@ KarlBot is a development environment for educational programming language [Karel
 - Automatically evaluated challenges
 - Mobile phones support
 
+![](/client//projects/application/src/assets/shared/presentation/pages/user-guide/editor.png)
+
 ## Developer Guide
 
 ### Project Overview
