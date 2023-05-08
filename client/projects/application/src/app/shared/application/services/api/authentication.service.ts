@@ -10,7 +10,7 @@ import { APIService } from "./api-service";
     providedIn: "root"
 })
 export class AuthenticationService {
-    private readonly BASE_URL = "/authentication";
+    private readonly BASE_URL = "/Authentication";
 
     /**
      * @param apiService Service for server API communication.
@@ -22,7 +22,7 @@ export class AuthenticationService {
      * @param firebaseIdToken Firebase ID token.
      */
     authenticateWithFirebase(firebaseIdToken: string): Promise<FirebaseReponse> {
-        const url = `${this.BASE_URL}/firebase`;
+        const url = `${this.BASE_URL}/Firebase`;
         const request: FirebaseRequest = { firebaseIdToken };
 
         return this.apiService.post<FirebaseReponse>(url, request, { isAnonymous: true });
