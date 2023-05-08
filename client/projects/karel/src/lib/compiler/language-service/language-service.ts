@@ -21,10 +21,10 @@ export class LanguageService {
     }
 
     /**
-     * Returns completion items at the given position.
+     * Returns completion items at the given position in the given compilation unit.
      * @param compilationUnit Compilation unit. 
-     * @param line Line.
-     * @param column Column.
+     * @param line Line number. Starts at 1.
+     * @param column Column number. Starts at 1.
      */
     getCompletionItemsAt(compilationUnit: CompilationUnitNode, line: number, column: number): CompletionItem[] {
         return this.compilation

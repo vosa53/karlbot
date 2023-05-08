@@ -31,7 +31,7 @@ export class SourceMap {
         const instructionToRange = new Map<Instruction, FileLineTextRange>();
         const fileToLineToInstructions = new Map<string, Map<number, Instruction[]>>();
 
-        for (const [instruction, range] of instructionsWithRange) {
+        for (const [instruction, range] of instructionsWithRangeSortedByPosition) {
             if (instructionToRange.has(instruction))
                 throw new Error("Instruction was specified more than once.");
 

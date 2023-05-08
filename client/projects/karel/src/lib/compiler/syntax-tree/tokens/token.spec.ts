@@ -10,6 +10,27 @@ import { SkippedTokenTrivia } from "../trivia/skipped-token-trivia";
 import { Trivia } from "../trivia/trivia";
 import { WhitespaceTrivia } from "../trivia/whitespace-trivia";
 import { PrimitiveToken } from "./token";
+import { TextRange } from "../../../text/text-range";
+
+describe("Token", () => {
+    it("getTextRangeWithoutTrivia - Returns text range without leading and trailing trivia", () => {
+        const primitiveToken = new TestPrimitiveToken("test", [new MultilineCommentTrivia("/*a\nbc*/")], [new InvalidCharactersTrivia("!!")]);
+        const token = new TestToken(primitiveToken, {} as Node, 10, 2, 3);
+
+        const range = token.getTextRangeWithoutTrivia();
+
+        expect(range).toEqual(new TextRange(18, 4));
+    });
+
+    it("getLineTextRange - Returns line text range without leading and trailing trivia", () => {
+        const primitiveToken = new TestPrimitiveToken("test", [new MultilineCommentTrivia("/*a\nbc*/")], [new InvalidCharactersTrivia("!!")]);
+        const token = new TestToken(primitiveToken, {} as Node, 10, 2, 3);
+
+        const range = token.getLineTextRangeWithoutTrivia();
+
+        expect(range).toEqual(new LineTextRange(3, 5, 3, 9));
+    });
+});
 
 describe("PrimitiveToken", () => {
     it("text - Is a text only of the token itself without its trivia.", () => {
@@ -234,6 +255,8 @@ describe("PrimitiveToken", () => {
         ]);
     });
 });
+
+class TestToken extends Token { }
 
 class TestPrimitiveToken extends PrimitiveToken {
     createWrapper(parent: Node, position: number, startLine: number, startColumn: number): Token {
