@@ -19,11 +19,11 @@ export class StandardLibrary {
             new ExternalProgramReference("put", DataType.unit),
             new ExternalProgramReference("wall", DataType.number),
             new ExternalProgramReference("sign", DataType.number),
+            new ExternalProgramReference("home", DataType.number),
             new ExternalProgramReference("north", DataType.number),
             new ExternalProgramReference("south", DataType.number),
             new ExternalProgramReference("east", DataType.number),
-            new ExternalProgramReference("west", DataType.number),
-            new ExternalProgramReference("home", DataType.number)
+            new ExternalProgramReference("west", DataType.number)
         ];
     }
     
@@ -40,11 +40,11 @@ export class StandardLibrary {
             new ExternalProgram("put", st => standardLibraryProgramHandlers.put(town, actionDelayProvider(), st)),
             new ExternalProgram("wall", st => this.booleanToNumber(standardLibraryProgramHandlers.wall(town))),
             new ExternalProgram("sign", st => this.booleanToNumber(standardLibraryProgramHandlers.sign(town))),
+            new ExternalProgram("home", st => this.booleanToNumber(standardLibraryProgramHandlers.home(town))),
             new ExternalProgram("north", st => this.booleanToNumber(standardLibraryProgramHandlers.north(town))),
             new ExternalProgram("south", st => this.booleanToNumber(standardLibraryProgramHandlers.south(town))),
             new ExternalProgram("east", st => this.booleanToNumber(standardLibraryProgramHandlers.east(town))),
-            new ExternalProgram("west", st => this.booleanToNumber(standardLibraryProgramHandlers.west(town))),
-            new ExternalProgram("home", st => this.booleanToNumber(standardLibraryProgramHandlers.isHome(town)))
+            new ExternalProgram("west", st => this.booleanToNumber(standardLibraryProgramHandlers.west(town)))
         ];
     }
 

@@ -88,6 +88,14 @@ export function sign(town: MutableTown): boolean {
 }
 
 /**
+ * Karel 'home' program.
+ * @param town Town where the program should be executed.
+ */
+export function home(town: MutableTown): boolean {
+    return town.karelPosition.x === town.homePosition.x && town.karelPosition.y === town.homePosition.y;
+}
+
+/**
  * Karel 'north' program.
  * @param town Town where the program should be executed.
  */
@@ -117,14 +125,6 @@ export function west(town: MutableTown): boolean {
  */
 export function east(town: MutableTown): boolean {
     return town.karelDirection === TownDirection.right;
-}
-
-/**
- * Karel 'home' program.
- * @param town Town where the program should be executed.
- */
-export function isHome(town: MutableTown): boolean {
-    return town.karelPosition.x === town.homePosition.x && town.karelPosition.y === town.homePosition.y;
 }
 
 function getNextPosition(town: MutableTown): Vector {
