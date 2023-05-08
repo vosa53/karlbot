@@ -11,7 +11,7 @@ export class TownDirectionUtils {
     private static readonly LEFT_VECTOR = new Vector(-1, 0);
 
     /**
-     * Converts the direction to a unit vector.
+     * Converts the given town direction to a unit vector.
      * @param direction Direction.
      */
     static toVector(direction: TownDirection): Vector {
@@ -28,7 +28,7 @@ export class TownDirectionUtils {
     }
 
     /**
-     * Converts the given unit vector to a direction.
+     * Converts the given unit vector to a town direction.
      * @param x Vector x coordinate.
      * @param y Vector y coordinate.
      */

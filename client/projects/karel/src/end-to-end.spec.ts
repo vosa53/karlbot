@@ -1,4 +1,5 @@
-import { Checker, Compilation, CompilationUnitParser, Emitter, Interpreter, InterpretStopToken, MutableTown, StandardLibrary, TownDirection, TownTile, Vector, NormalInterpretResult } from "../public-api";
+import { TestUtils } from "./lib/utils/test-utils";
+import { Checker, Compilation, CompilationUnitParser, Emitter, Interpreter, InterpretStopToken, MutableTown, StandardLibrary, TownDirection, TownTile, Vector, NormalInterpretResult } from "./public-api";
 
 describe("End to end tests", () => {
     it("One step", async () => {
@@ -182,12 +183,12 @@ describe("End to end tests", () => {
 });
 
 async function testProgram(entryPointName: string, code: string, inputTownText: string, outputTownText: string) {
-    const inputTown = createTown(dedent(inputTownText));
-    const outputTown = createTown(dedent(outputTownText));
+    const inputTown = createTown(TestUtils.dedent(inputTownText));
+    const outputTown = createTown(TestUtils.dedent(outputTownText));
 
     const externalProgramReferences = StandardLibrary.getProgramReferences();
 
-    const compilationUnit = CompilationUnitParser.parse(dedent(code), "File");
+    const compilationUnit = CompilationUnitParser.parse(TestUtils.dedent(code), "File");
     const compilation = new Compilation([compilationUnit], externalProgramReferences);
 
     const errors = Checker.check(compilation);
@@ -223,12 +224,4 @@ function createTown(text: string): MutableTown {
         }
     }
     return town;
-}
-
-function dedent(text: string) {
-    const lines = text.split("\n");
-    lines.splice(0, 1);
-    lines.pop();
-    const indentationLength = lines[0].match(/^[ ]*/)?.[0].length ?? 0;
-    return lines.map(l => l.substring(indentationLength)).join("\n");
 }
