@@ -7,6 +7,7 @@ using Infrastructure;
 using Infrastructure.DataSeeds;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Infrastructure.Services.Options;
 using KarlBot.OptionsConfigurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

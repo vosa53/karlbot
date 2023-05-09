@@ -1,5 +1,6 @@
 using ApplicationCore.Entities;
 using Infrastructure.Services;
+using Infrastructure.Services.Options;
 using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Tests.Services
