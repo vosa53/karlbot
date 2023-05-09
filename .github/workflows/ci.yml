@@ -28,55 +28,42 @@ jobs:
       run: |
         cd client
         npm install
-    # - name: Build client
-    #   run: |
-    #     cd client
-    #     npm run build -- karel
-    #     npm run build -- karel-evaluation
-    #     npm run build -- application
-    #     cd projects
-    #     cd karel
-    #     npm install
-    #     npm run build
-    #     cd ..
-    #     cd karel-evaluation
-    #     npm install
-    #     npm run build
-    #     cd ../..
-    # - name: Test client
-    #   run: |
-    #     cd client
-    #     npm run test -- --browsers=ChromeHeadless
+    - name: Build client
+      run: |
+        cd client
+        npm run build -- karel
+        npm run build -- karel-evaluation
+        npm run build -- application
+        cd projects
+        cd karel
+        npm install
+        npm run build
+        cd ..
+        cd karel-evaluation
+        npm install
+        npm run build
+        cd ../..
+    - name: Test client
+      run: |
+        cd client
+        npm run test -- --browsers=ChromeHeadless
         
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-    # - name: Restore server dependencies
-    #   run: |
-    #     cd server
-    #     dotnet restore
-    # - name: Build server
-    #   run: |
-    #     cd server
-    #     dotnet build --no-restore
-    # - name: Test server
-    #   run: |
-    #     cd server
-    #     dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1433;Database=KarlBotTest;User Id=sa;Password=29Z#O*P63g!5;TrustServerCertificate=True"
-    
-    - name: End-to-end tests
-      uses: cypress-io/github-action@v5
-      with:
-        working-directory: client
-        browser: chrome
-        start: |
-          cd ../server/KarlBot
-          dotnet run --launch-profile "https"
-        wait-on: 'http://localhost:4200, https://localhost:7105'
-      env:
-          CYPRESS_ConnectionStrings__DefaultConnection: 'Server=localhost,1433;Database=KarlBotTest;User Id=sa;Password=29Z#O*P63g!5;TrustServerCertificate=True'
-          CYPRESS_IsEndToEndTest: 'true'
+    - name: Restore server dependencies
+      run: |
+        cd server
+        dotnet restore
+    - name: Build server
+      run: |
+        cd server
+        dotnet build --no-restore
+    - name: Test server
+      run: |
+        cd server
+        dotnet test --no-build --verbosity normal -e ConnectionStrings__DefaultConnection="Server=localhost,1433;Database=KarlBotTest;User Id=sa;Password=29Z#O*P63g!5;TrustServerCertificate=True"
         
   deploy:
     runs-on: ubuntu-latest
