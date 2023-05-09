@@ -12,6 +12,9 @@ export class Evaluator {
      * @param testCases Test cases.
      */
     static async evaluate(project: Project, testCases: readonly TestCase[]): Promise<EvaluationResult> {
+        if (testCases.length === 0)
+            return new EvaluationResult(0, "System error: No test cases were given.");
+
         const errors = Checker.check(project.compilation);
         if (errors.length !== 0)
             return new EvaluationResult(0, "Project contains errors.");
