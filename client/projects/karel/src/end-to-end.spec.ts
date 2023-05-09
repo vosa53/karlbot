@@ -1,7 +1,7 @@
 import { TestUtils } from "./lib/utils/test-utils";
 import { Checker, Compilation, CompilationUnitParser, Emitter, Interpreter, InterpretStopToken, MutableTown, StandardLibrary, TownDirection, TownTile, Vector, NormalInterpretResult } from "./public-api";
 
-describe("End to end tests", () => {
+describe("End-to-end tests", () => {
     it("One step", async () => {
         await testProgram("oneStep", `
             program oneStep

@@ -4,12 +4,14 @@ using ApplicationCore.Services;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Infrastructure;
+using Infrastructure.DataSeeds;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using KarlBot.OptionsConfigurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
@@ -103,12 +105,7 @@ builder.Services.AddAuthentication(o =>
 
 var app = builder.Build();
 
-using (var serviceScope = app.Services.CreateScope())
-{
-    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
-}
-
+await InitializeDatabaseAsync(builder.Configuration.GetValue<bool>("IsEndToEndTest"));
 InitializeFirebase(app.Services.GetService<IOptions<FirebaseOptions>>()!.Value);
 
 // Request pipeline configuration.
@@ -138,6 +135,21 @@ app.MapControllers().RequireAuthorization();
 app.MapFallbackToFile("index.html", staticFileOptions);
 
 app.Run();
+
+async Task InitializeDatabaseAsync(bool isEndToEndTest)
+{
+    using var serviceScope = app.Services.CreateScope();
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    if (isEndToEndTest)
+    {
+        dbContext.Database.EnsureDeleted();
+        dbContext.Database.EnsureCreated();
+        await EndToEndTestsDataSeed.SeedAsync(dbContext);
+    }
+    else
+        dbContext.Database.Migrate();
+}
 
 void InitializeFirebase(FirebaseOptions options)
 {

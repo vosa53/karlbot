@@ -1,0 +1,23 @@
+{
+    "kind": "identitytoolkit#GetAccountInfoResponse",
+    "users": [
+        {
+            "localId": "Rphf0bHFSmgscCQxSEQyYrJoKOxb",
+            "createdAt": "1679921666667",
+            "lastLoginAt": "1683576236319",
+            "providerUserInfo": [
+                {
+                    "providerId": "google.com",
+                    "rawId": "4240317620343907012274625335652454110833",
+                    "federatedId": "4240317620343907012274625335652454110833",
+                    "email": "john.doe@gmail.com"
+                }
+            ],
+            "validSince": "1683564608",
+            "email": "john.doe@gmail.com",
+            "emailVerified": true,
+            "disabled": false,
+            "lastRefreshAt": "2023-05-08T20:38:23.868Z"
+        }
+    ]
+}
