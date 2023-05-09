@@ -68,8 +68,8 @@ describe("End-to-end tests", () => {
     })
 });
 
-// Firebase Authentication JavaScript library loads the current user from indexedDB of the browser. 
-// We fake its content here because automated sign in via google popup window is too cumbersome.
+// Firebase Authentication JavaScript library restores the current user session from IndexedDB of the browser.
+// We fake its content here because automated sign in via Google popup window is too cumbersome.
 function prepareFirebaseUser(window_: Cypress.AUTWindow) {
     const request = window_.indexedDB.open("firebaseLocalStorageDb");
 
