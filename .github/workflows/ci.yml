@@ -71,7 +71,8 @@ jobs:
         working-directory: client
         browser: chrome
         start: |
-          npm start
+          cd ../server/KarlBot
+          dotnet run --launch-profile "https"
         wait-on: 'http://localhost:4200, https://localhost:7105'
       env:
           CYPRESS_ConnectionStrings__DefaultConnection: 'Server=localhost,1433;Database=KarlBotTest;User Id=sa;Password=29Z#O*P63g!5;TrustServerCertificate=True'
