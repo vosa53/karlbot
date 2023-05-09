@@ -54,7 +54,7 @@ For user authentication is used [Firebase Authentication](https://firebase.googl
 - Client: `/client/projects/application/src/environments/environment.development.ts`
 - Server: `/server/KarlBot/appsettings.Development.json`
    - Database integration tests: `/server/Infrastructure.Tests/appsettings.json`
-- Firebase: `/firebase-emulator/firebase.json`
+- Firebase emulator: `/firebase-emulator/firebase.json`
 
 #### Git branches
 
@@ -160,12 +160,22 @@ npm run lint
 
 End-to-end:
 
+1. Launch the client and server with an environment variable `IsEndToEndTest` set to `true` (that clears the database and prepares test data).
+
+2. Run:
 ```
 cd client
 npx cypress open
 ```
+3. Wait for Cypress UI to open.
+4. Click on *E2E Testing*.
+5. Select *Chrome* browser.
+6. Click on *Start E2E Testing in Chrome*.
+7. Open `create-project-challenge-and-submit-it.cy.ts` test spec.
 
-### How to generate documentation
+*Alternative: If you don't need the UI* then simply use `npx cypress run` (client and server running is still needed).
+
+### How to generate the documentation
 
 Prerequisites:
 
