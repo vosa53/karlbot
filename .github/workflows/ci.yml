@@ -69,12 +69,12 @@ jobs:
       uses: cypress-io/github-action@v5
       with:
         browser: chrome
-        wait-on: 'http://localhost:4200', 'https://localhost:7105'
         start: |
           cd client
           npm start
           cd ../server/KarlBot
           dotnet run --launch-profile "https"
+        wait-on: 'http://localhost:4200, https://localhost:7105'
       env:
           CYPRESS_ConnectionStrings__DefaultConnection: 'Server=localhost,1433;Database=KarlBotTest;User Id=sa;Password=29Z#O*P63g!5;TrustServerCertificate=True'
           CYPRESS_IsEndToEndTest: 'true'
