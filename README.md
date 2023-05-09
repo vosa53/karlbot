@@ -154,6 +154,13 @@ npm run test
 npm run lint
 ```
 
+End-to-end:
+
+```
+cd client
+npx cypress open
+```
+
 ### How to generate documentation
 
 Prerequisites:
