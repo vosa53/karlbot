@@ -14,7 +14,7 @@ export const applicationThemeLight = EditorView.theme({
     ".cm-activeLine": { outlineColor: "#4a4a4a11" },
     ".cm-activeLineGutter": { color: "#37474F" },
     ".cm-selectionBackground": { background: "#E0F2F1dd" },
-    "&.cm-focused .cm-selectionBackground, ::selection": { background: "#4FC3F755" },
+    "&.cm-focused .cm-selectionBackground, ::selection": { background: "#4FC3F755 !important" }, // TODO: Remove !important when the bug on the production is resolved.
     ".cm-selectionMatch": { background: "#E0F2F1bb" },
     ".cm-lintRange-error": { backgroundImage: "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"6\" height=\"3\">%3Cpath%20d%3D%22m0%202.5%20l2%20-1.5%20l1%200%20l2%201.5%20l1%200%22%20stroke%3D%22%23f44336%22%20fill%3D%22none%22%20stroke-width%3D%222%22%2F%3E</svg>')" },
     ".cm-tooltip": { background: "white", boxShadow: "0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12)" },
