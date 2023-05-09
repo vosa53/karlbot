@@ -28,10 +28,14 @@ The application uses a three-tier architecture. It is divided into client, serve
 - Client: [TypeScript](https://www.typescriptlang.org/), [Angular](https://angular.io/)
     - User interface: [Angular Material](https://material.angular.io/)
     - Code editor: [CodeMirror](https://codemirror.net/)
-    - Rendering Markdown: [markdown-it](https://github.com/markdown-it/markdown-it)
+    - Markdown renderer: [markdown-it](https://github.com/markdown-it/markdown-it)
+    - Tests: [Cypress](https://www.cypress.io/), [Jasmine](https://jasmine.github.io/)
+    - Documentation: [Compodoc](https://compodoc.app/), [TypeDoc](https://typedoc.org/)
 - Server: [C#](https://learn.microsoft.com/en-us/dotnet/csharp/), [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core)
     - ORM: [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
     - Running JavaScript (challenge evaluation): [ClearScript](https://github.com/microsoft/ClearScript)
+    - Tests: [NUnit](https://nunit.org/), [Moq](https://github.com/moq/moq)
+    - Documentation: [Swagger UI](https://swagger.io/tools/swagger-ui/), [docfx](https://dotnet.github.io/docfx/)
 - Database: [Microsoft SQL Server](https://www.microsoft.com/cs-cz/sql-server)
 
 For user authentication is used [Firebase Authentication](https://firebase.google.com/docs/auth).
